@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   InteractionManager,
@@ -13,8 +13,8 @@ import {
 
 import { ListRow, Thumb } from '@/components/RowParts';
 import { useAppColors } from '@/constants/theme';
-import { normalizeSearchText } from '@/libs/search-normalization';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { tagColors } from '@/theme/theme';
 
@@ -285,10 +285,10 @@ export function SubstituteModal({
       const baseGroupId = getBaseGroupId(item.id);
       const isAvailable = candidateId >= 0 && availableIngredientIds.has(candidateId);
       const isOnShoppingList = candidateId >= 0 && shoppingIngredientIds.has(candidateId);
-      const tagColor = item.tags?.[0]?.color ?? tagColors.yellow;
+      const tagColor = item.tags?.[0]?.color ?? tagColors.default;
       const subtitle = renderSubtitle(baseGroupId);
       const brandIndicatorColor = item.styleIngredientId != null
-        ? Colors.styledIngredient
+        ? Colors.secondary
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
@@ -296,11 +296,11 @@ export function SubstituteModal({
         ? brandedBaseIngredientIds.has(candidateId)
           ? Colors.primary
           : styleBaseIngredientIds.has(candidateId)
-            ? Colors.styledIngredient
+            ? Colors.secondary
             : undefined
         : undefined;
       const rightIndicatorBottomColor = candidateId >= 0 && brandedBaseIngredientIds.has(candidateId) && styleBaseIngredientIds.has(candidateId)
-        ? Colors.styledIngredient
+        ? Colors.secondary
         : undefined;
 
       return (
@@ -375,7 +375,7 @@ export function SubstituteModal({
               shadowColor: Colors.shadow,
             },
           ]}
-          onPress={() => {}}
+          onPress={() => { }}
           accessibilityRole="menu">
           <View style={styles.modalHeader}>
             <View style={styles.modalTitleRow}>

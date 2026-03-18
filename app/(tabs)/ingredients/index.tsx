@@ -27,15 +27,15 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
 import { getLastIngredientTab, setLastIngredientTab, type IngredientTabKey } from '@/libs/collection-tabs';
-import { getLastIngredientListState, setLastIngredientListState } from '@/libs/ingredient-list-state';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
-import { buildIngredientSortOptions, type IngredientSortOption } from '@/libs/ingredient-sort-options';
 import { getPluralCategory } from '@/libs/i18n/plural';
 import { useI18n } from '@/libs/i18n/use-i18n';
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
+import { getLastIngredientListState, setLastIngredientListState } from '@/libs/ingredient-list-state';
+import { buildIngredientSortOptions, type IngredientSortOption } from '@/libs/ingredient-sort-options';
 import { buildReturnToParams, navigateToDetailsWithReturnTo } from '@/libs/navigation';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { buildTagOptions, type TagOption } from '@/libs/tag-options';
@@ -45,8 +45,8 @@ import {
   useInventorySettings,
   type Ingredient,
 } from '@/providers/inventory-provider';
-import { tagColors } from '@/theme/theme';
 import { useOnboarding } from '@/providers/onboarding-provider';
+import { tagColors } from '@/theme/theme';
 
 type IngredientSection = {
   key: string;
@@ -110,7 +110,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
   const ingredientTagColors = (ingredient.tags ?? [])
-    .map((tag) => tag?.color ?? tagColors.yellow)
+    .map((tag) => tag?.color ?? tagColors.default)
     .filter(Boolean);
 
   const handleToggleAvailability = useCallback(() => {
@@ -133,17 +133,17 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   );
 
   const brandIndicatorColor = ingredient.styleIngredientId != null
-    ? Colors.styledIngredient
+    ? Colors.secondary
     : ingredient.baseIngredientId != null
       ? Colors.primary
       : undefined;
   const rightIndicatorColor = hasBrandedVariants
     ? Colors.primary
     : hasStyledVariants
-      ? Colors.styledIngredient
+      ? Colors.secondary
       : undefined;
   const rightIndicatorBottomColor = hasBrandedVariants && hasStyledVariants
-    ? Colors.styledIngredient
+    ? Colors.secondary
     : undefined;
 
   const { t } = useI18n();
@@ -275,7 +275,7 @@ export default function IngredientsScreen() {
     () => new Map(),
   );
   const [, startAvailabilityTransition] = useTransition();
-  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
   const { registerControl } = useOnboarding();
 
   useScrollToTop(listRef);

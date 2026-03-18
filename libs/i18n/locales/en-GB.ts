@@ -335,7 +335,7 @@ export const enGBTranslations: TranslationDictionary = {
   "ingredientDetails.baseIngredient": "Base ingredient",
   "ingredientDetails.viewBaseIngredient": "View base ingredient",
   "ingredientDetails.removeBaseIngredient": "Remove base ingredient",
-  "ingredientDetails.styledIngredients": "Styled ingredients",
+  "ingredientDetails.secondarys": "Styled ingredients",
   "ingredientDetails.brandedIngredients": "Branded ingredients",
   "ingredientDetails.viewIngredient": "View {{name}}",
   "ingredientDetails.removeIngredientLink": "Remove {{name}} link",

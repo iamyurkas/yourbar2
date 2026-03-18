@@ -361,7 +361,7 @@ export default function IngredientDetailsScreen() {
   }, [allowAllSubstitutes, cocktails, ingredientLookup, numericIngredientId]);
 
   const COCKTAIL_PAGE_SIZE = 20;
-  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
   const [isFilterMenuVisible, setFilterMenuVisible] = useState(false);
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod["id"]>>(() => new Set());
@@ -1321,7 +1321,7 @@ export default function IngredientDetailsScreen() {
                   {styleIngredient?.id != null && brandedBaseIngredientIds.has(Number(styleIngredient.id)) ? (
                     <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
                   ) : styleIngredient?.id != null && styleBaseIngredientIds.has(Number(styleIngredient.id)) ? (
-                    <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                    <View style={[styles.rightIndicator, { backgroundColor: Colors.secondary }]} />
                   ) : null}
                   <View style={styles.baseIngredientInfo}>
                     <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
@@ -1477,7 +1477,7 @@ export default function IngredientDetailsScreen() {
                 <Text
                   style={[styles.sectionTitle, { color: Colors.onSurface }]}
                 >
-                  {t("ingredientDetails.styledIngredients")}
+                  {t("ingredientDetails.secondarys")}
                 </Text>
                 <View style={styles.brandedList}>
                   {styledIngredients.map((styled) => {
@@ -1506,11 +1506,11 @@ export default function IngredientDetailsScreen() {
                           },
                         ]}
                       >
-                        <View style={[styles.leftIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                        <View style={[styles.leftIndicator, { backgroundColor: Colors.secondary }]} />
                         {styled.id != null && brandedBaseIngredientIds.has(Number(styled.id)) ? (
                           <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
                         ) : styled.id != null && styleBaseIngredientIds.has(Number(styled.id)) ? (
-                          <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                          <View style={[styles.rightIndicator, { backgroundColor: Colors.secondary }]} />
                         ) : null}
                         <View style={styles.baseIngredientInfo}>
                           <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>
@@ -1614,7 +1614,7 @@ export default function IngredientDetailsScreen() {
                         {branded.id != null && brandedBaseIngredientIds.has(Number(branded.id)) ? (
                           <View style={[styles.rightIndicator, { backgroundColor: Colors.primary }]} />
                         ) : branded.id != null && styleBaseIngredientIds.has(Number(branded.id)) ? (
-                          <View style={[styles.rightIndicator, { backgroundColor: Colors.styledIngredient }]} />
+                          <View style={[styles.rightIndicator, { backgroundColor: Colors.secondary }]} />
                         ) : null}
                         <View style={styles.baseIngredientInfo}>
                           <View style={[styles.baseIngredientThumb, { backgroundColor: Colors.surfaceBright }]}>

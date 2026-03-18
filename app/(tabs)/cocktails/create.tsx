@@ -3364,11 +3364,11 @@ function EditableIngredientRow({
               candidateId >= 0 && shoppingIngredientIds.has(candidateId);
             const candidateTagColors = (candidate.tags ?? [])
               .filter(Boolean)
-              .map((tag) => tag?.color ?? tagColors.yellow);
+              .map((tag) => tag?.color ?? tagColors.default);
             const subtitle = renderSubtitle(baseGroupId);
             const brandIndicatorColor =
               candidate.styleIngredientId != null
-                ? Colors.styledIngredient
+                ? Colors.secondary
                 : candidate.baseIngredientId != null
                   ? Colors.primary
                   : undefined;
@@ -3620,22 +3620,22 @@ function EditableIngredientRow({
                         color={Colors.onSurfaceVariant}
                       />
                     </Pressable>
-                  <Pressable
-                    onPress={() =>
-                      onRemoveSubstitute(ingredient.key, substitute.key)
-                    }
-                    hitSlop={8}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailForm.removeNamed", {
-                      name: substitute.name,
-                    })}
-                  >
-                    <MaterialCommunityIcons
-                      name="close"
-                      size={16}
-                      color={Colors.onSurfaceVariant}
-                    />
-                  </Pressable>
+                    <Pressable
+                      onPress={() =>
+                        onRemoveSubstitute(ingredient.key, substitute.key)
+                      }
+                      hitSlop={8}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailForm.removeNamed", {
+                        name: substitute.name,
+                      })}
+                    >
+                      <MaterialCommunityIcons
+                        name="close"
+                        size={16}
+                        color={Colors.onSurfaceVariant}
+                      />
+                    </Pressable>
                   </View>
                 </View>
                 {isSubstituteExpanded ? (

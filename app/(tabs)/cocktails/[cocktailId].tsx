@@ -1734,12 +1734,12 @@ export default function CocktailDetailsScreen() {
                       catalogEntry?.tags ??
                       []
                     )
-                      .map((tag) => tag?.color ?? tagColors.yellow)
+                      .map((tag) => tag?.color ?? tagColors.default)
                       .filter(Boolean);
                     const brandIndicatorColor =
                       resolvedIngredient?.styleIngredientId != null ||
                         catalogEntry?.styleIngredientId != null
-                        ? Colors.styledIngredient
+                        ? Colors.secondary
                         : resolvedIngredient?.baseIngredientId != null ||
                           catalogEntry?.baseIngredientId != null
                           ? Colors.primary
@@ -1757,10 +1757,10 @@ export default function CocktailDetailsScreen() {
                     const rightIndicatorColor = isBrandBaseIngredient
                       ? Colors.primary
                       : isStyleBaseIngredient
-                        ? Colors.styledIngredient
+                        ? Colors.secondary
                         : undefined;
                     const rightIndicatorBottomColor = isBrandBaseIngredient && isStyleBaseIngredient
-                      ? Colors.styledIngredient
+                      ? Colors.secondary
                       : undefined;
                     const isOnShoppingList =
                       ingredientId >= 0 &&

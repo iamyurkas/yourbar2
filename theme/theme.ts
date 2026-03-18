@@ -48,7 +48,7 @@ export type ThemePalette = {
   onTertiaryContainer: string;
 };
 
-export const lightPalette = {
+export const lightPalette: ThemePalette = {
   primary: "#4DABF7",
   primaryContainer: "#D5E6FA",
   onPrimary: "#FFFFFF",
@@ -89,21 +89,21 @@ export const lightPalette = {
 
   highlightFaint: "#DDEEFF",
   highlightSubtle: "#fff4dd",
-  styledIngredient: "#EAB308",
+  styledIngredient: "#fff4dd",
   overlayOnPrimary: "#FFFFFF55",
 
-  secondary: "#625B71",
+  secondary: "#ffbf00",
   onSecondary: "#FFFFFF",
   secondaryContainer: "#E8DEF8",
   onSecondaryContainer: "#1D192B",
 
-  tertiary: "#7D5260",
+  tertiary: "#ff3366",
   onTertiary: "#FFFFFF",
   tertiaryContainer: "#FFD8E4",
   onTertiaryContainer: "#31111D",
-} as const;
+};
 
-export const darkPalette = {
+export const darkPalette: ThemePalette = {
   primary: "#9CCAFF",
   primaryContainer: "#1E2936",
   onPrimary: "#001529",
@@ -144,19 +144,19 @@ export const darkPalette = {
 
   highlightFaint: "#1E2936",
   highlightSubtle: "#412f00",
-  styledIngredient: "#FACC15",
+  styledIngredient: "#412f00",
   overlayOnPrimary: "#00000055",
 
-  secondary: "#B0BEC5",
+  secondary: "#FACC15",
   onSecondary: "#0A141F",
   secondaryContainer: "#1F2A36",
   onSecondaryContainer: "#DCE4EA",
 
-  tertiary: "#A5D8FF",
+  tertiary: "#ff3366",
   onTertiary: "#0B1721",
   tertiaryContainer: "#14202B",
   onTertiaryContainer: "#DFF3FF",
-} as const;
+};
 
 export const tagPalette = [
   "#ec5a5a",
@@ -180,17 +180,9 @@ export const tagPalette = [
 
 export const tagColors = {
   default: "#E5E7EB",
-  pink: "#F06292",
-  yellow: "#F4C430",
-  teal: "#26C6DA",
-  purple: "#9C27B0",
-  orange: "#FB8C00",
 } as const;
 
-function createTheme(
-  baseTheme: PaperTheme,
-  p: ThemePalette,
-): PaperTheme {
+function createTheme(baseTheme: PaperTheme, p: ThemePalette): PaperTheme {
   return {
     ...baseTheme,
     colors: {

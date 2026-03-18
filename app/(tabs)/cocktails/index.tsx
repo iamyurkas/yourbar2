@@ -117,7 +117,7 @@ export default function CocktailsScreen() {
     desc?: string | string[];
   }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
-  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
 
   const getParamValue = useCallback((value?: string | string[]) => {
     if (Array.isArray(value)) {
@@ -1012,7 +1012,7 @@ export default function CocktailsScreen() {
         const subtitleLabel = t(`cocktails.toMakeMore.${pluralCategory}`, { count: item.cocktailCount });
         const thumbnail = <Thumb label={item.name} uri={item.photoUri ?? undefined} />;
         const brandIndicatorColor = item.isStyled
-          ? Colors.styledIngredient
+          ? Colors.secondary
           : item.isBranded
             ? Colors.primary
             : undefined;

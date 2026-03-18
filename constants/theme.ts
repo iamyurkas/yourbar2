@@ -1,5 +1,5 @@
-import { lightTheme, lightPalette } from '@/theme/theme';
-import { useTheme } from '@/libs/react-native-paper';
+import { useTheme } from "@/libs/react-native-paper";
+import { lightPalette, lightTheme } from "@/theme/theme";
 
 export function useAppColors() {
   const theme = useTheme();
@@ -15,7 +15,7 @@ export function useAppColors() {
     disabled: theme.colors.disabled ?? lightPalette.disabled,
     placeholder: theme.colors.placeholder ?? lightPalette.placeholder,
     success: theme.colors.success ?? lightPalette.success,
-    styledIngredient: theme.colors.styledIngredient ?? lightPalette.styledIngredient,
+    styledIngredient: theme.colors.secondary ?? lightPalette.secondary,
   };
 }
 
@@ -33,5 +33,5 @@ export const Colors = {
   disabled: lightPalette.disabled,
   placeholder: lightPalette.placeholder,
   success: lightPalette.success,
-  styledIngredient: lightPalette.styledIngredient,
+  styledIngredient: lightPalette.secondary,
 } as const;

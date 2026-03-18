@@ -24,14 +24,14 @@ import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { isCocktailReady } from '@/libs/cocktail-availability';
+import { compareGlobalAlphabet } from '@/libs/global-sort';
+import { getPluralCategory } from '@/libs/i18n/plural';
+import { useI18n } from '@/libs/i18n/use-i18n';
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
 } from '@/libs/ingredient-availability';
 import { normalizeSearchText } from '@/libs/search-normalization';
-import { compareGlobalAlphabet } from '@/libs/global-sort';
-import { getPluralCategory } from '@/libs/i18n/plural';
-import { useI18n } from '@/libs/i18n/use-i18n';
 import { useInventory, type Cocktail, type Ingredient } from '@/providers/inventory-provider';
 import { useOnboarding, useOnboardingTarget } from '@/providers/onboarding-provider';
 import { tagColors } from '@/theme/theme';
@@ -77,20 +77,20 @@ const IngredientRow = memo(function IngredientRow({
   const { t } = useI18n();
   const ingredientId = Number(ingredient.id ?? -1);
   const ingredientTagColors = (ingredient.tags ?? [])
-    .map((tag) => tag?.color ?? tagColors.yellow)
+    .map((tag) => tag?.color ?? tagColors.default)
     .filter(Boolean);
   const brandIndicatorColor = ingredient.styleIngredientId != null
-    ? Colors.styledIngredient
+    ? Colors.secondary
     : ingredient.baseIngredientId != null
       ? Colors.primary
       : undefined;
   const rightIndicatorColor = isBrandBaseIngredient
     ? Colors.primary
     : isStyleBaseIngredient
-      ? Colors.styledIngredient
+      ? Colors.secondary
       : undefined;
   const rightIndicatorBottomColor = isBrandBaseIngredient && isStyleBaseIngredient
-    ? Colors.styledIngredient
+    ? Colors.secondary
     : undefined;
 
   const handlePress = useCallback(() => {
@@ -221,7 +221,7 @@ export default function ShakerScreen() {
   >(new Map());
   const insets = useSafeAreaInsets();
   const bottomInset = Math.min(insets.bottom, 8);
-  const defaultTagColor = tagColors.yellow ?? Colors.highlightFaint;
+  const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
   const { registerControl } = useOnboarding();
   const availabilityTargetProps = useOnboardingTarget('shaker-availability-toggle');
 
@@ -1115,40 +1115,40 @@ export default function ShakerScreen() {
             </Text>
           </View>
           <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('shaker.showMatchingRecipes')}
-              accessibilityState={{
-                disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
-              }}
-              disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
-              onPress={handleShowResults}
-              style={({ pressed }) => [
-                styles.showButton,
+            accessibilityRole="button"
+            accessibilityLabel={t('shaker.showMatchingRecipes')}
+            accessibilityState={{
+              disabled: matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0,
+            }}
+            disabled={matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0}
+            onPress={handleShowResults}
+            style={({ pressed }) => [
+              styles.showButton,
+              {
+                backgroundColor:
+                  matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
+                    ? Colors.surfaceVariant
+                    : Colors.primary,
+              },
+              pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
+                ? styles.showButtonPressed
+                : null,
+            ]}
+          >
+            <Text
+              style={[
+                styles.showButtonLabel,
                 {
-                  backgroundColor:
+                  color:
                     matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                      ? Colors.surfaceVariant
-                      : Colors.primary,
+                      ? Colors.onSurfaceVariant
+                      : Colors.onPrimary,
                 },
-                pressed && matchingCocktailSummary.recipeCount > 0 && selectedIngredientIds.size > 0
-                  ? styles.showButtonPressed
-                  : null,
               ]}
             >
-              <Text
-                style={[
-                  styles.showButtonLabel,
-                  {
-                    color:
-                      matchingCocktailSummary.recipeCount === 0 || selectedIngredientIds.size === 0
-                        ? Colors.onSurfaceVariant
-                        : Colors.onPrimary,
-                  },
-                ]}
-              >
-                {t("common.show")}
-              </Text>
-            </Pressable>
+              {t("common.show")}
+            </Text>
+          </Pressable>
         </View>
         <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <AppDialog

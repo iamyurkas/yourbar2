@@ -32,10 +32,10 @@ export const deDETranslations: TranslationDictionary = {
   "common.tabParty": "Party",
 
   "cocktails.emptyMy":
-    "Markieren Sie Zutaten, die Sie besitzen, um hier verfügbare Cocktails zu sehen.",
+    "Markieren Sie Ihre Zutaten, um hier verfügbare Cocktails zu sehen.",
   "cocktails.emptyAll": "Noch keine Cocktails",
   "cocktails.emptyParty":
-    "Wähle Cocktails aus, um eine Party-Einkaufsliste zu erstellen.",
+    "Wählen Sie Cocktails aus, um eine Party-Einkaufsliste zu erstellen.",
   "cocktails.helpMyTitle": "Meine Cocktails",
   "cocktails.helpMyText":
     "Dieser Bildschirm zeigt Cocktails, die Sie mit Ihren aktuellen Zutaten zubereiten können.\n\nNutzen Sie die Suche, um Ihre Rezepte schnell zu finden, und verwenden Sie Filter, um die Liste nach Tags oder Methode einzugrenzen.",
@@ -54,14 +54,14 @@ export const deDETranslations: TranslationDictionary = {
     "Dieser Bildschirm zeigt Zutaten, die Sie besitzen.\n\nSuchen Sie nach Namen und verwenden Sie Tag-Filter, um Ihre persönliche Sammlung schnell zu organisieren.",
   "ingredients.helpAllTitle": "Alle Zutaten",
   "ingredients.helpAllText":
-    "Dieser Bildschirm zeigt die vollständige Zutatenliste.\n\nNutzen Sie Suche und Tags, um schnell zu finden, was Sie brauchen.",
+    "Dieser Bildschirm zeigt die vollständige Zutatenliste.\n\nNutzen Sie die Suche und Tags, um schnell zu finden, was Sie brauchen.",
   "ingredients.helpShoppingTitle": "Einkaufsliste",
   "ingredients.helpShoppingText":
-    "Dieser Bildschirm zeigt Zutaten, die Sie kaufen möchten.\n\nMarkieren Sie Zutaten nach dem Kauf als verfügbar, um sie in 'Meine Zutaten' zu verschieben.",
+    "Dieser Bildschirm zeigt Zutaten, die Sie kaufen möchten.\n\nMarkieren Sie Zutaten nach dem Kauf als verfügbar, um sie in „Meine Zutaten“ zu verschieben.",
 
   "ingredientForm.changeImage": "Bild ändern",
   "ingredientForm.addImage": "Tippen, um ein Foto hinzuzufügen",
-  "ingredientForm.mediaLibraryAccessTitle": "Zugriff auf Mediathek",
+  "ingredientForm.mediaLibraryAccessTitle": "Zugriff auf die Mediathek",
   "ingredientForm.mediaLibraryAccessMessage":
     "Aktivieren Sie in den Systemeinstellungen die Berechtigung für die Fotomediathek, um ein Zutatenbild hinzuzufügen.",
   "ingredientForm.couldNotPickImage": "Bild konnte nicht ausgewählt werden",
@@ -75,7 +75,8 @@ export const deDETranslations: TranslationDictionary = {
   "ingredientForm.takePhoto": "Foto aufnehmen",
   "ingredientForm.chooseFromGallery": "Aus Galerie auswählen",
   "ingredientForm.nameRequiredTitle": "Name erforderlich",
-  "ingredientForm.nameRequiredMessage": "Bitte geben Sie den Zutatennamen ein.",
+  "ingredientForm.nameRequiredMessage":
+    "Bitte geben Sie einen Zutatennamen ein.",
   "ingredientForm.ingredientNotFound": "Zutat nicht gefunden",
   "ingredientForm.couldNotSave": "Zutat konnte nicht gespeichert werden",
   "ingredientForm.leaveWithoutSavingTitle": "Ohne Speichern verlassen?",
@@ -92,16 +93,16 @@ export const deDETranslations: TranslationDictionary = {
   "ingredientForm.baseDisableBrandedVariants":
     "Diese Zutat ist eine Basis für markengebundene Zutaten und kann daher selbst nicht markengebunden sein.",
   "ingredientForm.baseDisableStyledIngredient":
-    "Stil-Zutaten können nicht markengebunden sein. Entfernen Sie die Stil-Verknüpfung, um die Auswahl der Basis-Zutat zu aktivieren.",
+    "Stil-Zutaten können nicht markengebunden sein. Entfernen Sie die Stil-Verknüpfung, um die Auswahl der Basiszutat zu aktivieren.",
   "ingredientForm.styleDisableStyledVariants":
     "Diese Zutat ist eine Basis für Stil-Zutaten und kann daher selbst kein Stil sein.",
   "ingredientForm.styleDisableBrandedIngredient":
-    "Markengebundene Zutaten können keine Stil-Zutaten sein. Entfernen Sie die Verknüpfung zur Basis-Zutat, um die Stil-Auswahl zu aktivieren.",
+    "Markengebundene Zutaten können keine Stil-Zutaten sein. Entfernen Sie die Verknüpfung zur Basiszutat, um die Stil-Auswahl zu aktivieren.",
   "ingredientForm.editTitle": "Zutat bearbeiten",
   "ingredientForm.addTitle": "Neue Zutat hinzufügen",
   "ingredientForm.goBack": "Zurück",
   "ingredientForm.name": "Name",
-  "ingredientForm.namePlaceholder": "z. B.: Ingwersirup",
+  "ingredientForm.namePlaceholder": "z. B. Ingwersirup",
   "ingredientForm.removePhoto": "Foto entfernen",
   "ingredientForm.tags": "Tags",
   "ingredientForm.createTag": "Tag erstellen",
@@ -128,14 +129,14 @@ export const deDETranslations: TranslationDictionary = {
   "ingredientForm.noIngredientsFound": "Keine Zutaten gefunden",
   "ingredientForm.helpTitle": "Zutat hinzufügen",
   "ingredientForm.helpMessage":
-    "Verwenden Sie diesen Bildschirm, um eine neue Zutatenkarte zu erstellen.\n\nGeben Sie einen Namen ein, fügen Sie optional ein Foto, Tags, eine Basis- oder Stil-Zutat sowie Notizen hinzu und tippen Sie dann auf Speichern.\n\nEine Stil-Zutat kann nur mit einer Basis-Zutat verknüpft werden, die weder markengebunden noch selbst ein Stil ist.",
+    "Verwenden Sie diesen Bildschirm, um eine neue Zutatenkarte zu erstellen.\n\nGeben Sie einen Namen ein, fügen Sie optional ein Foto, Tags, eine Basis- oder Stil-Zutat sowie Notizen hinzu und tippen Sie dann auf Speichern.\n\nEine Stil-Zutat kann nur mit einer Basiszutat verknüpft werden, die weder markengebunden noch selbst ein Stil ist.",
   "ingredientForm.newTag": "Neuer Tag",
 
   "cocktailForm.editTitle": "Cocktail bearbeiten",
   "cocktailForm.addTitle": "Neuen Cocktail hinzufügen",
   "cocktailForm.changePhoto": "Foto ändern",
   "cocktailForm.addPhoto": "Foto hinzufügen",
-  "cocktailForm.mediaAccessRequired": "Mediathek-Zugriff erforderlich",
+  "cocktailForm.mediaAccessRequired": "Zugriff auf die Mediathek erforderlich",
   "cocktailForm.mediaAccessRequiredMessage":
     "Aktivieren Sie in den Systemeinstellungen die Berechtigung für die Fotomediathek, um ein Cocktailfoto hinzuzufügen.",
   "cocktailForm.couldNotPickImage": "Bild konnte nicht ausgewählt werden",
@@ -148,7 +149,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailForm.takePhoto": "Foto aufnehmen",
   "cocktailForm.chooseFromGallery": "Aus Galerie auswählen",
   "cocktailForm.nameRequired": "Name erforderlich",
-  "cocktailForm.nameRequiredMessage": "Bitte geben Sie den Cocktailnamen ein.",
+  "cocktailForm.nameRequiredMessage":
+    "Bitte geben Sie einen Cocktailnamen ein.",
   "cocktailForm.recipeRequired": "Rezept erforderlich",
   "cocktailForm.recipeRequiredMessage":
     "Fügen Sie dem Cocktail mindestens eine Zutat hinzu.",
@@ -166,7 +168,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailForm.stay": "Bleiben",
   "cocktailForm.leave": "Verlassen",
   "cocktailForm.name": "Name",
-  "cocktailForm.namePlaceholder": "z. B.: Margarita",
+  "cocktailForm.namePlaceholder": "z. B. Margarita",
   "cocktailForm.glass": "Glas",
   "cocktailForm.selectGlassware": "Glas auswählen",
   "cocktailForm.photo": "Foto",
@@ -211,7 +213,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailForm.onShoppingList": "Auf der Einkaufsliste",
   "cocktailForm.amount": "Menge",
   "cocktailForm.unit": "Einheit",
-  "cocktailForm.amountPlaceholder": "z. B.: 45",
+  "cocktailForm.amountPlaceholder": "z. B. 45",
   "cocktailForm.garnish": "Dekoration",
   "cocktailForm.optional": "Optional",
   "cocktailForm.process": "Zubereitung",
@@ -222,7 +224,7 @@ export const deDETranslations: TranslationDictionary = {
     "Kennzeichnet Eis für den Service, einschließlich Blending, weil dieses Eis im Glas landet.",
   "cocktailForm.allowBaseSubstitute": "Basisersatz zulassen",
   "cocktailForm.allowBaseSubstituteMessage":
-    "Wenn die angegebene Zutat nicht verfügbar ist, wird der Cocktail mit seiner Basiszutat als verfügbar angezeigt.",
+    "Wenn die angegebene Zutat nicht verfügbar ist, wird der Cocktail mit ihrer Basiszutat als verfügbar angezeigt.",
   "cocktailForm.allowBrandedSubstitute": "Markenersatz zulassen",
   "cocktailForm.allowBrandedSubstituteMessage":
     "Wenn die angegebene Zutat nicht verfügbar ist, wird der Cocktail mit markengebundenen Varianten der Basiszutat als verfügbar angezeigt.",
@@ -240,7 +242,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.toggleComment": "Kommentar hinzufügen",
   "cocktailDetails.openVideos": "Videoanleitung öffnen",
   "cocktailDetails.commentPlaceholder":
-    "Füge deinen Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
+    "Fügen Sie Ihren Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
   "cocktailDetails.showInMetric": "In metrischen Einheiten anzeigen",
   "cocktailDetails.showInImperial": "Imperial anzeigen",
   "cocktailDetails.displayMode.imperial": "Imperial",
@@ -275,11 +277,11 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
   "cocktailDetails.notFound": "Cocktail nicht gefunden",
   "cocktailDetails.helpMessage":
-    "Dieser Bildschirm zeigt Cocktail-Details, Zutaten und Anleitung.\n\nVerwenden Sie die Schaltflächen unter dem Cocktail, um ihn zu kopieren oder zu bearbeiten.\n\n**Zutaten-Bänder**\nLinkes Band markiert Zutatenart:\nblau = Markenzutat,\ngelb = Stil-Zutat.\n\nRechtes Band markiert Basisvarianten:\nblau = hat markengebundene Varianten,\ngelb = hat Stil-Varianten.",
+    "Dieser Bildschirm zeigt Cocktail-Details, Zutaten und Anleitung.\n\nVerwenden Sie die Schaltflächen unter dem Cocktail, um ihn zu kopieren oder zu bearbeiten.\n\n**Zutaten-Bänder**\nDas linke Band markiert die Zutatenart:\nblau = Markenzutat,\ngelb = Stil-Zutat.\n\nDas rechte Band markiert Basisvarianten:\nblau = hat markengebundene Varianten,\ngelb = hat Stil-Varianten.",
 
   "cocktailMethod.blend.label": "Mixen",
   "cocktailMethod.blend.description":
-    "Mit crushed ice zu einer gefrorenen Textur mixen.",
+    "Mit Crushed Ice zu einer gefrorenen Textur mixen.",
   "cocktailMethod.muddle.label": "Stampfen",
   "cocktailMethod.muddle.description":
     "Früchte, Beeren oder Kräuter andrücken, um Öle und Saft freizusetzen.",
@@ -295,18 +297,18 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailMethod.throw.label": "Umgießen",
   "cocktailMethod.throw.description":
     "Zwischen zwei Gefäßen hin- und hergießen, um sanft zu belüften, ohne zu stark zu verwässern.",
-  "cocktailMethod.build.label": "Im Glas",
+  "cocktailMethod.build.label": "Im Glas bauen",
   "cocktailMethod.build.description":
     "Zutaten direkt in das Servierglas geben.",
   "cocktailMethod.layer.label": "Schichten",
   "cocktailMethod.layer.description":
-    "Zutaten mit einem Barlöffel in Schichten übereinandergeben, für einen optischen Effekt.",
+    "Zutaten mit einem Barlöffel in Schichten übereinandergeben, um einen optischen Effekt zu erzeugen.",
 
   "ingredientDetails.title": "Zutaten-Details",
   "ingredientDetails.goBack": "Zurück",
   "ingredientDetails.noPhoto": "Kein Foto",
   "ingredientDetails.iHaveIt": "Habe ich",
-  "ingredientDetails.removeFromShoppingList": "Von Einkaufsliste entfernen",
+  "ingredientDetails.removeFromShoppingList": "Von der Einkaufsliste entfernen",
   "ingredientDetails.addToShoppingList": "Zur Einkaufsliste hinzufügen",
   "ingredientDetails.removeIngredientFromShoppingList":
     "Zutat von der Einkaufsliste entfernen",
@@ -316,7 +318,7 @@ export const deDETranslations: TranslationDictionary = {
   "ingredientDetails.amazonAffiliateInformation": "Amazon-Partnerinformationen",
   "ingredientDetails.affiliateDisclosureTitle": "Hinweis zu Partnerlinks",
   "ingredientDetails.affiliateDisclosureMessage":
-    "Einige Amazon-Links in dieser App sind Partner-Links. Wenn Sie etwas kaufen, erhalten wir möglicherweise eine kleine Provision ohne zusätzliche Kosten für Sie.\n\nDies hilft, die Entwicklung der App zu unterstützen.\nVielen Dank für Ihre Unterstützung!",
+    "Einige Amazon-Links in dieser App sind Partnerlinks. Wenn Sie etwas kaufen, erhalten wir möglicherweise eine kleine Provision, ohne dass für Sie zusätzliche Kosten entstehen.\n\nDies hilft, die Entwicklung der App zu unterstützen.\nVielen Dank für Ihre Unterstützung!",
   "ingredientDetails.toMakeMoreCocktails.one":
     "für {{count}} weiteren Cocktail",
   "ingredientDetails.toMakeMoreCocktails.few":
@@ -336,10 +338,10 @@ export const deDETranslations: TranslationDictionary = {
   "ingredientDetails.baseIngredient": "Basiszutat",
   "ingredientDetails.viewBaseIngredient": "Basiszutat ansehen",
   "ingredientDetails.removeBaseIngredient": "Basiszutat entfernen",
-  "ingredientDetails.styledIngredients": "Stil-Zutaten",
+  "ingredientDetails.secondarys": "Stil-Zutaten",
   "ingredientDetails.brandedIngredients": "Markenzutaten",
   "ingredientDetails.viewIngredient": "{{name}} ansehen",
-  "ingredientDetails.removeIngredientLink": "{{name}}-Verknüpfung entfernen",
+  "ingredientDetails.removeIngredientLink": "Verknüpfung zu {{name}} entfernen",
   "ingredientDetails.filterCocktails": "Cocktails filtern",
   "ingredientDetails.cocktails": "Cocktails",
   "ingredientDetails.showMoreCocktails": "Weitere Cocktails anzeigen",
@@ -352,13 +354,13 @@ export const deDETranslations: TranslationDictionary = {
     "Diese Zutat existiert noch nicht. Sie können sie jetzt erstellen.",
   "ingredientDetails.createMissingIngredient": "Diese Zutat erstellen",
   "ingredientDetails.helpMessage":
-    "Dieser Bildschirm zeigt Zutaten-Details, Verknüpfungen und zugehörige Cocktails.\n\nVerwenden Sie die Schaltfläche unter der Zutat, um sie zu bearbeiten.\n\n**Cocktail-Bänder**\nLinkes Band zeigt, was enthalten ist:\nblau = hat Markenzutaten,\ngelb = hat Stil-Zutaten.\n\nRechtes Band zeigt Ersatzmöglichkeiten:\nblau = Markenersatz vorhanden,\ngelb = Stilersatz vorhanden.",
+    "Dieser Bildschirm zeigt Zutaten-Details, Verknüpfungen und zugehörige Cocktails.\n\nVerwenden Sie die Schaltfläche unter der Zutat, um sie zu bearbeiten.\n\n**Cocktail-Bänder**\nDas linke Band zeigt, was enthalten ist:\nblau = hat Markenzutaten,\ngelb = hat Stil-Zutaten.\n\nDas rechte Band zeigt Ersatzmöglichkeiten:\nblau = Markenersatz vorhanden,\ngelb = Stilersatz vorhanden.",
   "ingredientDetails.removeBaseTitle": "Basiszutat entfernen",
   "ingredientDetails.removeBaseMessage":
-    "Sind Sie sicher, dass Sie die Verknüpfung von {{name}} mit seiner Basiszutat aufheben möchten?",
+    "Sind Sie sicher, dass Sie die Verknüpfung von {{name}} mit der Basiszutat aufheben möchten?",
   "ingredientDetails.removeStyleTitle": "Stil-Zutat entfernen",
   "ingredientDetails.removeStyleMessage":
-    "Sind Sie sicher, dass Sie die Verknüpfung von {{name}} mit seiner Stil-Zutat aufheben möchten?",
+    "Sind Sie sicher, dass Sie die Verknüpfung von {{name}} mit der Stil-Zutat aufheben möchten?",
   "ingredientDetails.removeBrandedTitle": "Markenzutat entfernen",
   "ingredientDetails.removeBrandedMessage":
     "Verknüpfung von {{source}} mit {{target}} aufheben?",
@@ -378,7 +380,7 @@ export const deDETranslations: TranslationDictionary = {
 
   "onboarding.start": "Start",
   "onboarding.next": "Weiter",
-  "onboarding.finish": "Fertigstellen",
+  "onboarding.finish": "Fertig",
   "onboarding.skip": "Überspringen",
   "onboarding.stepCounter": "{{current}} von {{total}}",
   "onboarding.step1.message":
@@ -424,7 +426,7 @@ export const deDETranslations: TranslationDictionary = {
   "ingredients.sortOptionMostUsedAccessibility":
     "Zutaten nach Verwendungshäufigkeit sortieren",
   "ingredients.sortOptionRecentlyAddedAccessibility":
-    "Zutaten nach kürzlich hinzugefügt sortieren",
+    "Zutaten nach zuletzt hinzugefügt sortieren",
 
   "cocktails.oneMoreIngredientForMore":
     "↓ Noch eine Zutat für mehr Cocktails ↓",
@@ -442,7 +444,7 @@ export const deDETranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Sortieren nach",
   "cocktails.sortOptionAlphabeticalAccessibility":
-    "Alphabetisch sortieren (A-Z)",
+    "Alphabetisch sortieren (A–Z)",
   "cocktails.sortOptionPartySelectedAccessibility":
     "Nach Partyauswahl sortieren",
   "cocktails.sortOptionRequiredCountAccessibility":
@@ -451,7 +453,7 @@ export const deDETranslations: TranslationDictionary = {
     "Nach Anzahl fehlender benötigter Zutaten sortieren",
   "cocktails.sortOptionRatingAccessibility": "Nach Bewertung sortieren",
   "cocktails.sortOptionRecentlyAddedAccessibility":
-    "Nach Hinzufügezeit sortieren",
+    "Nach Hinzufügedatum sortieren",
   "cocktails.sortOptionRandomAccessibility": "Zufällig sortieren",
   "cocktails.addCocktail": "Cocktail hinzufügen",
   "cocktails.addPartyIngredientsToShopping":
@@ -495,21 +497,21 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.manageBars": "Bars verwalten",
   "sideMenu.ignoreGarnish": "Dekoration ignorieren",
   "sideMenu.ignoreGarnishCaption": "Alle Dekorationen sind optional",
-  "sideMenu.allowAllSubstitutes": "Alle Ersetzungen zulassen",
-  "sideMenu.allowAllSubstitutesCaption": "Ersatz immer verwenden",
+  "sideMenu.allowAllSubstitutes": "Alle Ersatzoptionen zulassen",
+  "sideMenu.allowAllSubstitutesCaption": "Ersatz immer berücksichtigen",
   "sideMenu.useImperial": "Imperial anzeigen",
   "sideMenu.useImperialCaption": "oz statt ml und g verwenden",
   "sideMenu.keepScreenAwake": "Bildschirm aktiv halten",
   "sideMenu.keepScreenAwakeCaption":
-    "Bildschirmsperre bei Cocktailansicht verhindern",
+    "Bildschirmsperre in der Cocktailansicht verhindern",
   "sideMenu.smartShakerFiltering": "Intelligenter Filter",
   "sideMenu.smartShakerFilteringInfo":
     "Info zur intelligenten Shaker-Filterung",
   "sideMenu.smartShakerFilteringInfoTitle": "Intelligente Shaker-Filterung",
   "sideMenu.smartShakerFilteringInfoMessage":
-    "Wenn aktiviert, werden Zutaten in Gruppen ohne aktuelle Auswahl ausgeblendet, wenn sie null Ergebnisse liefern würden.\n\nIn Gruppen, in denen Sie bereits mindestens eine Zutat ausgewählt haben, bleiben Elemente sichtbar, um die ODER-Logik beizubehalten.\n\nDeaktivieren Sie dies, um das Standard-Shaker-Verhalten wiederherzustellen.",
+    "Wenn aktiviert, werden Zutaten in Gruppen ohne aktuelle Auswahl ausgeblendet, wenn sie keine Ergebnisse liefern würden.\n\nIn Gruppen, in denen Sie bereits mindestens eine Zutat ausgewählt haben, bleiben Elemente sichtbar, um die ODER-Logik beizubehalten.\n\nDeaktivieren Sie dies, um das Standardverhalten des Shakers wiederherzustellen.",
   "sideMenu.smartShakerFilteringCaption": "Nicht passende Zutaten ausblenden",
-  "sideMenu.showTabCounters": "Anzahl anzeigenr",
+  "sideMenu.showTabCounters": "Anzahl anzeigen",
   "sideMenu.showTabCountersCaption": "Anzahl neben Tabs anzeigen",
   "sideMenu.startingScreen": "Startbildschirm",
   "sideMenu.startingScreenOpen": "{{screen}} öffnen",
@@ -525,7 +527,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.deleteNamedTagA11y": "{{name}} löschen",
   "sideMenu.tagFallbackName": "Tag",
   "sideMenu.startScreenModalDescription":
-    "Wählen Sie, wo die App geöffnet wird",
+    "Wählen Sie, wo die App geöffnet wird.",
   "sideMenu.startScreenOptionA11y": "Zuerst {{screen}} öffnen",
   "sideMenu.amazonStoreModalDescription":
     "Überschreiben Sie die automatische Erkennung, um Ihren bevorzugten Amazon-Store auszuwählen.",
@@ -560,10 +562,10 @@ export const deDETranslations: TranslationDictionary = {
   "barManager.barName": "Bar-Name",
   "barManager.deleteConfirm":
     'Sind Sie sicher, dass Sie die Bar \n **"{{name}}"** löschen möchten?',
-  "barManager.cannotDeleteLast": "Sie können nicht Ihre einzige Bar löschen.",
+  "barManager.cannotDeleteLast": "Sie können Ihre einzige Bar nicht löschen.",
   "barManager.defaultName": "Zuhause",
 
-  "app.loadingTagline": "Deine Regeln!",
+  "app.loadingTagline": "Ihre Bar. Ihre Regeln!",
   "appDialog.closeDialog": "Dialog schließen",
   "tagEditor.hue": "Farbton",
   "tagEditor.tone": "Ton",
@@ -571,12 +573,12 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.restore": "Wiederherstellen",
   "sideMenu.restoreBundledData": "Mitgelieferte Daten wiederherstellen",
   "sideMenu.restoreBundledDataDescription":
-    "Integrierte Änderungen gehen verloren. Ihre eigenen Inhalte bleiben sicher.",
+    "Mitgelieferte Änderungen gehen verloren. Ihre eigenen Inhalte bleiben sicher.",
   "sideMenu.restoreBundledDataConfirmMessage":
     "Dies stellt die mitgelieferten Cocktails und Zutaten wieder her.\nIhre eigenen Cocktails und Zutaten bleiben unverändert.",
   "sideMenu.exportUnavailableTitle": "Export nicht verfügbar",
   "sideMenu.exportUnavailableMessage":
-    "Laden Sie Ihr Inventar vor dem Exportieren.",
+    "Laden Sie Ihr Inventar, bevor Sie es exportieren.",
   "sideMenu.backupUnavailableTitle": "Sicherung nicht verfügbar",
   "sideMenu.backupUnavailableMessage":
     "Laden Sie Ihr Inventar, bevor Sie Daten sichern.",
@@ -587,7 +589,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.backupFailedTitle": "Sicherung fehlgeschlagen",
   "sideMenu.importFailedTitle": "Import fehlgeschlagen",
   "sideMenu.deviceStorageUnavailable":
-    "Auf Gerätespeicher kann nicht zugegriffen werden.",
+    "Auf den Gerätespeicher kann nicht zugegriffen werden.",
   "sideMenu.importReadArchiveFailed":
     "Das ausgewählte Archiv kann nicht gelesen werden.",
   "sideMenu.importArchiveEmpty": "Das ausgewählte Archiv ist leer.",
@@ -600,7 +602,7 @@ export const deDETranslations: TranslationDictionary = {
 
   "sideMenu.importIngredientStatusesTitle": "Zutatenstatus importieren?",
   "sideMenu.importIngredientStatusesMessage":
-    "Wähle aus, welche Zutatenstatus aus diesem Backup importiert werden sollen.",
+    "Wählen Sie aus, welche Zutatenstatus aus diesem Backup importiert werden sollen.",
   "sideMenu.importIngredientStatusesAvailability": "Zutatenverfügbarkeit",
   "sideMenu.importIngredientStatusesShopping": "Einkaufsliste für Zutaten",
   "sideMenu.importIngredientStatusesConfirm": "Auswahl importieren",
@@ -619,13 +621,13 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.restoreData": "Daten wiederherstellen",
   "sideMenu.restoringData": "Daten werden wiederhergestellt...",
   "sideMenu.restoreDataDescription":
-    "Importieren Sie Cocktails, Zutaten und Fotos aus einem Archiv",
+    "Importieren Sie Cocktails, Zutaten und Fotos aus einem Archiv.",
   "sideMenu.reloadBundledInventory": "Mitgeliefertes Inventar neu laden",
   "language.en-GB": "Englisch",
   "language.en-US": "Englisch (US)",
   "language.uk-UA": "Ukrainisch",
   "language.es-ES": "Spanisch",
-  "language.de-DE": "Deutsche (Beta)",
+  "language.de-DE": "Deutsch (Beta)",
   "languageModal.title": "App-Sprache",
   "languageModal.description":
     "Änderungen werden sofort übernommen.\nMitgelieferte Daten werden übersetzt.",
@@ -646,7 +648,7 @@ export const deDETranslations: TranslationDictionary = {
     "Beginnen Sie mit dem, was Sie besitzen",
   "startScreen.ingredients_shopping.label": "Einkaufsliste",
   "startScreen.ingredients_shopping.description":
-    "Gehen Sie zu Ihren Einkaufsartikeln",
+    "Zu Ihren Einkaufsartikeln gehen",
 
   "theme.light": "Hell",
   "theme.dark": "Dunkel",
@@ -657,9 +659,9 @@ export const deDETranslations: TranslationDictionary = {
   "glassware.martini": "Martiniglas",
   "glassware.collins_glass": "Collins-Glas",
   "glassware.copper_mug": "Kupferbecher",
-  "glassware.coupe": "Coupe",
+  "glassware.coupe": "Coupe-Glas",
   "glassware.cup": "Tasse",
-  "glassware.goblet": "Kelchglas",
+  "glassware.goblet": "Kelch",
   "glassware.highball_glass": "Highball-Glas",
   "glassware.hurricane_glass": "Hurricane-Glas",
   "glassware.toddy_glass": "Hot-Toddy-Glas",
@@ -667,14 +669,14 @@ export const deDETranslations: TranslationDictionary = {
   "glassware.nick_and_nora": "Nick & Nora",
   "glassware.pitcher": "Krug",
   "glassware.pub_glass": "Pintglas",
-  "glassware.rocks_glass": "Tumbler",
-  "glassware.shooter": "Shooter-Glas",
+  "glassware.rocks_glass": "Old-Fashioned-Glas",
+  "glassware.shooter": "Shotglas",
   "glassware.snifter": "Schwenker",
   "glassware.tiki_glass": "Tiki-Glas",
   "glassware.wine_glass": "Weinglas",
 
-  "unit.1.singular": " ",
-  "unit.1.plural": " ",
+  "unit.1.singular": "",
+  "unit.1.plural": "",
   "unit.2.singular": "Barlöffel",
   "unit.2.plural": "Barlöffel",
   "unit.3.singular": "cl",
@@ -754,7 +756,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.setThemeA11y": "{{theme}}-Design festlegen",
   "sideMenu.reportIssueSubject": "Etwas stimmt nicht in Your Bar",
   "ingredients.onShoppingList": "Auf der Einkaufsliste",
-  "ingredients.removeFromShoppingList": "Von Einkaufsliste entfernen",
+  "ingredients.removeFromShoppingList": "Von der Einkaufsliste entfernen",
   "shaker.ingredientsCount": "{{count}} Zutaten",
   "shaker.ingredientsInGroupA11y": "{{name}} Zutaten",
   "shaker.makeCount.one": "{{count}} Cocktail zubereiten",
@@ -788,12 +790,12 @@ export const deDETranslations: TranslationDictionary = {
   "barcode.createManually": "Manuell erstellen",
   "barcode.scanAgain": "Erneut scannen",
   "barcode.editBeforeSaving": "Vor dem Speichern bearbeiten",
-  "barcode.loadingProductInfo": "Produktinfo wird geladen",
+  "barcode.loadingProductInfo": "Produktinformationen werden geladen",
   "barcode.helpTitle": "Hilfe zum Barcode-Scanner",
   "barcode.helpMessage":
-    "Richten Sie Ihre Kamera auf einen Produkt-Barcode. Wir prüfen, ob er bereits existiert, schlagen ähnliche Zutaten vor und lassen Sie sicher erstellen oder verknüpfen.",
+    "Richten Sie Ihre Kamera auf einen Produkt-Barcode. Wir prüfen, ob er bereits existiert, schlagen ähnliche Zutaten vor und lassen Sie ihn sicher erstellen oder verknüpfen.",
   "barcode.scannerUnavailable":
-    "Barcode-Scanner ist in diesem Build nicht verfügbar",
+    "Der Barcode-Scanner ist in diesem Build nicht verfügbar",
   "common.back": "Zurück",
   "common.somethingWentWrong": "Etwas ist schiefgelaufen",
   "common.tryAgain": "Erneut versuchen",

@@ -330,7 +330,7 @@ export const esESTranslations: TranslationDictionary = {
   "ingredientDetails.baseIngredient": "Ingrediente base",
   "ingredientDetails.viewBaseIngredient": "Ver ingrediente base",
   "ingredientDetails.removeBaseIngredient": "Quitar ingrediente base",
-  "ingredientDetails.styledIngredients": "Ingredientes de estilo",
+  "ingredientDetails.secondarys": "Ingredientes de estilo",
   "ingredientDetails.brandedIngredients": "Ingredientes de marca",
   "ingredientDetails.viewIngredient": "Ver {{name}}",
   "ingredientDetails.removeIngredientLink": "Quitar enlace de {{name}}",

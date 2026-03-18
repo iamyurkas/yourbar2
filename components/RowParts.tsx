@@ -143,7 +143,7 @@ export function ListRow({
   const showBrandIndicator = brandIndicatorColor != null;
   const showRightIndicator = rightIndicatorColor != null;
   const indicatorColor = brandIndicatorColor ?? Colors.primary;
-  const resolvedRightIndicatorColor = rightIndicatorColor ?? Colors.styledIngredient;
+  const resolvedRightIndicatorColor = rightIndicatorColor ?? Colors.secondary;
   const hasSplitLeftIndicator = showBrandIndicator && brandIndicatorBottomColor != null;
   const hasSplitRightIndicator = showRightIndicator && rightIndicatorBottomColor != null;
   const resolvedTagColors = tagColors?.filter(Boolean) ?? (tagColor ? [tagColor] : []);

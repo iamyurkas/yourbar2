@@ -31,8 +31,8 @@ import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
 import { useI18n } from '@/libs/i18n/use-i18n';
-import { getIngredientSaveNavigationPlan } from '@/libs/ingredient-save-navigation';
 import { resolveImageSource } from '@/libs/image-source';
+import { getIngredientSaveNavigationPlan } from '@/libs/ingredient-save-navigation';
 import { skipDuplicateBack } from '@/libs/navigation';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
@@ -1211,7 +1211,7 @@ export default function IngredientFormScreen() {
       const isOnShoppingList = Number.isFinite(id) && id >= 0 && shoppingIngredientIds.has(id);
       const isAvailable = Number.isFinite(id) && id >= 0 && availableIngredientIds.has(id);
       const brandIndicatorColor = item.styleIngredientId != null
-        ? Colors.styledIngredient
+        ? Colors.secondary
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
@@ -1219,11 +1219,11 @@ export default function IngredientFormScreen() {
         ? brandedBaseIngredientIds.has(id)
           ? Colors.primary
           : styledBaseIngredientIds.has(id)
-            ? Colors.styledIngredient
+            ? Colors.secondary
             : undefined
         : undefined;
       const rightIndicatorBottomColor = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id) && styledBaseIngredientIds.has(id)
-        ? Colors.styledIngredient
+        ? Colors.secondary
         : undefined;
 
       const control = isOnShoppingList ? (
@@ -1344,7 +1344,7 @@ export default function IngredientFormScreen() {
       const isOnShoppingList = Number.isFinite(id) && id >= 0 && shoppingIngredientIds.has(id);
       const isAvailable = Number.isFinite(id) && id >= 0 && availableIngredientIds.has(id);
       const brandIndicatorColor = item.styleIngredientId != null
-        ? Colors.styledIngredient
+        ? Colors.secondary
         : item.baseIngredientId != null
           ? Colors.primary
           : undefined;
@@ -1352,11 +1352,11 @@ export default function IngredientFormScreen() {
         ? brandedBaseIngredientIds.has(id)
           ? Colors.primary
           : styledBaseIngredientIds.has(id)
-            ? Colors.styledIngredient
+            ? Colors.secondary
             : undefined
         : undefined;
       const rightIndicatorBottomColor = Number.isFinite(id) && id >= 0 && brandedBaseIngredientIds.has(id) && styledBaseIngredientIds.has(id)
-        ? Colors.styledIngredient
+        ? Colors.secondary
         : undefined;
 
       const control = isOnShoppingList ? (

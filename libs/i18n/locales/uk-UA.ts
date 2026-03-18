@@ -29,7 +29,7 @@ export const ukUATranslations: TranslationDictionary = {
   "common.tabAll": "Усі",
   "common.tabMy": "Мої",
   "common.tabShopping": "Покупки",
-  "common.tabParty": "Party",
+  "common.tabParty": "Вечірка",
 
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
@@ -336,7 +336,7 @@ export const ukUATranslations: TranslationDictionary = {
   "ingredientDetails.baseIngredient": "Базовий інгредієнт",
   "ingredientDetails.viewBaseIngredient": "Переглянути базовий інгредієнт",
   "ingredientDetails.removeBaseIngredient": "Відвʼязати базовий інгредієнт",
-  "ingredientDetails.styledIngredients": "Стильові інгредієнти",
+  "ingredientDetails.secondarys": "Стильові інгредієнти",
   "ingredientDetails.brandedIngredients": "Брендові інгредієнти",
   "ingredientDetails.viewIngredient": "Переглянути {{name}}",
   "ingredientDetails.removeIngredientLink": "Видалити звʼязок з {{name}}",

@@ -181,7 +181,7 @@ const CocktailListRowComponent = ({
           <MaterialCommunityIcons
             name="party-popper"
             size={12}
-            color={Colors.styledIngredient}
+            color={Colors.secondary}
             accessibilityRole="image"
             accessibilityLabel={t('common.tabParty')}
           />
@@ -193,7 +193,7 @@ const CocktailListRowComponent = ({
     Colors.outline,
     Colors.tint,
     normalizedRating,
-    Colors.styledIngredient,
+    Colors.secondary,
     isPartySelected,
     showPartySelectionControl,
     onPartySelectionToggle,
@@ -254,7 +254,7 @@ const CocktailListRowComponent = ({
           <MaterialCommunityIcons
             name={resolveVideoServiceIcon(videoService)}
             size={METHOD_ICON_SIZE}
-            color={Colors.onSurfaceVariant}
+            color={Colors.tertiary}
           />
         ) : null}
         {icons.map(({ id, icon }, index) => {
@@ -344,11 +344,11 @@ const CocktailListRowComponent = ({
     return { hasBrandedIngredient: hasBranded, hasStyledIngredient: hasStyled };
   }, [cocktail.ingredients, lookup.ingredientById]);
 
-  const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : hasStyledIngredient ? Colors.styledIngredient : undefined;
-  const brandIndicatorBottomColor = hasBrandedIngredient && hasStyledIngredient ? Colors.styledIngredient : undefined;
+  const brandIndicatorColor = hasBrandedIngredient ? Colors.primary : hasStyledIngredient ? Colors.secondary : undefined;
+  const brandIndicatorBottomColor = hasBrandedIngredient && hasStyledIngredient ? Colors.secondary : undefined;
 
-  const rightIndicatorColor = hasBrandFallback ? Colors.primary : hasStyleFallback ? Colors.styledIngredient : undefined;
-  const rightIndicatorBottomColor = hasBrandFallback && hasStyleFallback ? Colors.styledIngredient : undefined;
+  const rightIndicatorColor = hasBrandFallback ? Colors.primary : hasStyleFallback ? Colors.secondary : undefined;
+  const rightIndicatorBottomColor = hasBrandFallback && hasStyleFallback ? Colors.secondary : undefined;
 
   const thumbnail = useMemo(
     () => <Thumb label={cocktail.name} uri={cocktail.photoUri} fallbackUri={glasswareUri} />,
