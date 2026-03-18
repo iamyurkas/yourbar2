@@ -113,6 +113,7 @@ export default function IngredientDetailsScreen() {
     availableIngredientIds,
     toggleIngredientAvailability,
     shoppingIngredientIds,
+    partyCocktailIds,
     toggleIngredientShopping,
     clearBaseIngredient,
     ignoreGarnish,
@@ -1747,6 +1748,7 @@ export default function IngredientDetailsScreen() {
                             recipeNamesCount={recipeNamesCount}
                             ingredientLine={ingredientLine}
                             ratingValue={ratingValue}
+                            isPartySelected={partyCocktailIds.has(Number(cocktail.id ?? -1))}
                             hasComment={Boolean(getCocktailComment(cocktail).trim())}
                             hasBrandFallback={hasBrandFallback}
                             hasStyleFallback={hasStyleFallback}

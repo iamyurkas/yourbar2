@@ -2,7 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   FlatList,
   Pressable,
@@ -50,17 +50,11 @@ type CocktailMethodOption = {
 const METHOD_ICON_SIZE = 16;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
 
-function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
-  return (cocktail.ingredients ?? []).filter(
-    (ingredient) => !ingredient?.optional && !(ignoreGarnish && ingredient?.garnish),
-  ).length;
-}
-
 export default function CocktailsScreen() {
-  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, getCocktailRating, getCocktailComment, loading } =
+  const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, partyCocktailIds, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, ratingFilterThreshold, showTabCounters } = useInventorySettings();
-  const { toggleIngredientShopping } = useInventoryActions();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { toggleIngredientShopping, toggleCocktailParty, addCocktailsIngredientsToShopping } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
@@ -79,6 +73,8 @@ export default function CocktailsScreen() {
   const [collapsedMissingIngredientIds, setCollapsedMissingIngredientIds] = useState<Set<number>>(
     () => new Set(),
   );
+  const [optimisticParty, setOptimisticParty] = useState<Map<number, boolean>>(() => new Map());
+  const [, startPartyTransition] = useTransition();
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
@@ -134,7 +130,7 @@ export default function CocktailsScreen() {
     setQuery((previous) => (previous === parsedQuery ? previous : parsedQuery));
 
     const parsedTab = getParamValue(params.tab);
-    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'favorites' ? parsedTab : 'all';
+    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'party' ? parsedTab : 'all';
     setActiveTab((previous) => (previous === nextTab ? previous : nextTab));
 
     const parsedTagKeys = getParamValue(params.tags)
@@ -157,7 +153,7 @@ export default function CocktailsScreen() {
 
     const parsedSort = getParamValue(params.sort);
     const nextSortOption: CocktailSortOption =
-      parsedSort === 'requiredCount' || parsedSort === 'rating' || parsedSort === 'recentlyAdded' || parsedSort === 'random'
+      parsedSort === 'party' || parsedSort === 'rating' || parsedSort === 'recentlyAdded' || parsedSort === 'random'
         ? parsedSort
         : 'alphabetical';
     setSelectedSortOption((previous) => (previous === nextSortOption ? previous : nextSortOption));
@@ -322,26 +318,15 @@ export default function CocktailsScreen() {
     [Colors],
   );
 
-  const ratedCocktails = useMemo(() => {
-    return cocktails.filter((cocktail) => {
-      const ratingValue = getCocktailRating(cocktail);
-      return ratingValue >= ratingFilterThreshold;
-    });
-  }, [cocktails, getCocktailRating, ratingFilterThreshold]);
-
   const baseTabCocktails = useMemo(() => {
-    if (activeTab === 'favorites') {
-      return ratedCocktails;
-    }
-
     return cocktails;
-  }, [activeTab, cocktails, ratedCocktails]);
+  }, [cocktails]);
 
   const cocktailsByTab = useMemo<Record<CocktailTabKey, Cocktail[]>>(() => ({
     all: cocktails,
     my: cocktails,
-    favorites: ratedCocktails,
-  }), [cocktails, ratedCocktails]);
+    party: cocktails.filter((cocktail) => partyCocktailIds.has(Number(cocktail.id ?? -1))),
+  }), [cocktails, partyCocktailIds]);
 
 
 
@@ -567,11 +552,11 @@ export default function CocktailsScreen() {
         return isSortDescending ? -result : result;
       }
 
-      if (selectedSortOption === 'requiredCount') {
-        const leftCount = countRequiredIngredients(left, ignoreGarnish);
-        const rightCount = countRequiredIngredients(right, ignoreGarnish);
-        if (leftCount !== rightCount) {
-          result = leftCount - rightCount;
+      if (selectedSortOption === 'party') {
+        const leftSelected = partyCocktailIds.has(Number(left.id ?? -1));
+        const rightSelected = partyCocktailIds.has(Number(right.id ?? -1));
+        if (leftSelected !== rightSelected) {
+          result = Number(rightSelected) - Number(leftSelected);
         } else {
           result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
@@ -615,8 +600,8 @@ export default function CocktailsScreen() {
     },
     [
       getCocktailRating,
-      ignoreGarnish,
       isSortDescending,
+      partyCocktailIds,
       randomSortRanks,
       selectedSortOption,
     ],
@@ -666,11 +651,11 @@ export default function CocktailsScreen() {
       counter: showTabCounters ? `(${myReadyCocktailsCount})` : undefined,
     },
     {
-      key: 'favorites',
-      label: t('common.tabFavorites'),
-      counter: showTabCounters ? `(${cocktailsByTab.favorites.length})` : undefined,
+      key: 'party',
+      label: t('common.tabParty'),
+      counter: showTabCounters ? `(${cocktailsByTab.party.length})` : undefined,
     },
-  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myReadyCocktailsCount, showTabCounters, t]);
+  ], [cocktailsByTab.all.length, cocktailsByTab.party.length, myReadyCocktailsCount, showTabCounters, t]);
 
 
 
@@ -721,6 +706,57 @@ export default function CocktailsScreen() {
     },
     [toggleIngredientShopping],
   );
+
+  const effectivePartyCocktailIds = useMemo(() => {
+    if (optimisticParty.size === 0) {
+      return partyCocktailIds;
+    }
+    const next = new Set(partyCocktailIds);
+    optimisticParty.forEach((value, id) => {
+      if (value) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+    });
+    return next;
+  }, [optimisticParty, partyCocktailIds]);
+
+  useEffect(() => {
+    if (optimisticParty.size === 0) {
+      return;
+    }
+    setOptimisticParty((previous) => {
+      const next = new Map(previous);
+      let didChange = false;
+      previous.forEach((value, id) => {
+        if (partyCocktailIds.has(id) === value) {
+          next.delete(id);
+          didChange = true;
+        }
+      });
+      return didChange ? next : previous;
+    });
+  }, [optimisticParty, partyCocktailIds]);
+
+  const handlePartyToggle = useCallback((cocktailId: number) => {
+    if (cocktailId < 0) {
+      return;
+    }
+
+    setOptimisticParty((previous) => {
+      const next = new Map(previous);
+      const current = next.has(cocktailId)
+        ? next.get(cocktailId) ?? partyCocktailIds.has(cocktailId)
+        : partyCocktailIds.has(cocktailId);
+      next.set(cocktailId, !current);
+      return next;
+    });
+
+    startPartyTransition(() => {
+      toggleCocktailParty(cocktailId);
+    });
+  }, [partyCocktailIds, startPartyTransition, toggleCocktailParty]);
 
   const handleToggleIngredientCollapse = useCallback((ingredientId: number) => {
     setCollapsedMissingIngredientIds((previous) => {
@@ -856,6 +892,12 @@ export default function CocktailsScreen() {
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item)}
           hasComment={Boolean(getCocktailComment(item).trim())}
+          isPartySelected={effectivePartyCocktailIds.has(Number(item.id ?? -1))}
+          onToggleParty={
+            activeTab === 'party'
+              ? () => handlePartyToggle(Number(item.id ?? -1))
+              : undefined
+          }
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
         />
@@ -865,7 +907,10 @@ export default function CocktailsScreen() {
       getAvailabilitySummary,
       getCocktailComment,
       getCocktailRating,
+      handlePartyToggle,
       handleSelectCocktail,
+      activeTab,
+      effectivePartyCocktailIds,
       ingredients,
     ],
   );
@@ -970,6 +1015,7 @@ export default function CocktailsScreen() {
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item.cocktail)}
           hasComment={Boolean(getCocktailComment(item.cocktail).trim())}
+          isPartySelected={effectivePartyCocktailIds.has(Number(item.cocktail.id ?? -1))}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
         />
@@ -986,6 +1032,7 @@ export default function CocktailsScreen() {
       ingredients,
       myTabAvailabilitySummaryByKey,
       collapsedMissingIngredientIds,
+      effectivePartyCocktailIds,
       shoppingIngredientIds,
       Colors,
       locale,
@@ -1025,12 +1072,13 @@ export default function CocktailsScreen() {
     selectedSortOption !== 'alphabetical' ||
     isSortDescending;
   const isMyTab = activeTab === 'my';
+  const isPartyTab = activeTab === 'party';
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
         return t('cocktails.emptyMy');
-      case 'favorites':
-        return t('cocktails.emptyFavorites');
+      case 'party':
+        return t('cocktails.emptyParty');
       default:
         return t('cocktails.emptyAll');
     }
@@ -1042,10 +1090,10 @@ export default function CocktailsScreen() {
           title: t('cocktails.helpMyTitle'),
           text: t('cocktails.helpMyText'),
         };
-      case 'favorites':
+      case 'party':
         return {
-          title: t('cocktails.helpFavoritesTitle'),
-          text: t('cocktails.helpFavoritesText'),
+          title: t('cocktails.helpPartyTitle'),
+          text: t('cocktails.helpPartyText'),
         };
       case 'all':
       default:
@@ -1125,8 +1173,8 @@ export default function CocktailsScreen() {
                     switch (option) {
                       case 'alphabetical':
                         return t('cocktails.sortOptionAlphabeticalAccessibility');
-                      case 'requiredCount':
-                        return t('cocktails.sortOptionRequiredCountAccessibility');
+                      case 'party':
+                        return t('cocktails.sortOptionPartyAccessibility');
                       case 'rating':
                         return t('cocktails.sortOptionRatingAccessibility');
                       case 'recentlyAdded':
@@ -1214,18 +1262,34 @@ export default function CocktailsScreen() {
           />
         )}
       </View>
-      <FabAdd
-        label={t("cocktails.addCocktail")}
-        onPress={() =>
-          router.push({
-            pathname: '/cocktails/create',
-            params: {
-              source: 'cocktails',
-              ...buildReturnToParams('/cocktails', listReturnToParams),
-            },
-          })
-        }
-      />
+      {isPartyTab ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('cocktails.addPartyToShopping')}
+          onPress={() => {
+            const selectedCocktails = sortedCocktails.filter((cocktail) =>
+              effectivePartyCocktailIds.has(Number(cocktail.id ?? -1)),
+            );
+            addCocktailsIngredientsToShopping(selectedCocktails);
+            router.push('/ingredients?tab=shopping');
+          }}
+          style={[styles.partyActionButton, { backgroundColor: Colors.primary }]}>
+          <MaterialIcons name="add-shopping-cart" size={24} color={Colors.onPrimary} />
+        </Pressable>
+      ) : (
+        <FabAdd
+          label={t("cocktails.addCocktail")}
+          onPress={() =>
+            router.push({
+              pathname: '/cocktails/create',
+              params: {
+                source: 'cocktails',
+                ...buildReturnToParams('/cocktails', listReturnToParams),
+              },
+            })
+          }
+        />
+      )}
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
@@ -1320,6 +1384,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
+  },
+  partyActionButton: {
+    position: 'absolute',
+    right: 16,
+    bottom: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 6,
   },
   methodIcon: {
     width: METHOD_ICON_SIZE,

@@ -1,12 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { View } from 'react-native';
-
-import IngredientsIcon from '@/assets/images/ingredients.svg';
 
 export type CocktailSortOption =
   | 'alphabetical'
-  | 'requiredCount'
+  | 'party'
   | 'rating'
   | 'recentlyAdded'
   | 'random';
@@ -37,19 +34,19 @@ export function buildCocktailSortOptions({
       accessibilityLabel: getAccessibilityLabel('alphabetical'),
     },
     {
-      key: 'requiredCount',
+      key: 'party',
       label: '',
-      selected: selectedSortOption === 'requiredCount',
-      onPress: () => onSortOptionChange('requiredCount'),
-      accessibilityLabel: getAccessibilityLabel('requiredCount'),
+      selected: selectedSortOption === 'party',
+      onPress: () => onSortOptionChange('party'),
+      accessibilityLabel: getAccessibilityLabel('party'),
       icon: (
         <View style={styles.sortIconInnerWrap}>
-          <Image
-            source={IngredientsIcon}
-            style={{ width: 16, height: 16, tintColor: selectedSortOption === 'requiredCount' ? surfaceColor : tintColor }}
-            contentFit="contain"
+          <MaterialCommunityIcons
+            name="party-popper"
+            size={16}
+            color={selectedSortOption === 'party' ? surfaceColor : tintColor}
           />
-          {selectedSortOption === 'requiredCount' ? (
+          {selectedSortOption === 'party' ? (
             <MaterialCommunityIcons
               name={isSortDescending ? 'arrow-down-thin' : 'arrow-up-thin'}
               size={12}

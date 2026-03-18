@@ -28,19 +28,19 @@ export const deDETranslations: TranslationDictionary = {
   "common.show": "Anzeigen",
   "common.tabAll": "Alle",
   "common.tabMy": "Meine",
-  "common.tabFavorites": "Favoriten",
+  "common.tabParty": "Party",
   "common.tabShopping": "Einkaufsliste",
 
   "cocktails.emptyMy":
     "Markieren Sie Zutaten, die Sie besitzen, um hier verfügbare Cocktails zu sehen.",
-  "cocktails.emptyFavorites":
+  "cocktails.emptyParty":
     "Bewerten Sie Cocktails oder ändern Sie die Mindestbewertung im Menü.",
   "cocktails.emptyAll": "Noch keine Cocktails",
   "cocktails.helpMyTitle": "Meine Cocktails",
   "cocktails.helpMyText":
     "Dieser Bildschirm zeigt Cocktails, die Sie mit Ihren aktuellen Zutaten zubereiten können.\n\nNutzen Sie die Suche, um Ihre Rezepte schnell zu finden, und verwenden Sie Filter, um die Liste nach Tags oder Methode einzugrenzen.",
-  "cocktails.helpFavoritesTitle": "Lieblingscocktails",
-  "cocktails.helpFavoritesText":
+  "cocktails.helpPartyTitle": "Lieblingscocktails",
+  "cocktails.helpPartyText":
     "Dieser Bildschirm zeigt Cocktails, die Sie bewertet haben.\n\nNutzen Sie Suche und Filter, um schneller zu finden, was Sie suchen.",
   "cocktails.helpAllTitle": "Alle Cocktails",
   "cocktails.helpAllText":
@@ -440,7 +440,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.sortBy": "Sortieren nach",
   "cocktails.sortOptionAlphabeticalAccessibility":
     "Alphabetisch sortieren (A-Z)",
-  "cocktails.sortOptionRequiredCountAccessibility":
+  "cocktails.sortOptionPartyAccessibility":
     "Nach Anzahl benötigter Zutaten sortieren",
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Nach Anzahl fehlender benötigter Zutaten sortieren",
@@ -448,7 +448,9 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.sortOptionRecentlyAddedAccessibility":
     "Nach Hinzufügezeit sortieren",
   "cocktails.sortOptionRandomAccessibility": "Zufällig sortieren",
-  "cocktails.addCocktail": "Cocktail hinzufügen",
+    "cocktails.addPartyToShopping": "Add party ingredients to shopping",
+  "cocktails.buyIngredients": "Buy ingredients",
+"cocktails.addCocktail": "Cocktail hinzufügen",
 
   "shakerResults.helpTitle": "Shaker-Ergebnisse",
   "shakerResults.helpText":
@@ -457,7 +459,7 @@ export const deDETranslations: TranslationDictionary = {
 
   "shakerResults.sortBy": "Sortieren nach",
   "shakerResults.sortOptionAlphabetical": "Alphabetisch (A–Z)",
-  "shakerResults.sortOptionRequiredCount": "Anzahl benötigter Zutaten",
+  "shakerResults.sortOptionParty": "Anzahl benötigter Zutaten",
   "shakerResults.sortOptionMissingRequiredCount":
     "Anzahl fehlender benötigter Zutaten",
   "shakerResults.sortOptionRating": "Bewertung",
@@ -638,8 +640,8 @@ export const deDETranslations: TranslationDictionary = {
   "startScreen.cocktails_my.label": "Meine Cocktails",
   "startScreen.cocktails_my.description":
     "Verfügbare Cocktails zuerst anzeigen",
-  "startScreen.cocktails_favorites.label": "Lieblingscocktails",
-  "startScreen.cocktails_favorites.description":
+  "startScreen.cocktails_party.label": "Lieblingscocktails",
+  "startScreen.cocktails_party.description":
     "Zu gespeicherten Cocktails springen",
   "startScreen.shaker.label": "Shaker",
   "startScreen.shaker.description": "Cocktails nach Zutaten finden",

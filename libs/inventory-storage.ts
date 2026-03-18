@@ -13,6 +13,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   imported?: boolean;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
+  partyCocktailIds?: number[];
   cocktailRatings?: Record<string, number>;
   cocktailComments?: Record<string, string>;
   ignoreGarnish?: boolean;
@@ -50,6 +51,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   customIngredientTags?: Array<{ id: number; name: string; color: string }>;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
+  partyCocktailIds?: number[];
   cocktailRatings?: Record<string, number>;
   cocktailComments?: Record<string, string>;
   ignoreGarnish?: boolean;
@@ -88,6 +90,7 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   customIngredientTags?: Array<{ id: number; name: string; color: string }>;
   availableIngredientIds?: number[];
   shoppingIngredientIds?: number[];
+  partyCocktailIds?: number[];
   cocktailRatings?: Record<string, number>;
   cocktailComments?: Record<string, string>;
   ignoreGarnish?: boolean;

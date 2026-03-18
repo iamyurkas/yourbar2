@@ -28,19 +28,19 @@ export const ukUATranslations: TranslationDictionary = {
   "common.show": "Показати",
   "common.tabAll": "Усі",
   "common.tabMy": "Мої",
-  "common.tabFavorites": "Обрані",
+  "common.tabParty": "Party",
   "common.tabShopping": "Покупки",
 
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
-  "cocktails.emptyFavorites":
+  "cocktails.emptyParty":
     "Оцініть коктейлі чи змініть поріг рейтингу в меню.",
   "cocktails.emptyAll": "Ще немає коктейлів",
   "cocktails.helpMyTitle": "Мої коктейлі",
   "cocktails.helpMyText":
     "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами чи методом.",
-  "cocktails.helpFavoritesTitle": "Обрані коктейлі",
-  "cocktails.helpFavoritesText":
+  "cocktails.helpPartyTitle": "Обрані коктейлі",
+  "cocktails.helpPartyText":
     "Цей екран показує коктейлі, які ви оцінили.\n\nВикористовуйте пошук і фільтри, щоб швидше знайти потрібне.",
   "cocktails.helpAllTitle": "Усі коктейлі",
   "cocktails.helpAllText":
@@ -442,7 +442,7 @@ export const ukUATranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Сортувати за",
   "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A-z",
-  "cocktails.sortOptionRequiredCountAccessibility":
+  "cocktails.sortOptionPartyAccessibility":
     "Сортувати за кількістю обов’язкових інгредієнтів",
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
@@ -450,7 +450,9 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.sortOptionRecentlyAddedAccessibility":
     "Сортувати за часом додавання",
   "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
-  "cocktails.addCocktail": "Додати коктейль",
+    "cocktails.addPartyToShopping": "Add party ingredients to shopping",
+  "cocktails.buyIngredients": "Buy ingredients",
+"cocktails.addCocktail": "Додати коктейль",
 
   "shakerResults.helpTitle": "Результати шейкера",
   "shakerResults.helpText":
@@ -459,7 +461,7 @@ export const ukUATranslations: TranslationDictionary = {
 
   "shakerResults.sortBy": "Сортувати за",
   "shakerResults.sortOptionAlphabetical": "За алфавітом (A–Z)",
-  "shakerResults.sortOptionRequiredCount":
+  "shakerResults.sortOptionParty":
     "Кількістю обов’язкових інгредієнтів",
   "shakerResults.sortOptionMissingRequiredCount":
     "Кількістю відсутніх обов’язкових інгредієнтів",
@@ -636,8 +638,8 @@ export const ukUATranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Переглянути всі рецепти",
   "startScreen.cocktails_my.label": "Мої коктейлі",
   "startScreen.cocktails_my.description": "Спочатку ваші доступні",
-  "startScreen.cocktails_favorites.label": "Улюблені коктейлі",
-  "startScreen.cocktails_favorites.description": "Швидкий доступ до збережених",
+  "startScreen.cocktails_party.label": "Улюблені коктейлі",
+  "startScreen.cocktails_party.description": "Швидкий доступ до збережених",
   "startScreen.shaker.label": "Шейкер",
   "startScreen.shaker.description": "Змішування",
   "startScreen.ingredients_all.label": "Усі інгредієнти",

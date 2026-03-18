@@ -104,12 +104,13 @@ export type Bar = {
   name: string;
   availableIngredientIds: number[];
   shoppingIngredientIds: number[];
+  partyCocktailIds?: number[];
 };
 
 export type StartScreen =
   | "cocktails_all"
   | "cocktails_my"
-  | "cocktails_favorites"
+  | "cocktails_party"
   | "shaker"
   | "ingredients_all"
   | "ingredients_my"

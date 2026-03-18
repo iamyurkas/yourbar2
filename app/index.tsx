@@ -18,7 +18,7 @@ function getHrefForStartScreen(screen: StartScreen): StartScreenHref {
       return '/(tabs)/ingredients';
     case 'cocktails_all':
     case 'cocktails_my':
-    case 'cocktails_favorites':
+    case 'cocktails_party':
     default:
       return '/(tabs)/cocktails';
   }
@@ -29,8 +29,8 @@ function syncTabPreference(screen: StartScreen) {
     case 'cocktails_my':
       setLastCocktailTab('my');
       break;
-    case 'cocktails_favorites':
-      setLastCocktailTab('favorites');
+    case 'cocktails_party':
+      setLastCocktailTab('party');
       break;
     case 'ingredients_my':
       setLastIngredientTab('my');

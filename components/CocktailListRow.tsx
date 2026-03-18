@@ -26,6 +26,8 @@ type CocktailListRowProps = {
   hasComment?: boolean;
   hasBrandFallback?: boolean;
   hasStyleFallback?: boolean;
+  isPartySelected?: boolean;
+  onToggleParty?: () => void;
 };
 
 const areCocktailRowPropsEqual = (
@@ -51,6 +53,7 @@ const areCocktailRowPropsEqual = (
     prev.hasComment === next.hasComment &&
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
+    prev.isPartySelected === next.isPartySelected &&
     onPressEqual
   );
 };
@@ -114,6 +117,8 @@ const CocktailListRowComponent = ({
   hasComment = false,
   hasBrandFallback = false,
   hasStyleFallback = false,
+  isPartySelected = false,
+  onToggleParty,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const { t } = useI18n();
@@ -158,6 +163,21 @@ const CocktailListRowComponent = ({
             ))}
           </View>
         ) : null}
+        {isPartySelected ? (
+          <MaterialCommunityIcons
+            name="party-popper"
+            size={12}
+            color={Colors.styledIngredient}
+          />
+        ) : null}
+        {onToggleParty ? (
+          <MaterialCommunityIcons
+            name={isPartySelected ? 'checkbox-marked-outline' : 'checkbox-blank-outline'}
+            size={20}
+            color={isPartySelected ? Colors.tint : Colors.onSurfaceVariant}
+            onPress={onToggleParty}
+          />
+        ) : null}
       </View>
     );
   }, [
@@ -165,6 +185,10 @@ const CocktailListRowComponent = ({
     Colors.outline,
     Colors.tint,
     normalizedRating,
+    onToggleParty,
+    isPartySelected,
+    Colors.onSurfaceVariant,
+    Colors.styledIngredient,
   ]);
 
   const tagColors = useMemo(

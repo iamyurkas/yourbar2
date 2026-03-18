@@ -88,10 +88,10 @@ const START_SCREEN_OPTIONS: StartScreenOption[] = [
     icon: { type: "icon", name: "cup-water" },
   },
   {
-    key: "cocktails_favorites",
-    labelKey: "startScreen.cocktails_favorites.label",
-    descriptionKey: "startScreen.cocktails_favorites.description",
-    icon: { type: "icon", name: "star" },
+    key: "cocktails_party",
+    labelKey: "startScreen.cocktails_party.label",
+    descriptionKey: "startScreen.cocktails_party.description",
+    icon: { type: "icon", name: "party-popper" },
   },
   {
     key: "shaker",
@@ -150,8 +150,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setShakerSmartFilteringEnabled,
     showTabCounters,
     setShowTabCounters,
-    ratingFilterThreshold,
-    setRatingFilterThreshold,
     startScreen,
     setStartScreen,
     appTheme,
@@ -185,10 +183,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
   const { startOnboarding } = useOnboarding();
   const [isMounted, setIsMounted] = useState(visible);
-  const [isRatingModalVisible, setRatingModalVisible] = useState(false);
-  const ratingModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
   const [isStartScreenModalVisible, setStartScreenModalVisible] =
     useState(false);
   const startScreenModalCloseTimeout = useRef<ReturnType<
@@ -418,20 +412,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         },
       ],
     });
-  };
-
-  const handleRatingThresholdPress = () => {
-    setRatingModalVisible(true);
-  };
-
-  const handleCloseRatingModal = () => {
-    clearTimeoutRef(ratingModalCloseTimeout);
-    setRatingModalVisible(false);
-  };
-
-  const handleSelectRatingThreshold = (value: number) => {
-    setRatingFilterThreshold(value);
-    scheduleModalClose(ratingModalCloseTimeout, setRatingModalVisible);
   };
 
   const handleStartScreenPress = () => {
@@ -1075,7 +1055,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   useEffect(() => {
     return () => {
-      clearTimeoutRef(ratingModalCloseTimeout);
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
       clearTimeoutRef(languageModalCloseTimeout);
@@ -1527,41 +1506,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             </Pressable>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t("sideMenu.favoritesRatingFilter")}
-              onPress={handleRatingThresholdPress}
-              style={[styles.settingRow, SURFACE_ROW_STYLE]}
-            >
-              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="star"
-                  size={16}
-                  color={Colors.tint}
-                />
-              </View>
-              <View style={styles.settingTextContainer}>
-                <Text
-                  style={[styles.settingLabel, { color: Colors.onSurface }]}
-                >
-                  {t("sideMenu.favoritesRatingFilter")}
-                </Text>
-                <Text
-                  style={[
-                    styles.settingCaption,
-                    { color: Colors.onSurfaceVariant },
-                  ]}
-                >
-                  {t("sideMenu.favoritesRatingFilterCaption", { rating: ratingFilterThreshold })}
-                </Text>
-              </View>
-              <MaterialCommunityIcons
-                name="chevron-right"
-                size={20}
-                color={Colors.onSurfaceVariant}
-              />
-            </Pressable>
-
-            <Pressable
-              accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageTags")}
               onPress={handleOpenTagManager}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
@@ -1756,103 +1700,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </ScrollView>
         </Animated.View>
       </View>
-      <Modal
-        transparent
-        visible={isRatingModalVisible}
-        animationType="fade"
-        onRequestClose={handleCloseRatingModal}
-      >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={handleCloseRatingModal}
-          accessibilityRole="button"
-        >
-          <Pressable
-            style={[
-              styles.modalCard,
-              MODAL_CARD_STYLE,
-            ]}
-            accessibilityLabel={t("sideMenu.favoritesRatingFilter")}
-            onPress={() => { }}
-          >
-            <View style={styles.modalHeader}>
-              <Text
-                style={[
-                  styles.modalTitle,
-                  { color: Colors.onSurface, flex: 1 },
-                ]}
-              >
-                {t("sideMenu.favoritesRatingFilter")}
-              </Text>
-              <Pressable
-                onPress={handleCloseRatingModal}
-                accessibilityRole="button"
-                accessibilityLabel={t("common.close")}
-              >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={22}
-                  color={Colors.onSurfaceVariant}
-                />
-              </Pressable>
-            </View>
-            <Text
-              style={[
-                styles.settingCaption,
-                { color: Colors.onSurfaceVariant },
-              ]}
-            >
-              {t("sideMenu.favoritesRatingModalDescription")}
-            </Text>
-            <View style={styles.ratingOptionRow}>
-              {[1, 2, 3, 4, 5].map((value) => {
-                const isSelected = value === ratingFilterThreshold;
-                return (
-                  <Pressable
-                    key={`rating-threshold-${value}`}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: isSelected }}
-                    accessibilityLabel={t("sideMenu.favoritesRatingOption", { value })}
-                    onPress={() => handleSelectRatingThreshold(value)}
-                    style={({ pressed }) => [
-                      styles.ratingOption,
-                      {
-                        borderColor: isSelected
-                          ? Colors.tint
-                          : Colors.outlineVariant,
-                        backgroundColor: isSelected
-                          ? Colors.tint
-                          : Colors.surfaceBright,
-                      },
-                      pressed ? { opacity: 0.8 } : null,
-                    ]}
-                  >
-                    <MaterialCommunityIcons
-                      name="star"
-                      size={20}
-                      color={
-                        isSelected ? Colors.background : Colors.onSurfaceVariant
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.ratingOptionLabel,
-                        {
-                          color: isSelected
-                            ? Colors.background
-                            : Colors.onSurface,
-                        },
-                      ]}
-                    >
-                      {value}+
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
       <Modal
         transparent
         visible={isTagManagerVisible}

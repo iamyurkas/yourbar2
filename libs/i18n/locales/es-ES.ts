@@ -28,18 +28,18 @@ export const esESTranslations: TranslationDictionary = {
   "common.show": "Mostrar",
   "common.tabAll": "Todos",
   "common.tabMy": "Mis",
-  "common.tabFavorites": "Favoritos",
+  "common.tabParty": "Party",
   "common.tabShopping": "Compras",
   "cocktails.emptyMy":
     "Marca los ingredientes que tienes para ver aquí los cócteles disponibles.",
-  "cocktails.emptyFavorites":
+  "cocktails.emptyParty":
     "Valora cócteles y/o ajusta el umbral de valoración en el menú.",
   "cocktails.emptyAll": "Aún no hay cócteles",
   "cocktails.helpMyTitle": "Mis cócteles",
   "cocktails.helpMyText":
     "Esta pantalla muestra los cócteles que puedes preparar con tus ingredientes actuales.\n\nUsa la búsqueda para encontrar tus recetas rápidamente y utiliza filtros para acotar la lista por etiquetas o método.",
-  "cocktails.helpFavoritesTitle": "Cócteles favoritos",
-  "cocktails.helpFavoritesText":
+  "cocktails.helpPartyTitle": "Cócteles favoritos",
+  "cocktails.helpPartyText":
     "Esta pantalla muestra los cócteles que has valorado.\n\nUsa la búsqueda y los filtros para encontrar lo que quieres más rápido.",
   "cocktails.helpAllTitle": "Todos los cócteles",
   "cocktails.helpAllText":
@@ -435,7 +435,7 @@ export const esESTranslations: TranslationDictionary = {
 
   "cocktails.sortBy": "Ordenar por",
   "cocktails.sortOptionAlphabeticalAccessibility": "Ordenar por A-z",
-  "cocktails.sortOptionRequiredCountAccessibility":
+  "cocktails.sortOptionPartyAccessibility":
     "Ordenar por cantidad de ingredientes obligatorios",
   "cocktails.sortOptionMissingRequiredCountAccessibility":
     "Ordenar por cantidad de ingredientes obligatorios faltantes",
@@ -443,7 +443,9 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.sortOptionRecentlyAddedAccessibility":
     "Ordenar por fecha de adición",
   "cocktails.sortOptionRandomAccessibility": "Orden aleatorio",
-  "cocktails.addCocktail": "Añadir cóctel",
+    "cocktails.addPartyToShopping": "Add party ingredients to shopping",
+  "cocktails.buyIngredients": "Buy ingredients",
+"cocktails.addCocktail": "Añadir cóctel",
   "shakerResults.helpTitle": "Resultados de la coctelera",
   "shakerResults.helpText":
     "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\n\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",
@@ -451,7 +453,7 @@ export const esESTranslations: TranslationDictionary = {
 
   "shakerResults.sortBy": "Ordenar por",
   "shakerResults.sortOptionAlphabetical": "Alfabético (A–Z)",
-  "shakerResults.sortOptionRequiredCount":
+  "shakerResults.sortOptionParty":
     "Cantidad de ingredientes obligatorios",
   "shakerResults.sortOptionMissingRequiredCount":
     "Cantidad de ingredientes obligatorios faltantes",
@@ -628,8 +630,8 @@ export const esESTranslations: TranslationDictionary = {
   "startScreen.cocktails_all.description": "Explora todas las recetas",
   "startScreen.cocktails_my.label": "Mis cócteles",
   "startScreen.cocktails_my.description": "Ve primero tus creaciones",
-  "startScreen.cocktails_favorites.label": "Cócteles favoritos",
-  "startScreen.cocktails_favorites.description":
+  "startScreen.cocktails_party.label": "Cócteles favoritos",
+  "startScreen.cocktails_party.description":
     "Accede a tus cócteles guardados",
   "startScreen.shaker.label": "Coctelera",
   "startScreen.shaker.description": "Mezcla según tu inventario",

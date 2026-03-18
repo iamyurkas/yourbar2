@@ -68,12 +68,6 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 
 const METHOD_ICON_SIZE = 16;
 
-function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
-  return (cocktail.ingredients ?? []).filter(
-    (ingredient) => !ingredient?.optional && !(ignoreGarnish && ingredient?.garnish),
-  ).length;
-}
-
 export default function ShakerResultsScreen() {
   const {
     cocktails,
@@ -81,6 +75,7 @@ export default function ShakerResultsScreen() {
     ingredients,
     ignoreGarnish,
     allowAllSubstitutes,
+    partyCocktailIds,
     getCocktailRating,
     getCocktailComment,
   } = useInventory();
@@ -558,11 +553,11 @@ export default function ShakerResultsScreen() {
         return isSortDescending ? -result : result;
       }
 
-      if (selectedSortOption === 'requiredCount') {
-        const leftCount = countRequiredIngredients(left, ignoreGarnish);
-        const rightCount = countRequiredIngredients(right, ignoreGarnish);
-        if (leftCount !== rightCount) {
-          result = leftCount - rightCount;
+      if (selectedSortOption === 'party') {
+        const leftSelected = partyCocktailIds.has(Number(left.id ?? -1));
+        const rightSelected = partyCocktailIds.has(Number(right.id ?? -1));
+        if (leftSelected !== rightSelected) {
+          result = Number(rightSelected) - Number(leftSelected);
         } else {
           result = compareOptionalGlobalAlphabet(leftName, rightName);
         }
@@ -608,8 +603,8 @@ export default function ShakerResultsScreen() {
   }, [
     filteredCocktails,
     getCocktailRating,
-    ignoreGarnish,
     isSortDescending,
+    partyCocktailIds,
     randomSortRanks,
     selectedSortOption,
   ]);
@@ -696,6 +691,7 @@ export default function ShakerResultsScreen() {
           recipeNamesCount={availability.recipeNames.length}
           ingredientLine={availability.ingredientLine}
           ratingValue={getCocktailRating(item)}
+          isPartySelected={partyCocktailIds.has(Number(item.id ?? -1))}
           hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
@@ -708,6 +704,7 @@ export default function ShakerResultsScreen() {
       getCocktailRating,
       handlePressCocktail,
       ingredients,
+      partyCocktailIds,
     ],
   );
 
@@ -778,8 +775,8 @@ export default function ShakerResultsScreen() {
                     switch (option) {
                       case 'alphabetical':
                         return t('shakerResults.sortOptionAlphabetical');
-                      case 'requiredCount':
-                        return t('shakerResults.sortOptionRequiredCount');
+                      case 'party':
+                        return t('shakerResults.sortOptionParty');
                       case 'rating':
                         return t('shakerResults.sortOptionRating');
                       case 'recentlyAdded':
