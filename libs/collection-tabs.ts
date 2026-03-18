@@ -1,4 +1,4 @@
-export type CocktailTabKey = 'all' | 'my' | 'favorites';
+export type CocktailTabKey = 'all' | 'my' | 'favorites' | 'party';
 export type IngredientTabKey = 'all' | 'my' | 'shopping';
 
 let lastCocktailTab: CocktailTabKey = 'all';

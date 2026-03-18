@@ -21,7 +21,7 @@ import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
-import { ListRow, Thumb } from '@/components/RowParts';
+import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import type { SegmentTabOption } from '@/components/TopBars';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
@@ -79,6 +79,7 @@ export default function CocktailsScreen() {
   const [collapsedMissingIngredientIds, setCollapsedMissingIngredientIds] = useState<Set<number>>(
     () => new Set(),
   );
+  const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() => new Set());
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
@@ -134,7 +135,7 @@ export default function CocktailsScreen() {
     setQuery((previous) => (previous === parsedQuery ? previous : parsedQuery));
 
     const parsedTab = getParamValue(params.tab);
-    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'favorites' ? parsedTab : 'all';
+    const nextTab: CocktailTabKey = parsedTab === 'my' || parsedTab === 'favorites' || parsedTab === 'party' ? parsedTab : 'all';
     setActiveTab((previous) => (previous === nextTab ? previous : nextTab));
 
     const parsedTagKeys = getParamValue(params.tags)
@@ -341,6 +342,7 @@ export default function CocktailsScreen() {
     all: cocktails,
     my: cocktails,
     favorites: ratedCocktails,
+    party: cocktails,
   }), [cocktails, ratedCocktails]);
 
 
@@ -670,7 +672,12 @@ export default function CocktailsScreen() {
       label: t('common.tabFavorites'),
       counter: showTabCounters ? `(${cocktailsByTab.favorites.length})` : undefined,
     },
-  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, myReadyCocktailsCount, showTabCounters, t]);
+    {
+      key: 'party',
+      label: t('common.tabParty'),
+      counter: showTabCounters ? `(${cocktailsByTab.party.length})` : undefined,
+    },
+  ], [cocktailsByTab.all.length, cocktailsByTab.favorites.length, cocktailsByTab.party.length, myReadyCocktailsCount, showTabCounters, t]);
 
 
 
@@ -838,6 +845,84 @@ export default function CocktailsScreen() {
       locale,
       t,
     ],
+  );
+
+  const partySelectionCount = partySelectedCocktailKeys.size;
+
+  const handlePartySelectionToggle = useCallback((cocktail: Cocktail) => {
+    const cocktailKey = String(cocktail.id ?? cocktail.name);
+    if (!cocktailKey) {
+      return;
+    }
+
+    setPartySelectedCocktailKeys((previous) => {
+      const next = new Set(previous);
+      if (next.has(cocktailKey)) {
+        next.delete(cocktailKey);
+      } else {
+        next.add(cocktailKey);
+      }
+
+      return next;
+    });
+  }, []);
+
+  const handleAddPartyIngredientsToShopping = useCallback(() => {
+    if (partySelectedCocktailKeys.size === 0) {
+      return;
+    }
+
+    const ingredientIdsToAdd = new Set<number>();
+
+    sortedCocktails.forEach((cocktail) => {
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      if (!partySelectedCocktailKeys.has(cocktailKey)) {
+        return;
+      }
+
+      (cocktail.ingredients ?? []).forEach((recipeIngredient) => {
+        const ingredientId = Number(recipeIngredient.ingredientId);
+        if (!Number.isFinite(ingredientId) || ingredientId < 0) {
+          return;
+        }
+
+        ingredientIdsToAdd.add(Math.trunc(ingredientId));
+      });
+    });
+
+    ingredientIdsToAdd.forEach((ingredientId) => {
+      if (!shoppingIngredientIds.has(ingredientId)) {
+        toggleIngredientShopping(ingredientId);
+      }
+    });
+
+    setPartySelectedCocktailKeys(() => new Set());
+    router.push({ pathname: '/ingredients', params: { tab: 'shopping' } });
+  }, [partySelectedCocktailKeys, router, shoppingIngredientIds, sortedCocktails, toggleIngredientShopping]);
+
+  const renderPartyItem = useCallback(
+    ({ item }: { item: Cocktail }) => {
+      const availability = getAvailabilitySummary(item);
+      const cocktailKey = String(item.id ?? item.name);
+      const isChecked = partySelectedCocktailKeys.has(cocktailKey);
+      const tagColors = (item.tags ?? []).map((tag) => tag?.color).filter(Boolean) as string[];
+
+      return (
+        <ListRow
+          title={item.name}
+          subtitle={availability.ingredientLine || '\u00A0'}
+          selected={availability.isReady}
+          highlightColor={Colors.highlightFaint}
+          tagColors={tagColors}
+          thumbnail={<Thumb label={item.name} uri={item.photoUri} />}
+          onPress={() => handleSelectCocktail(item)}
+          control={<PresenceCheck checked={isChecked} onToggle={() => handlePartySelectionToggle(item)} />}
+          accessibilityRole="button"
+          metaAlignment="center"
+        />
+      );
+    },
+    [Colors.highlightFaint, getAvailabilitySummary, handlePartySelectionToggle, handleSelectCocktail, partySelectedCocktailKeys],
   );
 
   const renderItem = useCallback(
@@ -1025,12 +1110,15 @@ export default function CocktailsScreen() {
     selectedSortOption !== 'alphabetical' ||
     isSortDescending;
   const isMyTab = activeTab === 'my';
+  const isPartyTab = activeTab === 'party';
   const emptyMessage = useMemo(() => {
     switch (activeTab) {
       case 'my':
         return t('cocktails.emptyMy');
       case 'favorites':
         return t('cocktails.emptyFavorites');
+      case 'party':
+        return t('cocktails.emptyParty');
       default:
         return t('cocktails.emptyAll');
     }
@@ -1046,6 +1134,11 @@ export default function CocktailsScreen() {
         return {
           title: t('cocktails.helpFavoritesTitle'),
           text: t('cocktails.helpFavoritesText'),
+        };
+      case 'party':
+        return {
+          title: t('cocktails.helpPartyTitle'),
+          text: t('cocktails.helpPartyText'),
         };
       case 'all':
       default:
@@ -1195,7 +1288,7 @@ export default function CocktailsScreen() {
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
             data={sortedCocktails}
             keyExtractor={keyExtractor}
-            renderItem={renderItem}
+            renderItem={isPartyTab ? renderPartyItem : renderItem}
             ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={styles.listContent}
             initialNumToRender={12}
@@ -1214,18 +1307,37 @@ export default function CocktailsScreen() {
           />
         )}
       </View>
-      <FabAdd
-        label={t("cocktails.addCocktail")}
-        onPress={() =>
-          router.push({
-            pathname: '/cocktails/create',
-            params: {
-              source: 'cocktails',
-              ...buildReturnToParams('/cocktails', listReturnToParams),
-            },
-          })
-        }
-      />
+      {isPartyTab ? (
+        <View style={[styles.partyFabContainer, { shadowColor: Colors.shadow }]}> 
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('cocktails.addPartyIngredientsToShopping')}
+            onPress={handleAddPartyIngredientsToShopping}
+            disabled={partySelectionCount === 0}
+            style={({ pressed }) => [
+              styles.partyFab,
+              {
+                backgroundColor: Colors.primary,
+                opacity: partySelectionCount === 0 ? 0.45 : pressed ? 0.85 : 1,
+              },
+            ]}>
+            <MaterialCommunityIcons name="basket" size={24} color={Colors.onPrimary} />
+          </Pressable>
+        </View>
+      ) : (
+        <FabAdd
+          label={t("cocktails.addCocktail")}
+          onPress={() =>
+            router.push({
+              pathname: '/cocktails/create',
+              params: {
+                source: 'cocktails',
+                ...buildReturnToParams('/cocktails', listReturnToParams),
+              },
+            })
+          }
+        />
+      )}
       <SideMenuDrawer visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </SafeAreaView>
   );
@@ -1333,5 +1445,24 @@ const styles = StyleSheet.create({
   },
   muddleIcon: {
     transform: [{ scaleX: 2 }],
+  },
+  partyFabContainer: {
+    position: 'absolute',
+    right: 24,
+    bottom: 24,
+    zIndex: 10,
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 6,
+    shadowOpacity: 0.18,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+  },
+  partyFab: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

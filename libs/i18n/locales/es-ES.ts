@@ -30,11 +30,13 @@ export const esESTranslations: TranslationDictionary = {
   "common.tabMy": "Mis",
   "common.tabFavorites": "Favoritos",
   "common.tabShopping": "Compras",
+  "common.tabParty": "Fiesta",
   "cocktails.emptyMy":
     "Marca los ingredientes que tienes para ver aquí los cócteles disponibles.",
   "cocktails.emptyFavorites":
     "Valora cócteles y/o ajusta el umbral de valoración en el menú.",
   "cocktails.emptyAll": "Aún no hay cócteles",
+  "cocktails.emptyParty": "Selecciona cócteles para crear una lista de compras para la fiesta.",
   "cocktails.helpMyTitle": "Mis cócteles",
   "cocktails.helpMyText":
     "Esta pantalla muestra los cócteles que puedes preparar con tus ingredientes actuales.\n\nUsa la búsqueda para encontrar tus recetas rápidamente y utiliza filtros para acotar la lista por etiquetas o método.",
@@ -44,6 +46,9 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.helpAllTitle": "Todos los cócteles",
   "cocktails.helpAllText":
     "Esta pantalla muestra la colección completa de cócteles.\n\nUsa la búsqueda, cambia de pestaña y aplica filtros por método o etiquetas.",
+  "cocktails.helpPartyTitle": "Cócteles para fiesta",
+  "cocktails.helpPartyText":
+    "Selecciona cócteles y toca el botón de cesta para añadir todos sus ingredientes a la lista de compras.",
   "ingredients.emptyMy": "Marca los ingredientes que tienes para verlos aquí.",
   "ingredients.emptyAll": "Aún no hay ingredientes",
   "ingredients.helpMyTitle": "Mis ingredientes",
@@ -444,6 +449,7 @@ export const esESTranslations: TranslationDictionary = {
     "Ordenar por fecha de adición",
   "cocktails.sortOptionRandomAccessibility": "Orden aleatorio",
   "cocktails.addCocktail": "Añadir cóctel",
+  "cocktails.addPartyIngredientsToShopping": "Añadir ingredientes de cócteles seleccionados a la lista de compras",
   "shakerResults.helpTitle": "Resultados de la coctelera",
   "shakerResults.helpText":
     "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\n\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",

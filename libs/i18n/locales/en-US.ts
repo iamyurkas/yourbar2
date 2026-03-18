@@ -30,12 +30,14 @@ export const enUSTranslations: TranslationDictionary = {
   "common.tabMy": "My",
   "common.tabFavorites": "Favorites",
   "common.tabShopping": "Shopping",
+  "common.tabParty": "Party",
 
   "cocktails.emptyMy":
     "Mark the ingredients you have to see available cocktails here.",
   "cocktails.emptyFavorites":
     "Rate cocktails, or adjust the minimum rating in the menu.",
   "cocktails.emptyAll": "No cocktails yet",
+  "cocktails.emptyParty": "Select cocktails to build a party shopping list.",
   "cocktails.helpMyTitle": "My cocktails",
   "cocktails.helpMyText":
     "This screen shows cocktails you can make with your current ingredients.\n\nUse search to find your recipes quickly, and use filters to narrow the list by tags or method.",
@@ -45,6 +47,9 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktails.helpAllTitle": "All cocktails",
   "cocktails.helpAllText":
     "This screen shows the full cocktail collection.\n\nUse search, switch tabs, and apply filters by method or tags.",
+  "cocktails.helpPartyTitle": "Party cocktails",
+  "cocktails.helpPartyText":
+    "Select cocktails, then tap the basket button to add all their ingredients to the shopping list.",
 
   "ingredients.emptyMy": "Mark the ingredients you have to see them here.",
   "ingredients.emptyAll": "No ingredients yet",
@@ -446,6 +451,7 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktails.sortOptionRecentlyAddedAccessibility": "Sort by recently added",
   "cocktails.sortOptionRandomAccessibility": "Sort randomly",
   "cocktails.addCocktail": "Add cocktail",
+  "cocktails.addPartyIngredientsToShopping": "Add selected cocktail ingredients to shopping list",
 
   "shakerResults.helpTitle": "Shaker results",
   "shakerResults.helpText":

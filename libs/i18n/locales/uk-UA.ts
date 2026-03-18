@@ -30,12 +30,14 @@ export const ukUATranslations: TranslationDictionary = {
   "common.tabMy": "Мої",
   "common.tabFavorites": "Обрані",
   "common.tabShopping": "Покупки",
+  "common.tabParty": "Party",
 
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
   "cocktails.emptyFavorites":
     "Оцініть коктейлі чи змініть поріг рейтингу в меню.",
   "cocktails.emptyAll": "Ще немає коктейлів",
+  "cocktails.emptyParty": "Оберіть коктейлі, щоб зібрати список покупок для вечірки.",
   "cocktails.helpMyTitle": "Мої коктейлі",
   "cocktails.helpMyText":
     "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами чи методом.",
@@ -45,6 +47,9 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.helpAllTitle": "Усі коктейлі",
   "cocktails.helpAllText":
     "Цей екран показує всю колекцію коктейлів.\n\nВикористовуйте пошук, перемикайте вкладки та застосовуйте фільтри.",
+  "cocktails.helpPartyTitle": "Коктейлі для вечірки",
+  "cocktails.helpPartyText":
+    "Оберіть коктейлі й натисніть кнопку кошика, щоб додати всі їхні інгредієнти до списку покупок.",
 
   "ingredients.emptyMy": "Позначте наявні інгредієнти, щоби бачити їх тут.",
   "ingredients.emptyAll": "Ще немає інгредієнтів",
@@ -451,6 +456,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Сортувати за часом додавання",
   "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
   "cocktails.addCocktail": "Додати коктейль",
+  "cocktails.addPartyIngredientsToShopping": "Додати інгредієнти вибраних коктейлів у список покупок",
 
   "shakerResults.helpTitle": "Результати шейкера",
   "shakerResults.helpText":

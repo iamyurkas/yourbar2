@@ -30,12 +30,14 @@ export const deDETranslations: TranslationDictionary = {
   "common.tabMy": "Meine",
   "common.tabFavorites": "Favoriten",
   "common.tabShopping": "Einkaufsliste",
+  "common.tabParty": "Party",
 
   "cocktails.emptyMy":
     "Markieren Sie Zutaten, die Sie besitzen, um hier verfügbare Cocktails zu sehen.",
   "cocktails.emptyFavorites":
     "Bewerten Sie Cocktails oder ändern Sie die Mindestbewertung im Menü.",
   "cocktails.emptyAll": "Noch keine Cocktails",
+  "cocktails.emptyParty": "Wähle Cocktails aus, um eine Party-Einkaufsliste zu erstellen.",
   "cocktails.helpMyTitle": "Meine Cocktails",
   "cocktails.helpMyText":
     "Dieser Bildschirm zeigt Cocktails, die Sie mit Ihren aktuellen Zutaten zubereiten können.\n\nNutzen Sie die Suche, um Ihre Rezepte schnell zu finden, und verwenden Sie Filter, um die Liste nach Tags oder Methode einzugrenzen.",
@@ -45,6 +47,9 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.helpAllTitle": "Alle Cocktails",
   "cocktails.helpAllText":
     "Dieser Bildschirm zeigt die vollständige Cocktailsammlung.\n\nNutzen Sie die Suche, wechseln Sie zwischen den Tabs und filtern Sie nach Methode oder Tags.",
+  "cocktails.helpPartyTitle": "Party-Cocktails",
+  "cocktails.helpPartyText":
+    "Wählen Sie Cocktails aus und tippen Sie dann auf die Korb-Schaltfläche, um alle Zutaten zur Einkaufsliste hinzuzufügen.",
 
   "ingredients.emptyMy":
     "Markieren Sie Zutaten, die Sie besitzen, um sie hier zu sehen.",
@@ -449,6 +454,7 @@ export const deDETranslations: TranslationDictionary = {
     "Nach Hinzufügezeit sortieren",
   "cocktails.sortOptionRandomAccessibility": "Zufällig sortieren",
   "cocktails.addCocktail": "Cocktail hinzufügen",
+  "cocktails.addPartyIngredientsToShopping": "Zutaten ausgewählter Cocktails zur Einkaufsliste hinzufügen",
 
   "shakerResults.helpTitle": "Shaker-Ergebnisse",
   "shakerResults.helpText":
