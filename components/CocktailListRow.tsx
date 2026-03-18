@@ -41,6 +41,12 @@ const areCocktailRowPropsEqual = (
     prev.onPress === next.onPress ||
     (!hasOnPress && !hasNextOnPress) ||
     (hasOnPress && hasNextOnPress && prev.cocktail === next.cocktail);
+  const hasPartyToggle = Boolean(prev.onPartySelectionToggle);
+  const hasNextPartyToggle = Boolean(next.onPartySelectionToggle);
+  const partyToggleEqual =
+    prev.onPartySelectionToggle === next.onPartySelectionToggle ||
+    (!hasPartyToggle && !hasNextPartyToggle) ||
+    (hasPartyToggle && hasNextPartyToggle && prev.cocktail === next.cocktail);
 
   return (
     prev.cocktail === next.cocktail &&
@@ -55,7 +61,9 @@ const areCocktailRowPropsEqual = (
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
     prev.isPartySelected === next.isPartySelected &&
-    onPressEqual
+    prev.showPartySelectionControl === next.showPartySelectionControl &&
+    onPressEqual &&
+    partyToggleEqual
   );
 };
 
