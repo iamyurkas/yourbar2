@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Linking from 'expo-linking';
+import { Platform } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 
 const SESSION_FILENAME = 'google-drive-session.json';
@@ -80,20 +81,42 @@ export async function clearGoogleDriveSession(): Promise<void> {
   await FileSystem.deleteAsync(path, { idempotent: true });
 }
 
+function resolveClientIdCandidate(value: unknown): string | null {
+  return typeof value === 'string' && value.trim().length > 0 ? value.trim() : null;
+}
+
 function getGoogleClientId(): string | null {
   const expoExtra = Constants.expoConfig?.extra as Record<string, unknown> | undefined;
   const manifest2Extra = Constants.manifest2?.extra?.expoClient?.extra as Record<string, unknown> | undefined;
   const manifestExtra = (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
+  const platformCandidates =
+    Platform.OS === 'android'
+      ? [
+        expoExtra?.googleDriveAndroidClientId,
+        manifest2Extra?.googleDriveAndroidClientId,
+        manifestExtra?.googleDriveAndroidClientId,
+        process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID,
+      ]
+      : Platform.OS === 'ios'
+        ? [
+          expoExtra?.googleDriveIosClientId,
+          manifest2Extra?.googleDriveIosClientId,
+          manifestExtra?.googleDriveIosClientId,
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
+        ]
+        : [];
+
   const candidates = [
+    ...platformCandidates,
     expoExtra?.googleDriveClientId,
     manifest2Extra?.googleDriveClientId,
     manifestExtra?.googleDriveClientId,
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
-  ];
+  ].map(resolveClientIdCandidate);
 
   for (const value of candidates) {
-    if (typeof value === 'string' && value.trim().length > 0) {
-      return value.trim();
+    if (value) {
+      return value;
     }
   }
 
@@ -129,14 +152,18 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
   const resolvedScheme = Constants.expoConfig?.scheme;
   const scheme = Array.isArray(resolvedScheme) ? resolvedScheme[0] : (resolvedScheme ?? 'yourbar');
   const redirectUri = Linking.createURL('oauthredirect', { scheme });
+  const codeVerifier = createCodeVerifier();
+  const codeChallenge = codeVerifier;
 
   const authUrl =
     `https://accounts.google.com/o/oauth2/v2/auth?` +
     `client_id=${encodeURIComponent(clientId)}` +
     `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-    `&response_type=token` +
+    `&response_type=code` +
     `&scope=${encodeURIComponent(GOOGLE_DRIVE_SCOPE)}` +
-    `&prompt=consent`;
+    `&prompt=consent` +
+    `&code_challenge=${encodeURIComponent(codeChallenge)}` +
+    `&code_challenge_method=plain`;
 
   const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
@@ -144,12 +171,41 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
     throw new Error('auth_cancelled');
   }
 
-  const hashIndex = result.url.indexOf('#');
-  const params = new URLSearchParams(hashIndex >= 0 ? result.url.slice(hashIndex + 1) : '');
+  const url = new URL(result.url);
+  const code = url.searchParams.get('code');
+  const authError = url.searchParams.get('error');
+  if (!code || authError) {
+    throw new Error(`auth_failed:${authError ?? 'missing_code'}`);
+  }
 
-  const accessToken = params.get('access_token');
-  const tokenType = params.get('token_type') ?? 'Bearer';
-  const expiresIn = Number(params.get('expires_in') ?? '3600');
+  const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      client_id: clientId,
+      code,
+      grant_type: 'authorization_code',
+      redirect_uri: redirectUri,
+      code_verifier: codeVerifier,
+    }).toString(),
+  });
+
+  if (!tokenResponse.ok) {
+    const errorText = await tokenResponse.text();
+    throw new Error(`token_exchange_failed:${tokenResponse.status}:${errorText}`);
+  }
+
+  const tokenPayload = (await tokenResponse.json()) as {
+    access_token?: string;
+    token_type?: string;
+    expires_in?: number | string;
+  };
+
+  const accessToken = tokenPayload.access_token;
+  const tokenType = tokenPayload.token_type ?? 'Bearer';
+  const expiresIn = Number(tokenPayload.expires_in ?? '3600');
 
   if (!accessToken || !Number.isFinite(expiresIn)) {
     throw new Error('auth_failed');
@@ -164,6 +220,16 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
 
   await persistSession(session);
   return session;
+}
+
+function createCodeVerifier(length = 64): string {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+  let result = '';
+  for (let i = 0; i < length; i += 1) {
+    result += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+
+  return result;
 }
 
 async function fetchDriveFiles(session: GoogleDriveSession): Promise<DriveFile[]> {

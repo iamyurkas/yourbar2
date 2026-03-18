@@ -55,6 +55,10 @@ export default ({ config }: { config: ExpoConfig }) => {
           process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
         googleDriveClientId:
           process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null,
+        googleDriveAndroidClientId:
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null,
+        googleDriveIosClientId:
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null,
 
         buildTime: new Date().toISOString(),
       },
