@@ -10,7 +10,7 @@ import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
 import { createIngredientLookup } from '@/libs/ingredient-availability';
 import { useI18n } from '@/libs/i18n/use-i18n';
 
-import { ListRow, Thumb } from './RowParts';
+import { ListRow, PresenceCheck, Thumb } from './RowParts';
 
 type CocktailListRowProps = {
   cocktail: Cocktail;
@@ -27,6 +27,8 @@ type CocktailListRowProps = {
   hasBrandFallback?: boolean;
   hasStyleFallback?: boolean;
   isPartySelected?: boolean;
+  showPartySelectionControl?: boolean;
+  onPartySelectionToggle?: () => void;
 };
 
 const areCocktailRowPropsEqual = (
@@ -39,6 +41,12 @@ const areCocktailRowPropsEqual = (
     prev.onPress === next.onPress ||
     (!hasOnPress && !hasNextOnPress) ||
     (hasOnPress && hasNextOnPress && prev.cocktail === next.cocktail);
+  const hasPartyToggle = Boolean(prev.onPartySelectionToggle);
+  const hasNextPartyToggle = Boolean(next.onPartySelectionToggle);
+  const partyToggleEqual =
+    prev.onPartySelectionToggle === next.onPartySelectionToggle ||
+    (!hasPartyToggle && !hasNextPartyToggle) ||
+    (hasPartyToggle && hasNextPartyToggle && prev.cocktail === next.cocktail);
 
   return (
     prev.cocktail === next.cocktail &&
@@ -53,7 +61,9 @@ const areCocktailRowPropsEqual = (
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
     prev.isPartySelected === next.isPartySelected &&
-    onPressEqual
+    prev.showPartySelectionControl === next.showPartySelectionControl &&
+    onPressEqual &&
+    partyToggleEqual
   );
 };
 
@@ -117,6 +127,8 @@ const CocktailListRowComponent = ({
   hasBrandFallback = false,
   hasStyleFallback = false,
   isPartySelected = false,
+  showPartySelectionControl = false,
+  onPartySelectionToggle,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const { t } = useI18n();
@@ -137,7 +149,7 @@ const CocktailListRowComponent = ({
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (normalizedRating <= 0) {
+    if (normalizedRating <= 0 && !showPartySelectionControl) {
       return null;
     }
 
@@ -160,8 +172,12 @@ const CocktailListRowComponent = ({
               />
             ))}
           </View>
+        ) : showPartySelectionControl ? (
+          <View style={styles.metaPillPlaceholder} />
         ) : null}
-        {isPartySelected ? (
+        {showPartySelectionControl && onPartySelectionToggle ? (
+          <PresenceCheck checked={isPartySelected} onToggle={onPartySelectionToggle} />
+        ) : isPartySelected ? (
           <MaterialCommunityIcons
             name="party-popper"
             size={12}
@@ -179,6 +195,8 @@ const CocktailListRowComponent = ({
     normalizedRating,
     Colors.styledIngredient,
     isPartySelected,
+    showPartySelectionControl,
+    onPartySelectionToggle,
     t,
   ]);
 
@@ -377,6 +395,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  metaPillPlaceholder: {
+    width: 8,
+    height: 8,
   },
   methodIconRow: {
     flexDirection: 'row',
