@@ -10,7 +10,7 @@ import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-over
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
-  persistInventorySnapshot,
+  persistInventorySnapshotDelta,
 } from '@/libs/inventory-storage';
 import {
   areStorageRecordsEqual,
@@ -263,6 +263,7 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     [amazonStoreOverride, detectedAmazonStore],
   );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
+  const persistTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inventoryDelta = useMemo(
     () => (inventoryState ? buildInventoryDelta(inventoryState, baseMaps) : null),
     [inventoryState, baseMaps],
@@ -571,9 +572,15 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
 
     lastPersistedSnapshot.current = serialized;
 
-    void persistInventorySnapshot(snapshot).catch((error) => {
-      console.error('Failed to persist inventory snapshot', error);
-    });
+    if (persistTimeoutRef.current) {
+      clearTimeout(persistTimeoutRef.current);
+    }
+
+    persistTimeoutRef.current = setTimeout(() => {
+      void persistInventorySnapshotDelta(snapshot).catch((error) => {
+        console.error('Failed to persist inventory snapshot', error);
+      });
+    }, 120);
   }, [
     inventoryState,
     inventoryDelta,
@@ -602,6 +609,12 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
     onboardingCompleted,
     onboardingStarterApplied,
   ]);
+  useEffect(() => () => {
+    if (persistTimeoutRef.current) {
+      clearTimeout(persistTimeoutRef.current);
+      persistTimeoutRef.current = null;
+    }
+  }, []);
 
   const cocktails = useMemo(
     () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
