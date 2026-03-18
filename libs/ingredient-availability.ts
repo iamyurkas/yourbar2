@@ -72,46 +72,6 @@ export function createIngredientLookup(ingredients: Ingredient[]): IngredientLoo
   return { ingredientById, brandsByBaseId, stylesByBaseId } satisfies IngredientLookup;
 }
 
-export function isRecipeIngredientAvailable(
-  ingredient: NonNullable<Cocktail['ingredients']>[number],
-  availableIngredientIds: Set<number>,
-  lookup: IngredientLookup,
-  options?: IngredientAvailabilityOptions,
-) {
-  const ignoreGarnish = options?.ignoreGarnish ?? true;
-  const allowAllSubstitutes = options?.allowAllSubstitutes ?? false;
-  const allowBase = ingredient.allowBaseSubstitution || allowAllSubstitutes;
-  const allowBrand = ingredient.allowBrandSubstitution || allowAllSubstitutes;
-  const allowStyle = ingredient.allowStyleSubstitution || allowAllSubstitutes;
-
-  if (!ingredient || ingredient.optional || (ignoreGarnish && ingredient.garnish)) {
-    return true;
-  }
-
-  const candidateIds = new Set<number>();
-
-  const id = typeof ingredient.ingredientId === 'number' ? ingredient.ingredientId : undefined;
-
-  if (id != null) {
-    collectVisibleIngredientIds(id, lookup, allowBase, allowBrand, allowStyle, candidateIds);
-  }
-
-  (ingredient.substitutes ?? []).forEach((substitute) => {
-    const substituteId = typeof substitute.ingredientId === 'number' ? substitute.ingredientId : undefined;
-    if (substituteId != null) {
-      collectVisibleIngredientIds(substituteId, lookup, allowBase, allowBrand, allowStyle, candidateIds);
-    }
-  });
-
-  for (const candidateId of candidateIds) {
-    if (availableIngredientIds.has(candidateId)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 function normalizeIngredientId(value?: number | string | null): number | undefined {
   if (value == null) {
     return undefined;

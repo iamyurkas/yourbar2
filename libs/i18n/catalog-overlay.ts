@@ -300,7 +300,3 @@ export function localizeCocktails(
 ): Cocktail[] {
   return cocktails.map((cocktail) => localizeCocktail(cocktail, locale, overrides));
 }
-
-export function getBundledInventoryData() {
-  return bundledData;
-}

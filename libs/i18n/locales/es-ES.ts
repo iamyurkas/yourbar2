@@ -466,8 +466,6 @@ export const esESTranslations: TranslationDictionary = {
   "shakerResults.sortOptionRecentlyAdded": "Añadidos recientemente",
   "shakerResults.sortOptionRandom": "Aleatorio",
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
-  "rowParts.removeFromFavorites": "Quitar de favoritos",
-  "rowParts.addToFavorites": "Añadir a favoritos",
   "cocktailListRow.allIngredientsReady": "Todos los ingredientes están listos",
   "tabBar.leaveWithoutSavingTitle": "¿Salir sin guardar?",
   "tabBar.leaveWithoutSavingMessage":

@@ -475,8 +475,6 @@ export const ukUATranslations: TranslationDictionary = {
   "shakerResults.sortOptionRandom": "Випадково",
   "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
 
-  "rowParts.removeFromFavorites": "Видалити з обраного",
-  "rowParts.addToFavorites": "Додати до обраного",
   "cocktailListRow.allIngredientsReady": "Усі інгредієнти готові",
 
   "tabBar.leaveWithoutSavingTitle": "Вийти без збереження?",

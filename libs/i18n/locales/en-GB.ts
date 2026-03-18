@@ -470,8 +470,6 @@ export const enGBTranslations: TranslationDictionary = {
   "shakerResults.sortOptionRandom": "Random",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
-  "rowParts.removeFromFavorites": "Remove from favourites",
-  "rowParts.addToFavorites": "Add to favourites",
   "cocktailListRow.allIngredientsReady": "All ingredients ready",
 
   "tabBar.leaveWithoutSavingTitle": "Leave without saving?",
