@@ -1432,11 +1432,15 @@ export default function CocktailsScreen() {
             style={({ pressed }) => [
               styles.partyFab,
               {
-                backgroundColor: Colors.primary,
-                opacity: partySelectionCount === 0 ? 0.45 : pressed ? 0.85 : 1,
+                backgroundColor: partySelectionCount === 0 ? Colors.disabled : Colors.primary,
+                opacity: partySelectionCount === 0 ? 1 : pressed ? 0.85 : 1,
               },
             ]}>
-            <MaterialIcons name="add-shopping-cart" size={24} color={Colors.onPrimary} />
+            <MaterialIcons
+              name="add-shopping-cart"
+              size={24}
+              color={partySelectionCount === 0 ? Colors.onSurfaceDisabled : Colors.onPrimary}
+            />
           </Pressable>
         </View>
       ) : (
