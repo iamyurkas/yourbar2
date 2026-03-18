@@ -579,6 +579,26 @@ export default function CocktailDetailsScreen() {
     return [...ids];
   }, [cocktail]);
 
+  const partyIngredientIds = useMemo(() => {
+    const ids = new Set<number>();
+
+    cocktails.forEach((partyCocktail) => {
+      const key = String(partyCocktail.id ?? partyCocktail.name);
+      if (!partySelectedCocktailKeys.has(key)) {
+        return;
+      }
+
+      (partyCocktail.ingredients ?? []).forEach((ingredient) => {
+        const parsedId = Number(ingredient.ingredientId);
+        if (Number.isFinite(parsedId) && parsedId >= 0) {
+          ids.add(Math.trunc(parsedId));
+        }
+      });
+    });
+
+    return ids;
+  }, [cocktails, partySelectedCocktailKeys]);
+
   const areAllCocktailIngredientsOnShoppingList = useMemo(() => {
     if (cocktailIngredientIds.length === 0) {
       return false;
@@ -1721,6 +1741,7 @@ export default function CocktailDetailsScreen() {
                     const isOnShoppingList =
                       ingredientId >= 0 &&
                       shoppingIngredientIds.has(ingredientId);
+                    const isPartyIngredient = ingredientId >= 0 && partyIngredientIds.has(ingredientId);
                     const handlePress = () => {
                       const routeParam =
                         resolvedId != null && resolvedId >= 0
@@ -1841,6 +1862,17 @@ export default function CocktailDetailsScreen() {
                               uri={photoUri}
                               fallbackUri={catalogEntry?.photoUri}
                             />
+                          }
+                          metaTopLeading={
+                            isPartyIngredient ? (
+                              <MaterialCommunityIcons
+                                name="party-popper"
+                                size={12}
+                                color={Colors.styledIngredient}
+                                accessibilityRole="image"
+                                accessibilityLabel={t('common.tabParty')}
+                              />
+                            ) : undefined
                           }
                           control={
                             <View style={styles.quantityContainer}>

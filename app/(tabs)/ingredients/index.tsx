@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
@@ -67,6 +67,7 @@ type IngredientListItemProps = {
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
   returnToParams?: Record<string, string | undefined>;
+  isPartyIngredient?: boolean;
 };
 
 type IngredientRowMeta = {
@@ -91,7 +92,8 @@ const areIngredientPropsEqual = (
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
   prev.onShoppingToggle === next.onShoppingToggle &&
-  prev.returnToParams === next.returnToParams;
+  prev.returnToParams === next.returnToParams &&
+  prev.isPartyIngredient === next.isPartyIngredient;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -106,6 +108,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
   returnToParams,
+  isPartyIngredient = false,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -204,6 +207,16 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     );
   }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
 
+
+  const partyIndicator = isPartyIngredient ? (
+    <MaterialCommunityIcons
+      name="party-popper"
+      size={12}
+      color={Colors.styledIngredient}
+      accessibilityRole="image"
+      accessibilityLabel={t('common.tabParty')}
+    />
+  ) : null;
   const handlePress = useCallback(() => {
     const routeParam = ingredient.id ?? ingredient.name;
     if (routeParam == null) {
@@ -231,6 +244,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       accessibilityState={showAvailabilityToggle && isAvailable ? { selected: true } : undefined}
       thumbnail={thumbnail}
       control={control}
+      metaTopLeading={partyIndicator}
       metaFooter={onShoppingToggle ? undefined : shoppingControl}
       brandIndicatorColor={brandIndicatorColor}
       rightIndicatorColor={rightIndicatorColor}
@@ -253,7 +267,7 @@ export default function IngredientsScreen() {
   }>();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
-  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
+  const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, partySelectedCocktailKeys, loading } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const initialListState = useMemo(() => getLastIngredientListState(), []);
@@ -821,6 +835,26 @@ export default function IngredientsScreen() {
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
 
+  const partyIngredientIds = useMemo(() => {
+    const ids = new Set<number>();
+
+    cocktails.forEach((cocktail) => {
+      const cocktailKey = String(cocktail.id ?? cocktail.name);
+      if (!partySelectedCocktailKeys.has(cocktailKey)) {
+        return;
+      }
+
+      (cocktail.ingredients ?? []).forEach((ingredient) => {
+        const parsedId = Number(ingredient.ingredientId);
+        if (Number.isFinite(parsedId) && parsedId >= 0) {
+          ids.add(Math.trunc(parsedId));
+        }
+      });
+    });
+
+    return ids;
+  }, [cocktails, partySelectedCocktailKeys]);
+
   const ingredientRowMetaByKey = useMemo(() => {
     const rowMetaMap = new Map<string, IngredientRowMeta>();
     const isMyTab = activeTab === 'my';
@@ -887,6 +921,7 @@ export default function IngredientsScreen() {
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
           returnToParams={listReturnToParams}
+          isPartyIngredient={isValidId && partyIngredientIds.has(ingredientId)}
         />
       );
     },
@@ -900,6 +935,7 @@ export default function IngredientsScreen() {
       Colors,
       shoppingIngredientIds,
       styleBaseIngredientIds,
+      partyIngredientIds,
       brandedBaseIngredientIds,
       listReturnToParams,
     ],
