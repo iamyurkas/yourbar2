@@ -93,6 +93,11 @@ import {
   sanitizeCocktailDefaultServings,
   sanitizeStartScreen,
 } from '@/providers/inventory/model/inventory-provider-sanitizers';
+import {
+  getNextCustomTagId,
+  sanitizeCustomTags,
+  sanitizeTranslationOverrides,
+} from '@/providers/inventory/model/inventory-provider-utils';
 
 const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
@@ -201,75 +206,6 @@ const USER_CREATED_ID_START = 10000;
 const MIN_COCKTAIL_DEFAULT_SERVINGS = 1;
 const MAX_COCKTAIL_DEFAULT_SERVINGS = 6;
 
-function sanitizeCustomTags<TTag extends { id?: number | null; name?: string | null; color?: string | null }>(
-  tags: readonly TTag[] | null | undefined,
-  fallbackColor: string,
-): Array<{ id: number; name: string; color: string }> {
-  if (!tags || tags.length === 0) {
-    return [];
-  }
-
-  const map = new Map<number, { id: number; name: string; color: string }>();
-
-  tags.forEach((tag) => {
-    const rawId = Number(tag.id ?? -1);
-    if (!Number.isFinite(rawId) || rawId < 0) {
-      return;
-    }
-
-    const name = tag.name?.trim();
-    if (!name) {
-      return;
-    }
-
-    const color = typeof tag.color === 'string' && tag.color.trim() ? tag.color : fallbackColor;
-    map.set(rawId, { id: Math.trunc(rawId), name, color });
-  });
-
-  return Array.from(map.values()).sort((a, b) => compareGlobalAlphabet(a.name, b.name));
-}
-
-
-function sanitizeTranslationOverrides(value: unknown): InventoryTranslationOverrides {
-  if (!value || typeof value !== 'object') {
-    return {};
-  }
-
-  const result: InventoryTranslationOverrides = {};
-  (Object.entries(value as Record<string, unknown>)).forEach(([locale, localeValue]) => {
-    if (!isSupportedLocale(locale) || !localeValue || typeof localeValue !== 'object') {
-      return;
-    }
-
-    const localeRecord = localeValue as Record<string, unknown>;
-    const cocktails = localeRecord.cocktails;
-    const ingredients = localeRecord.ingredients;
-    const nextLocale: InventoryLocaleTranslationOverrides = {};
-    if (cocktails && typeof cocktails === 'object') {
-      nextLocale.cocktails = cocktails as Record<string, any>;
-    }
-    if (ingredients && typeof ingredients === 'object') {
-      nextLocale.ingredients = ingredients as Record<string, any>;
-    }
-
-    result[locale] = nextLocale;
-  });
-
-  return result;
-}
-
-function getNextCustomTagId(tags: readonly { id?: number | null }[], minimum: number): number {
-  const maxId = tags.reduce((max, tag) => {
-    const id = Number(tag.id ?? -1);
-    if (!Number.isFinite(id) || id < 0) {
-      return max;
-    }
-    return Math.max(max, Math.trunc(id));
-  }, minimum);
-
-  return maxId + 1;
-}
-
 type InventoryProviderProps = {
   children: React.ReactNode;
 };
@@ -336,10 +272,10 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
   );
   const [translationOverrides, setTranslationOverrides] = useState<InventoryTranslationOverrides>({});
   const [customCocktailTags, setCustomCocktailTags] = useState<CocktailTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR),
+    sanitizeCustomTags(globalThis.__yourbarInventoryCustomCocktailTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
   );
   const [customIngredientTags, setCustomIngredientTags] = useState<IngredientTag[]>(() =>
-    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR),
+    sanitizeCustomTags(globalThis.__yourbarInventoryCustomIngredientTags, DEFAULT_TAG_COLOR, compareGlobalAlphabet),
   );
   const [bars, setBars] = useState<Bar[]>(() => globalThis.__yourbarInventoryBars ?? []);
   const [activeBarId, setActiveBarId] = useState<string>(
@@ -454,12 +390,17 @@ const [ratingFilterThreshold, setRatingFilterThreshold] = useState<number>(() =>
           const nextCustomCocktailTags = sanitizeCustomTags(
             'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
             DEFAULT_TAG_COLOR,
+            compareGlobalAlphabet,
           );
           const nextCustomIngredientTags = sanitizeCustomTags(
             'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
             DEFAULT_TAG_COLOR,
+            compareGlobalAlphabet,
           );
-          const nextTranslationOverrides = sanitizeTranslationOverrides((stored as { translationOverrides?: unknown }).translationOverrides);
+          const nextTranslationOverrides = sanitizeTranslationOverrides<InventoryTranslationOverrides>(
+            (stored as { translationOverrides?: unknown }).translationOverrides,
+            isSupportedLocale,
+          );
           const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
           const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
           const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
