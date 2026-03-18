@@ -971,6 +971,8 @@ export default function CocktailsScreen() {
     ({ item }: { item: Cocktail }) => {
       const availability = getAvailabilitySummary(item);
 
+      const isPartySelected = partySelectedCocktailKeys.has(String(item.id ?? item.name));
+
       return (
         <CocktailListRow
           cocktail={item}
@@ -985,6 +987,7 @@ export default function CocktailsScreen() {
           hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
+          isPartySelected={isPartySelected}
         />
       );
     },
@@ -994,6 +997,7 @@ export default function CocktailsScreen() {
       getCocktailRating,
       handleSelectCocktail,
       ingredients,
+      partySelectedCocktailKeys,
     ],
   );
 
@@ -1084,6 +1088,7 @@ export default function CocktailsScreen() {
       }
 
       const availability = getAvailabilitySummary(item.cocktail, myTabAvailabilitySummaryByKey);
+      const isPartySelected = partySelectedCocktailKeys.has(String(item.cocktail.id ?? item.cocktail.name));
 
       return (
         <CocktailListRow
@@ -1099,6 +1104,7 @@ export default function CocktailsScreen() {
           hasComment={Boolean(getCocktailComment(item.cocktail).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
+          isPartySelected={isPartySelected}
         />
       );
     },
@@ -1117,6 +1123,7 @@ export default function CocktailsScreen() {
       Colors,
       locale,
       t,
+      partySelectedCocktailKeys,
     ],
   );
 

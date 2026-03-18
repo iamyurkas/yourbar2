@@ -26,6 +26,7 @@ type CocktailListRowProps = {
   hasComment?: boolean;
   hasBrandFallback?: boolean;
   hasStyleFallback?: boolean;
+  isPartySelected?: boolean;
 };
 
 const areCocktailRowPropsEqual = (
@@ -51,6 +52,7 @@ const areCocktailRowPropsEqual = (
     prev.hasComment === next.hasComment &&
     prev.hasBrandFallback === next.hasBrandFallback &&
     prev.hasStyleFallback === next.hasStyleFallback &&
+    prev.isPartySelected === next.isPartySelected &&
     onPressEqual
   );
 };
@@ -114,6 +116,7 @@ const CocktailListRowComponent = ({
   hasComment = false,
   hasBrandFallback = false,
   hasStyleFallback = false,
+  isPartySelected = false,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const { t } = useI18n();
@@ -158,6 +161,15 @@ const CocktailListRowComponent = ({
             ))}
           </View>
         ) : null}
+        {isPartySelected ? (
+          <MaterialCommunityIcons
+            name="party-popper"
+            size={12}
+            color={Colors.styledIngredient}
+            accessibilityRole="image"
+            accessibilityLabel={t('common.tabParty')}
+          />
+        ) : null}
       </View>
     );
   }, [
@@ -165,6 +177,9 @@ const CocktailListRowComponent = ({
     Colors.outline,
     Colors.tint,
     normalizedRating,
+    Colors.styledIngredient,
+    isPartySelected,
+    t,
   ]);
 
   const tagColors = useMemo(

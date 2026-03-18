@@ -119,6 +119,7 @@ export default function IngredientDetailsScreen() {
     allowAllSubstitutes,
     getCocktailRating,
     getCocktailComment,
+    partySelectedCocktailKeys,
     effectiveAmazonStore,
   } = useInventory();
 
@@ -1750,6 +1751,7 @@ export default function IngredientDetailsScreen() {
                             hasComment={Boolean(getCocktailComment(cocktail).trim())}
                             hasBrandFallback={hasBrandFallback}
                             hasStyleFallback={hasStyleFallback}
+                            isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
                           />
                         </React.Fragment>
                       );
