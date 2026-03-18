@@ -34,7 +34,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktails.emptyMy":
     "Markieren Sie Zutaten, die Sie besitzen, um hier verfügbare Cocktails zu sehen.",
   "cocktails.emptyAll": "Noch keine Cocktails",
-  "cocktails.emptyParty": "Wähle Cocktails aus, um eine Party-Einkaufsliste zu erstellen.",
+  "cocktails.emptyParty":
+    "Wähle Cocktails aus, um eine Party-Einkaufsliste zu erstellen.",
   "cocktails.helpMyTitle": "Meine Cocktails",
   "cocktails.helpMyText":
     "Dieser Bildschirm zeigt Cocktails, die Sie mit Ihren aktuellen Zutaten zubereiten können.\n\nNutzen Sie die Suche, um Ihre Rezepte schnell zu finden, und verwenden Sie Filter, um die Liste nach Tags oder Methode einzugrenzen.",
@@ -237,7 +238,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.clearRating": "Bewertung löschen",
   "cocktailDetails.setRatingTo": "Bewertung auf {{value}} setzen",
   "cocktailDetails.toggleComment": "Kommentar hinzufügen",
-  "cocktailDetails.openVideoInstructions": "Videoanleitung öffnen",
+  "cocktailDetails.openVideos": "Videoanleitung öffnen",
   "cocktailDetails.commentPlaceholder":
     "Füge deinen Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
   "cocktailDetails.showInMetric": "In metrischen Einheiten anzeigen",
@@ -267,7 +268,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.orAny": "oder ein beliebiger {{name}}",
   "cocktailDetails.substituteFor": "Ersatz für {{name}}",
   "cocktailDetails.onShoppingList": "Auf der Einkaufsliste",
-  "cocktailDetails.addCocktailIngredientsToShopping": "Cocktail-Zutaten zur Einkaufsliste hinzufügen",
+  "cocktailDetails.addCocktailIngredientsToShopping":
+    "Cocktail-Zutaten zur Einkaufsliste hinzufügen",
   "cocktailDetails.buyAllIngredients": "Alle Zutaten kaufen",
   "cocktailDetails.copyCocktail": "Cocktail kopieren",
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
@@ -452,7 +454,8 @@ export const deDETranslations: TranslationDictionary = {
     "Nach Hinzufügezeit sortieren",
   "cocktails.sortOptionRandomAccessibility": "Zufällig sortieren",
   "cocktails.addCocktail": "Cocktail hinzufügen",
-  "cocktails.addPartyIngredientsToShopping": "Zutaten ausgewählter Cocktails zur Einkaufsliste hinzufügen",
+  "cocktails.addPartyIngredientsToShopping":
+    "Zutaten ausgewählter Cocktails zur Einkaufsliste hinzufügen",
 
   "shakerResults.helpTitle": "Shaker-Ergebnisse",
   "shakerResults.helpText":

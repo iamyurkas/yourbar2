@@ -34,7 +34,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.emptyMy":
     "Позначте наявні інгредієнти, щоби бачити доступні коктейлі.",
   "cocktails.emptyAll": "Ще немає коктейлів",
-  "cocktails.emptyParty": "Оберіть коктейлі, щоб зібрати список покупок для вечірки.",
+  "cocktails.emptyParty":
+    "Оберіть коктейлі, щоб зібрати список покупок для вечірки.",
   "cocktails.helpMyTitle": "Мої коктейлі",
   "cocktails.helpMyText":
     "Цей екран показує коктейлі, які можна приготувати з ваших поточних інгредієнтів.\n\nВикористовуйте пошук і фільтри за тегами чи методом.",
@@ -236,7 +237,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.clearRating": "Скинути рейтинг",
   "cocktailDetails.setRatingTo": "Встановити рейтинг {{value}}",
   "cocktailDetails.toggleComment": "Додати коментар",
-  "cocktailDetails.openVideoInstructions": "Відкрити відеоінструкцію",
+  "cocktailDetails.openVideos": "Відкрити відеоінструкцію",
   "cocktailDetails.commentPlaceholder":
     "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
   "cocktailDetails.showInMetric": "Метрична система",
@@ -266,7 +267,8 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.orAny": "чи будь-який {{name}}",
   "cocktailDetails.substituteFor": "Заміняє {{name}}",
   "cocktailDetails.onShoppingList": "У списку покупок",
-  "cocktailDetails.addCocktailIngredientsToShopping": "Додати інгредієнти коктейлю до списку покупок",
+  "cocktailDetails.addCocktailIngredientsToShopping":
+    "Додати інгредієнти коктейлю до списку покупок",
   "cocktailDetails.buyAllIngredients": "Купити всі інгредієнти",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
@@ -454,7 +456,8 @@ export const ukUATranslations: TranslationDictionary = {
     "Сортувати за часом додавання",
   "cocktails.sortOptionRandomAccessibility": "Випадкове сортування",
   "cocktails.addCocktail": "Додати коктейль",
-  "cocktails.addPartyIngredientsToShopping": "Додати інгредієнти вибраних коктейлів у список покупок",
+  "cocktails.addPartyIngredientsToShopping":
+    "Додати інгредієнти вибраних коктейлів у список покупок",
 
   "shakerResults.helpTitle": "Результати шейкера",
   "shakerResults.helpText":

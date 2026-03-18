@@ -888,23 +888,23 @@ export default function CocktailDetailsScreen() {
       .filter(Boolean);
   }, [cocktail?.instructions]);
 
-  const videoInstructionUrl = cocktail?.video?.trim() || "";
-  const videoService = useMemo(() => resolveVideoService(videoInstructionUrl), [videoInstructionUrl]);
+  const videoUrl = cocktail?.video?.trim() || "";
+  const videoService = useMemo(() => resolveVideoService(videoUrl), [videoUrl]);
 
-  const handleOpenVideoInstructions = useCallback(async () => {
-    if (!videoInstructionUrl) {
+  const handleOpenVideos = useCallback(async () => {
+    if (!videoUrl) {
       return;
     }
 
-    const url = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(videoInstructionUrl)
-      ? videoInstructionUrl
-      : `https://${videoInstructionUrl}`;
+    const url = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(videoUrl)
+      ? videoUrl
+      : `https://${videoUrl}`;
 
     const supported = await Linking.canOpenURL(url);
     if (supported) {
       await Linking.openURL(url);
     }
-  }, [videoInstructionUrl]);
+  }, [videoUrl]);
 
   const descriptionParagraphs = useMemo(() => {
     const description = cocktail?.description?.trim();
@@ -1269,10 +1269,10 @@ export default function CocktailDetailsScreen() {
 
                   {videoService ? (
                     <Pressable
-                      onPress={handleOpenVideoInstructions}
+                      onPress={handleOpenVideos}
                       accessibilityRole="button"
-                      accessibilityLabel={t("cocktailDetails.openVideoInstructions")}
-                      style={styles.videoInstructionButton}
+                      accessibilityLabel={t("cocktailDetails.openVideos")}
+                      style={styles.videoButton}
                       hitSlop={8}
                     >
                       <MaterialCommunityIcons
@@ -2068,7 +2068,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: -2,
   },
-  videoInstructionButton: {
+  videoButton: {
     width: 32,
     height: 32,
     marginLeft: "auto",

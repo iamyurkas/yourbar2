@@ -33,7 +33,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.emptyMy":
     "Marca los ingredientes que tienes para ver aquí los cócteles disponibles.",
   "cocktails.emptyAll": "Aún no hay cócteles",
-  "cocktails.emptyParty": "Selecciona cócteles para crear una lista de compras para la fiesta.",
+  "cocktails.emptyParty":
+    "Selecciona cócteles para crear una lista de compras para la fiesta.",
   "cocktails.helpMyTitle": "Mis cócteles",
   "cocktails.helpMyText":
     "Esta pantalla muestra los cócteles que puedes preparar con tus ingredientes actuales.\n\nUsa la búsqueda para encontrar tus recetas rápidamente y utiliza filtros para acotar la lista por etiquetas o método.",
@@ -232,7 +233,7 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.clearRating": "Borrar valoración",
   "cocktailDetails.setRatingTo": "Establecer valoración en {{value}}",
   "cocktailDetails.toggleComment": "Añadir comentario",
-  "cocktailDetails.openVideoInstructions": "Abrir instrucciones en video",
+  "cocktailDetails.openVideos": "Abrir instrucciones en video",
   "cocktailDetails.commentPlaceholder":
     "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
   "cocktailDetails.showInMetric": "Mostrar en sistema métrico",
@@ -262,7 +263,8 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.orAny": "o cualquier {{name}}",
   "cocktailDetails.substituteFor": "Sustituto de {{name}}",
   "cocktailDetails.onShoppingList": "En la lista de la compra",
-  "cocktailDetails.addCocktailIngredientsToShopping": "Añadir ingredientes del cóctel a la lista de compras",
+  "cocktailDetails.addCocktailIngredientsToShopping":
+    "Añadir ingredientes del cóctel a la lista de compras",
   "cocktailDetails.buyAllIngredients": "Comprar todos los ingredientes",
   "cocktailDetails.copyCocktail": "Copiar cóctel",
   "cocktailDetails.editCocktail": "Editar cóctel",
@@ -447,7 +449,8 @@ export const esESTranslations: TranslationDictionary = {
     "Ordenar por fecha de adición",
   "cocktails.sortOptionRandomAccessibility": "Orden aleatorio",
   "cocktails.addCocktail": "Añadir cóctel",
-  "cocktails.addPartyIngredientsToShopping": "Añadir ingredientes de cócteles seleccionados a la lista de compras",
+  "cocktails.addPartyIngredientsToShopping":
+    "Añadir ingredientes de cócteles seleccionados a la lista de compras",
   "shakerResults.helpTitle": "Resultados de la coctelera",
   "shakerResults.helpText":
     "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\n\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",

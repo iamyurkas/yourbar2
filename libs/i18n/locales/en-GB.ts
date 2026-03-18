@@ -213,9 +213,11 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailForm.garnish": "Garnish",
   "cocktailForm.optional": "Optional",
   "cocktailForm.process": "Process",
-  "cocktailForm.processMessage": "Marks ice used during preparation techniques like shaking, stirring, or throwing.",
+  "cocktailForm.processMessage":
+    "Marks ice used during preparation techniques like shaking, stirring, or throwing.",
   "cocktailForm.serving": "Serving",
-  "cocktailForm.servingMessage": "Marks ice for serving, including blending, because that ice ends up in the glass.",
+  "cocktailForm.servingMessage":
+    "Marks ice for serving, including blending, because that ice ends up in the glass.",
   "cocktailForm.allowBaseSubstitute": "Allow base substitute",
   "cocktailForm.allowBaseSubstituteMessage":
     "If the specified ingredient isn't available, the cocktail will be shown as available with its base ingredient.",
@@ -234,8 +236,9 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.clearRating": "Clear rating",
   "cocktailDetails.setRatingTo": "Set rating to {{value}}",
   "cocktailDetails.toggleComment": "Add comment",
-  "cocktailDetails.openVideoInstructions": "Open video instructions",
-  "cocktailDetails.commentPlaceholder": "Add your comment. It saves automatically when you leave this screen.",
+  "cocktailDetails.openVideos": "Open video instructions",
+  "cocktailDetails.commentPlaceholder":
+    "Add your comment. It saves automatically when you leave this screen.",
   "cocktailDetails.showInMetric": "Show in metric",
   "cocktailDetails.showInImperial": "Show in imperial",
   "cocktailDetails.displayMode.imperial": "Imperial",
@@ -263,7 +266,8 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.orAny": "or any {{name}}",
   "cocktailDetails.substituteFor": "Substitute for {{name}}",
   "cocktailDetails.onShoppingList": "On shopping list",
-  "cocktailDetails.addCocktailIngredientsToShopping": "Add cocktail ingredients to shopping list",
+  "cocktailDetails.addCocktailIngredientsToShopping":
+    "Add cocktail ingredients to shopping list",
   "cocktailDetails.buyAllIngredients": "Buy all ingredients",
   "cocktailDetails.copyCocktail": "Copy cocktail",
   "cocktailDetails.editCocktail": "Edit cocktail",
@@ -448,7 +452,8 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktails.sortOptionRecentlyAddedAccessibility": "Sort by recently added",
   "cocktails.sortOptionRandomAccessibility": "Sort randomly",
   "cocktails.addCocktail": "Add cocktail",
-  "cocktails.addPartyIngredientsToShopping": "Add selected cocktail ingredients to shopping list",
+  "cocktails.addPartyIngredientsToShopping":
+    "Add selected cocktail ingredients to shopping list",
 
   "shakerResults.helpTitle": "Shaker results",
   "shakerResults.helpText":
@@ -586,7 +591,8 @@ export const enGBTranslations: TranslationDictionary = {
     "Please try again with a valid backup archive.",
 
   "sideMenu.importIngredientStatusesTitle": "Import ingredient statuses?",
-  "sideMenu.importIngredientStatusesMessage": "Choose which ingredient statuses to import from this backup.",
+  "sideMenu.importIngredientStatusesMessage":
+    "Choose which ingredient statuses to import from this backup.",
   "sideMenu.importIngredientStatusesAvailability": "Ingredient availability",
   "sideMenu.importIngredientStatusesShopping": "Ingredient shopping list",
   "sideMenu.importIngredientStatusesConfirm": "Import selected",
