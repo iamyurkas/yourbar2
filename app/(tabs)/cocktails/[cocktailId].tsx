@@ -1212,11 +1212,14 @@ export default function CocktailDetailsScreen() {
               <View style={styles.partyControlsWrapper}>
                 <View style={styles.partyControlRow}>
                   <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('common.tabParty')}</Text>
-                  <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
+                  <View style={styles.partyControlActionSlot}>
+                    <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
+                  </View>
                 </View>
                 <View style={styles.partyControlRow}>
                   <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('cocktailDetails.buyAllIngredients')}</Text>
-                  <Pressable
+                  <View style={styles.partyControlActionSlot}>
+                    <Pressable
                     onPress={handleAddCocktailIngredientsToShopping}
                     accessibilityRole="button"
                     accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
@@ -1228,6 +1231,7 @@ export default function CocktailDetailsScreen() {
                       color={Colors.tint}
                     />
                   </Pressable>
+                  </View>
                 </View>
               </View>
 
@@ -1912,8 +1916,8 @@ export default function CocktailDetailsScreen() {
                     />
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
+                  </View>
                 </View>
-              </View>
             ) : null}
           </View>
         ) : (
@@ -2024,10 +2028,10 @@ const styles = StyleSheet.create({
   partyControlsWrapper: {
     alignSelf: 'stretch',
     alignItems: 'flex-end',
-    gap: 8,
-    marginTop: 8,
+    gap: 16,
   },
   partyControlRow: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -2036,6 +2040,10 @@ const styles = StyleSheet.create({
   partyControlLabel: {
     fontSize: 13,
     fontWeight: '500',
+  },
+  partyControlActionSlot: {
+    width: 28,
+    alignItems: 'flex-end',
   },
   partyShoppingButton: {
     width: 28,
