@@ -166,6 +166,12 @@ export function buildGoogleOAuthRequest(input: {
   const shouldUseProxyRedirect = Boolean(input.preferProxyRedirect)
     && Platform.OS !== "web"
     && (client.source === "default" || client.source === "web");
+  const requiresProxyRedirect = Platform.OS === "android"
+    && (client.source === "default" || client.source === "web");
+  if (requiresProxyRedirect && !input.proxyRedirectUri) {
+    console.warn("[GoogleDriveSync] Android default/web OAuth client requires EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI");
+    return null;
+  }
   if (shouldUseProxyRedirect && !input.proxyRedirectUri) {
     console.warn("[GoogleDriveSync] Missing proxy redirect URI for web/default client on native platform");
     return null;
