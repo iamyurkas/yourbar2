@@ -41,13 +41,27 @@ type GoogleTokenResponse = {
   scope?: string;
 };
 
-function getPlatformClientId(): { clientId: string; source: "default" | "android" | "ios" | "web" } | null {
+function getPlatformClientId(
+  forceSource?: "default" | "android" | "ios" | "web",
+): { clientId: string; source: "default" | "android" | "ios" | "web" } | null {
   const fallback = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null;
   const webClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ?? null;
   const androidClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null;
   const iosClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null;
 
   if (Platform.OS === "android") {
+    if (forceSource === "android" && androidClient) {
+      return { clientId: androidClient, source: "android" };
+    }
+    if (forceSource === "default" && fallback) {
+      return { clientId: fallback, source: "default" };
+    }
+    if (forceSource === "web" && webClient) {
+      return { clientId: webClient, source: "web" };
+    }
+    if (forceSource) {
+      return null;
+    }
     if (androidClient) {
       return { clientId: androidClient, source: "android" };
     }
@@ -55,6 +69,18 @@ function getPlatformClientId(): { clientId: string; source: "default" | "android
   }
 
   if (Platform.OS === "ios") {
+    if (forceSource === "ios" && iosClient) {
+      return { clientId: iosClient, source: "ios" };
+    }
+    if (forceSource === "default" && fallback) {
+      return { clientId: fallback, source: "default" };
+    }
+    if (forceSource === "web" && webClient) {
+      return { clientId: webClient, source: "web" };
+    }
+    if (forceSource) {
+      return null;
+    }
     if (iosClient) {
       return { clientId: iosClient, source: "ios" };
     }
@@ -64,6 +90,16 @@ function getPlatformClientId(): { clientId: string; source: "default" | "android
     if (webClient) {
       return { clientId: webClient, source: "web" };
     }
+    return null;
+  }
+
+  if (forceSource === "web" && webClient) {
+    return { clientId: webClient, source: "web" };
+  }
+  if (forceSource === "default" && fallback) {
+    return { clientId: fallback, source: "default" };
+  }
+  if (forceSource) {
     return null;
   }
 
@@ -105,8 +141,9 @@ export function buildGoogleOAuthRequest(input: {
   appRedirectUri: string;
   proxyRedirectUri?: string | null;
   preferProxyRedirect?: boolean;
+  forceClientSource?: "default" | "android" | "ios" | "web";
 }): GoogleOAuthRequest | null {
-  const client = getPlatformClientId();
+  const client = getPlatformClientId(input.forceClientSource);
   if (!client) {
     console.warn("[GoogleDriveSync] Google OAuth client id is not configured");
     return null;
