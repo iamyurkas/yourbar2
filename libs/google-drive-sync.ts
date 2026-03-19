@@ -110,6 +110,7 @@ function createCodeVerifier(): string {
 export function buildGoogleOAuthRequest(input: {
   appRedirectUri: string;
   proxyRedirectUri?: string | null;
+  preferProxyRedirect?: boolean;
 }): GoogleOAuthRequest | null {
   const client = getPlatformClientId();
   if (!client) {
@@ -120,7 +121,9 @@ export function buildGoogleOAuthRequest(input: {
 
   const nativeScheme = getGoogleNativeRedirectScheme(clientId);
   const canUseNativeRedirect = Platform.OS === "ios" && client.source === "ios" && Boolean(nativeScheme);
-  const shouldUseProxyRedirect = Platform.OS !== "web" && (client.source === "default" || client.source === "web");
+  const shouldUseProxyRedirect = Boolean(input.preferProxyRedirect)
+    && Platform.OS !== "web"
+    && (client.source === "default" || client.source === "web");
   if (shouldUseProxyRedirect && !input.proxyRedirectUri) {
     console.warn("[GoogleDriveSync] Missing proxy redirect URI for web/default client on native platform");
     return null;

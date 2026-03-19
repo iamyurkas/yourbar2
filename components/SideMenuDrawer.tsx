@@ -1006,9 +1006,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const slug = Constants.expoConfig?.slug;
     const configuredProxyRedirectUri = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI ?? null;
     const proxyRedirectUri = configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null);
+    const preferProxyRedirect = Constants.appOwnership === "expo";
     const authRequest = buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
+      preferProxyRedirect,
     });
     if (!authRequest) {
       console.warn("[GoogleDriveSync] Missing Google Drive OAuth configuration", {
@@ -1019,6 +1021,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           || process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
         ),
         hasProxyRedirect: Boolean(proxyRedirectUri),
+        preferProxyRedirect,
         owner: owner ?? null,
         slug: slug ?? null,
       });
@@ -1030,6 +1033,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       platform: Platform.OS,
       appRedirectUri,
       proxyRedirectUri,
+      preferProxyRedirect,
       redirectUri: authRequest.redirectUri,
       clientSource: authRequest.clientSource,
       authUrlPreview: authRequest.authUrl.slice(0, 140),
