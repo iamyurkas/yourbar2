@@ -7,32 +7,6 @@ type ExpoIosConfig = {
 
 export default ({ config }: { config: ExpoConfig }) => {
   const baseExpo = base.expo ?? {};
-  const configureScheme = (value: unknown): string[] => {
-    if (Array.isArray(value)) {
-      return value.filter((item): item is string => typeof item === "string" && item.length > 0);
-    }
-    if (typeof value === "string" && value.length > 0) {
-      return [value];
-    }
-    return [];
-  };
-  const getGoogleSchemeFromClientId = (clientId: string | undefined): string | null => {
-    if (!clientId) {
-      return null;
-    }
-    const suffix = ".apps.googleusercontent.com";
-    if (!clientId.endsWith(suffix)) {
-      return null;
-    }
-    const appIdPrefix = clientId.slice(0, -suffix.length);
-    return appIdPrefix ? `com.googleusercontent.apps.${appIdPrefix}` : null;
-  };
-  const configuredSchemes = [
-    ...configureScheme(baseExpo.scheme),
-    ...configureScheme(config.scheme),
-    getGoogleSchemeFromClientId(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID),
-    getGoogleSchemeFromClientId(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID),
-  ].filter((value, index, all) => Boolean(value) && all.indexOf(value) === index);
 
   return {
     expo: {
@@ -41,7 +15,7 @@ export default ({ config }: { config: ExpoConfig }) => {
 
       name: baseExpo.name,
       slug: baseExpo.slug,
-      scheme: configuredSchemes.length > 0 ? configuredSchemes : baseExpo.scheme,
+      scheme: baseExpo.scheme,
       version: baseExpo.version,
 
       ios: {

@@ -1008,7 +1008,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const authRequest = buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
-      preferProxyRedirect: false,
+      preferProxyRedirect: true,
     });
     if (!authRequest) {
       console.warn("[GoogleDriveSync] Missing Google Drive OAuth configuration", {
@@ -1030,7 +1030,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       platform: Platform.OS,
       appRedirectUri,
       proxyRedirectUri,
-      preferProxyRedirect: false,
+      preferProxyRedirect: true,
       redirectUri: authRequest.redirectUri,
       clientSource: authRequest.clientSource,
       authUrlPreview: authRequest.authUrl.slice(0, 140),
@@ -1056,18 +1056,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       if (
         sessionResult
         && sessionResult.result.type === "dismiss"
-        && proxyRedirectUri
-        && (sessionResult.request.clientSource === "default" || sessionResult.request.clientSource === "web")
+        && sessionResult.request.redirectUri !== appRedirectUri
       ) {
-        const proxyAuthRequest = buildGoogleOAuthRequest({
+        const appAuthRequest = buildGoogleOAuthRequest({
           appRedirectUri,
           proxyRedirectUri,
-          preferProxyRedirect: true,
+          preferProxyRedirect: false,
         });
-        console.info("[GoogleDriveSync] Retrying OAuth with proxy redirect", {
-          proxyRedirectUri,
+        console.info("[GoogleDriveSync] Retrying OAuth with app redirect", {
+          appRedirectUri,
         });
-        sessionResult = await runOAuthSession(proxyAuthRequest);
+        sessionResult = await runOAuthSession(appAuthRequest);
       }
 
       const result = sessionResult?.result;
