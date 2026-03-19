@@ -49,6 +49,7 @@ function getPlatformClientId(
   const androidClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null;
   const iosClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null;
   const useAndroidClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_USE_ANDROID_CLIENT === "true";
+  const useIosClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_USE_IOS_CLIENT === "true";
 
   if (Platform.OS === "android") {
     if (forceSource === "android" && useAndroidClient && androidClient) {
@@ -76,7 +77,7 @@ function getPlatformClientId(
   }
 
   if (Platform.OS === "ios") {
-    if (forceSource === "ios" && iosClient) {
+    if (forceSource === "ios" && useIosClient && iosClient) {
       return { clientId: iosClient, source: "ios" };
     }
     if (forceSource === "default" && fallback) {
@@ -88,7 +89,7 @@ function getPlatformClientId(
     if (forceSource) {
       return null;
     }
-    if (iosClient) {
+    if (useIosClient && iosClient) {
       return { clientId: iosClient, source: "ios" };
     }
     if (fallback) {
