@@ -558,6 +558,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.googleDriveMissingClientId": "Missing Google OAuth client ID in app config.",
   "sideMenu.googleDriveAndroidClientTypeHint": "Android OAuth client IDs are not supported by this browser-based flow. Set EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID to a Web OAuth client ID.",
   "sideMenu.googleDriveInvalidRequestHint": "Google rejected the OAuth request. Check that your Google OAuth client type and redirect URI match this build.",
+  "sideMenu.googleDriveAuthCancelledHint": "Google sign-in did not complete. The browser likely could not return to the app.",
   "sideMenu.googleDriveLoginFailed": "Unable to sign in. Please try again.",
   "sideMenu.googleDriveSyncSuccessTitle": "Sync complete",
   "sideMenu.googleDriveSyncSuccessMessage": "Your inventory and settings are synced to Google Drive.",

@@ -210,7 +210,7 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
   const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
   if (result.type !== 'success' || !result.url) {
-    throw new Error('auth_cancelled');
+    throw new Error(`auth_cancelled:${result.type}`);
   }
 
   const url = new URL(result.url);
