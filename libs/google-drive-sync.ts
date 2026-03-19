@@ -102,6 +102,12 @@ function getGoogleClientId(): string | null {
   const manifest2Extra = Constants.manifest2?.extra?.expoClient?.extra as Record<string, unknown> | undefined;
   const manifestExtra = (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
   const candidates = [
+    // Prioritize iOS client ID on all platforms to allow custom URI schemes in browser-based OAuth flows.
+    expoExtra?.googleDriveIosClientId,
+    manifest2Extra?.googleDriveIosClientId,
+    manifestExtra?.googleDriveIosClientId,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
+
     expoExtra?.googleDriveClientId,
     manifest2Extra?.googleDriveClientId,
     manifestExtra?.googleDriveClientId,
@@ -112,14 +118,6 @@ function getGoogleClientId(): string | null {
         manifest2Extra?.googleDriveAndroidClientId,
         manifestExtra?.googleDriveAndroidClientId,
         process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID,
-      ]
-      : []),
-    ...(Platform.OS === 'ios'
-      ? [
-        expoExtra?.googleDriveIosClientId,
-        manifest2Extra?.googleDriveIosClientId,
-        manifestExtra?.googleDriveIosClientId,
-        process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
       ]
       : []),
   ].map(resolveClientIdCandidate);

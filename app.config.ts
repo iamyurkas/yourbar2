@@ -10,9 +10,9 @@ export default ({ config }: { config: ExpoConfig }) => {
   const baseExtra = (baseExpo.extra ?? {}) as Record<string, unknown>;
   const configExtra = (config.extra ?? {}) as Record<string, unknown>;
   const googleClientIds = [
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? baseExtra.googleDriveIosClientId ?? configExtra.googleDriveIosClientId ?? null,
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? baseExtra.googleDriveClientId ?? configExtra.googleDriveClientId ?? null,
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? baseExtra.googleDriveAndroidClientId ?? configExtra.googleDriveAndroidClientId ?? null,
-    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? baseExtra.googleDriveIosClientId ?? configExtra.googleDriveIosClientId ?? null,
   ];
   const googleSchemes = googleClientIds
     .flatMap((candidate) => (typeof candidate === "string" ? [candidate.trim()] : []))
@@ -83,16 +83,16 @@ export default ({ config }: { config: ExpoConfig }) => {
         ...(config.extra ?? {}),
 
         iosAppStoreCountryCode:
-          process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? null,
-        iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? "6758964503",
+          process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? baseExtra.iosAppStoreCountryCode ?? configExtra.iosAppStoreCountryCode ?? null,
+        iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? baseExtra.iosAppStoreId ?? configExtra.iosAppStoreId ?? "6758964503",
         androidPlayStoreCountryCode:
-          process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
+          process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? baseExtra.androidPlayStoreCountryCode ?? configExtra.androidPlayStoreCountryCode ?? null,
         googleDriveClientId:
-          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null,
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? baseExtra.googleDriveClientId ?? configExtra.googleDriveClientId ?? null,
         googleDriveAndroidClientId:
-          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null,
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? baseExtra.googleDriveAndroidClientId ?? configExtra.googleDriveAndroidClientId ?? null,
         googleDriveIosClientId:
-          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null,
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? baseExtra.googleDriveIosClientId ?? configExtra.googleDriveIosClientId ?? null,
 
         buildTime: new Date().toISOString(),
       },
