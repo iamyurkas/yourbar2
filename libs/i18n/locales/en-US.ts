@@ -553,7 +553,7 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.googleDriveSyncDownloading": "Downloading cloud backup...",
   "sideMenu.googleDriveSyncDownloadCaption": "Restore your full bar from Google Drive",
   "sideMenu.googleDriveMissingClientIdTitle": "Google Drive login unavailable",
-  "sideMenu.googleDriveMissingClientIdMessage": "Missing Google Drive client ID. Configure EXPO_PUBLIC_GOOGLE_DRIVE_* variables.",
+  "sideMenu.googleDriveMissingClientIdMessage": "Missing Google Drive OAuth config. Set EXPO_PUBLIC_GOOGLE_DRIVE_* and EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI.",
   "sideMenu.googleDriveLoginFailedTitle": "Google Drive sign-in failed",
   "sideMenu.googleDriveLoginFailedMessage": "Could not sign in to Google Drive. Please try again.",
   "sideMenu.googleDriveSyncSuccessTitle": "Google Drive sync complete",

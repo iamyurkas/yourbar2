@@ -561,7 +561,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.googleDriveSyncDownloading": "Завантаження резерву з хмари...",
   "sideMenu.googleDriveSyncDownloadCaption": "Відновити весь бар із Google Drive",
   "sideMenu.googleDriveMissingClientIdTitle": "Вхід у Google Drive недоступний",
-  "sideMenu.googleDriveMissingClientIdMessage": "Не задано Google Drive client ID. Налаштуйте змінні EXPO_PUBLIC_GOOGLE_DRIVE_*.",
+  "sideMenu.googleDriveMissingClientIdMessage": "Не задано OAuth-конфігурацію Google Drive. Налаштуйте EXPO_PUBLIC_GOOGLE_DRIVE_* і EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI.",
   "sideMenu.googleDriveLoginFailedTitle": "Не вдалося увійти в Google Drive",
   "sideMenu.googleDriveLoginFailedMessage": "Не вдалося виконати вхід у Google Drive. Спробуйте ще раз.",
   "sideMenu.googleDriveSyncSuccessTitle": "Синхронізацію з Google Drive завершено",

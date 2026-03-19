@@ -1004,13 +1004,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const appRedirectUri = ExpoLinking.createURL("oauth/google-drive", { scheme: "yourbar" });
     const owner = Constants.expoConfig?.owner;
     const slug = Constants.expoConfig?.slug;
-    const proxyRedirectUri = owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null;
+    const configuredProxyRedirectUri = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI ?? null;
+    const proxyRedirectUri = configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null);
     const authRequest = buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
     });
     if (!authRequest) {
-      console.warn("[GoogleDriveSync] Missing Google Drive client id in environment");
+      console.warn("[GoogleDriveSync] Missing Google Drive OAuth configuration", {
+        hasClientId: Boolean(
+          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID
+          || process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID
+          || process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID
+          || process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
+        ),
+        hasProxyRedirect: Boolean(proxyRedirectUri),
+        owner: owner ?? null,
+        slug: slug ?? null,
+      });
       showDialogMessage(t("sideMenu.googleDriveMissingClientIdTitle"), t("sideMenu.googleDriveMissingClientIdMessage"));
       return;
     }

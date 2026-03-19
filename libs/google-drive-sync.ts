@@ -121,6 +121,10 @@ export function buildGoogleOAuthRequest(input: {
   const nativeScheme = getGoogleNativeRedirectScheme(clientId);
   const canUseNativeRedirect = Platform.OS === "ios" && client.source === "ios" && Boolean(nativeScheme);
   const shouldUseProxyRedirect = Platform.OS !== "web" && (client.source === "default" || client.source === "web");
+  if (shouldUseProxyRedirect && !input.proxyRedirectUri) {
+    console.warn("[GoogleDriveSync] Missing proxy redirect URI for web/default client on native platform");
+    return null;
+  }
   const redirectUri = canUseNativeRedirect
     ? `${nativeScheme}:/oauthredirect`
     : (shouldUseProxyRedirect ? (input.proxyRedirectUri ?? input.appRedirectUri) : input.appRedirectUri);
