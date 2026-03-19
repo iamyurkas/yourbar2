@@ -621,7 +621,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const isAuthCancelled = rawMessage.startsWith("auth_cancelled:");
       const diagnostics = getGoogleDriveAuthDebugInfo();
 
-      console.error("Google Drive OAuth diagnostics", {
+      console.log("Google Drive OAuth diagnostics", {
         error: rawMessage || String(error),
         platform: diagnostics.platform,
         appOwnership: diagnostics.appOwnership,

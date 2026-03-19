@@ -566,7 +566,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.googleDriveMissingClientId": "У конфігурації застосунку відсутній Google OAuth client ID.",
   "sideMenu.googleDriveAndroidClientTypeHint": "Android OAuth client ID не підтримується цим browser-flow. Вкажіть EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID як Web OAuth client ID.",
   "sideMenu.googleDriveInvalidRequestHint": "Google відхилив OAuth-запит. Перевірте, що тип OAuth-клієнта і redirect URI відповідають цій збірці.",
-  "sideMenu.googleDriveAuthCancelledHint": "Вхід через Google не завершився. Ймовірно, браузер не зміг повернутися в застосунок.",
+  "sideMenu.googleDriveAuthCancelledHint": "Вхід через Google було закрито до callback. Перезберіть застосунок після змін OAuth і спробуйте знову.",
   "sideMenu.googleDriveLoginFailed": "Не вдалося виконати вхід. Спробуйте ще раз.",
   "sideMenu.googleDriveSyncSuccessTitle": "Синхронізацію завершено",
   "sideMenu.googleDriveSyncSuccessMessage": "Інвентар і налаштування синхронізовано з Google Drive.",

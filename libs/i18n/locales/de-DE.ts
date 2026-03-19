@@ -572,7 +572,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.googleDriveMissingClientId": "Google OAuth-Client-ID fehlt in der App-Konfiguration.",
   "sideMenu.googleDriveAndroidClientTypeHint": "Android-OAuth-Client-IDs werden von diesem browserbasierten Flow nicht unterstützt. Setzen Sie EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID auf eine Web-OAuth-Client-ID.",
   "sideMenu.googleDriveInvalidRequestHint": "Google hat die OAuth-Anfrage abgelehnt. Prüfen Sie, ob OAuth-Client-Typ und Redirect-URI zu diesem Build passen.",
-  "sideMenu.googleDriveAuthCancelledHint": "Die Google-Anmeldung wurde nicht abgeschlossen. Wahrscheinlich konnte der Browser nicht zur App zurückkehren.",
+  "sideMenu.googleDriveAuthCancelledHint": "Die Google-Anmeldung wurde vor dem Callback beendet. Erstellen Sie nach OAuth-Änderungen einen neuen Build und versuchen Sie es erneut.",
   "sideMenu.googleDriveLoginFailed": "Anmeldung fehlgeschlagen. Bitte erneut versuchen.",
   "sideMenu.googleDriveSyncSuccessTitle": "Synchronisierung abgeschlossen",
   "sideMenu.googleDriveSyncSuccessMessage": "Ihr Inventar und Ihre Einstellungen wurden mit Google Drive synchronisiert.",
