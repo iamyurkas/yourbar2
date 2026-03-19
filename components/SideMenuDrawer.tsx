@@ -618,6 +618,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const rawMessage = error instanceof Error ? error.message : "";
       const isConfigError = rawMessage === "missing_client_id" || rawMessage === "invalid_client_id";
       const isInvalidRequest = rawMessage.includes("auth_failed:invalid_request");
+      const diagnostics = getGoogleDriveAuthDebugInfo();
+
+      console.warn("Google Drive OAuth diagnostics", {
+        error: rawMessage || String(error),
+        platform: diagnostics.platform,
+        appOwnership: diagnostics.appOwnership,
+        clientId: diagnostics.clientIdPreview ?? "n/a",
+        redirectUri: diagnostics.redirectUri ?? "n/a",
+        schemes: diagnostics.configuredSchemes,
+      });
 
       const message = isConfigError
         ? t("sideMenu.googleDriveMissingClientId")
@@ -626,7 +636,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           : t("sideMenu.googleDriveLoginFailed");
 
       if (isInvalidRequest) {
-        const diagnostics = getGoogleDriveAuthDebugInfo();
         const diagnosticDetails = [
           `platform: ${diagnostics.platform}`,
           `appOwnership: ${diagnostics.appOwnership}`,
