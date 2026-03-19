@@ -110,6 +110,8 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   translationOverrides?: unknown;
   bars?: Bar[];
   activeBarId?: string;
+  lastSyncTime?: string | null;
+  googleUser?: import('@/providers/inventory-types').GoogleUser | null;
 };
 
 export type InventorySnapshot<TCocktail, TIngredient> =

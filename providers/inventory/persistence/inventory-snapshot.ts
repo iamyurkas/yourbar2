@@ -10,6 +10,7 @@ import type {
   AppLocale,
   AppTheme,
   Bar,
+  GoogleUser,
   CocktailStorageRecord,
   CocktailTag,
   IngredientStorageRecord,
@@ -169,6 +170,8 @@ export type InventorySnapshotOptions = {
   onboardingStep: number;
   onboardingCompleted: boolean;
   onboardingStarterApplied: boolean;
+  lastSyncTime?: string | null;
+  googleUser?: GoogleUser | null;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -270,5 +273,7 @@ export function buildInventorySnapshot(
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
     onboardingStarterApplied: options.onboardingStarterApplied,
-  } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
+    lastSyncTime: options.lastSyncTime,
+    googleUser: options.googleUser,
+  } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord> & { lastSyncTime?: string | null; googleUser?: GoogleUser | null };
 }

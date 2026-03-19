@@ -4,6 +4,7 @@ import type {
   AppTheme,
   Bar,
   CocktailTag,
+  GoogleUser,
   IngredientTag,
   StartScreen,
 } from '@/providers/inventory-types';
@@ -34,6 +35,9 @@ export type InventoryRuntimeCache = {
   onboardingStep: number | undefined;
   onboardingCompleted: boolean | undefined;
   onboardingStarterApplied: boolean | undefined;
+  isSyncing: boolean | undefined;
+  lastSyncTime: string | null | undefined;
+  googleUser: GoogleUser | null | undefined;
 };
 
 declare global {
@@ -85,6 +89,12 @@ declare global {
   var __yourbarInventoryOnboardingCompleted: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryOnboardingStarterApplied: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryIsSyncing: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryLastSyncTime: string | null | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventoryGoogleUser: GoogleUser | null | undefined;
 }
 
 export function readInventoryRuntimeCache(): InventoryRuntimeCache {
@@ -113,6 +123,9 @@ export function readInventoryRuntimeCache(): InventoryRuntimeCache {
     onboardingStep: globalThis.__yourbarInventoryOnboardingStep,
     onboardingCompleted: globalThis.__yourbarInventoryOnboardingCompleted,
     onboardingStarterApplied: globalThis.__yourbarInventoryOnboardingStarterApplied,
+    isSyncing: globalThis.__yourbarInventoryIsSyncing,
+    lastSyncTime: globalThis.__yourbarInventoryLastSyncTime,
+    googleUser: globalThis.__yourbarInventoryGoogleUser,
   };
 }
 
@@ -141,4 +154,7 @@ export function writeInventoryRuntimeCache(cache: InventoryRuntimeCache): void {
   globalThis.__yourbarInventoryOnboardingStep = cache.onboardingStep;
   globalThis.__yourbarInventoryOnboardingCompleted = cache.onboardingCompleted;
   globalThis.__yourbarInventoryOnboardingStarterApplied = cache.onboardingStarterApplied;
+  globalThis.__yourbarInventoryIsSyncing = cache.isSyncing;
+  globalThis.__yourbarInventoryLastSyncTime = cache.lastSyncTime;
+  globalThis.__yourbarInventoryGoogleUser = cache.googleUser;
 }

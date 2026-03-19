@@ -13,8 +13,26 @@ import {
   persistInventorySnapshot,
 } from '@/libs/inventory-storage';
 import {
+  signInWithGoogle,
+  uploadToGoogleDrive,
+  downloadFromGoogleDrive as downloadToGoogleDrive,
+  getFileMetadata,
+  getAccessToken,
+  clearAccessToken,
+  type GoogleUser,
+} from '@/libs/google-drive-sync';
+import {
+  base64ToBytes,
+  bytesToBase64,
+  parseTarArchive,
+  createTarArchive,
+} from '@/libs/archive-utils';
+import * as FileSystem from 'expo-file-system/legacy';
+import { buildPhotoBaseName } from '@/libs/photo-utils';
+import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
+  BACKUP_PHOTO_URI_PATTERN,
   normalizePhotoUriForBackup,
   normalizeSearchFields,
   normalizeSynonyms,
@@ -211,6 +229,13 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingStarterApplied, setOnboardingStarterApplied] = useState<boolean>(
     () => runtimeCache.onboardingStarterApplied ?? false,
   );
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [lastSyncTime, setLastSyncTime] = useState<string | null>(
+    () => runtimeCache.lastSyncTime ?? null,
+  );
+  const [googleUser, setGoogleUser] = useState<GoogleUser | null>(
+    () => runtimeCache.googleUser ?? null,
+  );
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
@@ -221,6 +246,49 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => (inventoryState ? buildInventoryDelta(inventoryState, baseMaps) : null),
     [inventoryState, baseMaps],
   );
+  const isValidInventoryExportFile = (candidate: unknown): candidate is InventoryExportFile => {
+    if (!candidate || typeof candidate !== 'object') {
+      return false;
+    }
+
+    const record = candidate as { kind?: unknown; schemaVersion?: unknown };
+    return (record.kind === 'base' || record.kind === 'translations') && typeof record.schemaVersion === 'number';
+  };
+
+  const parsePhotoEntryFromArchivePath = (path: string): {
+    type: ImportedPhotoEntry['type'];
+    id: number;
+    extension: string;
+  } | null => {
+    const normalizedPath = path.trim().replace(/^\/+/, '');
+    const [category, filename] = normalizedPath.split('/');
+    if (!category || !filename) {
+      return null;
+    }
+
+    if (category !== 'cocktails' && category !== 'ingredients') {
+      return null;
+    }
+
+    const extensionMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
+    const extension = extensionMatch?.[1]?.toLowerCase() ?? 'jpg';
+    const idMatch = filename.match(/^(\d+)-/);
+    if (!idMatch) {
+      return null;
+    }
+
+    const id = Number(idMatch[1]);
+    if (!Number.isFinite(id) || id < 0) {
+      return null;
+    }
+
+    return {
+      type: category,
+      id: Math.trunc(id),
+      extension,
+    };
+  };
+
   const applyInventoryBootstrap = useCallback(
     (bootstrap: {
       inventoryState: InventoryState;
@@ -248,6 +316,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep: number;
       onboardingCompleted: boolean;
       onboardingStarterApplied: boolean;
+      lastSyncTime?: string | null;
+      googleUser?: GoogleUser | null;
     }) => {
       setInventoryState(bootstrap.inventoryState);
       setAvailableIngredientIds(bootstrap.availableIngredientIds);
@@ -274,6 +344,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setOnboardingStep(bootstrap.onboardingStep);
       setOnboardingCompleted(bootstrap.onboardingCompleted);
       setOnboardingStarterApplied(bootstrap.onboardingStarterApplied);
+      setLastSyncTime(bootstrap.lastSyncTime ?? null);
+      setGoogleUser(bootstrap.googleUser ?? null);
     },
     [],
   );
@@ -334,6 +406,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
           const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
           const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
+          const nextLastSyncTime = (stored as { lastSyncTime?: string }).lastSyncTime ?? null;
+          const nextGoogleUser = (stored as { googleUser?: GoogleUser }).googleUser ?? null;
 
           let nextBars: Bar[] = castedStored.bars ?? [];
           let nextActiveBarId: string = castedStored.activeBarId ?? '';
@@ -374,6 +448,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             onboardingStep: nextOnboardingStep,
             onboardingCompleted: nextOnboardingCompleted,
             onboardingStarterApplied: nextOnboardingStarterApplied,
+            lastSyncTime: nextLastSyncTime,
+            googleUser: nextGoogleUser,
           });
           return;
         }
@@ -491,6 +567,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      isSyncing,
+      lastSyncTime,
+      googleUser,
     });
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
@@ -518,6 +597,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      lastSyncTime,
+      googleUser,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -557,6 +638,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     onboardingStep,
     onboardingCompleted,
     onboardingStarterApplied,
+    isSyncing,
+    lastSyncTime,
+    googleUser,
   ]);
 
   const cocktails = useMemo(
@@ -1140,15 +1224,25 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, []);
 
-  const exportInventoryData = useCallback((): InventoryExportFile[] | null => {
-    if (!inventoryState) {
+  const exportInventoryData = useCallback((
+    overrides?: {
+      inventoryState?: InventoryState;
+      availableIngredientIds?: Set<number>;
+      shoppingIngredientIds?: Set<number>;
+      ratingsByCocktailId?: Record<string, number>;
+      commentsByCocktailId?: Record<string, string>;
+      translationOverrides?: InventoryTranslationOverrides;
+    }
+  ): InventoryExportFile[] | null => {
+    const state = overrides?.inventoryState ?? inventoryState;
+    if (!state) {
       return null;
     }
 
     const baseCocktails = baseMaps.baseCocktails;
     const baseIngredients = baseMaps.baseIngredients;
 
-    const cocktails = inventoryState.cocktails.reduce<InventoryExportData['cocktails']>((acc, cocktail) => {
+    const cocktails = state.cocktails.reduce<InventoryExportData['cocktails']>((acc, cocktail) => {
       const record = toCocktailStorageRecord(cocktail);
       const id = Number(record.id ?? -1);
       const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
@@ -1171,7 +1265,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       });
       return acc;
     }, []);
-    const ingredients = inventoryState.ingredients.reduce<InventoryExportData['ingredients']>((acc, ingredient) => {
+    const ingredients = state.ingredients.reduce<InventoryExportData['ingredients']>((acc, ingredient) => {
       const record = toIngredientStorageRecord(ingredient);
       const id = Number(record.id ?? -1);
       const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
@@ -1196,16 +1290,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }, []);
 
     const exportFeedback = buildCocktailFeedbackExport(
-      ratingsByCocktailId,
-      commentsByCocktailId,
+      overrides?.ratingsByCocktailId ?? ratingsByCocktailId,
+      overrides?.commentsByCocktailId ?? commentsByCocktailId,
       {
         ratings: sanitizeCocktailRatings,
         comments: sanitizeCocktailComments,
       },
     );
     const exportIngredientStatus = buildIngredientStatusExport(
-      availableIngredientIds,
-      shoppingIngredientIds,
+      overrides?.availableIngredientIds ?? availableIngredientIds,
+      overrides?.shoppingIngredientIds ?? shoppingIngredientIds,
       toSortedArray,
     );
 
@@ -1220,7 +1314,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       },
     } satisfies InventoryBaseExportFile];
 
-    (Object.entries(translationOverrides) as Array<[SupportedLocale, InventoryLocaleTranslationOverrides | undefined]>).forEach(([locale, localeData]) => {
+    (Object.entries(overrides?.translationOverrides ?? translationOverrides) as Array<[SupportedLocale, InventoryLocaleTranslationOverrides | undefined]>).forEach(([locale, localeData]) => {
       if (!localeData) {
         return;
       }
@@ -1254,8 +1348,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     translationOverrides,
   ]);
 
-  const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
-    if (!inventoryState) {
+  const exportInventoryPhotoEntries = useCallback((
+    overrides?: { inventoryState?: InventoryState }
+  ): PhotoBackupEntry[] | null => {
+    const state = overrides?.inventoryState ?? inventoryState;
+    if (!state) {
       return null;
     }
 
@@ -1263,7 +1360,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     const baseIngredients = baseMaps.baseIngredients;
 
     return [
-      ...inventoryState.cocktails.reduce<PhotoBackupEntry[]>((acc, cocktail) => {
+      ...state.cocktails.reduce<PhotoBackupEntry[]>((acc, cocktail) => {
         const record = toCocktailStorageRecord(cocktail);
         const id = Number(record.id ?? -1);
         const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
@@ -1281,7 +1378,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         });
         return acc;
       }, []),
-      ...inventoryState.ingredients.reduce<PhotoBackupEntry[]>((acc, ingredient) => {
+      ...state.ingredients.reduce<PhotoBackupEntry[]>((acc, ingredient) => {
         const record = toIngredientStorageRecord(ingredient);
         const id = Number(record.id ?? -1);
         const normalizedId = Number.isFinite(id) && id >= 0 ? Math.trunc(id) : undefined;
@@ -1305,7 +1402,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const importInventoryData = useCallback((
     input: InventoryExportData | InventoryExportFile | InventoryExportFile[],
     options?: InventoryImportOptions,
-  ) => {
+  ): {
+    ratings: Record<string, number>;
+    comments: Record<string, string>;
+    availableIngredientIds: Set<number>;
+    shoppingIngredientIds: Set<number>;
+    inventoryState?: InventoryState;
+    translationOverrides?: InventoryTranslationOverrides;
+  } => {
     const files = Array.isArray(input)
       ? input
       : (input && typeof input === 'object' && 'kind' in input
@@ -1375,30 +1479,37 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       return merged;
     };
 
+    const resultRatings = { ...ratingsByCocktailId, ...incomingFeedback.ratings };
+    const resultComments = { ...commentsByCocktailId, ...incomingFeedback.comments };
+
     if (Object.keys(incomingFeedback.ratings).length > 0) {
-      setRatingsByCocktailId((prev) => ({
-        ...prev,
-        ...incomingFeedback.ratings,
-      }));
+      setRatingsByCocktailId(resultRatings);
     }
 
     if (Object.keys(incomingFeedback.comments).length > 0) {
-      setCommentsByCocktailId((prev) => ({
-        ...prev,
-        ...incomingFeedback.comments,
-      }));
+      setCommentsByCocktailId(resultComments);
     }
 
     const shouldImportIngredientAvailability = options?.importIngredientAvailability === true;
     const shouldImportIngredientShopping = options?.importIngredientShopping === true;
 
+    const resultAvailable = shouldImportIngredientAvailability
+      ? new Set([...availableIngredientIds, ...incomingIngredientStatus.availableIngredientIds])
+      : availableIngredientIds;
+
+    const resultShopping = shouldImportIngredientShopping
+      ? new Set([...shoppingIngredientIds, ...incomingIngredientStatus.shoppingIngredientIds])
+      : shoppingIngredientIds;
+
     if (shouldImportIngredientAvailability && incomingIngredientStatus.availableIngredientIds.size > 0) {
-      setAvailableIngredientIds((prev) => new Set([...prev, ...incomingIngredientStatus.availableIngredientIds]));
+      setAvailableIngredientIds(resultAvailable);
     }
 
     if (shouldImportIngredientShopping && incomingIngredientStatus.shoppingIngredientIds.size > 0) {
-      setShoppingIngredientIds((prev) => new Set([...prev, ...incomingIngredientStatus.shoppingIngredientIds]));
+      setShoppingIngredientIds(resultShopping);
     }
+
+    let resultInventoryState = inventoryState;
 
     if (incomingState) {
       setInventoryState((prev) => {
@@ -1424,14 +1535,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           return current ? mergeCocktailWithFallback(current, item) : item;
         });
 
-        return {
+        resultInventoryState = {
           ...prev,
           imported: true,
           cocktails: mergeById(prev.cocktails, cocktailsForMerge),
           ingredients: mergeById(prev.ingredients, incomingState.ingredients),
         } satisfies InventoryState;
+        return resultInventoryState;
       });
     }
+
+    let resultTranslationOverrides = translationOverrides;
 
     if (translationFiles.length > 0) {
       setTranslationOverrides((prev) => {
@@ -1464,10 +1578,20 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             ingredients: mergedIngredients,
           };
         });
+        resultTranslationOverrides = next;
         return next;
       });
     }
-  }, []);
+
+    return {
+      ratings: resultRatings,
+      comments: resultComments,
+      availableIngredientIds: resultAvailable,
+      shoppingIngredientIds: resultShopping,
+      inventoryState: resultInventoryState,
+      translationOverrides: resultTranslationOverrides,
+    };
+  }, [availableIngredientIds, commentsByCocktailId, inventoryState, ratingsByCocktailId, shoppingIngredientIds, translationOverrides]);
 
   const importInventoryPhotos = useCallback((entries: ImportedPhotoEntry[]) => {
     let importedCount = 0;
@@ -2215,6 +2339,130 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     );
   }, []);
 
+  const handleSignInWithGoogle = useCallback(async () => {
+    try {
+      const user = await signInWithGoogle();
+      if (user) {
+        setGoogleUser(user);
+      }
+    } catch (error) {
+      console.error('Sign in with Google failed', error);
+    }
+  }, []);
+
+  const handleSignOutFromGoogle = useCallback(async () => {
+    await clearAccessToken();
+    setGoogleUser(null);
+  }, []);
+
+  const handleSyncWithGoogleDrive = useCallback(async () => {
+    const accessToken = await getAccessToken();
+    if (!googleUser || !accessToken || isSyncing) {
+      return;
+    }
+
+    setIsSyncing(true);
+    try {
+      // 1. Download and merge
+      let mergedDataResult: ReturnType<typeof importInventoryData> | undefined;
+      const remoteArchiveBase64 = await downloadToGoogleDrive(accessToken);
+      if (remoteArchiveBase64) {
+        const remoteBytes = base64ToBytes(remoteArchiveBase64);
+        const remoteFiles = parseTarArchive(remoteBytes);
+
+        const decoder = new TextDecoder();
+        const importFiles: InventoryExportFile[] = [];
+        for (const archived of remoteFiles) {
+          if (archived.path.toLowerCase().endsWith('.json')) {
+            const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
+            if (isValidInventoryExportFile(parsed)) {
+              importFiles.push(parsed);
+            }
+          }
+        }
+
+        if (importFiles.length > 0) {
+          mergedDataResult = importInventoryData(importFiles);
+
+          const importedPhotoEntries: ImportedPhotoEntry[] = [];
+          const timestamp = Date.now();
+          const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+          const photosDir = `${directory!.replace(/\/?$/, '/')}imported-photos/`;
+          await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
+
+          for (const file of remoteFiles) {
+            if (!file.path.toLowerCase().endsWith('.json')) {
+              const parsedPath = parsePhotoEntryFromArchivePath(file.path);
+              if (parsedPath && file.contents.length > 0) {
+                const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
+                const destinationUri = `${photosDir}${outputFileName}`;
+                await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
+                  encoding: FileSystem.EncodingType.Base64,
+                });
+                importedPhotoEntries.push({
+                  type: parsedPath.type,
+                  id: parsedPath.id,
+                  photoUri: destinationUri,
+                });
+              }
+            }
+          }
+          if (importedPhotoEntries.length > 0) {
+            importInventoryPhotos(importedPhotoEntries);
+          }
+        }
+      }
+
+      // 2. Upload current state (merged if download occurred)
+      const data = exportInventoryData(mergedDataResult ? {
+        inventoryState: mergedDataResult.inventoryState,
+        availableIngredientIds: mergedDataResult.availableIngredientIds,
+        shoppingIngredientIds: mergedDataResult.shoppingIngredientIds,
+        ratingsByCocktailId: mergedDataResult.ratings,
+        commentsByCocktailId: mergedDataResult.comments,
+        translationOverrides: mergedDataResult.translationOverrides,
+      } : undefined);
+      const photoEntries = exportInventoryPhotoEntries(mergedDataResult ? {
+        inventoryState: mergedDataResult.inventoryState
+      } : undefined);
+      if (data && photoEntries) {
+        const files: { path: string; contents: Uint8Array }[] = [];
+        const encoder = new TextEncoder();
+        data.forEach((file) => {
+          const path = file.kind === 'base' ? 'base.json' : `translations.${file.locale}.json`;
+          files.push({
+            path,
+            contents: encoder.encode(JSON.stringify(file, null, 2)),
+          });
+        });
+
+        for (const entry of photoEntries) {
+          if (entry.uri) {
+            const info = await FileSystem.getInfoAsync(entry.uri);
+            if (info.exists && !info.isDirectory) {
+              const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name ?? 'photo');
+              const fileName = `${baseName}.jpg`;
+              const contentsBase64 = await FileSystem.readAsStringAsync(entry.uri, {
+                encoding: FileSystem.EncodingType.Base64,
+              });
+              files.push({ path: `${entry.type}/${fileName}`, contents: base64ToBytes(contentsBase64) });
+            }
+          }
+        }
+
+        const archiveBase64 = createTarArchive(files);
+        await uploadToGoogleDrive(accessToken, archiveBase64);
+
+        const metadata = await getFileMetadata(accessToken);
+        setLastSyncTime(metadata?.modifiedTime || new Date().toISOString());
+      }
+    } catch (error) {
+      console.error('Google Drive sync failed', error);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [googleUser, isSyncing, exportInventoryData, exportInventoryPhotoEntries, importInventoryData, importInventoryPhotos]);
+
   const handleDeleteBar = useCallback((id: string) => {
     setBars((prev) => {
       if (prev.length <= 1) {
@@ -2581,6 +2829,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      isSyncing,
+      lastSyncTime,
+      googleUser,
     }),
     [
       ignoreGarnish,
@@ -2602,6 +2853,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      isSyncing,
+      lastSyncTime,
+      googleUser,
     ],
   );
 
@@ -2649,6 +2903,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createBar: handleCreateBar,
       updateBar: handleUpdateBar,
       deleteBar: handleDeleteBar,
+      signInWithGoogle: handleSignInWithGoogle,
+      signOutFromGoogle: handleSignOutFromGoogle,
+      syncWithGoogleDrive: handleSyncWithGoogleDrive,
     }),
     [
       setIngredientAvailability,

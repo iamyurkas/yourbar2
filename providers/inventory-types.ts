@@ -117,6 +117,19 @@ export type StartScreen =
 export type AppTheme = "light" | "dark" | "system";
 export type AppLocale = "de-DE" | "en-GB" | "en-US" | "es-ES" | "uk-UA";
 
+export type GoogleUser = {
+  id: string;
+  email: string;
+  name?: string;
+  picture?: string;
+};
+
+export type SyncStatus = {
+  isSyncing: boolean;
+  lastSyncTime?: string | null;
+  googleUser?: GoogleUser | null;
+};
+
 export type CreateCocktailSubstituteInput = {
   ingredientId?: number | string | null;
   name?: string | null;

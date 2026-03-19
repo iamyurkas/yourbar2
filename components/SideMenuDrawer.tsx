@@ -171,6 +171,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     createBar,
     updateBar,
     deleteBar,
+    signInWithGoogle,
+    signOutFromGoogle,
+    syncWithGoogleDrive,
+    isSyncing,
+    lastSyncTime,
+    googleUser,
   } = useInventory();
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
@@ -222,6 +228,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [shouldImportIngredientShopping, setShouldImportIngredientShopping] = useState(false);
   const [isImportIngredientStatusesSubmitting, setIsImportIngredientStatusesSubmitting] = useState(false);
   const ingredientStatusImportResolverRef = useRef<((value: InventoryImportOptions | null) => void) | null>(null);
+  const syncRotate = useRef(new Animated.Value(0)).current;
   const translateX = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -323,6 +330,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   useEffect(() => {
+    if (isSyncing) {
+      Animated.loop(
+        Animated.timing(syncRotate, {
+          toValue: 1,
+          duration: 1000,
+          easing: (t) => t,
+          useNativeDriver: true,
+        })
+      ).start();
+    } else {
+      syncRotate.stopAnimation();
+      syncRotate.setValue(0);
+    }
+  }, [isSyncing, syncRotate]);
+
+  useEffect(() => {
     if (visible) {
       setIsMounted(true);
       Animated.parallel([
@@ -379,6 +402,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const toggleShowTabCounters = () => {
     setShowTabCounters(!showTabCounters);
+  };
+
+  const handleGoogleSyncPress = async () => {
+    if (googleUser) {
+      await syncWithGoogleDrive();
+    } else {
+      await signInWithGoogle();
+    }
+  };
+
+  const handleGoogleSignOut = () => {
+    setDialogOptions({
+      title: t("sideMenu.googleSignOutTitle"),
+      message: t("sideMenu.googleSignOutMessage"),
+      actions: [
+        { label: t("common.cancel"), variant: "secondary" },
+        {
+          label: t("sideMenu.signOut"),
+          variant: "destructive",
+          onPress: async () => {
+            await signOutFromGoogle();
+          },
+        },
+      ],
+    });
   };
 
   const handleSmartShakerFilteringInfoPress = () => {
@@ -1152,6 +1200,63 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={googleUser ? t("sideMenu.googleSync") : t("sideMenu.googleSignIn")}
+              onPress={handleGoogleSyncPress}
+              disabled={isSyncing}
+              style={[styles.actionRow, SURFACE_ROW_STYLE, { paddingLeft: 8 }]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE, { backgroundColor: 'transparent' }]}>
+                {googleUser?.picture ? (
+                  <Image source={{ uri: googleUser.picture }} style={{ width: 22, height: 22, borderRadius: 11 }} />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="google"
+                    size={20}
+                    color={Colors.onSurfaceVariant}
+                  />
+                )}
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  {googleUser ? t("sideMenu.googleSync") : t("sideMenu.googleSignIn")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {isSyncing
+                    ? t("sideMenu.syncing")
+                    : googleUser
+                      ? (lastSyncTime ? t("sideMenu.lastSync", { time: new Date(lastSyncTime).toLocaleString() }) : googleUser.email)
+                      : t("sideMenu.googleSignInCaption")}
+                </Text>
+              </View>
+              {googleUser && !isSyncing && (
+                <Pressable
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    handleGoogleSignOut();
+                  }}
+                  hitSlop={12}
+                >
+                  <MaterialCommunityIcons
+                    name="logout-variant"
+                    size={20}
+                    color={Colors.onSurfaceVariant}
+                  />
+                </Pressable>
+              )}
+              {isSyncing && (
+                <Animated.View style={{ transform: [{
+                  rotate: syncRotate.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '360deg'],
+                  })
+                }] }}>
+                  <MaterialCommunityIcons name="sync" size={20} color={Colors.tint} />
+                </Animated.View>
+              )}
+            </Pressable>
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageBars")}

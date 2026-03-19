@@ -64,6 +64,9 @@ export type InventoryActionsContextValue = {
   createBar: (name: string) => void;
   updateBar: (id: string, name: string) => void;
   deleteBar: (id: string) => void;
+  signInWithGoogle: () => Promise<void>;
+  signOutFromGoogle: () => Promise<void>;
+  syncWithGoogleDrive: () => Promise<void>;
 };
 
 export const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);
