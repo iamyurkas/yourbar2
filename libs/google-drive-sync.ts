@@ -48,14 +48,14 @@ function getPlatformClientId(): { clientId: string; source: "default" | "android
   const iosClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null;
 
   if (Platform.OS === "android") {
+    if (androidClient) {
+      return { clientId: androidClient, source: "android" };
+    }
     if (fallback) {
       return { clientId: fallback, source: "default" };
     }
     if (webClient) {
       return { clientId: webClient, source: "web" };
-    }
-    if (androidClient) {
-      return { clientId: androidClient, source: "android" };
     }
     return null;
   }
@@ -120,7 +120,10 @@ export function buildGoogleOAuthRequest(input: {
   const clientId = client.clientId;
 
   const nativeScheme = getGoogleNativeRedirectScheme(clientId);
-  const canUseNativeRedirect = Platform.OS === "ios" && client.source === "ios" && Boolean(nativeScheme);
+  const canUseNativeRedirect = Boolean(nativeScheme) && (
+    (Platform.OS === "ios" && client.source === "ios")
+    || (Platform.OS === "android" && client.source === "android")
+  );
   const shouldUseProxyRedirect = Boolean(input.preferProxyRedirect)
     && Platform.OS !== "web"
     && (client.source === "default" || client.source === "web");
