@@ -3,7 +3,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
+import * as ExpoLinking from "expo-linking";
 import * as Sharing from "expo-sharing";
+import * as WebBrowser from "expo-web-browser";
 import {
   useEffect,
   useMemo,
@@ -35,6 +37,12 @@ import { TagPill } from "@/components/TagPill";
 import { useAppColors } from "@/constants/theme";
 import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
 import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
+import {
+  buildGoogleOAuthUrl,
+  downloadArchiveFromGoogleDrive,
+  fetchGoogleAccountEmail,
+  uploadArchiveToGoogleDrive,
+} from "@/libs/google-drive-sync";
 import type { SupportedLocale } from "@/libs/i18n/types";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
@@ -58,6 +66,25 @@ const APP_VERSION =
   Constants.expoConfig?.version ??
   Constants.manifest2?.extra?.expoClient?.version ??
   "unknown";
+const GOOGLE_DRIVE_SYNC_FILE_NAME = "yourbar-sync";
+
+WebBrowser.maybeCompleteAuthSession();
+
+type GoogleDriveAuthState = {
+  accessToken: string;
+  email: string | null;
+};
+
+const parseOAuthAccessToken = (url: string): string | null => {
+  const hashStart = url.indexOf("#");
+  if (hashStart < 0) {
+    return null;
+  }
+
+  const hashParams = new URLSearchParams(url.slice(hashStart + 1));
+  const token = hashParams.get("access_token");
+  return token && token.length > 0 ? token : null;
+};
 
 type StartScreenIcon =
   | {
@@ -217,6 +244,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   );
   const [isBackingUpData, setIsBackingUpData] = useState(false);
   const [isRestoringData, setIsRestoringData] = useState(false);
+  const [googleDriveAuthState, setGoogleDriveAuthState] = useState<GoogleDriveAuthState | null>(null);
+  const [isGoogleDriveLoginPending, setGoogleDriveLoginPending] = useState(false);
+  const [isGoogleDrivePushPending, setGoogleDrivePushPending] = useState(false);
+  const [isGoogleDrivePullPending, setGoogleDrivePullPending] = useState(false);
   const [isIngredientStatusImportModalVisible, setIsIngredientStatusImportModalVisible] = useState(false);
   const [shouldImportIngredientAvailability, setShouldImportIngredientAvailability] = useState(false);
   const [shouldImportIngredientShopping, setShouldImportIngredientShopping] = useState(false);
@@ -718,91 +749,173 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+  const buildArchiveBase64 = async (): Promise<string | null> => {
+    const data = exportInventoryData();
+    if (!data) {
+      showDialogMessage(t("sideMenu.exportUnavailableTitle"), t("sideMenu.exportUnavailableMessage"));
+      return null;
+    }
+
+    const photoEntries = exportInventoryPhotoEntries();
+    if (!photoEntries) {
+      showDialogMessage(t("sideMenu.backupUnavailableTitle"), t("sideMenu.backupUnavailableMessage"));
+      return null;
+    }
+
+    const files: { path: string; contents: Uint8Array }[] = [];
+    const encoder = new TextEncoder();
+    data.forEach((file) => {
+      const path = file.kind === "base" ? "base.json" : `translations.${file.locale}.json`;
+      files.push({
+        path,
+        contents: encoder.encode(JSON.stringify(file, null, 2)),
+      });
+    });
+
+    const entries = photoEntries.filter((entry) => entry.uri);
+    const nameCounts = new Map<string, number>();
+
+    for (const entry of entries) {
+      const uri = entry.uri;
+      if (!uri) {
+        continue;
+      }
+
+      const info = await FileSystem.getInfoAsync(uri);
+      if (!info.exists || info.isDirectory) {
+        continue;
+      }
+
+      const baseName = buildPhotoBaseName(entry.id || "photo", entry.name ?? "photo");
+      const nameKey = `${entry.type}/${baseName}.jpg`;
+      const duplicateCount = nameCounts.get(nameKey) ?? 0;
+      nameCounts.set(nameKey, duplicateCount + 1);
+      const fileName = duplicateCount > 0 ? `${baseName}-${duplicateCount + 1}.jpg` : `${baseName}.jpg`;
+      const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      files.push({ path: `${entry.type}/${fileName}`, contents: base64ToBytes(contentsBase64) });
+    }
+
+    return createTarArchive(files);
+  };
+
+  const importArchiveBase64 = async (archiveBase64: string): Promise<boolean> => {
+    const archiveBytes = base64ToBytes(archiveBase64);
+    const archivedFiles = parseTarArchive(archiveBytes);
+
+    if (archivedFiles.length === 0) {
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importArchiveEmpty"));
+      return false;
+    }
+
+    const decoder = new TextDecoder();
+    const importFiles: InventoryExportFile[] = [];
+    let hasLegacyBase = false;
+    let legacyBase: InventoryExportData | null = null;
+
+    for (const archived of archivedFiles) {
+      if (!archived.path.toLowerCase().endsWith(".json")) {
+        continue;
+      }
+
+      const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
+      if (isInventoryExportFile(parsed)) {
+        importFiles.push(parsed);
+      } else if (isValidInventoryData(parsed) && !hasLegacyBase) {
+        hasLegacyBase = true;
+        legacyBase = parsed;
+      }
+    }
+
+    if (importFiles.length === 0 && !legacyBase) {
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
+      return false;
+    }
+
+    const baseFromFile = importFiles.find((file) => file.kind === "base");
+    const importBaseData = baseFromFile?.kind === "base" ? baseFromFile.data : legacyBase;
+    let importOptions: InventoryImportOptions | undefined;
+
+    if (hasImportableIngredientStatus(importBaseData)) {
+      const selectedOptions = await requestIngredientStatusImportOptions();
+      if (!selectedOptions) {
+        return false;
+      }
+      importOptions = selectedOptions;
+    }
+
+    importInventoryData(
+      importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData),
+      importOptions,
+    );
+
+    const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+    if (!directory) {
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
+      return false;
+    }
+
+    const importedPhotoEntries: ImportedPhotoEntry[] = [];
+    const timestamp = Date.now();
+    const photosDir = `${directory.replace(/\/?$/, "/")}imported-photos/`;
+    await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
+
+    for (const file of archivedFiles) {
+      if (file.path.toLowerCase().endsWith(".json")) {
+        continue;
+      }
+
+      const parsedPath = parsePhotoEntryFromArchivePath(file.path);
+      if (!parsedPath || file.contents.length === 0) {
+        continue;
+      }
+
+      const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
+      const destinationUri = `${photosDir}${outputFileName}`;
+      await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      importedPhotoEntries.push({
+        type: parsedPath.type,
+        id: parsedPath.id,
+        photoUri: destinationUri,
+      });
+    }
+
+    importInventoryPhotos(importedPhotoEntries);
+    onClose();
+    return true;
+  };
+
   const handleBackupData = async () => {
     if (isBackingUpData) {
       return;
     }
 
-    const data = exportInventoryData();
-    if (!data) {
-      showDialogMessage(
-        t("sideMenu.exportUnavailableTitle"),
-        t("sideMenu.exportUnavailableMessage"),
-      );
-      return;
-    }
-
-    const photoEntries = exportInventoryPhotoEntries();
-    if (!photoEntries) {
-      showDialogMessage(
-        t("sideMenu.backupUnavailableTitle"),
-        t("sideMenu.backupUnavailableMessage"),
-      );
-      return;
-    }
-
     setIsBackingUpData(true);
-
     try {
       const sharingAvailable = await Sharing.isAvailableAsync();
       if (!sharingAvailable) {
-        showDialogMessage(
-          t("sideMenu.sharingUnavailableTitle"),
-          t("sideMenu.sharingUnavailableMessage"),
-        );
+        showDialogMessage(t("sideMenu.sharingUnavailableTitle"), t("sideMenu.sharingUnavailableMessage"));
         return;
       }
 
-      const directory =
-        FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+      const directory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
       if (!directory) {
         showDialogMessage(t("sideMenu.exportFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
         return;
       }
 
-      const files: { path: string; contents: Uint8Array }[] = [];
-      const encoder = new TextEncoder();
-      data.forEach((file) => {
-        const path = file.kind === 'base' ? 'base.json' : `translations.${file.locale}.json`;
-        files.push({
-          path,
-          contents: encoder.encode(JSON.stringify(file, null, 2)),
-        });
-      });
-
-      const entries = photoEntries.filter((entry) => entry.uri);
-      const nameCounts = new Map<string, number>();
-
-      for (const entry of entries) {
-        const uri = entry.uri;
-        if (!uri) {
-          continue;
-        }
-
-        const info = await FileSystem.getInfoAsync(uri);
-        if (!info.exists || info.isDirectory) {
-          continue;
-        }
-
-        const baseName = buildPhotoBaseName(entry.id || "photo", entry.name ?? "photo");
-        const nameKey = `${entry.type}/${baseName}.jpg`;
-        const duplicateCount = nameCounts.get(nameKey) ?? 0;
-        nameCounts.set(nameKey, duplicateCount + 1);
-        const fileName =
-          duplicateCount > 0
-            ? `${baseName}-${duplicateCount + 1}.jpg`
-            : `${baseName}.jpg`;
-        const contentsBase64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        const contents = base64ToBytes(contentsBase64);
-        files.push({ path: `${entry.type}/${fileName}`, contents });
+      const archiveBase64 = await buildArchiveBase64();
+      if (!archiveBase64) {
+        return;
       }
 
       const timestamp = new Date().toISOString().slice(0, 10);
       const filename = `yourbar-backup-${timestamp}.tar`;
       const fileUri = `${directory.replace(/\/?$/, "/")}${filename}`;
-      const archiveBase64 = createTarArchive(files);
       await FileSystem.writeAsStringAsync(fileUri, archiveBase64, {
         encoding: FileSystem.EncodingType.Base64,
       });
@@ -826,13 +939,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     setIsRestoringData(true);
-
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: ["application/x-tar", "public.tar-archive"],
         copyToCacheDirectory: true,
       });
-
       if (result.canceled) {
         return;
       }
@@ -846,98 +957,97 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       const archiveBase64 = await FileSystem.readAsStringAsync(asset.uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
-      const archiveBytes = base64ToBytes(archiveBase64);
-      const archivedFiles = parseTarArchive(archiveBytes);
-
-      if (archivedFiles.length === 0) {
-        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importArchiveEmpty"));
-        return;
-      }
-
-      const decoder = new TextDecoder();
-      const importFiles: InventoryExportFile[] = [];
-      let hasLegacyBase = false;
-      let legacyBase: InventoryExportData | null = null;
-      for (const archived of archivedFiles) {
-        if (!archived.path.toLowerCase().endsWith('.json')) {
-          continue;
-        }
-
-        const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
-        if (isInventoryExportFile(parsed)) {
-          importFiles.push(parsed);
-        } else if (isValidInventoryData(parsed) && !hasLegacyBase) {
-          hasLegacyBase = true;
-          legacyBase = parsed;
-        }
-      }
-
-      if (importFiles.length === 0 && !legacyBase) {
-        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
-        return;
-      }
-
-      const baseFromFile = importFiles.find((file) => file.kind === "base");
-      const importBaseData = baseFromFile?.kind === "base" ? baseFromFile.data : legacyBase;
-      let importOptions: InventoryImportOptions | undefined;
-
-      if (hasImportableIngredientStatus(importBaseData)) {
-        const selectedOptions = await requestIngredientStatusImportOptions();
-        if (!selectedOptions) {
-          return;
-        }
-        importOptions = selectedOptions;
-      }
-
-      importInventoryData(
-        importFiles.length > 0 ? importFiles : (legacyBase as InventoryExportData),
-        importOptions,
-      );
-
-      const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
-      if (!directory) {
-        showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.deviceStorageUnavailable"));
-        return;
-      }
-
-      const importedPhotoEntries: ImportedPhotoEntry[] = [];
-      const timestamp = Date.now();
-      const photosDir = `${directory.replace(/\/?$/, "/")}imported-photos/`;
-      await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
-
-      for (const file of archivedFiles) {
-        if (file.path.toLowerCase().endsWith('.json')) {
-          continue;
-        }
-
-        const parsedPath = parsePhotoEntryFromArchivePath(file.path);
-        if (!parsedPath || file.contents.length === 0) {
-          continue;
-        }
-
-        const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
-        const destinationUri = `${photosDir}${outputFileName}`;
-        await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        importedPhotoEntries.push({
-          type: parsedPath.type,
-          id: parsedPath.id,
-          photoUri: destinationUri,
-        });
-      }
-
-      importInventoryPhotos(importedPhotoEntries);
-      onClose();
+      await importArchiveBase64(archiveBase64);
     } catch (error) {
       console.error("Failed to restore backup archive", error);
-      showDialogMessage(
-        t("sideMenu.importFailedTitle"),
-        t("sideMenu.importRetryWithValidArchive"),
-      );
+      showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importRetryWithValidArchive"));
     } finally {
       setIsRestoringData(false);
+    }
+  };
+
+  const handleGoogleDriveLoginPress = async () => {
+    if (isGoogleDriveLoginPending) {
+      return;
+    }
+
+    if (googleDriveAuthState) {
+      setGoogleDriveAuthState(null);
+      return;
+    }
+
+    const redirectUri = ExpoLinking.createURL("oauth/google-drive");
+    const authUrl = buildGoogleOAuthUrl(redirectUri);
+    if (!authUrl) {
+      showDialogMessage(t("sideMenu.googleDriveMissingClientIdTitle"), t("sideMenu.googleDriveMissingClientIdMessage"));
+      return;
+    }
+
+    setGoogleDriveLoginPending(true);
+    try {
+      const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
+      if (result.type !== "success" || !result.url) {
+        return;
+      }
+
+      const token = parseOAuthAccessToken(result.url);
+      if (!token) {
+        showDialogMessage(t("sideMenu.googleDriveLoginFailedTitle"), t("sideMenu.googleDriveLoginFailedMessage"));
+        return;
+      }
+
+      const email = await fetchGoogleAccountEmail(token);
+      setGoogleDriveAuthState({ accessToken: token, email });
+    } catch (error) {
+      console.error("Google Drive login failed", error);
+      showDialogMessage(t("sideMenu.googleDriveLoginFailedTitle"), t("sideMenu.googleDriveLoginFailedMessage"));
+    } finally {
+      setGoogleDriveLoginPending(false);
+    }
+  };
+
+  const handleGoogleDrivePush = async () => {
+    if (!googleDriveAuthState || isGoogleDrivePushPending) {
+      return;
+    }
+
+    setGoogleDrivePushPending(true);
+    try {
+      const archiveBase64 = await buildArchiveBase64();
+      if (!archiveBase64) {
+        return;
+      }
+
+      await uploadArchiveToGoogleDrive(googleDriveAuthState.accessToken, archiveBase64);
+      showDialogMessage(t("sideMenu.googleDriveSyncSuccessTitle"), t("sideMenu.googleDriveSyncUploadSuccessMessage"));
+    } catch (error) {
+      console.error("Google Drive upload failed", error);
+      showDialogMessage(t("sideMenu.googleDriveSyncFailedTitle"), t("sideMenu.googleDriveSyncFailedMessage"));
+    } finally {
+      setGoogleDrivePushPending(false);
+    }
+  };
+
+  const handleGoogleDrivePull = async () => {
+    if (!googleDriveAuthState || isGoogleDrivePullPending) {
+      return;
+    }
+
+    setGoogleDrivePullPending(true);
+    try {
+      const syncPayload = await downloadArchiveFromGoogleDrive(googleDriveAuthState.accessToken);
+      if (!syncPayload) {
+        showDialogMessage(t("sideMenu.googleDriveNoBackupTitle"), t("sideMenu.googleDriveNoBackupMessage", { file: GOOGLE_DRIVE_SYNC_FILE_NAME }));
+        return;
+      }
+
+      await importArchiveBase64(syncPayload.archiveBase64);
+      showDialogMessage(t("sideMenu.googleDriveSyncSuccessTitle"), t("sideMenu.googleDriveSyncDownloadSuccessMessage"));
+    } catch (error) {
+      console.error("Google Drive download failed", error);
+      showDialogMessage(t("sideMenu.googleDriveSyncFailedTitle"), t("sideMenu.googleDriveSyncFailedMessage"));
+    } finally {
+      setGoogleDrivePullPending(false);
     }
   };
 
@@ -1152,6 +1262,94 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.googleDriveLogin")}
+              onPress={handleGoogleDriveLoginPress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="google-drive"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  {googleDriveAuthState ? t("sideMenu.googleDriveConnected") : t("sideMenu.googleDriveLogin")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {isGoogleDriveLoginPending
+                    ? t("sideMenu.googleDriveLoggingIn")
+                    : googleDriveAuthState?.email ?? t("sideMenu.googleDriveDisconnectedCaption")}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name={googleDriveAuthState ? "logout" : "login"}
+                size={18}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.googleDriveSyncUpload")}
+              disabled={!googleDriveAuthState || isGoogleDrivePushPending}
+              onPress={handleGoogleDrivePush}
+              style={({ pressed }) => [
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+                (!googleDriveAuthState || isGoogleDrivePushPending) ? { opacity: 0.5 } : null,
+                pressed ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="cloud-upload-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  {isGoogleDrivePushPending ? t("sideMenu.googleDriveSyncUploading") : t("sideMenu.googleDriveSyncUpload")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {t("sideMenu.googleDriveSyncUploadCaption")}
+                </Text>
+              </View>
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.googleDriveSyncDownload")}
+              disabled={!googleDriveAuthState || isGoogleDrivePullPending}
+              onPress={handleGoogleDrivePull}
+              style={({ pressed }) => [
+                styles.actionRow,
+                SURFACE_ROW_STYLE,
+                (!googleDriveAuthState || isGoogleDrivePullPending) ? { opacity: 0.5 } : null,
+                pressed ? { opacity: 0.8 } : null,
+              ]}
+            >
+              <View style={[styles.actionIcon, ACTION_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="cloud-download-outline"
+                  size={16}
+                  color={Colors.onSurfaceVariant}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  {isGoogleDrivePullPending ? t("sideMenu.googleDriveSyncDownloading") : t("sideMenu.googleDriveSyncDownload")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {t("sideMenu.googleDriveSyncDownloadCaption")}
+                </Text>
+              </View>
+            </Pressable>
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageBars")}
