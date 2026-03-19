@@ -64,14 +64,14 @@ function getPlatformClientId(
     if (forceSource) {
       return null;
     }
+    if (useAndroidClient && androidClient) {
+      return { clientId: androidClient, source: "android" };
+    }
     if (fallback) {
       return { clientId: fallback, source: "default" };
     }
     if (webClient) {
       return { clientId: webClient, source: "web" };
-    }
-    if (useAndroidClient && androidClient) {
-      return { clientId: androidClient, source: "android" };
     }
     return null;
   }
