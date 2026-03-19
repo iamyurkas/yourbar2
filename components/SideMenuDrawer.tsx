@@ -1003,9 +1003,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const appRedirectUri = "yourbar://oauth/google-drive";
     const owner = Constants.expoConfig?.owner;
     const slug = Constants.expoConfig?.slug;
+    const allowExpoProxyRedirect = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ALLOW_EXPO_PROXY === "true";
     const configuredProxyRedirectUri = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI ?? null;
-    const proxyRedirectUri = configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null);
-    const preferProxyRedirect = Platform.OS !== "android";
+    const proxyRedirectUri = configuredProxyRedirectUri
+      ?? (allowExpoProxyRedirect && owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null);
+    const preferProxyRedirect = allowExpoProxyRedirect && Platform.OS !== "android";
     const authRequest = buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
@@ -1021,6 +1023,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           || process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
         ),
         hasProxyRedirect: Boolean(proxyRedirectUri),
+        allowExpoProxyRedirect,
         preferProxyRedirect,
         owner: owner ?? null,
         slug: slug ?? null,
@@ -1033,6 +1036,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       platform: Platform.OS,
       appRedirectUri,
       proxyRedirectUri,
+      allowExpoProxyRedirect,
       preferProxyRedirect,
       redirectUri: authRequest.redirectUri,
       clientSource: authRequest.clientSource,
@@ -1060,6 +1064,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         sessionResult
         && sessionResult.result.type !== "success"
         && Platform.OS === "android"
+        && allowExpoProxyRedirect
         && proxyRedirectUri
       ) {
         const fallbackAuthRequest = buildGoogleOAuthRequest({
