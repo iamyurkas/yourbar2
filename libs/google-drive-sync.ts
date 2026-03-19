@@ -101,29 +101,27 @@ function getGoogleClientId(): string | null {
   const expoExtra = Constants.expoConfig?.extra as Record<string, unknown> | undefined;
   const manifest2Extra = Constants.manifest2?.extra?.expoClient?.extra as Record<string, unknown> | undefined;
   const manifestExtra = (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
-  const platformCandidates =
-    Platform.OS === 'android'
+  const candidates = [
+    expoExtra?.googleDriveClientId,
+    manifest2Extra?.googleDriveClientId,
+    manifestExtra?.googleDriveClientId,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
+    ...(Platform.OS === 'android'
       ? [
         expoExtra?.googleDriveAndroidClientId,
         manifest2Extra?.googleDriveAndroidClientId,
         manifestExtra?.googleDriveAndroidClientId,
         process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID,
       ]
-      : Platform.OS === 'ios'
-        ? [
-          expoExtra?.googleDriveIosClientId,
-          manifest2Extra?.googleDriveIosClientId,
-          manifestExtra?.googleDriveIosClientId,
-          process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
-        ]
-        : [];
-
-  const candidates = [
-    ...platformCandidates,
-    expoExtra?.googleDriveClientId,
-    manifest2Extra?.googleDriveClientId,
-    manifestExtra?.googleDriveClientId,
-    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
+      : []),
+    ...(Platform.OS === 'ios'
+      ? [
+        expoExtra?.googleDriveIosClientId,
+        manifest2Extra?.googleDriveIosClientId,
+        manifestExtra?.googleDriveIosClientId,
+        process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
+      ]
+      : []),
   ].map(resolveClientIdCandidate);
 
   for (const value of candidates) {
