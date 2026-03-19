@@ -25,6 +25,21 @@ type SyncPayload = {
   updatedAt: string;
 };
 
+type GoogleOAuthRequest = {
+  authUrl: string;
+  clientId: string;
+  redirectUri: string;
+  codeVerifier: string;
+};
+
+type GoogleTokenResponse = {
+  access_token?: string;
+  expires_in?: number;
+  token_type?: string;
+  refresh_token?: string;
+  scope?: string;
+};
+
 function getPlatformClientId(): string | null {
   const fallback = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null;
 
@@ -39,22 +54,62 @@ function getPlatformClientId(): string | null {
   return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ?? fallback;
 }
 
-export function buildGoogleOAuthUrl(redirectUri: string): string | null {
-  const clientId = getPlatformClientId();
-  if (!clientId) {
+function getGoogleNativeRedirectScheme(clientId: string): string | null {
+  const suffix = ".apps.googleusercontent.com";
+  if (!clientId.endsWith(suffix)) {
     return null;
   }
+
+  const appIdPrefix = clientId.slice(0, -suffix.length);
+  if (!appIdPrefix) {
+    return null;
+  }
+
+  return `com.googleusercontent.apps.${appIdPrefix}`;
+}
+
+function createCodeVerifier(): string {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+  const bytes = 64;
+  let output = "";
+  for (let index = 0; index < bytes; index += 1) {
+    const randomIndex = Math.floor(Math.random() * alphabet.length);
+    output += alphabet[randomIndex];
+  }
+  return output;
+}
+
+export function buildGoogleOAuthRequest(fallbackRedirectUri: string): GoogleOAuthRequest | null {
+  const clientId = getPlatformClientId();
+  if (!clientId) {
+    console.warn("[GoogleDriveSync] Google OAuth client id is not configured");
+    return null;
+  }
+
+  const nativeScheme = getGoogleNativeRedirectScheme(clientId);
+  const redirectUri = Platform.OS === "web" || !nativeScheme
+    ? fallbackRedirectUri
+    : `${nativeScheme}:/oauthredirect`;
+  const codeVerifier = createCodeVerifier();
 
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    response_type: "token",
+    response_type: "code",
     scope: GOOGLE_OAUTH_SCOPE,
     include_granted_scopes: "true",
+    access_type: "offline",
+    code_challenge: codeVerifier,
+    code_challenge_method: "plain",
     prompt: "consent",
   });
 
-  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  return {
+    authUrl: `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`,
+    clientId,
+    redirectUri,
+    codeVerifier,
+  };
 }
 
 async function parseDriveResponse<T>(response: Response): Promise<T> {
@@ -76,10 +131,19 @@ async function findExistingSyncFile(accessToken: string): Promise<GoogleDriveFil
   });
 
   const payload = await parseDriveResponse<DriveFilesListResponse>(response);
-  return payload.files?.[0] ?? null;
+  const file = payload.files?.[0] ?? null;
+  console.info("[GoogleDriveSync] Drive file lookup completed", {
+    found: Boolean(file),
+    fileId: file?.id ?? null,
+    modifiedTime: file?.modifiedTime ?? null,
+  });
+  return file;
 }
 
 export async function uploadArchiveToGoogleDrive(accessToken: string, archiveBase64: string): Promise<void> {
+  console.info("[GoogleDriveSync] uploadArchiveToGoogleDrive invoked", {
+    archiveBase64Length: archiveBase64.length,
+  });
   const existingFile = await findExistingSyncFile(accessToken);
   const payload: SyncPayload = {
     schemaVersion: 1,
@@ -138,6 +202,7 @@ export async function uploadArchiveToGoogleDrive(accessToken: string, archiveBas
 }
 
 export async function downloadArchiveFromGoogleDrive(accessToken: string): Promise<{ archiveBase64: string; modifiedTime?: string } | null> {
+  console.info("[GoogleDriveSync] downloadArchiveFromGoogleDrive invoked");
   const existingFile = await findExistingSyncFile(accessToken);
   if (!existingFile) {
     return null;
@@ -176,4 +241,33 @@ export async function fetchGoogleAccountEmail(accessToken: string): Promise<stri
 
   const payload = await response.json() as { email?: string };
   return payload.email ?? null;
+}
+
+export async function exchangeGoogleCodeForTokens(input: {
+  code: string;
+  clientId: string;
+  redirectUri: string;
+  codeVerifier: string;
+}): Promise<GoogleTokenResponse> {
+  console.info("[GoogleDriveSync] Exchanging OAuth code for token", {
+    redirectUri: input.redirectUri,
+    codeLength: input.code.length,
+  });
+  const body = new URLSearchParams({
+    code: input.code,
+    client_id: input.clientId,
+    redirect_uri: input.redirectUri,
+    grant_type: "authorization_code",
+    code_verifier: input.codeVerifier,
+  });
+
+  const response = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: body.toString(),
+  });
+
+  return parseDriveResponse<GoogleTokenResponse>(response);
 }

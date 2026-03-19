@@ -38,8 +38,9 @@ import { useAppColors } from "@/constants/theme";
 import { AMAZON_STORES, AMAZON_STORE_KEYS, type AmazonStoreOverride } from "@/libs/amazon-stores";
 import { base64ToBytes, bytesToBase64, createTarArchive, parseTarArchive } from "@/libs/archive-utils";
 import {
-  buildGoogleOAuthUrl,
+  buildGoogleOAuthRequest,
   downloadArchiveFromGoogleDrive,
+  exchangeGoogleCodeForTokens,
   fetchGoogleAccountEmail,
   uploadArchiveToGoogleDrive,
 } from "@/libs/google-drive-sync";
@@ -75,15 +76,15 @@ type GoogleDriveAuthState = {
   email: string | null;
 };
 
-const parseOAuthAccessToken = (url: string): string | null => {
-  const hashStart = url.indexOf("#");
-  if (hashStart < 0) {
+const parseOAuthCode = (url: string): string | null => {
+  const queryStart = url.indexOf("?");
+  if (queryStart < 0) {
     return null;
   }
 
-  const hashParams = new URLSearchParams(url.slice(hashStart + 1));
-  const token = hashParams.get("access_token");
-  return token && token.length > 0 ? token : null;
+  const queryParams = new URLSearchParams(url.slice(queryStart + 1));
+  const code = queryParams.get("code");
+  return code && code.length > 0 ? code : null;
 };
 
 type StartScreenIcon =
@@ -750,6 +751,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const buildArchiveBase64 = async (): Promise<string | null> => {
+    console.info("[GoogleDriveSync] Preparing backup archive");
     const data = exportInventoryData();
     if (!data) {
       showDialogMessage(t("sideMenu.exportUnavailableTitle"), t("sideMenu.exportUnavailableMessage"));
@@ -773,6 +775,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
 
     const entries = photoEntries.filter((entry) => entry.uri);
+    console.info("[GoogleDriveSync] Backup data snapshot collected", {
+      exportFilesCount: data.length,
+      photoEntriesCount: photoEntries.length,
+      photoEntriesWithUriCount: entries.length,
+    });
     const nameCounts = new Map<string, number>();
 
     for (const entry of entries) {
@@ -797,10 +804,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       files.push({ path: `${entry.type}/${fileName}`, contents: base64ToBytes(contentsBase64) });
     }
 
-    return createTarArchive(files);
+    const archiveBase64 = createTarArchive(files);
+    console.info("[GoogleDriveSync] Backup archive created", {
+      fileCount: files.length,
+      archiveBase64Length: archiveBase64.length,
+    });
+    return archiveBase64;
   };
 
   const importArchiveBase64 = async (archiveBase64: string): Promise<boolean> => {
+    console.info("[GoogleDriveSync] Importing backup archive", {
+      archiveBase64Length: archiveBase64.length,
+    });
     const archiveBytes = base64ToBytes(archiveBase64);
     const archivedFiles = parseTarArchive(archiveBytes);
 
@@ -827,6 +842,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         legacyBase = parsed;
       }
     }
+
+    console.info("[GoogleDriveSync] Parsed archive metadata", {
+      archivedFilesCount: archivedFiles.length,
+      structuredExportFilesCount: importFiles.length,
+      hasLegacyBase,
+    });
 
     if (importFiles.length === 0 && !legacyBase) {
       showDialogMessage(t("sideMenu.importFailedTitle"), t("sideMenu.importMissingInventory"));
@@ -885,6 +906,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     importInventoryPhotos(importedPhotoEntries);
+    console.info("[GoogleDriveSync] Archive import completed", {
+      importedPhotosCount: importedPhotoEntries.length,
+    });
     onClose();
     return true;
   };
@@ -972,32 +996,67 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     if (googleDriveAuthState) {
+      console.info("[GoogleDriveSync] Logging out from Google Drive session");
       setGoogleDriveAuthState(null);
       return;
     }
 
-    const redirectUri = ExpoLinking.createURL("oauth/google-drive");
-    const authUrl = buildGoogleOAuthUrl(redirectUri);
-    if (!authUrl) {
+    const fallbackRedirectUri = ExpoLinking.createURL("oauth/google-drive");
+    const authRequest = buildGoogleOAuthRequest(fallbackRedirectUri);
+    if (!authRequest) {
+      console.warn("[GoogleDriveSync] Missing Google Drive client id in environment");
       showDialogMessage(t("sideMenu.googleDriveMissingClientIdTitle"), t("sideMenu.googleDriveMissingClientIdMessage"));
       return;
     }
 
+    console.info("[GoogleDriveSync] Starting Google OAuth", {
+      platform: Platform.OS,
+      fallbackRedirectUri,
+      redirectUri: authRequest.redirectUri,
+      authUrlPreview: authRequest.authUrl.slice(0, 140),
+    });
+
     setGoogleDriveLoginPending(true);
     try {
-      const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
+      const result = await WebBrowser.openAuthSessionAsync(authRequest.authUrl, authRequest.redirectUri);
+      console.info("[GoogleDriveSync] OAuth session finished", {
+        type: result.type,
+        hasUrl: Boolean(result.type === "success" && result.url),
+      });
       if (result.type !== "success" || !result.url) {
         return;
       }
 
-      const token = parseOAuthAccessToken(result.url);
-      if (!token) {
+      const code = parseOAuthCode(result.url);
+      if (!code) {
+        console.warn("[GoogleDriveSync] OAuth callback did not include code", {
+          urlPreview: result.url.slice(0, 180),
+        });
         showDialogMessage(t("sideMenu.googleDriveLoginFailedTitle"), t("sideMenu.googleDriveLoginFailedMessage"));
         return;
       }
 
-      const email = await fetchGoogleAccountEmail(token);
-      setGoogleDriveAuthState({ accessToken: token, email });
+      const tokenResponse = await exchangeGoogleCodeForTokens({
+        code,
+        clientId: authRequest.clientId,
+        redirectUri: authRequest.redirectUri,
+        codeVerifier: authRequest.codeVerifier,
+      });
+      const accessToken = tokenResponse.access_token;
+      if (!accessToken) {
+        console.warn("[GoogleDriveSync] Token exchange succeeded without access token", tokenResponse);
+        showDialogMessage(t("sideMenu.googleDriveLoginFailedTitle"), t("sideMenu.googleDriveLoginFailedMessage"));
+        return;
+      }
+
+      const email = await fetchGoogleAccountEmail(accessToken);
+      console.info("[GoogleDriveSync] Login complete", {
+        hasEmail: Boolean(email),
+        scope: tokenResponse.scope,
+        tokenType: tokenResponse.token_type,
+        expiresIn: tokenResponse.expires_in,
+      });
+      setGoogleDriveAuthState({ accessToken, email });
     } catch (error) {
       console.error("Google Drive login failed", error);
       showDialogMessage(t("sideMenu.googleDriveLoginFailedTitle"), t("sideMenu.googleDriveLoginFailedMessage"));
@@ -1013,12 +1072,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     setGoogleDrivePushPending(true);
     try {
+      console.info("[GoogleDriveSync] Cloud upload started");
       const archiveBase64 = await buildArchiveBase64();
       if (!archiveBase64) {
+        console.warn("[GoogleDriveSync] Cloud upload aborted because backup archive was not created");
         return;
       }
 
+      console.info("[GoogleDriveSync] Uploading archive to Google Drive", {
+        archiveBase64Length: archiveBase64.length,
+      });
       await uploadArchiveToGoogleDrive(googleDriveAuthState.accessToken, archiveBase64);
+      console.info("[GoogleDriveSync] Cloud upload finished successfully");
       showDialogMessage(t("sideMenu.googleDriveSyncSuccessTitle"), t("sideMenu.googleDriveSyncUploadSuccessMessage"));
     } catch (error) {
       console.error("Google Drive upload failed", error);
@@ -1035,13 +1100,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     setGoogleDrivePullPending(true);
     try {
+      console.info("[GoogleDriveSync] Cloud download started");
       const syncPayload = await downloadArchiveFromGoogleDrive(googleDriveAuthState.accessToken);
       if (!syncPayload) {
+        console.info("[GoogleDriveSync] No cloud backup was found");
         showDialogMessage(t("sideMenu.googleDriveNoBackupTitle"), t("sideMenu.googleDriveNoBackupMessage", { file: GOOGLE_DRIVE_SYNC_FILE_NAME }));
         return;
       }
 
+      console.info("[GoogleDriveSync] Cloud backup loaded", {
+        archiveBase64Length: syncPayload.archiveBase64.length,
+        modifiedTime: syncPayload.modifiedTime ?? null,
+      });
       await importArchiveBase64(syncPayload.archiveBase64);
+      console.info("[GoogleDriveSync] Cloud restore finished successfully");
       showDialogMessage(t("sideMenu.googleDriveSyncSuccessTitle"), t("sideMenu.googleDriveSyncDownloadSuccessMessage"));
     } catch (error) {
       console.error("Google Drive download failed", error);
