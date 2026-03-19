@@ -11,8 +11,8 @@ export default ({ config }: { config: ExpoConfig }) => {
   const configExtra = (config.extra ?? {}) as Record<string, unknown>;
   const googleClientIds = [
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? baseExtra.googleDriveClientId ?? configExtra.googleDriveClientId ?? null,
-    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? baseExtra.googleDriveAndroidClientId ?? configExtra.googleDriveAndroidClientId ?? null,
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? baseExtra.googleDriveIosClientId ?? configExtra.googleDriveIosClientId ?? null,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? baseExtra.googleDriveAndroidClientId ?? configExtra.googleDriveAndroidClientId ?? null,
   ];
   const googleSchemes = googleClientIds
     .flatMap((candidate) => (typeof candidate === "string" ? [candidate.trim()] : []))

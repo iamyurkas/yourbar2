@@ -106,22 +106,15 @@ function getGoogleClientId(): string | null {
     manifest2Extra?.googleDriveClientId,
     manifestExtra?.googleDriveClientId,
     process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
-    ...(Platform.OS === 'android'
-      ? [
-        expoExtra?.googleDriveAndroidClientId,
-        manifest2Extra?.googleDriveAndroidClientId,
-        manifestExtra?.googleDriveAndroidClientId,
-        process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID,
-      ]
-      : []),
-    ...(Platform.OS === 'ios'
-      ? [
-        expoExtra?.googleDriveIosClientId,
-        manifest2Extra?.googleDriveIosClientId,
-        manifestExtra?.googleDriveIosClientId,
-        process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
-      ]
-      : []),
+    // Prefer iOS client IDs even on Android because Google doesn't allow custom redirect schemes for Android client IDs
+    expoExtra?.googleDriveIosClientId,
+    manifest2Extra?.googleDriveIosClientId,
+    manifestExtra?.googleDriveIosClientId,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
+    expoExtra?.googleDriveAndroidClientId,
+    manifest2Extra?.googleDriveAndroidClientId,
+    manifestExtra?.googleDriveAndroidClientId,
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID,
   ].map(resolveClientIdCandidate);
 
   for (const value of candidates) {
