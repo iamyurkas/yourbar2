@@ -27,11 +27,46 @@ export default ({ config }: { config: ExpoConfig }) => {
     const appIdPrefix = clientId.slice(0, -suffix.length);
     return appIdPrefix ? `com.googleusercontent.apps.${appIdPrefix}` : null;
   };
+
+  const baseExtra = (baseExpo.extra ?? {}) as Record<string, unknown>;
+  const configExtra = (config.extra ?? {}) as Record<string, unknown>;
+
+  const googleDriveClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ??
+    (baseExtra.googleDriveClientId as string | undefined) ??
+    (configExtra.googleDriveClientId as string | undefined) ??
+    null;
+
+  const googleDriveIosClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ??
+    (baseExtra.googleDriveIosClientId as string | undefined) ??
+    (configExtra.googleDriveIosClientId as string | undefined) ??
+    null;
+
+  const googleDriveAndroidClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ??
+    (baseExtra.googleDriveAndroidClientId as string | undefined) ??
+    (configExtra.googleDriveAndroidClientId as string | undefined) ??
+    null;
+
+  const googleDriveWebClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ??
+    (baseExtra.googleDriveWebClientId as string | undefined) ??
+    (configExtra.googleDriveWebClientId as string | undefined) ??
+    null;
+
+  const googleClientIds = [
+    googleDriveIosClientId,
+    googleDriveAndroidClientId,
+    googleDriveClientId,
+    googleDriveWebClientId,
+  ].filter((id): id is string => Boolean(id));
+
   const configuredSchemes = [
     ...configureScheme(baseExpo.scheme),
     ...configureScheme(config.scheme),
-    getGoogleSchemeFromClientId(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID),
-    getGoogleSchemeFromClientId(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID),
+    getGoogleSchemeFromClientId(googleDriveAndroidClientId ?? undefined),
+    getGoogleSchemeFromClientId(googleDriveIosClientId ?? undefined),
   ].filter((value, index, all) => Boolean(value) && all.indexOf(value) === index);
 
   return {
@@ -71,14 +106,30 @@ export default ({ config }: { config: ExpoConfig }) => {
       plugins: [...(baseExpo.plugins ?? []), ...(config.plugins ?? [])],
 
       extra: {
-        ...(baseExpo.extra ?? {}),
-        ...(config.extra ?? {}),
+        ...baseExtra,
+        ...configExtra,
 
         iosAppStoreCountryCode:
-          process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ?? null,
-        iosAppStoreId: process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ?? "6758964503",
+          process.env.EXPO_PUBLIC_IOS_APP_STORE_COUNTRY_CODE ??
+          (baseExtra.iosAppStoreCountryCode as string | undefined) ??
+          (configExtra.iosAppStoreCountryCode as string | undefined) ??
+          null,
+        iosAppStoreId:
+          process.env.EXPO_PUBLIC_IOS_APP_STORE_ID ??
+          (baseExtra.iosAppStoreId as string | undefined) ??
+          (configExtra.iosAppStoreId as string | undefined) ??
+          "6758964503",
         androidPlayStoreCountryCode:
-          process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
+          process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ??
+          (baseExtra.androidPlayStoreCountryCode as string | undefined) ??
+          (configExtra.androidPlayStoreCountryCode as string | undefined) ??
+          null,
+
+        googleDriveClientId,
+        googleDriveIosClientId,
+        googleDriveAndroidClientId,
+        googleDriveWebClientId,
+        googleClientIds,
 
         buildTime: new Date().toISOString(),
       },

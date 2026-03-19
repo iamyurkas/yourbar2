@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { Platform } from "react-native";
 
 const GOOGLE_OAUTH_SCOPE = [
@@ -40,18 +41,41 @@ type GoogleTokenResponse = {
   scope?: string;
 };
 
-function getPlatformClientId(): string | null {
-  const fallback = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null;
+function getGoogleClientId(): string | null {
+  const configExtra = Constants.expoConfig?.extra;
 
+  /**
+   * On Android, we prioritize the iOS Client ID if available.
+   *
+   * This is a known workaround for Google OAuth: Android-type Client IDs in the Google Console
+   * do not allow configuring the custom URI schemes (reverse-DNS style) required by
+   * browser-based OAuth flows (like `WebBrowser.openAuthSessionAsync`).
+   *
+   * By using an iOS-type Client ID on Android, we can use the reverse-DNS redirect URI
+   * which is supported by Google for that client type.
+   */
   if (Platform.OS === "android") {
-    return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? fallback;
+    return (
+      (configExtra?.googleDriveIosClientId as string | undefined) ??
+      (configExtra?.googleDriveAndroidClientId as string | undefined) ??
+      (configExtra?.googleDriveClientId as string | undefined) ??
+      null
+    );
   }
 
   if (Platform.OS === "ios") {
-    return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? fallback;
+    return (
+      (configExtra?.googleDriveIosClientId as string | undefined) ??
+      (configExtra?.googleDriveClientId as string | undefined) ??
+      null
+    );
   }
 
-  return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ?? fallback;
+  return (
+    (configExtra?.googleDriveWebClientId as string | undefined) ??
+    (configExtra?.googleDriveClientId as string | undefined) ??
+    null
+  );
 }
 
 function getGoogleNativeRedirectScheme(clientId: string): string | null {
@@ -80,7 +104,7 @@ function createCodeVerifier(): string {
 }
 
 export function buildGoogleOAuthRequest(fallbackRedirectUri: string): GoogleOAuthRequest | null {
-  const clientId = getPlatformClientId();
+  const clientId = getGoogleClientId();
   if (!clientId) {
     console.warn("[GoogleDriveSync] Google OAuth client id is not configured");
     return null;
