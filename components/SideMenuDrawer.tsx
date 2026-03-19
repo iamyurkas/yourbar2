@@ -3,7 +3,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
-import * as ExpoLinking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import * as WebBrowser from "expo-web-browser";
 import {
@@ -1001,16 +1000,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       return;
     }
 
-    const appRedirectUri = ExpoLinking.createURL("oauth/google-drive", { scheme: "yourbar" });
+    const appRedirectUri = "yourbar://oauth/google-drive";
     const owner = Constants.expoConfig?.owner;
     const slug = Constants.expoConfig?.slug;
     const configuredProxyRedirectUri = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI ?? null;
     const proxyRedirectUri = configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null);
-    const preferProxyRedirect = Constants.appOwnership === "expo";
     const authRequest = buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
-      preferProxyRedirect,
+      preferProxyRedirect: false,
     });
     if (!authRequest) {
       console.warn("[GoogleDriveSync] Missing Google Drive OAuth configuration", {
@@ -1021,7 +1019,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           || process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID,
         ),
         hasProxyRedirect: Boolean(proxyRedirectUri),
-        preferProxyRedirect,
         owner: owner ?? null,
         slug: slug ?? null,
       });
@@ -1033,7 +1030,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       platform: Platform.OS,
       appRedirectUri,
       proxyRedirectUri,
-      preferProxyRedirect,
+      preferProxyRedirect: false,
       redirectUri: authRequest.redirectUri,
       clientSource: authRequest.clientSource,
       authUrlPreview: authRequest.authUrl.slice(0, 140),
@@ -1041,11 +1038,44 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     setGoogleDriveLoginPending(true);
     try {
-      const result = await WebBrowser.openAuthSessionAsync(authRequest.authUrl, authRequest.redirectUri);
-      console.info("[GoogleDriveSync] OAuth session finished", {
-        type: result.type,
-        hasUrl: Boolean(result.type === "success" && result.url),
-      });
+      const runOAuthSession = async (request: ReturnType<typeof buildGoogleOAuthRequest>) => {
+        if (!request) {
+          return null;
+        }
+        const result = await WebBrowser.openAuthSessionAsync(request.authUrl, request.redirectUri);
+        console.info("[GoogleDriveSync] OAuth session finished", {
+          type: result.type,
+          hasUrl: Boolean(result.type === "success" && result.url),
+          redirectUri: request.redirectUri,
+          clientSource: request.clientSource,
+        });
+        return { request, result };
+      };
+
+      let sessionResult = await runOAuthSession(authRequest);
+      if (
+        sessionResult
+        && sessionResult.result.type === "dismiss"
+        && proxyRedirectUri
+        && (sessionResult.request.clientSource === "default" || sessionResult.request.clientSource === "web")
+      ) {
+        const proxyAuthRequest = buildGoogleOAuthRequest({
+          appRedirectUri,
+          proxyRedirectUri,
+          preferProxyRedirect: true,
+        });
+        console.info("[GoogleDriveSync] Retrying OAuth with proxy redirect", {
+          proxyRedirectUri,
+        });
+        sessionResult = await runOAuthSession(proxyAuthRequest);
+      }
+
+      const result = sessionResult?.result;
+      const usedAuthRequest = sessionResult?.request;
+      if (!result || !usedAuthRequest) {
+        return;
+      }
+
       if (result.type !== "success" || !result.url) {
         return;
       }
@@ -1061,9 +1091,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
       const tokenResponse = await exchangeGoogleCodeForTokens({
         code,
-        clientId: authRequest.clientId,
-        redirectUri: authRequest.redirectUri,
-        codeVerifier: authRequest.codeVerifier,
+        clientId: usedAuthRequest.clientId,
+        redirectUri: usedAuthRequest.redirectUri,
+        codeVerifier: usedAuthRequest.codeVerifier,
       });
       const accessToken = tokenResponse.access_token;
       if (!accessToken) {
