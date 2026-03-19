@@ -627,7 +627,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         appOwnership: diagnostics.appOwnership,
         clientId: diagnostics.clientIdPreview ?? "n/a",
         redirectUri: diagnostics.redirectUri ?? "n/a",
-        schemes: diagnostics.configuredSchemes,
+        expectedRedirectScheme: diagnostics.expectedRedirectScheme ?? "n/a",
+        expoConfiguredSchemes: diagnostics.expoConfiguredSchemes,
+        androidIntentFilterSchemes: diagnostics.androidIntentFilterSchemes,
+        iosUrlSchemes: diagnostics.iosUrlSchemes,
+        isExpectedSchemeRegistered: diagnostics.isExpectedSchemeRegistered,
       });
 
       const message = isConfigError
@@ -644,7 +648,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           `appOwnership: ${diagnostics.appOwnership}`,
           `clientId: ${diagnostics.clientIdPreview ?? "n/a"}`,
           `redirectUri: ${diagnostics.redirectUri ?? "n/a"}`,
-          `schemes: ${diagnostics.configuredSchemes.join(", ") || "n/a"}`,
+          `expectedRedirectScheme: ${diagnostics.expectedRedirectScheme ?? "n/a"}`,
+          `expo.scheme: ${diagnostics.expoConfiguredSchemes.join(", ") || "n/a"}`,
+          `android.intentFilters: ${diagnostics.androidIntentFilterSchemes.join(", ") || "n/a"}`,
+          `ios.CFBundleURLSchemes: ${diagnostics.iosUrlSchemes.join(", ") || "n/a"}`,
+          `isExpectedSchemeRegistered: ${diagnostics.isExpectedSchemeRegistered ? "yes" : "no"}`,
           `error: ${rawMessage || "unknown"}`,
         ].join("\n");
         showDialogMessage(t("sideMenu.googleDriveErrorTitle"), `${message}\n\n${diagnosticDetails}`);

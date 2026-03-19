@@ -26,7 +26,11 @@ export type GoogleDriveAuthDebugInfo = {
   clientIdConfigured: boolean;
   clientIdPreview?: string;
   redirectUri?: string;
-  configuredSchemes: string[];
+  expectedRedirectScheme?: string;
+  expoConfiguredSchemes: string[];
+  androidIntentFilterSchemes: string[];
+  iosUrlSchemes: string[];
+  isExpectedSchemeRegistered: boolean;
 };
 
 function getStoragePath(): string | null {
@@ -141,14 +145,19 @@ export function isGoogleDriveAuthSupported(): boolean {
 
 export function getGoogleDriveAuthDebugInfo(): GoogleDriveAuthDebugInfo {
   const clientId = getGoogleClientId();
-  const configuredSchemes = normalizeSchemes(Constants.expoConfig?.scheme);
+  const expoConfiguredSchemes = normalizeSchemes(Constants.expoConfig?.scheme);
+  const androidIntentFilterSchemes = extractAndroidIntentFilterSchemes(Constants.expoConfig?.android);
+  const iosUrlSchemes = extractIosUrlSchemes(Constants.expoConfig?.ios);
   let redirectUri: string | undefined;
+  let expectedRedirectScheme: string | undefined;
 
   if (clientId) {
     try {
       redirectUri = getGoogleRedirectUri(clientId);
+      expectedRedirectScheme = getGoogleRedirectScheme(clientId);
     } catch {
       redirectUri = undefined;
+      expectedRedirectScheme = undefined;
     }
   }
 
@@ -163,7 +172,13 @@ export function getGoogleDriveAuthDebugInfo(): GoogleDriveAuthDebugInfo {
     clientIdConfigured: Boolean(clientId),
     clientIdPreview,
     redirectUri,
-    configuredSchemes,
+    expectedRedirectScheme,
+    expoConfiguredSchemes,
+    androidIntentFilterSchemes,
+    iosUrlSchemes,
+    isExpectedSchemeRegistered: expectedRedirectScheme
+      ? [...expoConfiguredSchemes, ...androidIntentFilterSchemes, ...iosUrlSchemes].includes(expectedRedirectScheme)
+      : false,
   };
 }
 
@@ -266,6 +281,11 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
 }
 
 function getGoogleRedirectUri(clientId: string): string {
+  const scheme = getGoogleRedirectScheme(clientId);
+  return `${scheme}:/oauth2redirect`;
+}
+
+function getGoogleRedirectScheme(clientId: string): string {
   const suffix = '.apps.googleusercontent.com';
   if (!clientId.endsWith(suffix)) {
     throw new Error('invalid_client_id');
@@ -276,8 +296,7 @@ function getGoogleRedirectUri(clientId: string): string {
     throw new Error('invalid_client_id');
   }
 
-  const scheme = `com.googleusercontent.apps.${idPrefix}`;
-  return `${scheme}:/oauth2redirect`;
+  return `com.googleusercontent.apps.${idPrefix}`;
 }
 
 function createCodeVerifier(length = 64): string {
@@ -300,6 +319,37 @@ function normalizeSchemes(candidate: unknown): string[] {
   }
 
   return [];
+}
+
+function extractAndroidIntentFilterSchemes(androidConfig: unknown): string[] {
+  if (!androidConfig || typeof androidConfig !== 'object') {
+    return [];
+  }
+
+  const intentFilters = (androidConfig as { intentFilters?: Array<{ data?: Array<{ scheme?: string }> }> }).intentFilters;
+  if (!Array.isArray(intentFilters)) {
+    return [];
+  }
+
+  return intentFilters
+    .flatMap((filter) => (Array.isArray(filter?.data) ? filter.data : []))
+    .map((item) => item?.scheme)
+    .filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
+}
+
+function extractIosUrlSchemes(iosConfig: unknown): string[] {
+  if (!iosConfig || typeof iosConfig !== 'object') {
+    return [];
+  }
+
+  const urlTypes = (iosConfig as { infoPlist?: { CFBundleURLTypes?: Array<{ CFBundleURLSchemes?: string[] }> } }).infoPlist?.CFBundleURLTypes;
+  if (!Array.isArray(urlTypes)) {
+    return [];
+  }
+
+  return urlTypes
+    .flatMap((type) => (Array.isArray(type?.CFBundleURLSchemes) ? type.CFBundleURLSchemes : []))
+    .filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
 }
 
 async function fetchDriveFiles(session: GoogleDriveSession): Promise<DriveFile[]> {
