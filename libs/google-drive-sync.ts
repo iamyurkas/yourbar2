@@ -40,12 +40,51 @@ function getClientIdForPlatform(): string | undefined {
 }
 
 function getRedirectUri(): string {
-  const scheme = Constants.expoConfig?.scheme;
-  if (!scheme) {
-    throw new Error('Expo scheme is missing; cannot complete Google auth redirect.');
+  const rawScheme = Constants.expoConfig?.scheme;
+  const configuredScheme = Array.isArray(rawScheme) ? rawScheme[0] : rawScheme;
+  const deepLink = Linking.createURL('oauthredirect', configuredScheme ? { scheme: configuredScheme } : undefined);
+  if (!deepLink) {
+    throw new Error('Unable to build OAuth redirect URL.');
   }
 
-  return `${scheme}:/oauthredirect`;
+  return deepLink;
+}
+
+async function openGoogleAuthSession(authUrl: string, redirectUri: string): Promise<string> {
+  const authResult = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
+
+  if (authResult.type === 'success' && authResult.url) {
+    return authResult.url;
+  }
+
+  if (authResult.type !== 'cancel' && authResult.type !== 'dismiss') {
+    throw new Error(`Google sign-in failed with status: ${authResult.type}`);
+  }
+
+  const fallbackResult = await new Promise<string>((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      subscription.remove();
+      reject(new Error('Google sign-in timed out waiting for redirect.'));
+    }, 120_000);
+
+    const subscription = Linking.addEventListener('url', ({ url }) => {
+      if (!url.startsWith(redirectUri)) {
+        return;
+      }
+
+      clearTimeout(timeout);
+      subscription.remove();
+      resolve(url);
+    });
+
+    void WebBrowser.openBrowserAsync(authUrl).catch((error) => {
+      clearTimeout(timeout);
+      subscription.remove();
+      reject(error);
+    });
+  });
+
+  return fallbackResult;
 }
 
 function isTokenValid(tokens: GoogleDriveTokens): boolean {
@@ -120,12 +159,9 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveTokens> {
     code_challenge_method: 'plain',
   }).toString()}`;
 
-  const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
-  if (result.type !== 'success' || !result.url) {
-    throw new Error('Google sign-in was cancelled.');
-  }
+  const redirectUrl = await openGoogleAuthSession(authUrl, redirectUri);
 
-  const parsed = Linking.parse(result.url);
+  const parsed = Linking.parse(redirectUrl);
   const params = parsed.queryParams ?? {};
   if (typeof params.state !== 'string' || params.state !== state) {
     throw new Error('Google sign-in state mismatch.');
