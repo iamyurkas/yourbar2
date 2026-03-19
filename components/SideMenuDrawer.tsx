@@ -1013,6 +1013,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       platform: Platform.OS,
       fallbackRedirectUri,
       redirectUri: authRequest.redirectUri,
+      clientSource: authRequest.clientSource,
       authUrlPreview: authRequest.authUrl.slice(0, 140),
     });
 

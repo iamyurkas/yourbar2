@@ -30,6 +30,7 @@ type GoogleOAuthRequest = {
   clientId: string;
   redirectUri: string;
   codeVerifier: string;
+  clientSource: "default" | "android" | "ios" | "web";
 };
 
 type GoogleTokenResponse = {
@@ -40,18 +41,45 @@ type GoogleTokenResponse = {
   scope?: string;
 };
 
-function getPlatformClientId(): string | null {
+function getPlatformClientId(): { clientId: string; source: "default" | "android" | "ios" | "web" } | null {
   const fallback = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID ?? null;
+  const webClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ?? null;
+  const androidClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null;
+  const iosClient = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null;
 
   if (Platform.OS === "android") {
-    return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? fallback;
+    if (fallback) {
+      return { clientId: fallback, source: "default" };
+    }
+    if (webClient) {
+      return { clientId: webClient, source: "web" };
+    }
+    if (androidClient) {
+      return { clientId: androidClient, source: "android" };
+    }
+    return null;
   }
 
   if (Platform.OS === "ios") {
-    return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? fallback;
+    if (iosClient) {
+      return { clientId: iosClient, source: "ios" };
+    }
+    if (fallback) {
+      return { clientId: fallback, source: "default" };
+    }
+    if (webClient) {
+      return { clientId: webClient, source: "web" };
+    }
+    return null;
   }
 
-  return process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ?? fallback;
+  if (webClient) {
+    return { clientId: webClient, source: "web" };
+  }
+  if (fallback) {
+    return { clientId: fallback, source: "default" };
+  }
+  return null;
 }
 
 function getGoogleNativeRedirectScheme(clientId: string): string | null {
@@ -80,14 +108,16 @@ function createCodeVerifier(): string {
 }
 
 export function buildGoogleOAuthRequest(fallbackRedirectUri: string): GoogleOAuthRequest | null {
-  const clientId = getPlatformClientId();
-  if (!clientId) {
+  const client = getPlatformClientId();
+  if (!client) {
     console.warn("[GoogleDriveSync] Google OAuth client id is not configured");
     return null;
   }
+  const clientId = client.clientId;
 
   const nativeScheme = getGoogleNativeRedirectScheme(clientId);
-  const redirectUri = Platform.OS === "web" || !nativeScheme
+  const canUseNativeRedirect = Platform.OS === "ios" && client.source === "ios" && Boolean(nativeScheme);
+  const redirectUri = Platform.OS === "web" || !canUseNativeRedirect
     ? fallbackRedirectUri
     : `${nativeScheme}:/oauthredirect`;
   const codeVerifier = createCodeVerifier();
@@ -109,6 +139,7 @@ export function buildGoogleOAuthRequest(fallbackRedirectUri: string): GoogleOAut
     clientId,
     redirectUri,
     codeVerifier,
+    clientSource: client.source,
   };
 }
 
