@@ -18,7 +18,7 @@ export default ({ config }: { config: ExpoConfig }) => {
     .flatMap((candidate) => (typeof candidate === "string" ? [candidate.trim()] : []))
     .filter((candidate) => candidate.endsWith(".apps.googleusercontent.com"))
     .map((candidate) =>
-      `com.googleusercontent.apps.${candidate.replace(/\\.apps\\.googleusercontent\\.com$/, "")}`,
+      `com.googleusercontent.apps.${candidate.slice(0, -".apps.googleusercontent.com".length)}`,
     );
   const configuredScheme = baseExpo.scheme ?? config.scheme ?? "yourbar";
   const primaryScheme = Array.isArray(configuredScheme) ? configuredScheme[0] : configuredScheme;
