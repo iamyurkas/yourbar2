@@ -1009,12 +1009,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       ? (configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null))
       : null;
     const preferProxyRedirect = Boolean(proxyRedirectUri);
-    const authRequest = await buildGoogleOAuthRequest({
+    const initialAuthRequest = await buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
       preferProxyRedirect,
     });
-    if (!authRequest) {
+    if (!initialAuthRequest) {
       console.warn("[GoogleDriveSync] Missing Google Drive OAuth configuration", {
         hasClientId: Boolean(
           process.env.EXPO_PUBLIC_GOOGLE_DRIVE_CLIENT_ID
@@ -1038,13 +1038,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       proxyRedirectUri,
       allowExpoProxyRedirect,
       preferProxyRedirect,
-      redirectUri: authRequest.redirectUri,
-      clientSource: authRequest.clientSource,
-      codeChallengeMethod: authRequest.codeChallengeMethod,
-      authUrlPreview: authRequest.authUrl.slice(0, 140),
+      redirectUri: initialAuthRequest.redirectUri,
+      clientSource: initialAuthRequest.clientSource,
+      codeChallengeMethod: initialAuthRequest.codeChallengeMethod,
+      authUrlPreview: initialAuthRequest.authUrl.slice(0, 140),
     });
     try {
-      const authUrl = new URL(authRequest.authUrl);
+      const authUrl = new URL(initialAuthRequest.authUrl);
       console.info("[GoogleDriveSync] OAuth request details", {
         clientId: authUrl.searchParams.get("client_id"),
         redirectUriFromQuery: authUrl.searchParams.get("redirect_uri"),
@@ -1058,10 +1058,17 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     setGoogleDriveLoginPending(true);
     try {
+      const attemptedKeys = new Set<string>();
       const runOAuthSession = async (request: Awaited<ReturnType<typeof buildGoogleOAuthRequest>>) => {
         if (!request) {
           return null;
         }
+        const attemptKey = `${request.clientSource}|${request.redirectUri}`;
+        if (attemptedKeys.has(attemptKey)) {
+          return null;
+        }
+        attemptedKeys.add(attemptKey);
+
         const result = await WebBrowser.openAuthSessionAsync(request.authUrl, request.redirectUri);
         console.info("[GoogleDriveSync] OAuth session finished", {
           type: result.type,
@@ -1072,23 +1079,39 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return { request, result };
       };
 
-      let sessionResult = await runOAuthSession(authRequest);
-      if (
-        sessionResult
-        && sessionResult.result.type !== "success"
-        && Platform.OS === "android"
-        && proxyRedirectUri
-      ) {
-        const fallbackAuthRequest = await buildGoogleOAuthRequest({
-          appRedirectUri,
-          proxyRedirectUri,
-          preferProxyRedirect: true,
-          forceClientSource: "default",
-        });
-        console.info("[GoogleDriveSync] Retrying OAuth with fallback default client + proxy redirect", {
-          proxyRedirectUri,
-        });
-        sessionResult = await runOAuthSession(fallbackAuthRequest);
+      const fallbackSpecs = [
+        { forceClientSource: "default" as const, preferProxyRedirect: true },
+        { forceClientSource: "default" as const, preferProxyRedirect: false },
+        { forceClientSource: "web" as const, preferProxyRedirect: true },
+        { forceClientSource: "web" as const, preferProxyRedirect: false },
+        { forceClientSource: "android" as const, preferProxyRedirect: false },
+      ];
+
+      let sessionResult = await runOAuthSession(initialAuthRequest);
+      if (sessionResult?.result.type !== "success" && Platform.OS === "android") {
+        for (const fallbackSpec of fallbackSpecs) {
+          if (fallbackSpec.preferProxyRedirect && !proxyRedirectUri) {
+            continue;
+          }
+          const fallbackAuthRequest = await buildGoogleOAuthRequest({
+            appRedirectUri,
+            proxyRedirectUri,
+            preferProxyRedirect: fallbackSpec.preferProxyRedirect,
+            forceClientSource: fallbackSpec.forceClientSource,
+          });
+          if (!fallbackAuthRequest) {
+            continue;
+          }
+          console.info("[GoogleDriveSync] Retrying OAuth with fallback request", {
+            forceClientSource: fallbackSpec.forceClientSource,
+            preferProxyRedirect: fallbackSpec.preferProxyRedirect,
+            redirectUri: fallbackAuthRequest.redirectUri,
+          });
+          sessionResult = await runOAuthSession(fallbackAuthRequest);
+          if (sessionResult?.result.type === "success") {
+            break;
+          }
+        }
       }
 
       const result = sessionResult?.result;
