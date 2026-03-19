@@ -1009,7 +1009,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       ? (configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null))
       : null;
     const preferProxyRedirect = Boolean(proxyRedirectUri);
-    const authRequest = buildGoogleOAuthRequest({
+    const authRequest = await buildGoogleOAuthRequest({
       appRedirectUri,
       proxyRedirectUri,
       preferProxyRedirect,
@@ -1040,6 +1040,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       preferProxyRedirect,
       redirectUri: authRequest.redirectUri,
       clientSource: authRequest.clientSource,
+      codeChallengeMethod: authRequest.codeChallengeMethod,
       authUrlPreview: authRequest.authUrl.slice(0, 140),
     });
     try {
@@ -1057,7 +1058,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     setGoogleDriveLoginPending(true);
     try {
-      const runOAuthSession = async (request: ReturnType<typeof buildGoogleOAuthRequest>) => {
+      const runOAuthSession = async (request: Awaited<ReturnType<typeof buildGoogleOAuthRequest>>) => {
         if (!request) {
           return null;
         }
@@ -1078,7 +1079,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         && Platform.OS === "android"
         && proxyRedirectUri
       ) {
-        const fallbackAuthRequest = buildGoogleOAuthRequest({
+        const fallbackAuthRequest = await buildGoogleOAuthRequest({
           appRedirectUri,
           proxyRedirectUri,
           preferProxyRedirect: true,

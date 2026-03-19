@@ -1,5 +1,7 @@
 import { Platform } from "react-native";
 
+import { bytesToBase64 } from "@/libs/archive-utils";
+
 const GOOGLE_OAUTH_SCOPE = [
   "openid",
   "email",
@@ -30,6 +32,7 @@ type GoogleOAuthRequest = {
   clientId: string;
   redirectUri: string;
   codeVerifier: string;
+  codeChallengeMethod: "S256" | "plain";
   clientSource: "default" | "android" | "ios" | "web";
 };
 
@@ -145,12 +148,36 @@ function createCodeVerifier(): string {
   return output;
 }
 
-export function buildGoogleOAuthRequest(input: {
+function bytesToBase64Url(bytes: Uint8Array): string {
+  return bytesToBase64(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+async function createCodeChallenge(codeVerifier: string): Promise<{
+  codeChallenge: string;
+  codeChallengeMethod: "S256" | "plain";
+}> {
+  try {
+    const subtle = globalThis.crypto?.subtle;
+    if (!subtle) {
+      return { codeChallenge: codeVerifier, codeChallengeMethod: "plain" };
+    }
+    const data = new TextEncoder().encode(codeVerifier);
+    const digest = await subtle.digest("SHA-256", data);
+    return {
+      codeChallenge: bytesToBase64Url(new Uint8Array(digest)),
+      codeChallengeMethod: "S256",
+    };
+  } catch {
+    return { codeChallenge: codeVerifier, codeChallengeMethod: "plain" };
+  }
+}
+
+export async function buildGoogleOAuthRequest(input: {
   appRedirectUri: string;
   proxyRedirectUri?: string | null;
   preferProxyRedirect?: boolean;
   forceClientSource?: "default" | "android" | "ios" | "web";
-}): GoogleOAuthRequest | null {
+}): Promise<GoogleOAuthRequest | null> {
   const client = getPlatformClientId(input.forceClientSource);
   if (!client) {
     console.warn("[GoogleDriveSync] Google OAuth client id is not configured");
@@ -181,6 +208,7 @@ export function buildGoogleOAuthRequest(input: {
     ? `${nativeScheme}:/${nativeRedirectPath}`
     : (shouldUseProxyRedirect ? (input.proxyRedirectUri ?? input.appRedirectUri) : input.appRedirectUri);
   const codeVerifier = createCodeVerifier();
+  const { codeChallenge, codeChallengeMethod } = await createCodeChallenge(codeVerifier);
 
   const params = new URLSearchParams({
     client_id: clientId,
@@ -189,8 +217,8 @@ export function buildGoogleOAuthRequest(input: {
     scope: GOOGLE_OAUTH_SCOPE,
     include_granted_scopes: "true",
     access_type: "offline",
-    code_challenge: codeVerifier,
-    code_challenge_method: "plain",
+    code_challenge: codeChallenge,
+    code_challenge_method: codeChallengeMethod,
     prompt: "consent",
   });
 
@@ -199,6 +227,7 @@ export function buildGoogleOAuthRequest(input: {
     clientId,
     redirectUri,
     codeVerifier,
+    codeChallengeMethod,
     clientSource: client.source,
   };
 }
