@@ -118,6 +118,7 @@ export function buildGoogleOAuthRequest(input: {
     (Platform.OS === "ios" && client.source === "ios")
     || (Platform.OS === "android" && client.source === "android")
   );
+  const nativeRedirectPath = Platform.OS === "android" ? "oauth2redirect" : "oauthredirect";
   const shouldUseProxyRedirect = Boolean(input.preferProxyRedirect)
     && Platform.OS !== "web"
     && (client.source === "default" || client.source === "web");
@@ -126,7 +127,7 @@ export function buildGoogleOAuthRequest(input: {
     return null;
   }
   const redirectUri = canUseNativeRedirect
-    ? `${nativeScheme}:/oauthredirect`
+    ? `${nativeScheme}:/${nativeRedirectPath}`
     : (shouldUseProxyRedirect ? (input.proxyRedirectUri ?? input.appRedirectUri) : input.appRedirectUri);
   const codeVerifier = createCodeVerifier();
 
