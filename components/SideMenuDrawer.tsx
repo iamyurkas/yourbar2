@@ -1042,6 +1042,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clientSource: authRequest.clientSource,
       authUrlPreview: authRequest.authUrl.slice(0, 140),
     });
+    try {
+      const authUrl = new URL(authRequest.authUrl);
+      console.info("[GoogleDriveSync] OAuth request details", {
+        clientId: authUrl.searchParams.get("client_id"),
+        redirectUriFromQuery: authUrl.searchParams.get("redirect_uri"),
+        responseType: authUrl.searchParams.get("response_type"),
+        codeChallengeMethod: authUrl.searchParams.get("code_challenge_method"),
+        scope: authUrl.searchParams.get("scope"),
+      });
+    } catch (error) {
+      console.warn("[GoogleDriveSync] Failed to parse OAuth request URL", error);
+    }
 
     setGoogleDriveLoginPending(true);
     try {
