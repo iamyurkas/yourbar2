@@ -107,7 +107,10 @@ function createCodeVerifier(): string {
   return output;
 }
 
-export function buildGoogleOAuthRequest(fallbackRedirectUri: string): GoogleOAuthRequest | null {
+export function buildGoogleOAuthRequest(input: {
+  appRedirectUri: string;
+  proxyRedirectUri?: string | null;
+}): GoogleOAuthRequest | null {
   const client = getPlatformClientId();
   if (!client) {
     console.warn("[GoogleDriveSync] Google OAuth client id is not configured");
@@ -117,9 +120,10 @@ export function buildGoogleOAuthRequest(fallbackRedirectUri: string): GoogleOAut
 
   const nativeScheme = getGoogleNativeRedirectScheme(clientId);
   const canUseNativeRedirect = Platform.OS === "ios" && client.source === "ios" && Boolean(nativeScheme);
-  const redirectUri = Platform.OS === "web" || !canUseNativeRedirect
-    ? fallbackRedirectUri
-    : `${nativeScheme}:/oauthredirect`;
+  const shouldUseProxyRedirect = Platform.OS !== "web" && (client.source === "default" || client.source === "web");
+  const redirectUri = canUseNativeRedirect
+    ? `${nativeScheme}:/oauthredirect`
+    : (shouldUseProxyRedirect ? (input.proxyRedirectUri ?? input.appRedirectUri) : input.appRedirectUri);
   const codeVerifier = createCodeVerifier();
 
   const params = new URLSearchParams({
