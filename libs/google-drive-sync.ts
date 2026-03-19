@@ -22,19 +22,60 @@ export const getGoogleClientId = () => {
   const extra = Constants.expoConfig?.extra;
   const clientIds = (extra?.googleClientIds as string[]) ?? [];
 
-  // Favoring iOS-type IDs for Android browser-based auth as per project memory
-  // to avoid custom URI scheme issues.
   if (Platform.OS === 'android') {
+    const androidId = extra?.googleDriveAndroidClientId;
+    if (androidId) {
+      return androidId;
+    }
+
     const iosId = extra?.googleDriveIosClientId;
     if (iosId) {
       return iosId;
     }
   }
 
+  if (Platform.OS === 'ios') {
+    const iosId = extra?.googleDriveIosClientId;
+    if (iosId) {
+      return iosId;
+    }
+  }
+
+  if (Platform.OS === 'web') {
+    const webId = extra?.googleDriveWebClientId;
+    if (webId) {
+      return webId;
+    }
+  }
+
   return clientIds[0] ?? null;
 };
 
-const getRedirectUri = () => {
+const getGoogleNativeSchemeFromClientId = (clientId: string) => {
+  const suffix = '.apps.googleusercontent.com';
+  if (!clientId.endsWith(suffix)) {
+    return null;
+  }
+
+  const idPrefix = clientId.slice(0, -suffix.length);
+  if (!idPrefix) {
+    return null;
+  }
+
+  return `com.googleusercontent.apps.${idPrefix}`;
+};
+
+const getRedirectUri = (clientId: string) => {
+  if (Platform.OS === 'android' || Platform.OS === 'ios') {
+    const googleScheme = getGoogleNativeSchemeFromClientId(clientId);
+    if (googleScheme) {
+      return AuthSession.makeRedirectUri({
+        scheme: googleScheme,
+        path: 'oauthredirect',
+      });
+    }
+  }
+
   const scheme = Constants.expoConfig?.scheme;
   return AuthSession.makeRedirectUri({
     scheme: Array.isArray(scheme) ? scheme[0] : scheme,
@@ -48,7 +89,7 @@ export async function signInWithGoogle(): Promise<GoogleUser | null> {
     throw new Error('Google Client ID not configured');
   }
 
-  const redirectUri = getRedirectUri();
+  const redirectUri = getRedirectUri(clientId);
 
   const authRequest = new AuthSession.AuthRequest({
     clientId,
