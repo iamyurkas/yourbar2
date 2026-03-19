@@ -1005,8 +1005,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     const slug = Constants.expoConfig?.slug;
     const allowExpoProxyRedirect = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ALLOW_EXPO_PROXY === "true";
     const configuredProxyRedirectUri = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_REDIRECT_URI ?? null;
-    const proxyRedirectUri = configuredProxyRedirectUri
-      ?? (allowExpoProxyRedirect && owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null);
+    const proxyRedirectUri = allowExpoProxyRedirect
+      ? (configuredProxyRedirectUri ?? (owner && slug ? `https://auth.expo.io/@${owner}/${slug}` : null))
+      : null;
     const preferProxyRedirect = Boolean(proxyRedirectUri);
     const authRequest = buildGoogleOAuthRequest({
       appRedirectUri,
