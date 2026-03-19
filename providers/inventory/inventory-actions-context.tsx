@@ -64,6 +64,9 @@ export type InventoryActionsContextValue = {
   createBar: (name: string) => void;
   updateBar: (id: string, name: string) => void;
   deleteBar: (id: string) => void;
+  signInToGoogleDriveSync: () => Promise<boolean>;
+  signOutFromGoogleDriveSync: () => void;
+  syncWithGoogleDriveNow: () => Promise<boolean>;
 };
 
 export const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);

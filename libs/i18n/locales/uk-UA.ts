@@ -577,7 +577,15 @@ export const ukUATranslations: TranslationDictionary = {
     "Це відновить вбудовані коктейлі та інгредієнти.\nВаші власні коктейлі та інгредієнти залишаться без змін.",
   "sideMenu.exportUnavailableTitle": "Експорт недоступний",
   "sideMenu.exportUnavailableMessage": "Завантажте інвентар перед експортом.",
-  "sideMenu.backupUnavailableTitle": "Резервне копіювання недоступне",
+  
+  "sideMenu.cloudSync": "Хмарна синхронізація",
+  "sideMenu.cloudSyncSignIn": "Увійти в Google Drive",
+  "sideMenu.cloudSyncSignedIn": "Google Drive підключено",
+  "sideMenu.cloudSyncCaption": "Синхронізує бари, коктейлі, інгредієнти, рейтинги, шопінг і налаштування",
+  "sideMenu.cloudSyncAuto": "Автосинхронізація запускається при старті",
+  "sideMenu.cloudSyncing": "Синхронізація з Google Drive…",
+  "sideMenu.cloudSyncSignOut": "Вийти з хмарної синхронізації",
+"sideMenu.backupUnavailableTitle": "Резервне копіювання недоступне",
   "sideMenu.backupUnavailableMessage":
     "Завантажте інвентар перед створенням резервної копії.",
   "sideMenu.sharingUnavailableTitle": "Поширення недоступне",

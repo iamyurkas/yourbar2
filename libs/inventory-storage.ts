@@ -30,6 +30,10 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   onboardingStep?: number;
   onboardingCompleted?: boolean;
   onboardingStarterApplied?: boolean;
+  googleDriveAccessToken?: string;
+  googleDriveRefreshToken?: string;
+  googleDriveAccessTokenExpiresAt?: number;
+  googleDriveSyncEnabled?: boolean;
 };
 
 export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
@@ -68,6 +72,10 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   onboardingStep?: number;
   onboardingCompleted?: boolean;
   onboardingStarterApplied?: boolean;
+  googleDriveAccessToken?: string;
+  googleDriveRefreshToken?: string;
+  googleDriveAccessTokenExpiresAt?: number;
+  googleDriveSyncEnabled?: boolean;
 };
 
 
@@ -107,6 +115,10 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   onboardingStep?: number;
   onboardingCompleted?: boolean;
   onboardingStarterApplied?: boolean;
+  googleDriveAccessToken?: string;
+  googleDriveRefreshToken?: string;
+  googleDriveAccessTokenExpiresAt?: number;
+  googleDriveSyncEnabled?: boolean;
   translationOverrides?: unknown;
   bars?: Bar[];
   activeBarId?: string;

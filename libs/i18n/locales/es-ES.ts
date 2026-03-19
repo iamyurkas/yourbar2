@@ -567,7 +567,15 @@ export const esESTranslations: TranslationDictionary = {
     "Esto restaurará los cócteles e ingredientes incluidos.\nTus cócteles e ingredientes personalizados se mantendrán igual.",
   "sideMenu.exportUnavailableTitle": "Exportación no disponible",
   "sideMenu.exportUnavailableMessage": "Carga tu inventario antes de exportar.",
-  "sideMenu.backupUnavailableTitle": "Copia de seguridad no disponible",
+  
+  "sideMenu.cloudSync": "Sincronización en la nube",
+  "sideMenu.cloudSyncSignIn": "Iniciar sesión en Google Drive",
+  "sideMenu.cloudSyncSignedIn": "Google Drive conectado",
+  "sideMenu.cloudSyncCaption": "Sincroniza bares, cócteles, ingredientes, valoraciones, compras y ajustes",
+  "sideMenu.cloudSyncAuto": "La sincronización automática se ejecuta al iniciar",
+  "sideMenu.cloudSyncing": "Sincronizando con Google Drive…",
+  "sideMenu.cloudSyncSignOut": "Cerrar sesión de sincronización",
+"sideMenu.backupUnavailableTitle": "Copia de seguridad no disponible",
   "sideMenu.backupUnavailableMessage":
     "Carga tu inventario antes de hacer la copia de seguridad.",
   "sideMenu.sharingUnavailableTitle": "Compartir no disponible",

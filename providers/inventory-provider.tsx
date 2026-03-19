@@ -11,7 +11,15 @@ import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
   persistInventorySnapshot,
+  type InventorySnapshot,
 } from '@/libs/inventory-storage';
+import {
+  downloadAppDataJson,
+  ensureFreshGoogleAccessToken,
+  signInToGoogleDrive,
+  uploadAppDataJson,
+  type GoogleDriveTokens,
+} from '@/libs/google-drive-sync';
 import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
@@ -211,6 +219,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingStarterApplied, setOnboardingStarterApplied] = useState<boolean>(
     () => runtimeCache.onboardingStarterApplied ?? false,
   );
+  const [googleDriveTokens, setGoogleDriveTokens] = useState<GoogleDriveTokens | null>(null);
+  const [googleDriveSyncEnabled, setGoogleDriveSyncEnabled] = useState<boolean>(true);
+  const [isGoogleDriveSyncing, setIsGoogleDriveSyncing] = useState<boolean>(false);
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
@@ -334,6 +345,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
           const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
           const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
           const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
+          const nextGoogleDriveAccessToken = (stored as { googleDriveAccessToken?: string }).googleDriveAccessToken;
+          const nextGoogleDriveRefreshToken = (stored as { googleDriveRefreshToken?: string }).googleDriveRefreshToken;
+          const nextGoogleDriveAccessTokenExpiresAt = (stored as { googleDriveAccessTokenExpiresAt?: number }).googleDriveAccessTokenExpiresAt;
+          const nextGoogleDriveSyncEnabled = (stored as { googleDriveSyncEnabled?: boolean }).googleDriveSyncEnabled ?? true;
 
           let nextBars: Bar[] = castedStored.bars ?? [];
           let nextActiveBarId: string = castedStored.activeBarId ?? '';
@@ -375,6 +390,16 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             onboardingCompleted: nextOnboardingCompleted,
             onboardingStarterApplied: nextOnboardingStarterApplied,
           });
+          setGoogleDriveTokens(
+            nextGoogleDriveAccessToken
+              ? {
+                accessToken: nextGoogleDriveAccessToken,
+                refreshToken: nextGoogleDriveRefreshToken,
+                expiresAt: nextGoogleDriveAccessTokenExpiresAt,
+              }
+              : null,
+          );
+          setGoogleDriveSyncEnabled(nextGoogleDriveSyncEnabled);
           return;
         }
       } catch (error) {
@@ -416,6 +441,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             onboardingCompleted: false,
             onboardingStarterApplied: false,
           });
+          setGoogleDriveTokens(null);
+          setGoogleDriveSyncEnabled(true);
         }
       } catch (error) {
         console.error('Failed to import bundled inventory', error);
@@ -460,6 +487,148 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     });
   }, [activeBarId, availableIngredientIds, shoppingIngredientIds]);
 
+  const applyStoredSnapshot = useCallback((stored: InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>) => {
+    const castedStored = stored as any;
+    const nextInventoryState = rehydrateBuiltInTags(
+      createInventoryStateFromSnapshot(stored, baseInventoryData),
+      BUILTIN_COCKTAIL_TAGS,
+      BUILTIN_INGREDIENT_TAGS,
+    );
+    const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
+    const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
+    const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
+    const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
+    const nextPartySelectedCocktailKeys = sanitizePartySelectedCocktailKeys(
+      (stored as { partySelectedCocktailKeys?: string[] }).partySelectedCocktailKeys,
+    );
+    const nextAppLocale = sanitizeAppLocale(stored.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale;
+    let nextBars: Bar[] = castedStored.bars ?? [];
+    let nextActiveBarId: string = castedStored.activeBarId ?? '';
+    if (nextBars.length === 0) {
+      nextActiveBarId = Date.now().toString();
+      nextBars = [{
+        id: nextActiveBarId,
+        name: getDefaultBarName(nextAppLocale),
+        availableIngredientIds: toSortedArray(nextAvailableIds),
+        shoppingIngredientIds: toSortedArray(nextShoppingIds),
+      }];
+    }
+
+    applyInventoryBootstrap({
+      inventoryState: nextInventoryState,
+      availableIngredientIds: nextAvailableIds,
+      shoppingIngredientIds: nextShoppingIds,
+      ratingsByCocktailId: nextRatings,
+      commentsByCocktailId: nextComments,
+      partySelectedCocktailKeys: nextPartySelectedCocktailKeys,
+      ignoreGarnish: stored.ignoreGarnish ?? true,
+      allowAllSubstitutes: stored.allowAllSubstitutes ?? true,
+      useImperialUnits: (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits,
+      keepScreenAwake: stored.keepScreenAwake ?? true,
+      shakerSmartFilteringEnabled: stored.shakerSmartFilteringEnabled ?? false,
+      showTabCounters: stored.showTabCounters ?? false,
+      ratingFilterThreshold: Math.min(5, Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1))),
+      startScreen: sanitizeStartScreen(stored.startScreen, DEFAULT_START_SCREEN) as StartScreen,
+      appTheme: sanitizeAppTheme(stored.appTheme, DEFAULT_APP_THEME) as AppTheme,
+      appLocale: nextAppLocale,
+      translationOverrides: sanitizeTranslationOverrides<InventoryTranslationOverrides>(
+        (stored as { translationOverrides?: unknown }).translationOverrides,
+        isSupportedLocale,
+      ),
+      amazonStoreOverride: sanitizeAmazonStoreOverride(stored.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null,
+      customCocktailTags: sanitizeCustomTags(
+        'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
+        DEFAULT_TAG_COLOR,
+        compareGlobalAlphabet,
+      ),
+      customIngredientTags: sanitizeCustomTags(
+        'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
+        DEFAULT_TAG_COLOR,
+        compareGlobalAlphabet,
+      ),
+      bars: nextBars,
+      activeBarId: nextActiveBarId,
+      onboardingStep: Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1))),
+      onboardingCompleted: (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false,
+      onboardingStarterApplied: (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false,
+    });
+  }, [applyInventoryBootstrap, baseInventoryData, shouldDefaultToImperialUnits]);
+
+  const syncWithGoogleDriveNow = useCallback(async (): Promise<boolean> => {
+    if (!googleDriveTokens || !inventoryDelta) {
+      return false;
+    }
+
+    setIsGoogleDriveSyncing(true);
+    try {
+      const refreshedTokens = await ensureFreshGoogleAccessToken(googleDriveTokens);
+      setGoogleDriveTokens(refreshedTokens);
+
+      const remoteContents = await downloadAppDataJson(refreshedTokens.accessToken);
+      if (remoteContents) {
+        const remoteSnapshot = JSON.parse(remoteContents) as InventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>;
+        if (remoteSnapshot.version === INVENTORY_SNAPSHOT_VERSION || (remoteSnapshot as any).version === 2 || (remoteSnapshot as any).version === 1) {
+          applyStoredSnapshot(remoteSnapshot);
+        }
+      }
+
+      const snapshot = buildInventorySnapshot(inventoryDelta, {
+        availableIngredientIds,
+        shoppingIngredientIds,
+        ratingsByCocktailId,
+        commentsByCocktailId,
+        partySelectedCocktailKeys,
+        ignoreGarnish,
+        allowAllSubstitutes,
+        useImperialUnits,
+        keepScreenAwake,
+        shakerSmartFilteringEnabled,
+        showTabCounters,
+        ratingFilterThreshold,
+        startScreen,
+        appTheme,
+        appLocale,
+        translationOverrides,
+        amazonStoreOverride,
+        customCocktailTags,
+        customIngredientTags,
+        bars,
+        activeBarId,
+        onboardingStep,
+        onboardingCompleted,
+        onboardingStarterApplied,
+        googleDriveAccessToken: refreshedTokens.accessToken,
+        googleDriveRefreshToken: refreshedTokens.refreshToken,
+        googleDriveAccessTokenExpiresAt: refreshedTokens.expiresAt,
+        googleDriveSyncEnabled,
+      });
+      await uploadAppDataJson(refreshedTokens.accessToken, JSON.stringify(snapshot));
+      return true;
+    } catch (error) {
+      console.error('Google Drive sync failed', error);
+      return false;
+    } finally {
+      setIsGoogleDriveSyncing(false);
+    }
+  }, [googleDriveTokens, inventoryDelta, applyStoredSnapshot, availableIngredientIds, shoppingIngredientIds, ratingsByCocktailId, commentsByCocktailId, partySelectedCocktailKeys, ignoreGarnish, allowAllSubstitutes, useImperialUnits, keepScreenAwake, shakerSmartFilteringEnabled, showTabCounters, ratingFilterThreshold, startScreen, appTheme, appLocale, translationOverrides, amazonStoreOverride, customCocktailTags, customIngredientTags, bars, activeBarId, onboardingStep, onboardingCompleted, onboardingStarterApplied, googleDriveSyncEnabled]);
+
+  const signInToGoogleDriveSync = useCallback(async (): Promise<boolean> => {
+    try {
+      const tokens = await signInToGoogleDrive();
+      setGoogleDriveTokens(tokens);
+      setGoogleDriveSyncEnabled(true);
+      return await syncWithGoogleDriveNow();
+    } catch (error) {
+      console.error('Google Drive sign-in failed', error);
+      return false;
+    }
+  }, [syncWithGoogleDriveNow]);
+
+  const signOutFromGoogleDriveSync = useCallback(() => {
+    setGoogleDriveTokens(null);
+    setGoogleDriveSyncEnabled(false);
+  }, []);
+
   useEffect(() => {
     if (!inventoryState || !inventoryDelta) {
       return;
@@ -491,6 +660,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      googleDriveAccessToken: googleDriveTokens?.accessToken,
+      googleDriveRefreshToken: googleDriveTokens?.refreshToken,
+      googleDriveAccessTokenExpiresAt: googleDriveTokens?.expiresAt,
+      googleDriveSyncEnabled,
     });
 
     const snapshot = buildInventorySnapshot(inventoryDelta, {
@@ -518,6 +691,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      googleDriveAccessToken: googleDriveTokens?.accessToken,
+      googleDriveRefreshToken: googleDriveTokens?.refreshToken,
+      googleDriveAccessTokenExpiresAt: googleDriveTokens?.expiresAt,
+      googleDriveSyncEnabled,
     });
     const serialized = JSON.stringify(snapshot);
 
@@ -557,7 +734,19 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     onboardingStep,
     onboardingCompleted,
     onboardingStarterApplied,
+    googleDriveTokens,
+    googleDriveSyncEnabled,
   ]);
+
+  useEffect(() => {
+    if (!inventoryState || !googleDriveTokens || !googleDriveSyncEnabled) {
+      return;
+    }
+
+    void syncWithGoogleDriveNow();
+    // run once when app finishes bootstrap if signed in
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inventoryState, googleDriveTokens, googleDriveSyncEnabled]);
 
   const cocktails = useMemo(
     () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
@@ -2581,6 +2770,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      googleDriveSyncEnabled,
+      googleDriveSyncSignedIn: Boolean(googleDriveTokens?.accessToken),
+      isGoogleDriveSyncing,
     }),
     [
       ignoreGarnish,
@@ -2602,6 +2794,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      googleDriveSyncEnabled,
+      googleDriveTokens,
+      isGoogleDriveSyncing,
     ],
   );
 
@@ -2649,6 +2844,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       createBar: handleCreateBar,
       updateBar: handleUpdateBar,
       deleteBar: handleDeleteBar,
+      signInToGoogleDriveSync,
+      signOutFromGoogleDriveSync,
+      syncWithGoogleDriveNow,
     }),
     [
       setIngredientAvailability,
@@ -2693,6 +2891,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleCreateBar,
       handleUpdateBar,
       handleDeleteBar,
+      signInToGoogleDriveSync,
+      signOutFromGoogleDriveSync,
+      syncWithGoogleDriveNow,
     ],
   );
 

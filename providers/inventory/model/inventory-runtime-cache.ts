@@ -34,6 +34,10 @@ export type InventoryRuntimeCache = {
   onboardingStep: number | undefined;
   onboardingCompleted: boolean | undefined;
   onboardingStarterApplied: boolean | undefined;
+  googleDriveAccessToken?: string;
+  googleDriveRefreshToken?: string;
+  googleDriveAccessTokenExpiresAt?: number;
+  googleDriveSyncEnabled?: boolean;
 };
 
 declare global {

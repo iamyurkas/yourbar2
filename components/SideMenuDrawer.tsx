@@ -4,13 +4,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system/legacy";
 import { Image, type ImageSource } from "expo-image";
 import * as Sharing from "expo-sharing";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ComponentProps,
-} from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentProps } from "react";
 import {
   Animated,
   Dimensions,
@@ -171,6 +165,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     createBar,
     updateBar,
     deleteBar,
+    googleDriveSyncSignedIn,
+    isGoogleDriveSyncing,
+    signInToGoogleDriveSync,
+    signOutFromGoogleDriveSync,
+    syncWithGoogleDriveNow,
   } = useInventory();
   const Colors = useAppColors();
   const insets = useSafeAreaInsets();
@@ -433,6 +432,24 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleBackupRestorePress = () => {
     setBackupRestoreModalVisible(true);
+  };
+
+  const handleGoogleDriveSignIn = async () => {
+    const success = await signInToGoogleDriveSync();
+    if (!success) {
+      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
+    }
+  };
+
+  const handleGoogleDriveSyncNow = async () => {
+    const success = await syncWithGoogleDriveNow();
+    if (!success) {
+      showDialogMessage(t("common.error"), t("common.tryAgainLater"));
+    }
+  };
+
+  const handleGoogleDriveSignOut = () => {
+    signOutFromGoogleDriveSync();
   };
 
   const handleLanguagePress = () => {
@@ -1152,6 +1169,47 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("sideMenu.cloudSync")}
+              onPress={googleDriveSyncSignedIn ? handleGoogleDriveSyncNow : handleGoogleDriveSignIn}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name={googleDriveSyncSignedIn ? "google-drive" : "login"}
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  {googleDriveSyncSignedIn ? t("sideMenu.cloudSyncSignedIn") : t("sideMenu.cloudSyncSignIn")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {isGoogleDriveSyncing
+                    ? t("sideMenu.cloudSyncing")
+                    : (googleDriveSyncSignedIn ? t("sideMenu.cloudSyncAuto") : t("sideMenu.cloudSyncCaption"))}
+                </Text>
+              </View>
+              {googleDriveSyncSignedIn ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t("sideMenu.cloudSyncSignOut")}
+                  onPress={handleGoogleDriveSignOut}
+                  hitSlop={8}
+                >
+                  <MaterialCommunityIcons name="logout" size={18} color={Colors.onSurfaceVariant} />
+                </Pressable>
+              ) : (
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  size={20}
+                  color={Colors.onSurfaceVariant}
+                />
+              )}
+            </Pressable>
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageBars")}

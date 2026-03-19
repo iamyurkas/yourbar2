@@ -579,7 +579,15 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.exportUnavailableTitle": "Export nicht verfügbar",
   "sideMenu.exportUnavailableMessage":
     "Laden Sie Ihr Inventar, bevor Sie es exportieren.",
-  "sideMenu.backupUnavailableTitle": "Sicherung nicht verfügbar",
+  
+  "sideMenu.cloudSync": "Cloud-Sync",
+  "sideMenu.cloudSyncSignIn": "Bei Google Drive anmelden",
+  "sideMenu.cloudSyncSignedIn": "Google Drive verbunden",
+  "sideMenu.cloudSyncCaption": "Synchronisiert Bars, Cocktails, Zutaten, Bewertungen, Einkauf und Einstellungen",
+  "sideMenu.cloudSyncAuto": "Auto-Sync läuft beim App-Start",
+  "sideMenu.cloudSyncing": "Synchronisiere mit Google Drive…",
+  "sideMenu.cloudSyncSignOut": "Von Cloud-Sync abmelden",
+"sideMenu.backupUnavailableTitle": "Sicherung nicht verfügbar",
   "sideMenu.backupUnavailableMessage":
     "Laden Sie Ihr Inventar, bevor Sie Daten sichern.",
   "sideMenu.sharingUnavailableTitle": "Teilen nicht verfügbar",

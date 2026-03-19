@@ -169,6 +169,10 @@ export type InventorySnapshotOptions = {
   onboardingStep: number;
   onboardingCompleted: boolean;
   onboardingStarterApplied: boolean;
+  googleDriveAccessToken?: string;
+  googleDriveRefreshToken?: string;
+  googleDriveAccessTokenExpiresAt?: number;
+  googleDriveSyncEnabled: boolean;
 };
 
 export function toSortedArray(values: Iterable<number>): number[] {
@@ -270,5 +274,9 @@ export function buildInventorySnapshot(
     onboardingStep: options.onboardingStep,
     onboardingCompleted: options.onboardingCompleted,
     onboardingStarterApplied: options.onboardingStarterApplied,
+    googleDriveAccessToken: options.googleDriveAccessToken,
+    googleDriveRefreshToken: options.googleDriveRefreshToken,
+    googleDriveAccessTokenExpiresAt: options.googleDriveAccessTokenExpiresAt,
+    googleDriveSyncEnabled: options.googleDriveSyncEnabled,
   } satisfies InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
 }

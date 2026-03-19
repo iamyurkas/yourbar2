@@ -22,6 +22,9 @@ export type InventorySettingsContextValue = {
   onboardingStep: number;
   onboardingCompleted: boolean;
   onboardingStarterApplied: boolean;
+  googleDriveSyncEnabled: boolean;
+  googleDriveSyncSignedIn: boolean;
+  isGoogleDriveSyncing: boolean;
 };
 
 export const InventorySettingsContext = createContext<InventorySettingsContextValue | undefined>(undefined);

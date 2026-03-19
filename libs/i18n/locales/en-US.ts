@@ -569,7 +569,15 @@ export const enUSTranslations: TranslationDictionary = {
     "This will restore the bundled cocktails and ingredients.\nYour custom cocktails and ingredients will stay the same.",
   "sideMenu.exportUnavailableTitle": "Export unavailable",
   "sideMenu.exportUnavailableMessage": "Load your inventory before exporting.",
-  "sideMenu.backupUnavailableTitle": "Backup unavailable",
+  
+  "sideMenu.cloudSync": "Cloud sync",
+  "sideMenu.cloudSyncSignIn": "Sign in to Google Drive",
+  "sideMenu.cloudSyncSignedIn": "Google Drive connected",
+  "sideMenu.cloudSyncCaption": "Sync all bars, cocktails, ingredients, ratings, shopping and settings",
+  "sideMenu.cloudSyncAuto": "Auto-sync runs on app launch",
+  "sideMenu.cloudSyncing": "Syncing with Google Drive…",
+  "sideMenu.cloudSyncSignOut": "Sign out from cloud sync",
+"sideMenu.backupUnavailableTitle": "Backup unavailable",
   "sideMenu.backupUnavailableMessage":
     "Load your inventory before backing up data.",
   "sideMenu.sharingUnavailableTitle": "Sharing unavailable",
