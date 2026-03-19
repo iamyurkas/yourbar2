@@ -51,12 +51,6 @@ function getPlatformClientId(): { clientId: string; source: "default" | "android
     if (androidClient) {
       return { clientId: androidClient, source: "android" };
     }
-    if (fallback) {
-      return { clientId: fallback, source: "default" };
-    }
-    if (webClient) {
-      return { clientId: webClient, source: "web" };
-    }
     return null;
   }
 
