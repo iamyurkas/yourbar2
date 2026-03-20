@@ -1207,12 +1207,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               onPress={handleGoogleDrivePrimaryPress}
               style={[styles.settingRow, SURFACE_ROW_STYLE]}
             >
-              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
-                <MaterialCommunityIcons
-                  name="google-drive"
-                  size={16}
-                  color={Colors.tint}
-                />
+              <View style={[styles.checkbox, googleDriveAccount?.photoUrl ? styles.googleDriveAvatarContainer : null, SURFACE_ICON_STYLE]}>
+                {googleDriveAccount?.photoUrl ? (
+                  <Image
+                    source={{ uri: googleDriveAccount.photoUrl }}
+                    style={styles.googleDriveAvatar}
+                    contentFit="cover"
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="google-drive"
+                    size={16}
+                    color={Colors.tint}
+                  />
+                )}
               </View>
               <View style={styles.settingTextContainer}>
                 <Text
@@ -3045,6 +3053,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: "center",
     justifyContent: "center",
+  },
+  googleDriveAvatarContainer: {
+    borderRadius: 999,
+    overflow: "hidden",
+    borderWidth: 0,
+  },
+  googleDriveAvatar: {
+    width: "100%",
+    height: "100%",
   },
   settingTextContainer: {
     flex: 1,
