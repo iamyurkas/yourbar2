@@ -410,8 +410,12 @@ export const deDETranslations: TranslationDictionary = {
     "Es befinden sich noch keine Zutaten auf Ihrer\nEinkaufsliste.",
   "ingredients.emptyList": "Keine Zutaten in der Liste",
   "ingredients.makeCount.one": "{{count}} Cocktail zubereiten",
+  "ingredients.makeCount.few": "{{count}} Cocktails zubereiten",
+  "ingredients.makeCount.many": "{{count}} Cocktails zubereiten",
   "ingredients.makeCount.other": "{{count}} Cocktails zubereiten",
   "ingredients.recipeCount.one": "{{count}} Rezept",
+  "ingredients.recipeCount.few": "{{count}} Rezepte",
+  "ingredients.recipeCount.many": "{{count}} Rezepte",
   "ingredients.recipeCount.other": "{{count}} Rezepte",
   "ingredients.helpAllFullText":
     "Dieser Bildschirm zeigt alle Zutaten in der App.\n\nNutzen Sie die Suche, wechseln Sie zwischen den Tabs und filtern Sie nach Tags.\n\nTippen Sie auf ein Kontrollkästchen, um die Verfügbarkeit zu markieren.",
@@ -485,6 +489,7 @@ export const deDETranslations: TranslationDictionary = {
 
   "tagEditor.tagName": "Tag-Name",
   "tagEditor.newTag": "Neuer Tag",
+  "tagEditor.editTag": "Tag bearbeiten",
   "tagEditor.color": "Farbe",
 
   "tags.unnamed": "Unbenannter Tag",
