@@ -45,6 +45,15 @@ const LAST_SYNC_ERROR_KEY = 'google_drive_last_sync_error';
 const SYNC_REVISION_KEY = 'google_drive_sync_revision';
 const SYNC_TIMEOUT_MS = 20000;
 
+function logSync(step: string, details?: Record<string, unknown>) {
+  const timestamp = new Date().toISOString();
+  if (details) {
+    console.log(`[GoogleDriveSyncProvider][${timestamp}] ${step}`, details);
+    return;
+  }
+  console.log(`[GoogleDriveSyncProvider][${timestamp}] ${step}`);
+}
+
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -172,31 +181,47 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   }, []);
 
   const performSync = useCallback(async (mode: 'push' | 'pull') => {
+    logSync('performSync:requested', { mode });
     if (syncInFlightRef.current) {
+      logSync('performSync:skipped_in_flight', { mode });
       return syncInFlightRef.current;
     }
 
     if (loading) {
+      logSync('performSync:skipped_loading', { mode });
       return;
     }
 
     const snapshot = exportInventorySyncState();
     if (!snapshot) {
+      logSync('performSync:skipped_no_snapshot', { mode });
       return;
     }
 
     const syncPromise = (async () => {
+      logSync('performSync:start', { mode });
       setStatus('syncing');
       const accessToken = await withTimeout(getGoogleDriveAccessToken(), SYNC_TIMEOUT_MS);
       const deviceId = await withTimeout(getDeviceId(), SYNC_TIMEOUT_MS);
       const appVersion = getAppVersion();
       const syncRevision = Number(await SecureStore.getItemAsync(SYNC_REVISION_KEY) ?? '0');
+      logSync('performSync:context_ready', {
+        mode,
+        deviceId,
+        appVersion,
+        syncRevision,
+      });
 
       if (mode === 'pull') {
         const remoteFile = await withTimeout(
           readGoogleDriveSnapshot<InventorySyncStateSnapshot>(accessToken),
           SYNC_TIMEOUT_MS,
         );
+        logSync('performSync:pull_remote_result', {
+          hasRemoteFile: Boolean(remoteFile),
+          remoteRevision: remoteFile?.envelope?.syncRevision ?? null,
+          remoteExportedAt: remoteFile?.envelope?.exportedAt ?? null,
+        });
         if (remoteFile?.envelope?.snapshot) {
           const localEnvelope = createSyncEnvelope({
             snapshot,
@@ -206,14 +231,21 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
           });
 
           if (shouldUseRemote(remoteFile.envelope, localEnvelope)) {
+            logSync('performSync:pull_applying_remote_snapshot', {
+              remoteRevision: remoteFile.envelope.syncRevision,
+            });
             importInventorySyncState(remoteFile.envelope.snapshot);
             lastFingerprintRef.current = JSON.stringify(remoteFile.envelope.snapshot);
             await SecureStore.setItemAsync(SYNC_REVISION_KEY, String(remoteFile.envelope.syncRevision));
+          }
+          else {
+            logSync('performSync:pull_kept_local_snapshot');
           }
         }
 
         const completedAt = new Date().toISOString();
         await persistSyncState(completedAt, null);
+        logSync('performSync:pull_success', { completedAt });
         setDiagnostics(null);
         return;
       }
@@ -228,12 +260,18 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
       await withTimeout(upsertGoogleDriveSnapshot({ accessToken, envelope }), SYNC_TIMEOUT_MS);
       await SecureStore.setItemAsync(SYNC_REVISION_KEY, String(nextRevision));
+      logSync('performSync:push_uploaded', {
+        nextRevision,
+        exportedAt: envelope.exportedAt,
+      });
 
       const completedAt = new Date().toISOString();
       await persistSyncState(completedAt, null);
+      logSync('performSync:push_success', { completedAt });
       setDiagnostics(null);
     })()
       .finally(() => {
+        logSync('performSync:finished', { mode });
         setStatus('idle');
         syncInFlightRef.current = null;
       });
@@ -243,9 +281,14 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   }, [exportInventorySyncState, importInventorySyncState, loading, persistSyncState]);
 
   const syncNow = useCallback(async () => {
+    logSync('syncNow:requested');
     try {
       await performSync('push');
     } catch (error) {
+      logSync('syncNow:error', {
+        errorType: error instanceof Error ? error.name : typeof error,
+        message: error instanceof Error ? error.message : String(error),
+      });
       const message = mapSyncErrorToUserMessage(error, 'push');
       await persistSyncState(lastSyncAt, message);
       setDiagnostics(buildDiagnostics(error, 'push'));
@@ -257,9 +300,14 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   }, [lastSyncAt, performSync, persistSyncState]);
 
   const restoreFromCloud = useCallback(async () => {
+    logSync('restoreFromCloud:requested');
     try {
       await performSync('pull');
     } catch (error) {
+      logSync('restoreFromCloud:error', {
+        errorType: error instanceof Error ? error.name : typeof error,
+        message: error instanceof Error ? error.message : String(error),
+      });
       const message = mapSyncErrorToUserMessage(error, 'pull');
       await persistSyncState(lastSyncAt, message);
       setDiagnostics(buildDiagnostics(error, 'pull'));
@@ -268,16 +316,19 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   }, [lastSyncAt, performSync, persistSyncState]);
 
   const signIn = useCallback(async () => {
+    logSync('signIn:requested');
     setStatus('signing_in');
     setErrorMessage(null);
 
     try {
       const session = await signInToGoogleDrive();
+      logSync('signIn:success', { email: session.email });
       setAccount(session);
       setStatus('idle');
       await performSync('pull');
     } catch (error) {
       if (isGoogleSignInCancelled(error)) {
+        logSync('signIn:cancelled');
         setStatus('idle');
         return;
       }
@@ -292,10 +343,14 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
       setStatus('error');
       setErrorMessage('Google sign-in failed. Please try again.');
       setDiagnostics(buildDiagnostics(error, 'pull'));
+      logSync('signIn:error', {
+        message: error instanceof Error ? error.message : String(error),
+      });
     }
   }, [performSync]);
 
   const signOut = useCallback(async () => {
+    logSync('signOut:requested');
     await signOutFromGoogleDrive();
     setAccount(null);
     setStatus('idle');
@@ -305,10 +360,13 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
   useEffect(() => {
     void (async () => {
+      logSync('bootstrap:start');
       let session: GoogleDriveSession | null = null;
       try {
         configureGoogleDriveSignIn();
+        logSync('bootstrap:configured_signin');
         session = await getGoogleDriveSession();
+        logSync('bootstrap:session_loaded', { hasSession: Boolean(session) });
       } catch (error) {
         if (isGoogleSignInUnavailable(error)) {
           setErrorMessage('Google sign-in requires a native development/production build (not Expo Go).');
@@ -326,14 +384,17 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
       setErrorMessage(storedError ?? null);
 
       if (session) {
+        logSync('bootstrap:initial_pull');
         await performSync('pull');
       }
+      logSync('bootstrap:done');
     })();
   }, [performSync]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active' && account) {
+        logSync('appState:active_trigger_pull');
         void performSync('pull').catch(() => undefined);
       }
     });
@@ -355,6 +416,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
     const nextFingerprint = JSON.stringify(snapshot);
     if (lastFingerprintRef.current === nextFingerprint) {
+      logSync('autoPush:skipped_same_fingerprint');
       return;
     }
 
@@ -365,6 +427,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     }
 
     pushDebounceRef.current = setTimeout(() => {
+      logSync('autoPush:debounced_sync');
       void syncNow();
     }, 2000);
 

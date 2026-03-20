@@ -18,6 +18,15 @@ export class GoogleDriveSyncError extends Error {
   }
 }
 
+function logDrive(step: string, details?: Record<string, unknown>) {
+  const timestamp = new Date().toISOString();
+  if (details) {
+    console.log(`[GoogleDriveSync][${timestamp}] ${step}`, details);
+    return;
+  }
+  console.log(`[GoogleDriveSync][${timestamp}] ${step}`);
+}
+
 export type GoogleDriveSyncEnvelope<TSnapshot> = {
   schemaVersion: number;
   exportedAt: string;
@@ -61,9 +70,24 @@ function createAuthHeaders(accessToken: string): Record<string, string> {
 }
 
 async function fetchJson<T>(input: string, init: RequestInit, operation: string): Promise<T> {
+  logDrive('request:start', {
+    operation,
+    method: init.method ?? 'GET',
+    url: input,
+  });
   const response = await fetch(input, init);
+  logDrive('request:response', {
+    operation,
+    status: response.status,
+    ok: response.ok,
+  });
   if (!response.ok) {
     const message = await response.text();
+    logDrive('request:error', {
+      operation,
+      status: response.status,
+      bodyPreview: message.slice(0, 300),
+    });
     throw new GoogleDriveSyncError({
       message: `Google Drive request failed (${response.status}).`,
       operation,
@@ -97,6 +121,7 @@ export function createSyncEnvelope<TSnapshot>(params: {
 export async function findGoogleDriveSyncFile(accessToken: string): Promise<{ id: string; modifiedTime: string } | null> {
   const query = encodeURIComponent("name='yourbar-sync.json' and 'appDataFolder' in parents and trashed=false");
   const url = `${DRIVE_API_BASE_URL}?spaces=appDataFolder&fields=files(id,name,modifiedTime)&pageSize=1&q=${query}`;
+  logDrive('findFile:start');
   const response = await fetchJson<{ files?: Array<{ id: string; modifiedTime: string }> }>(url, {
     method: 'GET',
     headers: createAuthHeaders(accessToken),
@@ -104,8 +129,14 @@ export async function findGoogleDriveSyncFile(accessToken: string): Promise<{ id
 
   const file = response.files?.[0];
   if (!file) {
+    logDrive('findFile:not_found');
     return null;
   }
+
+  logDrive('findFile:found', {
+    fileId: file.id,
+    modifiedTime: file.modifiedTime,
+  });
 
   return {
     id: file.id,
@@ -114,8 +145,10 @@ export async function findGoogleDriveSyncFile(accessToken: string): Promise<{ id
 }
 
 export async function readGoogleDriveSnapshot<TSnapshot>(accessToken: string): Promise<RemoteSyncFile<TSnapshot> | null> {
+  logDrive('readFile:start');
   const file = await findGoogleDriveSyncFile(accessToken);
   if (!file) {
+    logDrive('readFile:skipped_no_file');
     return null;
   }
 
@@ -125,6 +158,10 @@ export async function readGoogleDriveSnapshot<TSnapshot>(accessToken: string): P
     headers: createAuthHeaders(accessToken),
   }, 'readFile');
 
+  logDrive('readFile:success', {
+    fileId: file.id,
+    modifiedTime: file.modifiedTime,
+  });
   return {
     fileId: file.id,
     modifiedTime: file.modifiedTime,
@@ -136,8 +173,14 @@ export async function upsertGoogleDriveSnapshot<TSnapshot>(params: {
   accessToken: string;
   envelope: GoogleDriveSyncEnvelope<TSnapshot>;
 }): Promise<void> {
+  logDrive('upsert:start');
   const { accessToken, envelope } = params;
   const existing = await findGoogleDriveSyncFile(accessToken);
+  logDrive('upsert:mode', {
+    mode: existing ? 'update' : 'create',
+    syncRevision: envelope.syncRevision,
+    exportedAt: envelope.exportedAt,
+  });
 
   const metadata = existing
     ? { name: GOOGLE_DRIVE_SYNC_FILENAME }
@@ -172,6 +215,10 @@ export async function upsertGoogleDriveSnapshot<TSnapshot>(params: {
 
   if (!response.ok) {
     const message = await response.text();
+    logDrive('upsert:error', {
+      status: response.status,
+      bodyPreview: message.slice(0, 300),
+    });
     throw new GoogleDriveSyncError({
       message: `Failed to upload sync snapshot (${response.status}).`,
       operation: existing ? 'updateFile' : 'createFile',
@@ -179,4 +226,9 @@ export async function upsertGoogleDriveSnapshot<TSnapshot>(params: {
       responseBody: message,
     });
   }
+
+  logDrive('upsert:success', {
+    status: response.status,
+    mode: existing ? 'update' : 'create',
+  });
 }
