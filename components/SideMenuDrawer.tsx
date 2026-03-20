@@ -186,7 +186,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     signIn: signInToGoogleDrive,
     signOut: signOutFromGoogleDrive,
     syncNow: syncGoogleDriveNow,
-    restoreFromCloud: restoreGoogleDriveFromCloud,
   } = useGoogleDriveSync();
   const [isMounted, setIsMounted] = useState(visible);
   const [isStartScreenModalVisible, setStartScreenModalVisible] =
@@ -451,8 +450,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     void signInToGoogleDrive();
   };
 
-  const handleGoogleDriveRestorePress = () => {
-    void restoreGoogleDriveFromCloud();
+  const handleGoogleDriveSyncPress = () => {
+    void syncGoogleDriveNow();
   };
 
   const handleGoogleDriveSignOutPress = () => {
@@ -1252,12 +1251,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.googleDriveActions}>
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={t("sideMenu.googleDriveRestore")}
-                  onPress={handleGoogleDriveRestorePress}
+                  accessibilityLabel={t("sideMenu.googleDriveSync")}
+                  onPress={handleGoogleDriveSyncPress}
                   style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
                 >
                   <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurface }]}>
-                    {t("sideMenu.googleDriveRestore")}
+                    {t("sideMenu.googleDriveSync")}
                   </Text>
                 </Pressable>
                 <Pressable

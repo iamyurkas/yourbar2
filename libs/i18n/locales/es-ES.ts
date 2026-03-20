@@ -783,7 +783,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.googleDriveSignIn": "Sign in with Google",
   "sideMenu.googleDriveSignInCaption": "Sync your bar data across devices",
   "sideMenu.googleDriveSyncNow": "Sync now",
-  "sideMenu.googleDriveRestore": "Restore from cloud",
+  "sideMenu.googleDriveSync": "Sync",
   "sideMenu.googleDriveSignOut": "Sign out",
   "sideMenu.googleDriveStatusIdle": "Ready to sync",
   "sideMenu.googleDriveStatusSyncing": "Syncing with Google Drive…",

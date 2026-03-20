@@ -302,7 +302,9 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   const syncNow = useCallback(async () => {
     logSync('syncNow:requested');
     try {
+      await performSync('pull');
       await performSync('push');
+      logSync('syncNow:completed_bidirectional');
     } catch (error) {
       logSync('syncNow:error', {
         errorType: error instanceof Error ? error.name : typeof error,
@@ -322,6 +324,8 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     logSync('restoreFromCloud:requested');
     try {
       await performSync('pull');
+      await performSync('push');
+      logSync('restoreFromCloud:completed_bidirectional');
     } catch (error) {
       logSync('restoreFromCloud:error', {
         errorType: error instanceof Error ? error.name : typeof error,
