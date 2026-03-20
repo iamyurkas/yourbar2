@@ -565,8 +565,9 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
       setErrorMessage(storedError ?? null);
 
       if (session) {
-        logSync('bootstrap:initial_pull');
+        logSync('bootstrap:initial_sync');
         await performSyncRef.current?.('pull');
+        await performSyncRef.current?.('push');
       }
       logSync('bootstrap:done');
     })();
