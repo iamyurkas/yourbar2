@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 const GOOGLE_DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
 const SECURE_EMAIL_KEY = 'google_drive_sync_email';
@@ -36,6 +36,10 @@ type GoogleSigninModule = {
 
 function loadGoogleSigninModule(): GoogleSigninModule | null {
   if (Platform.OS === 'web') {
+    return null;
+  }
+
+  if (!(NativeModules as Record<string, unknown>).RNGoogleSignin) {
     return null;
   }
 
