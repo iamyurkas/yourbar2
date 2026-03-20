@@ -183,6 +183,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     lastSyncAt: googleDriveLastSyncAt,
     errorMessage: googleDriveErrorMessage,
     signIn: signInToGoogleDrive,
+    signOut: signOutFromGoogleDrive,
     syncNow: syncGoogleDriveNow,
   } = useGoogleDriveSync();
   const [isMounted, setIsMounted] = useState(visible);
@@ -450,6 +451,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleGoogleDriveSyncPress = () => {
     void syncGoogleDriveNow();
+  };
+
+  const handleGoogleDriveSignOutPress = () => {
+    void signOutFromGoogleDrive();
   };
 
   const handleStartScreenPress = () => {
@@ -1228,7 +1233,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {googleDriveSyncCaption}
                 </Text>
               </View>
-              <Pressable onPress={googleDriveAccount ? handleGoogleDriveSyncPress : handleGoogleDrivePrimaryPress}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={googleDriveAccount ? t("sideMenu.googleDriveSignOut") : t("sideMenu.googleDriveSignIn")}
+                onPress={(event) => {
+                  event.stopPropagation();
+
+                  if (googleDriveAccount) {
+                    handleGoogleDriveSignOutPress();
+                    return;
+                  }
+
+                  handleGoogleDrivePrimaryPress();
+                }}
+              >
                 <MaterialCommunityIcons
                   name={googleDriveAccount ? "logout" : "chevron-right"}
                   size={20}
