@@ -515,6 +515,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           {
             label: t("common.delete"),
             variant: "destructive",
+            disableOnPress: true,
             onPress: () => {
               deleteBar(bar.id);
             },
