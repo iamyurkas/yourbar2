@@ -1,4 +1,22 @@
 export const GOOGLE_DRIVE_SYNC_FILENAME = 'yourbar-sync.json';
+export class GoogleDriveSyncError extends Error {
+  status?: number;
+  operation: string;
+  responseBody?: string;
+
+  constructor(params: {
+    message: string;
+    operation: string;
+    status?: number;
+    responseBody?: string;
+  }) {
+    super(params.message);
+    this.name = 'GoogleDriveSyncError';
+    this.operation = params.operation;
+    this.status = params.status;
+    this.responseBody = params.responseBody;
+  }
+}
 
 export type GoogleDriveSyncEnvelope<TSnapshot> = {
   schemaVersion: number;
@@ -42,11 +60,16 @@ function createAuthHeaders(accessToken: string): Record<string, string> {
   };
 }
 
-async function fetchJson<T>(input: string, init: RequestInit): Promise<T> {
+async function fetchJson<T>(input: string, init: RequestInit, operation: string): Promise<T> {
   const response = await fetch(input, init);
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(`Google Drive request failed (${response.status}): ${message}`);
+    throw new GoogleDriveSyncError({
+      message: `Google Drive request failed (${response.status}).`,
+      operation,
+      status: response.status,
+      responseBody: message,
+    });
   }
 
   return response.json() as Promise<T>;
@@ -77,7 +100,7 @@ export async function findGoogleDriveSyncFile(accessToken: string): Promise<{ id
   const response = await fetchJson<{ files?: Array<{ id: string; modifiedTime: string }> }>(url, {
     method: 'GET',
     headers: createAuthHeaders(accessToken),
-  });
+  }, 'findFile');
 
   const file = response.files?.[0];
   if (!file) {
@@ -100,7 +123,7 @@ export async function readGoogleDriveSnapshot<TSnapshot>(accessToken: string): P
   const envelope = await fetchJson<GoogleDriveSyncEnvelope<TSnapshot>>(downloadUrl, {
     method: 'GET',
     headers: createAuthHeaders(accessToken),
-  });
+  }, 'readFile');
 
   return {
     fileId: file.id,
@@ -149,6 +172,11 @@ export async function upsertGoogleDriveSnapshot<TSnapshot>(params: {
 
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(`Failed to upload sync snapshot (${response.status}): ${message}`);
+    throw new GoogleDriveSyncError({
+      message: `Failed to upload sync snapshot (${response.status}).`,
+      operation: existing ? 'updateFile' : 'createFile',
+      status: response.status,
+      responseBody: message,
+    });
   }
 }

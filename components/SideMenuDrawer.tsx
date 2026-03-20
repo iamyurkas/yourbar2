@@ -182,6 +182,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     status: googleDriveStatus,
     lastSyncAt: googleDriveLastSyncAt,
     errorMessage: googleDriveErrorMessage,
+    diagnostics: googleDriveDiagnostics,
     signIn: signInToGoogleDrive,
     signOut: signOutFromGoogleDrive,
     syncNow: syncGoogleDriveNow,
@@ -456,6 +457,21 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleGoogleDriveSignOutPress = () => {
     void signOutFromGoogleDrive();
+  };
+
+  const handleGoogleDriveDiagnosticsPress = () => {
+    if (!googleDriveDiagnostics) {
+      showDialogMessage(
+        t("sideMenu.googleDriveDebugTitle"),
+        t("sideMenu.googleDriveDebugEmpty"),
+      );
+      return;
+    }
+
+    showDialogMessage(
+      t("sideMenu.googleDriveDebugTitle"),
+      googleDriveDiagnostics,
+    );
   };
 
 
@@ -1223,11 +1239,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {googleDriveSyncCaption}
                 </Text>
               </View>
-              <MaterialCommunityIcons
-                name={googleDriveAccount ? "sync" : "chevron-right"}
-                size={20}
-                color={Colors.onSurfaceVariant}
-              />
+              <Pressable onPress={handleGoogleDriveDiagnosticsPress}>
+                <MaterialCommunityIcons
+                  name={googleDriveAccount ? "sync" : "chevron-right"}
+                  size={20}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
             </Pressable>
 
             {googleDriveAccount ? (

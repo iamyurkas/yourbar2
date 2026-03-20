@@ -788,4 +788,6 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.googleDriveStatusIdle": "Ready to sync",
   "sideMenu.googleDriveStatusSyncing": "Syncing with Google Drive…",
   "sideMenu.googleDriveLastSynced": "Last synced: {{value}}",
+  "sideMenu.googleDriveDebugTitle": "Google Drive sync details",
+  "sideMenu.googleDriveDebugEmpty": "No diagnostic details are available yet.",
 };
