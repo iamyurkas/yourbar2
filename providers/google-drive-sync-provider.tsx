@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import * as Application from 'expo-application';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as SecureStore from 'expo-secure-store';
 import { AppState } from 'react-native';
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -44,6 +45,7 @@ const LAST_SYNC_KEY = 'google_drive_last_sync_at';
 const LAST_SYNC_ERROR_KEY = 'google_drive_last_sync_error';
 const SYNC_REVISION_KEY = 'google_drive_sync_revision';
 const LAST_SYNC_SNAPSHOT_KEY = 'google_drive_last_sync_snapshot';
+const LAST_SYNC_SNAPSHOT_FILENAME = 'google-drive-last-sync-snapshot.json';
 const SYNC_TIMEOUT_MS = 20000;
 const AUTO_PULL_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -100,6 +102,15 @@ function mapSyncErrorToUserMessage(error: unknown, mode: 'push' | 'pull'): strin
   return mode === 'pull'
     ? 'Unable to restore from cloud right now. Please try again.'
     : 'Unable to sync now. Please check your internet connection and try again.';
+}
+
+function resolveLastSyncSnapshotPath(): string | undefined {
+  const baseDirectory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
+  if (!baseDirectory) {
+    return undefined;
+  }
+
+  return `${baseDirectory.replace(/\/?$/, '/')}${LAST_SYNC_SNAPSHOT_FILENAME}`;
 }
 
 function buildDiagnostics(error: unknown, mode: 'push' | 'pull'): string {
@@ -295,6 +306,19 @@ function mergeSyncSnapshotsWithBase(params: {
 }
 
 async function getLastSyncedSnapshot(): Promise<InventorySyncStateSnapshot | null> {
+  const storagePath = resolveLastSyncSnapshotPath();
+  if (storagePath) {
+    try {
+      const info = await FileSystem.getInfoAsync(storagePath);
+      if (info.exists) {
+        const raw = await FileSystem.readAsStringAsync(storagePath);
+        if (raw) {
+          return JSON.parse(raw) as InventorySyncStateSnapshot;
+        }
+      }
+    } catch {}
+  }
+
   const raw = await SecureStore.getItemAsync(LAST_SYNC_SNAPSHOT_KEY);
   if (!raw) {
     return null;
@@ -308,7 +332,15 @@ async function getLastSyncedSnapshot(): Promise<InventorySyncStateSnapshot | nul
 }
 
 async function setLastSyncedSnapshot(snapshot: InventorySyncStateSnapshot): Promise<void> {
-  await SecureStore.setItemAsync(LAST_SYNC_SNAPSHOT_KEY, JSON.stringify(snapshot));
+  const raw = JSON.stringify(snapshot);
+  const storagePath = resolveLastSyncSnapshotPath();
+  if (storagePath) {
+    await FileSystem.writeAsStringAsync(storagePath, raw);
+    await SecureStore.deleteItemAsync(LAST_SYNC_SNAPSHOT_KEY);
+    return;
+  }
+
+  await SecureStore.setItemAsync(LAST_SYNC_SNAPSHOT_KEY, raw);
 }
 
 export function GoogleDriveSyncProvider({ children }: { children: React.ReactNode }) {
@@ -533,6 +565,10 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     logSync('signOut:requested');
     await signOutFromGoogleDrive();
     await SecureStore.deleteItemAsync(LAST_SYNC_SNAPSHOT_KEY);
+    const storagePath = resolveLastSyncSnapshotPath();
+    if (storagePath) {
+      await FileSystem.deleteAsync(storagePath, { idempotent: true });
+    }
     setAccount(null);
     setStatus('idle');
     setErrorMessage(null);
