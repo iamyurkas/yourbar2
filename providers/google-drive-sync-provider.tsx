@@ -45,7 +45,7 @@ const LAST_SYNC_ERROR_KEY = 'google_drive_last_sync_error';
 const SYNC_REVISION_KEY = 'google_drive_sync_revision';
 const LAST_SYNC_SNAPSHOT_KEY = 'google_drive_last_sync_snapshot';
 const SYNC_TIMEOUT_MS = 20000;
-const AUTO_PULL_INTERVAL_MS = 15000;
+const AUTO_PULL_INTERVAL_MS = 5 * 60 * 1000;
 
 function logSync(step: string, details?: Record<string, unknown>) {
   const timestamp = new Date().toISOString();
@@ -319,7 +319,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [diagnostics, setDiagnostics] = useState<string | null>(null);
   const lastFingerprintRef = useRef<string | null>(null);
-  const pushDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasPendingChangesRef = useRef(false);
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncInFlightRef = useRef<Promise<void> | null>(null);
   const performSyncRef = useRef<((mode: 'push' | 'pull') => Promise<void>) | null>(null);
@@ -460,6 +460,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     try {
       await performSync('pull');
       await performSync('push');
+      hasPendingChangesRef.current = false;
       logSync('syncNow:completed_bidirectional');
     } catch (error) {
       logSync('syncNow:error', {
@@ -573,16 +574,16 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
-      if (nextState === 'active' && account) {
-        logSync('appState:active_trigger_pull');
-        void performSync('pull').catch(() => undefined);
+      if (nextState === 'active' && account && hasPendingChangesRef.current) {
+        logSync('appState:active_trigger_sync_with_pending_changes');
+        void syncNow().catch(() => undefined);
       }
     });
 
     return () => {
       subscription.remove();
     };
-  }, [account, performSync]);
+  }, [account, syncNow]);
 
   useEffect(() => {
     if (!account) {
@@ -590,14 +591,19 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     }
 
     const interval = setInterval(() => {
-      logSync('autoPull:interval_trigger_pull', { intervalMs: AUTO_PULL_INTERVAL_MS });
-      void performSync('pull').catch(() => undefined);
+      if (!hasPendingChangesRef.current) {
+        logSync('autoSync:interval_skipped_no_pending_changes', { intervalMs: AUTO_PULL_INTERVAL_MS });
+        return;
+      }
+
+      logSync('autoSync:interval_trigger_sync', { intervalMs: AUTO_PULL_INTERVAL_MS });
+      void syncNow().catch(() => undefined);
     }, AUTO_PULL_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
     };
-  }, [account, performSync]);
+  }, [account, syncNow]);
 
   useEffect(() => {
     if (!account || loading) {
@@ -610,28 +616,21 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     }
 
     const nextFingerprint = JSON.stringify(snapshot);
+    if (lastFingerprintRef.current === null) {
+      lastFingerprintRef.current = nextFingerprint;
+      logSync('autoSync:fingerprint_initialized');
+      return;
+    }
+
     if (lastFingerprintRef.current === nextFingerprint) {
-      logSync('autoPush:skipped_same_fingerprint');
+      logSync('autoSync:skipped_same_fingerprint');
       return;
     }
 
     lastFingerprintRef.current = nextFingerprint;
-
-    if (pushDebounceRef.current) {
-      clearTimeout(pushDebounceRef.current);
-    }
-
-    pushDebounceRef.current = setTimeout(() => {
-      logSync('autoPush:debounced_sync');
-      void syncNow();
-    }, 2000);
-
-    return () => {
-      if (pushDebounceRef.current) {
-        clearTimeout(pushDebounceRef.current);
-      }
-    };
-  }, [account, exportInventorySyncState, loading, syncNow]);
+    hasPendingChangesRef.current = true;
+    logSync('autoSync:marked_pending_changes');
+  }, [account, exportInventorySyncState, loading]);
 
   const value = useMemo(() => ({
     account,
