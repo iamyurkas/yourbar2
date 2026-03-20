@@ -1231,8 +1231,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 />
               </View>
               <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
-                  {googleDriveAccount ? googleDriveAccount.email : t("sideMenu.googleDriveSignIn")}
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={[styles.settingLabel, styles.googleDriveAccountLabel, { color: Colors.onSurface }]}
+                >
+                  {googleDriveAccount ? (googleDriveAccount.name || googleDriveAccount.email) : t("sideMenu.googleDriveSignIn")}
                 </Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
                   {googleDriveSyncCaption}
@@ -3085,6 +3089,9 @@ const styles = StyleSheet.create({
   settingLabel: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  googleDriveAccountLabel: {
+    flexShrink: 1,
   },
   settingCaption: {
     fontSize: 12,
