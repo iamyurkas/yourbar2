@@ -783,4 +783,12 @@ export const enGBTranslations: TranslationDictionary = {
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
   "common.tryAgain": "Try again",
+  "sideMenu.googleDriveSignIn": "Sign in with Google",
+  "sideMenu.googleDriveSignInCaption": "Sync your bar data across devices",
+  "sideMenu.googleDriveSyncNow": "Sync now",
+  "sideMenu.googleDriveRestore": "Restore from cloud",
+  "sideMenu.googleDriveSignOut": "Sign out",
+  "sideMenu.googleDriveStatusIdle": "Ready to sync",
+  "sideMenu.googleDriveStatusSyncing": "Syncing with Google Drive…",
+  "sideMenu.googleDriveLastSynced": "Last synced: {{value}}",
 };

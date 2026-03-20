@@ -39,6 +39,7 @@ import type { SupportedLocale } from "@/libs/i18n/types";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import { useGoogleDriveSync } from "@/providers/google-drive-sync-provider";
 import {
   type ImportedPhotoEntry,
   type InventoryExportData,
@@ -176,6 +177,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const insets = useSafeAreaInsets();
   const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
   const { startOnboarding } = useOnboarding();
+  const {
+    account: googleDriveAccount,
+    status: googleDriveStatus,
+    lastSyncAt: googleDriveLastSyncAt,
+    errorMessage: googleDriveErrorMessage,
+    signIn: signInToGoogleDrive,
+    signOut: signOutFromGoogleDrive,
+    syncNow: syncGoogleDriveNow,
+    restoreFromCloud: restoreGoogleDriveFromCloud,
+  } = useGoogleDriveSync();
   const [isMounted, setIsMounted] = useState(visible);
   const [isStartScreenModalVisible, setStartScreenModalVisible] =
     useState(false);
@@ -290,6 +301,28 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
     return AMAZON_STORES[effectiveAmazonStore].label;
   }, [effectiveAmazonStore, t]);
+
+  const googleDriveSyncCaption = useMemo(() => {
+    if (!googleDriveAccount) {
+      return t("sideMenu.googleDriveSignInCaption");
+    }
+
+    if (googleDriveStatus === "syncing") {
+      return t("sideMenu.googleDriveStatusSyncing");
+    }
+
+    if (googleDriveErrorMessage) {
+      return googleDriveErrorMessage;
+    }
+
+    if (googleDriveLastSyncAt) {
+      return t("sideMenu.googleDriveLastSynced", {
+        value: new Date(googleDriveLastSyncAt).toLocaleString(),
+      });
+    }
+
+    return t("sideMenu.googleDriveStatusIdle");
+  }, [googleDriveAccount, googleDriveErrorMessage, googleDriveLastSyncAt, googleDriveStatus, t]);
 
   const renderStartScreenIcon = (
     option: StartScreenOption,
@@ -406,6 +439,23 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         },
       ],
     });
+  };
+
+  const handleGoogleDrivePrimaryPress = () => {
+    if (googleDriveAccount) {
+      void syncGoogleDriveNow();
+      return;
+    }
+
+    void signInToGoogleDrive();
+  };
+
+  const handleGoogleDriveRestorePress = () => {
+    void restoreGoogleDriveFromCloud();
+  };
+
+  const handleGoogleDriveSignOutPress = () => {
+    void signOutFromGoogleDrive();
   };
 
 
@@ -1152,6 +1202,59 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={googleDriveAccount ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveSignIn")}
+              onPress={handleGoogleDrivePrimaryPress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, SURFACE_ICON_STYLE]}>
+                <MaterialCommunityIcons
+                  name="google-drive"
+                  size={16}
+                  color={Colors.tint}
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: Colors.onSurface }]}>
+                  {googleDriveAccount ? googleDriveAccount.email : t("sideMenu.googleDriveSignIn")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {googleDriveSyncCaption}
+                </Text>
+              </View>
+              <MaterialCommunityIcons
+                name={googleDriveAccount ? "sync" : "chevron-right"}
+                size={20}
+                color={Colors.onSurfaceVariant}
+              />
+            </Pressable>
+
+            {googleDriveAccount ? (
+              <View style={styles.googleDriveActions}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t("sideMenu.googleDriveRestore")}
+                  onPress={handleGoogleDriveRestorePress}
+                  style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
+                >
+                  <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurface }]}>
+                    {t("sideMenu.googleDriveRestore")}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t("sideMenu.googleDriveSignOut")}
+                  onPress={handleGoogleDriveSignOutPress}
+                  style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
+                >
+                  <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurfaceVariant }]}>
+                    {t("sideMenu.googleDriveSignOut")}
+                  </Text>
+                </Pressable>
+              </View>
+            ) : null}
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageBars")}
@@ -2912,6 +3015,23 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  googleDriveActions: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: -4,
+    marginBottom: 4,
+    marginLeft: 34,
+  },
+  googleDriveActionChip: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  googleDriveActionChipLabel: {
+    fontSize: 12,
+    fontWeight: "600",
   },
   backupRestoreModalActionRow: {
     paddingLeft: 8,

@@ -11,6 +11,7 @@ import type {
   InventoryExportData,
   InventoryExportFile,
   InventoryImportOptions,
+  InventorySyncStateSnapshot,
   PhotoBackupEntry,
   ImportedPhotoEntry,
   StartScreen,
@@ -34,6 +35,8 @@ export type InventoryActionsContextValue = {
     options?: InventoryImportOptions,
   ) => void;
   importInventoryPhotos: (entries: ImportedPhotoEntry[]) => number;
+  exportInventorySyncState: () => InventorySyncStateSnapshot | null;
+  importInventorySyncState: (snapshot: InventorySyncStateSnapshot) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;

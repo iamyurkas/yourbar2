@@ -46,6 +46,7 @@ import {
   type InventoryExportData,
   type InventoryExportFile,
   type InventoryImportOptions,
+  type InventorySyncStateSnapshot,
   type InventoryLocaleTranslationOverrides,
   type InventoryTranslationOverrides,
   type InventoryTranslationsExportFile,
@@ -278,6 +279,94 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [],
   );
 
+  const buildBootstrapFromSnapshot = useCallback((snapshot: InventorySyncStateSnapshot) => {
+    const castedStored = snapshot as any;
+    const nextInventoryState = rehydrateBuiltInTags(
+      createInventoryStateFromSnapshot(snapshot, baseInventoryData),
+      BUILTIN_COCKTAIL_TAGS,
+      BUILTIN_INGREDIENT_TAGS,
+    );
+    const nextAvailableIds = createIngredientIdSet(snapshot.availableIngredientIds);
+    const nextShoppingIds = createIngredientIdSet(snapshot.shoppingIngredientIds);
+    const nextRatings = sanitizeCocktailRatings(snapshot.cocktailRatings);
+    const nextComments = sanitizeCocktailComments((snapshot as { cocktailComments?: Record<string, string> }).cocktailComments);
+    const nextPartySelectedCocktailKeys = sanitizePartySelectedCocktailKeys(
+      (snapshot as { partySelectedCocktailKeys?: string[] }).partySelectedCocktailKeys,
+    );
+    const nextIgnoreGarnish = snapshot.ignoreGarnish ?? true;
+    const nextAllowAllSubstitutes = snapshot.allowAllSubstitutes ?? true;
+    const nextUseImperialUnits = (snapshot.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
+    const nextKeepScreenAwake = snapshot.keepScreenAwake ?? true;
+    const nextShakerSmartFilteringEnabled = snapshot.shakerSmartFilteringEnabled ?? false;
+    const nextShowTabCounters = snapshot.showTabCounters ?? false;
+    const nextRatingFilterThreshold = Math.min(
+      5,
+      Math.max(1, Math.round(snapshot.ratingFilterThreshold ?? 1)),
+    );
+    const nextStartScreen = sanitizeStartScreen(snapshot.startScreen, DEFAULT_START_SCREEN) as StartScreen;
+    const nextAppTheme = sanitizeAppTheme(snapshot.appTheme, DEFAULT_APP_THEME) as AppTheme;
+    const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(snapshot.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null;
+    const nextAppLocale = sanitizeAppLocale(snapshot.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale;
+    const nextCustomCocktailTags = sanitizeCustomTags(
+      'customCocktailTags' in snapshot ? snapshot.customCocktailTags : undefined,
+      DEFAULT_TAG_COLOR,
+      compareGlobalAlphabet,
+    );
+    const nextCustomIngredientTags = sanitizeCustomTags(
+      'customIngredientTags' in snapshot ? snapshot.customIngredientTags : undefined,
+      DEFAULT_TAG_COLOR,
+      compareGlobalAlphabet,
+    );
+    const nextTranslationOverrides = sanitizeTranslationOverrides<InventoryTranslationOverrides>(
+      (snapshot as { translationOverrides?: unknown }).translationOverrides,
+      isSupportedLocale,
+    );
+    const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((snapshot as { onboardingStep?: number }).onboardingStep ?? 1)));
+    const nextOnboardingCompleted = (snapshot as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
+    const nextOnboardingStarterApplied = (snapshot as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
+
+    let nextBars: Bar[] = castedStored.bars ?? [];
+    let nextActiveBarId: string = castedStored.activeBarId ?? '';
+
+    if (nextBars.length === 0) {
+      nextActiveBarId = Date.now().toString();
+      nextBars = [{
+        id: nextActiveBarId,
+        name: getDefaultBarName(nextAppLocale),
+        availableIngredientIds: toSortedArray(nextAvailableIds),
+        shoppingIngredientIds: toSortedArray(nextShoppingIds),
+      }];
+    }
+
+    return {
+      inventoryState: nextInventoryState,
+      availableIngredientIds: nextAvailableIds,
+      shoppingIngredientIds: nextShoppingIds,
+      ratingsByCocktailId: nextRatings,
+      commentsByCocktailId: nextComments,
+      partySelectedCocktailKeys: nextPartySelectedCocktailKeys,
+      ignoreGarnish: nextIgnoreGarnish,
+      allowAllSubstitutes: nextAllowAllSubstitutes,
+      useImperialUnits: nextUseImperialUnits,
+      keepScreenAwake: nextKeepScreenAwake,
+      shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
+      showTabCounters: nextShowTabCounters,
+      ratingFilterThreshold: nextRatingFilterThreshold,
+      startScreen: nextStartScreen,
+      appTheme: nextAppTheme,
+      appLocale: nextAppLocale,
+      translationOverrides: nextTranslationOverrides,
+      amazonStoreOverride: nextAmazonStoreOverride,
+      customCocktailTags: nextCustomCocktailTags,
+      customIngredientTags: nextCustomIngredientTags,
+      bars: nextBars,
+      activeBarId: nextActiveBarId,
+      onboardingStep: nextOnboardingStep,
+      onboardingCompleted: nextOnboardingCompleted,
+      onboardingStarterApplied: nextOnboardingStarterApplied,
+    };
+  }, [baseInventoryData, shouldDefaultToImperialUnits]);
+
   useEffect(() => {
     if (inventoryState) {
       return;
@@ -290,91 +379,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || (stored as any).version === 2 || (stored as any).version === 1) && !cancelled) {
-          const castedStored = stored as any;
-          const nextInventoryState = rehydrateBuiltInTags(
-            createInventoryStateFromSnapshot(stored, baseInventoryData),
-            BUILTIN_COCKTAIL_TAGS,
-            BUILTIN_INGREDIENT_TAGS,
-          );
-          const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
-          const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
-          const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
-          const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
-          const nextPartySelectedCocktailKeys = sanitizePartySelectedCocktailKeys(
-            (stored as { partySelectedCocktailKeys?: string[] }).partySelectedCocktailKeys,
-          );
-          const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
-          const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
-          const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
-          const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
-          const nextShakerSmartFilteringEnabled = stored.shakerSmartFilteringEnabled ?? false;
-          const nextShowTabCounters = stored.showTabCounters ?? false;
-          const nextRatingFilterThreshold = Math.min(
-            5,
-            Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)),
-          );
-          const nextStartScreen = sanitizeStartScreen(stored.startScreen, DEFAULT_START_SCREEN) as StartScreen;
-          const nextAppTheme = sanitizeAppTheme(stored.appTheme, DEFAULT_APP_THEME) as AppTheme;
-          const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null;
-          const nextAppLocale = sanitizeAppLocale(stored.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale;
-          const nextCustomCocktailTags = sanitizeCustomTags(
-            'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
-            DEFAULT_TAG_COLOR,
-            compareGlobalAlphabet,
-          );
-          const nextCustomIngredientTags = sanitizeCustomTags(
-            'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
-            DEFAULT_TAG_COLOR,
-            compareGlobalAlphabet,
-          );
-          const nextTranslationOverrides = sanitizeTranslationOverrides<InventoryTranslationOverrides>(
-            (stored as { translationOverrides?: unknown }).translationOverrides,
-            isSupportedLocale,
-          );
-          const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
-          const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
-          const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
-
-          let nextBars: Bar[] = castedStored.bars ?? [];
-          let nextActiveBarId: string = castedStored.activeBarId ?? '';
-
-          if (nextBars.length === 0) {
-            nextActiveBarId = Date.now().toString();
-            nextBars = [{
-              id: nextActiveBarId,
-              name: getDefaultBarName(nextAppLocale),
-              availableIngredientIds: toSortedArray(nextAvailableIds),
-              shoppingIngredientIds: toSortedArray(nextShoppingIds),
-            }];
-          }
-
-          applyInventoryBootstrap({
-            inventoryState: nextInventoryState,
-            availableIngredientIds: nextAvailableIds,
-            shoppingIngredientIds: nextShoppingIds,
-            ratingsByCocktailId: nextRatings,
-            commentsByCocktailId: nextComments,
-            partySelectedCocktailKeys: nextPartySelectedCocktailKeys,
-            ignoreGarnish: nextIgnoreGarnish,
-            allowAllSubstitutes: nextAllowAllSubstitutes,
-            useImperialUnits: nextUseImperialUnits,
-            keepScreenAwake: nextKeepScreenAwake,
-            shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
-            showTabCounters: nextShowTabCounters,
-            ratingFilterThreshold: nextRatingFilterThreshold,
-            startScreen: nextStartScreen,
-            appTheme: nextAppTheme,
-            appLocale: nextAppLocale,
-            translationOverrides: nextTranslationOverrides,
-            amazonStoreOverride: nextAmazonStoreOverride,
-            customCocktailTags: nextCustomCocktailTags,
-            customIngredientTags: nextCustomIngredientTags,
-            bars: nextBars,
-            activeBarId: nextActiveBarId,
-            onboardingStep: nextOnboardingStep,
-            onboardingCompleted: nextOnboardingCompleted,
-            onboardingStarterApplied: nextOnboardingStarterApplied,
-          });
+          applyInventoryBootstrap(buildBootstrapFromSnapshot(stored as InventorySyncStateSnapshot));
           return;
         }
       } catch (error) {
@@ -428,7 +433,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return () => {
       cancelled = true;
     };
-  }, [applyInventoryBootstrap, baseInventoryData, inventoryState, shouldDefaultToImperialUnits]);
+  }, [applyInventoryBootstrap, buildBootstrapFromSnapshot, inventoryState, shouldDefaultToImperialUnits]);
 
   useEffect(() => {
     if (!activeBarId) {
@@ -1253,6 +1258,69 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     shoppingIngredientIds,
     translationOverrides,
   ]);
+
+  const exportInventorySyncState = useCallback((): InventorySyncStateSnapshot | null => {
+    if (!inventoryDelta) {
+      return null;
+    }
+
+    return buildInventorySnapshot(inventoryDelta, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      ratingsByCocktailId,
+      commentsByCocktailId,
+      partySelectedCocktailKeys,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      useImperialUnits,
+      keepScreenAwake,
+      shakerSmartFilteringEnabled,
+      showTabCounters,
+      ratingFilterThreshold,
+      startScreen,
+      appTheme,
+      appLocale,
+      translationOverrides,
+      amazonStoreOverride,
+      customCocktailTags,
+      customIngredientTags,
+      bars,
+      activeBarId,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
+    });
+  }, [
+    activeBarId,
+    allowAllSubstitutes,
+    amazonStoreOverride,
+    appLocale,
+    appTheme,
+    availableIngredientIds,
+    bars,
+    commentsByCocktailId,
+    customCocktailTags,
+    customIngredientTags,
+    ignoreGarnish,
+    inventoryDelta,
+    keepScreenAwake,
+    onboardingCompleted,
+    onboardingStarterApplied,
+    onboardingStep,
+    partySelectedCocktailKeys,
+    ratingFilterThreshold,
+    ratingsByCocktailId,
+    shakerSmartFilteringEnabled,
+    shoppingIngredientIds,
+    showTabCounters,
+    startScreen,
+    translationOverrides,
+    useImperialUnits,
+  ]);
+
+  const importInventorySyncState = useCallback((snapshot: InventorySyncStateSnapshot) => {
+    applyInventoryBootstrap(buildBootstrapFromSnapshot(snapshot));
+  }, [applyInventoryBootstrap, buildBootstrapFromSnapshot]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
@@ -2619,6 +2687,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventoryPhotoEntries,
       importInventoryData,
       importInventoryPhotos,
+      exportInventorySyncState,
+      importInventorySyncState,
       updateCocktail,
       updateIngredient,
       deleteCocktail,
@@ -2663,6 +2733,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventoryPhotoEntries,
       importInventoryData,
       importInventoryPhotos,
+      exportInventorySyncState,
+      importInventorySyncState,
       updateCocktail,
       updateIngredient,
       deleteCocktail,
