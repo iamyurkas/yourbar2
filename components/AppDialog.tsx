@@ -1,5 +1,5 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   message: {
-    fontSize: 15,
+    fontSize: 16,
     lineHeight: 22,
     textAlign: 'center',
   },

@@ -3946,7 +3946,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   methodPickerLabel: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "400",
     flex: 1,
   },
@@ -4421,7 +4421,7 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 2 }],
   },
   methodOptionLabel: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "600",
   },
   methodOptionDescription: {

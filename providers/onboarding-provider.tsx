@@ -3,8 +3,8 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { Keyboard, Pressable, StyleSheet, Text, useWindowDimensions, View, type LayoutChangeEvent, type LayoutRectangle } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
-import { ONBOARDING_STARTER_INGREDIENT_IDS, ONBOARDING_STEPS, type OnboardingTargetId } from '@/libs/onboarding-config';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { ONBOARDING_STARTER_INGREDIENT_IDS, ONBOARDING_STEPS, type OnboardingTargetId } from '@/libs/onboarding-config';
 import { useInventory } from '@/providers/inventory-provider';
 
 type Rect = { x: number; y: number; width: number; height: number };
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: { fontSize: 16, fontWeight: '700' },
   messageWrap: { gap: 2, alignItems: 'center' },
-  messageText: { fontSize: 15, lineHeight: 21, textAlign: 'center' },
+  messageText: { fontSize: 16, lineHeight: 21, textAlign: 'center' },
   bold: { fontWeight: '700' },
   italic: { fontStyle: 'italic' },
 });
