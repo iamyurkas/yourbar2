@@ -1226,29 +1226,43 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {googleDriveSyncCaption}
                 </Text>
               </View>
-              <Pressable onPress={googleDriveAccount ? handleGoogleDriveSyncPress : handleGoogleDrivePrimaryPress}>
-                <MaterialCommunityIcons
-                  name={googleDriveAccount ? "sync" : "chevron-right"}
-                  size={20}
-                  color={Colors.onSurfaceVariant}
-                />
-              </Pressable>
-            </Pressable>
-
-            {googleDriveAccount ? (
-              <View style={styles.googleDriveActions}>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={t("sideMenu.googleDriveSignOut")}
-                  onPress={handleGoogleDriveSignOutPress}
-                  style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
-                >
-                  <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurfaceVariant }]}>
-                    {t("sideMenu.googleDriveSignOut")}
-                  </Text>
+              {googleDriveAccount ? (
+                <View style={styles.googleDriveInlineActions}>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={t("sideMenu.googleDriveSignOut")}
+                    onPress={handleGoogleDriveSignOutPress}
+                    style={styles.googleDriveInlineActionButton}
+                  >
+                    <MaterialCommunityIcons
+                      name="logout"
+                      size={18}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={t("sideMenu.googleDriveSyncNow")}
+                    onPress={handleGoogleDriveSyncPress}
+                    style={styles.googleDriveInlineActionButton}
+                  >
+                    <MaterialCommunityIcons
+                      name="sync"
+                      size={18}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                </View>
+              ) : (
+                <Pressable onPress={handleGoogleDrivePrimaryPress}>
+                  <MaterialCommunityIcons
+                    name="chevron-right"
+                    size={20}
+                    color={Colors.onSurfaceVariant}
+                  />
                 </Pressable>
-              </View>
-            ) : null}
+              )}
+            </Pressable>
 
             <Pressable
               accessibilityRole="button"
@@ -3011,22 +3025,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
   },
-  googleDriveActions: {
-    flexDirection: "row",
-    gap: 10,
-    marginTop: -4,
-    marginBottom: 4,
-    marginLeft: 34,
+  googleDriveInlineActions: {
+    height: 34,
+    justifyContent: "space-between",
+    marginRight: -2,
   },
-  googleDriveActionChip: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  googleDriveActionChipLabel: {
-    fontSize: 12,
-    fontWeight: "600",
+  googleDriveInlineActionButton: {
+    height: 16,
+    width: 24,
+    alignItems: "center",
+    justifyContent: "center",
   },
   backupRestoreModalActionRow: {
     paddingLeft: 8,
