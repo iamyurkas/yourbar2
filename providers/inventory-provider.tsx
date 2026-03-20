@@ -6,29 +6,27 @@ import { TAG_COLORS } from '@/constants/tag-colors';
 import { AMAZON_STORES, detectAmazonStoreFromStoreOrLocale, detectUsStorefrontOrLocale, getEffectiveAmazonStore, type AmazonStoreKey, type AmazonStoreOverride } from '@/libs/amazon-stores';
 import { DEFAULT_LOCALE, isSupportedLocale, translate } from '@/libs/i18n';
 import type { SupportedLocale } from '@/libs/i18n/types';
+import Constants from 'expo-constants';
 import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   loadInventorySnapshot,
   persistInventorySnapshot,
+  type InventoryDeltaSnapshotV3,
 } from '@/libs/inventory-storage';
 import {
-  signInWithGoogle,
-  uploadToGoogleDrive,
-  downloadFromGoogleDrive as downloadToGoogleDrive,
-  getFileMetadata,
-  getAccessToken,
-  clearAccessToken,
-  type GoogleUser,
+  fetchCloudSyncSnapshot,
+  upsertCloudSyncSnapshot,
+  type CloudSyncEnvelope,
 } from '@/libs/google-drive-sync';
 import {
-  base64ToBytes,
-  bytesToBase64,
-  parseTarArchive,
-  createTarArchive,
-} from '@/libs/archive-utils';
-import * as FileSystem from 'expo-file-system/legacy';
-import { buildPhotoBaseName } from '@/libs/photo-utils';
+  clearGoogleAuthSession,
+  getGoogleAccessToken,
+  isGoogleSignInCancelled,
+  signInWithGoogleNative,
+  tryRestoreGoogleUser,
+  type GoogleAuthUser,
+} from '@/libs/google-auth';
 import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
@@ -59,6 +57,8 @@ import {
   type Ingredient,
   type IngredientStorageRecord,
   type IngredientTag,
+  type GoogleUser,
+  type SyncState,
   type IngredientTranslationOverride,
   type InventoryBaseExportFile,
   type InventoryExportData,
@@ -127,6 +127,40 @@ const DEFAULT_START_SCREEN: StartScreen = 'cocktails_all';
 const DEFAULT_APP_THEME: AppTheme = 'light';
 const DEFAULT_APP_LOCALE: AppLocale = DEFAULT_LOCALE;
 
+
+const APP_VERSION =
+  Constants.expoConfig?.version
+  ?? Constants.manifest2?.extra?.expoClient?.version
+  ?? 'unknown';
+const CLOUD_SYNC_SCHEMA_VERSION = 1;
+
+function createStableHash(payload: string): string {
+  let hash = 2166136261;
+  for (let index = 0; index < payload.length; index += 1) {
+    hash ^= payload.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return `fnv1a-${(hash >>> 0).toString(16)}`;
+}
+
+function chooseLatestEnvelope<TSnapshot extends { version?: number }>(
+  local: CloudSyncEnvelope<TSnapshot>,
+  remote: CloudSyncEnvelope<TSnapshot>,
+): 'local' | 'remote' {
+  const localTime = Date.parse(local.exportedAt) || 0;
+  const remoteTime = Date.parse(remote.exportedAt) || 0;
+
+  if (localTime !== remoteTime) {
+    return localTime > remoteTime ? 'local' : 'remote';
+  }
+
+  if (local.syncRevision !== remote.syncRevision) {
+    return local.syncRevision > remote.syncRevision ? 'local' : 'remote';
+  }
+
+  return local.deviceId >= remote.deviceId ? 'local' : 'remote';
+}
 
 function getDefaultBarName(locale: AppLocale): string {
   return translate(locale, 'barManager.defaultName');
@@ -229,13 +263,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [onboardingStarterApplied, setOnboardingStarterApplied] = useState<boolean>(
     () => runtimeCache.onboardingStarterApplied ?? false,
   );
-  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [syncState, setSyncState] = useState<SyncState>(() => runtimeCache.syncState ?? 'idle');
+  const [syncError, setSyncError] = useState<string | null>(() => runtimeCache.syncError ?? null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(
     () => runtimeCache.lastSyncTime ?? null,
   );
   const [googleUser, setGoogleUser] = useState<GoogleUser | null>(
     () => runtimeCache.googleUser ?? null,
   );
+  const syncRevisionRef = useRef<number>(runtimeCache.syncRevision ?? 0);
+  const deviceIdRef = useRef<string>(runtimeCache.syncDeviceId ?? `device-${Date.now()}`);
+  const isSyncing = syncState === 'syncing';
   const detectedAmazonStore = useMemo(() => detectAmazonStoreFromStoreOrLocale(), []);
   const effectiveAmazonStore = useMemo(
     () => getEffectiveAmazonStore(amazonStoreOverride, detectedAmazonStore),
@@ -246,49 +284,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     () => (inventoryState ? buildInventoryDelta(inventoryState, baseMaps) : null),
     [inventoryState, baseMaps],
   );
-  const isValidInventoryExportFile = (candidate: unknown): candidate is InventoryExportFile => {
-    if (!candidate || typeof candidate !== 'object') {
-      return false;
-    }
-
-    const record = candidate as { kind?: unknown; schemaVersion?: unknown };
-    return (record.kind === 'base' || record.kind === 'translations') && typeof record.schemaVersion === 'number';
-  };
-
-  const parsePhotoEntryFromArchivePath = (path: string): {
-    type: ImportedPhotoEntry['type'];
-    id: number;
-    extension: string;
-  } | null => {
-    const normalizedPath = path.trim().replace(/^\/+/, '');
-    const [category, filename] = normalizedPath.split('/');
-    if (!category || !filename) {
-      return null;
-    }
-
-    if (category !== 'cocktails' && category !== 'ingredients') {
-      return null;
-    }
-
-    const extensionMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
-    const extension = extensionMatch?.[1]?.toLowerCase() ?? 'jpg';
-    const idMatch = filename.match(/^(\d+)-/);
-    if (!idMatch) {
-      return null;
-    }
-
-    const id = Number(idMatch[1]);
-    if (!Number.isFinite(id) || id < 0) {
-      return null;
-    }
-
-    return {
-      type: category,
-      id: Math.trunc(id),
-      extension,
-    };
-  };
-
   const applyInventoryBootstrap = useCallback(
     (bootstrap: {
       inventoryState: InventoryState;
@@ -507,6 +502,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   }, [applyInventoryBootstrap, baseInventoryData, inventoryState, shouldDefaultToImperialUnits]);
 
   useEffect(() => {
+    void (async () => {
+      const restoredUser = await tryRestoreGoogleUser();
+      if (restoredUser) {
+        setGoogleUser(restoredUser);
+      }
+    })();
+  }, []);
+  useEffect(() => {
     if (!activeBarId) {
       return;
     }
@@ -567,6 +570,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      syncState,
+      syncError,
+      syncRevision: syncRevisionRef.current,
+      syncDeviceId: deviceIdRef.current,
       isSyncing,
       lastSyncTime,
       googleUser,
@@ -638,6 +645,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     onboardingStep,
     onboardingCompleted,
     onboardingStarterApplied,
+    syncState,
+    syncError,
     isSyncing,
     lastSyncTime,
     googleUser,
@@ -2339,130 +2348,271 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     );
   }, []);
 
-  const handleSignInWithGoogle = useCallback(async () => {
-    try {
-      const user = await signInWithGoogle();
-      if (user) {
-        setGoogleUser(user);
-      }
-    } catch (error) {
-      console.error('Sign in with Google failed', error);
+  const restoreSnapshotFromCloud = useCallback((stored: InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>) => {
+    const castedStored = stored as any;
+    const nextInventoryState = rehydrateBuiltInTags(
+      createInventoryStateFromSnapshot(stored, baseInventoryData),
+      BUILTIN_COCKTAIL_TAGS,
+      BUILTIN_INGREDIENT_TAGS,
+    );
+    const nextAvailableIds = createIngredientIdSet(stored.availableIngredientIds);
+    const nextShoppingIds = createIngredientIdSet(stored.shoppingIngredientIds);
+    const nextRatings = sanitizeCocktailRatings(stored.cocktailRatings);
+    const nextComments = sanitizeCocktailComments((stored as { cocktailComments?: Record<string, string> }).cocktailComments);
+    const nextPartySelectedCocktailKeys = sanitizePartySelectedCocktailKeys(
+      (stored as { partySelectedCocktailKeys?: string[] }).partySelectedCocktailKeys,
+    );
+    const nextIgnoreGarnish = stored.ignoreGarnish ?? true;
+    const nextAllowAllSubstitutes = stored.allowAllSubstitutes ?? true;
+    const nextUseImperialUnits = (stored.useImperialUnits ?? false) || shouldDefaultToImperialUnits;
+    const nextKeepScreenAwake = stored.keepScreenAwake ?? true;
+    const nextShakerSmartFilteringEnabled = stored.shakerSmartFilteringEnabled ?? false;
+    const nextShowTabCounters = stored.showTabCounters ?? false;
+    const nextRatingFilterThreshold = Math.min(5, Math.max(1, Math.round(stored.ratingFilterThreshold ?? 1)));
+    const nextStartScreen = sanitizeStartScreen(stored.startScreen, DEFAULT_START_SCREEN) as StartScreen;
+    const nextAppTheme = sanitizeAppTheme(stored.appTheme, DEFAULT_APP_THEME) as AppTheme;
+    const nextAmazonStoreOverride = sanitizeAmazonStoreOverride(stored.amazonStoreOverride, AMAZON_STORES) as AmazonStoreOverride | null;
+    const nextAppLocale = sanitizeAppLocale(stored.appLocale, isSupportedLocale, DEFAULT_APP_LOCALE) as AppLocale;
+    const nextCustomCocktailTags = sanitizeCustomTags(
+      'customCocktailTags' in stored ? stored.customCocktailTags : undefined,
+      DEFAULT_TAG_COLOR,
+      compareGlobalAlphabet,
+    );
+    const nextCustomIngredientTags = sanitizeCustomTags(
+      'customIngredientTags' in stored ? stored.customIngredientTags : undefined,
+      DEFAULT_TAG_COLOR,
+      compareGlobalAlphabet,
+    );
+    const nextTranslationOverrides = sanitizeTranslationOverrides<InventoryTranslationOverrides>(
+      (stored as { translationOverrides?: unknown }).translationOverrides,
+      isSupportedLocale,
+    );
+    const nextOnboardingStep = Math.max(1, Math.min(11, Math.trunc((stored as { onboardingStep?: number }).onboardingStep ?? 1)));
+    const nextOnboardingCompleted = (stored as { onboardingCompleted?: boolean }).onboardingCompleted ?? false;
+    const nextOnboardingStarterApplied = (stored as { onboardingStarterApplied?: boolean }).onboardingStarterApplied ?? false;
+
+    let nextBars: Bar[] = castedStored.bars ?? [];
+    let nextActiveBarId: string = castedStored.activeBarId ?? '';
+
+    if (nextBars.length === 0) {
+      nextActiveBarId = Date.now().toString();
+      nextBars = [{
+        id: nextActiveBarId,
+        name: getDefaultBarName(nextAppLocale),
+        availableIngredientIds: toSortedArray(nextAvailableIds),
+        shoppingIngredientIds: toSortedArray(nextShoppingIds),
+      }];
     }
-  }, []);
 
-  const handleSignOutFromGoogle = useCallback(async () => {
-    await clearAccessToken();
-    setGoogleUser(null);
-  }, []);
+    applyInventoryBootstrap({
+      inventoryState: nextInventoryState,
+      availableIngredientIds: nextAvailableIds,
+      shoppingIngredientIds: nextShoppingIds,
+      ratingsByCocktailId: nextRatings,
+      commentsByCocktailId: nextComments,
+      partySelectedCocktailKeys: nextPartySelectedCocktailKeys,
+      ignoreGarnish: nextIgnoreGarnish,
+      allowAllSubstitutes: nextAllowAllSubstitutes,
+      useImperialUnits: nextUseImperialUnits,
+      keepScreenAwake: nextKeepScreenAwake,
+      shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
+      showTabCounters: nextShowTabCounters,
+      ratingFilterThreshold: nextRatingFilterThreshold,
+      startScreen: nextStartScreen,
+      appTheme: nextAppTheme,
+      appLocale: nextAppLocale,
+      translationOverrides: nextTranslationOverrides,
+      amazonStoreOverride: nextAmazonStoreOverride,
+      customCocktailTags: nextCustomCocktailTags,
+      customIngredientTags: nextCustomIngredientTags,
+      bars: nextBars,
+      activeBarId: nextActiveBarId,
+      onboardingStep: nextOnboardingStep,
+      onboardingCompleted: nextOnboardingCompleted,
+      onboardingStarterApplied: nextOnboardingStarterApplied,
+      lastSyncTime: new Date().toISOString(),
+      googleUser,
+    });
+  }, [applyInventoryBootstrap, baseInventoryData, googleUser, shouldDefaultToImperialUnits]);
 
-  const handleSyncWithGoogleDrive = useCallback(async () => {
-    const accessToken = await getAccessToken();
-    if (!googleUser || !accessToken || isSyncing) {
+  const buildLocalCloudEnvelope = useCallback((): CloudSyncEnvelope<InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>> | null => {
+    if (!inventoryDelta) {
+      return null;
+    }
+
+    const snapshot = buildInventorySnapshot(inventoryDelta, {
+      availableIngredientIds,
+      shoppingIngredientIds,
+      ratingsByCocktailId,
+      commentsByCocktailId,
+      partySelectedCocktailKeys,
+      ignoreGarnish,
+      allowAllSubstitutes,
+      useImperialUnits,
+      keepScreenAwake,
+      shakerSmartFilteringEnabled,
+      showTabCounters,
+      ratingFilterThreshold,
+      startScreen,
+      appTheme,
+      appLocale,
+      translationOverrides,
+      amazonStoreOverride,
+      customCocktailTags,
+      customIngredientTags,
+      bars,
+      activeBarId,
+      onboardingStep,
+      onboardingCompleted,
+      onboardingStarterApplied,
+      lastSyncTime,
+      googleUser,
+    });
+
+    const exportedAt = new Date().toISOString();
+    const syncRevision = syncRevisionRef.current + 1;
+    const checksum = createStableHash(JSON.stringify(snapshot));
+
+    return {
+      schemaVersion: CLOUD_SYNC_SCHEMA_VERSION,
+      exportedAt,
+      deviceId: deviceIdRef.current,
+      appVersion: APP_VERSION,
+      syncRevision,
+      checksum,
+      snapshot,
+    };
+  }, [
+    activeBarId,
+    allowAllSubstitutes,
+    amazonStoreOverride,
+    appLocale,
+    appTheme,
+    availableIngredientIds,
+    bars,
+    commentsByCocktailId,
+    customCocktailTags,
+    customIngredientTags,
+    googleUser,
+    ignoreGarnish,
+    inventoryDelta,
+    keepScreenAwake,
+    lastSyncTime,
+    onboardingCompleted,
+    onboardingStarterApplied,
+    onboardingStep,
+    partySelectedCocktailKeys,
+    ratingFilterThreshold,
+    ratingsByCocktailId,
+    shakerSmartFilteringEnabled,
+    shoppingIngredientIds,
+    showTabCounters,
+    startScreen,
+    translationOverrides,
+    useImperialUnits,
+  ]);
+
+  const runSyncWithGoogleDrive = useCallback(async (mode: 'sync' | 'restore') => {
+    if (syncState === 'syncing' || syncState === 'signing_in' || !googleUser) {
       return;
     }
 
-    setIsSyncing(true);
-    try {
-      // 1. Download and merge
-      let mergedDataResult: ReturnType<typeof importInventoryData> | undefined;
-      const remoteArchiveBase64 = await downloadToGoogleDrive(accessToken);
-      if (remoteArchiveBase64) {
-        const remoteBytes = base64ToBytes(remoteArchiveBase64);
-        const remoteFiles = parseTarArchive(remoteBytes);
-
-        const decoder = new TextDecoder();
-        const importFiles: InventoryExportFile[] = [];
-        for (const archived of remoteFiles) {
-          if (archived.path.toLowerCase().endsWith('.json')) {
-            const parsed = JSON.parse(decoder.decode(archived.contents)) as unknown;
-            if (isValidInventoryExportFile(parsed)) {
-              importFiles.push(parsed);
-            }
-          }
-        }
-
-        if (importFiles.length > 0) {
-          mergedDataResult = importInventoryData(importFiles);
-
-          const importedPhotoEntries: ImportedPhotoEntry[] = [];
-          const timestamp = Date.now();
-          const directory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
-          const photosDir = `${directory!.replace(/\/?$/, '/')}imported-photos/`;
-          await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
-
-          for (const file of remoteFiles) {
-            if (!file.path.toLowerCase().endsWith('.json')) {
-              const parsedPath = parsePhotoEntryFromArchivePath(file.path);
-              if (parsedPath && file.contents.length > 0) {
-                const outputFileName = `${parsedPath.type}-${parsedPath.id}-${timestamp}.${parsedPath.extension}`;
-                const destinationUri = `${photosDir}${outputFileName}`;
-                await FileSystem.writeAsStringAsync(destinationUri, bytesToBase64(file.contents), {
-                  encoding: FileSystem.EncodingType.Base64,
-                });
-                importedPhotoEntries.push({
-                  type: parsedPath.type,
-                  id: parsedPath.id,
-                  photoUri: destinationUri,
-                });
-              }
-            }
-          }
-          if (importedPhotoEntries.length > 0) {
-            importInventoryPhotos(importedPhotoEntries);
-          }
-        }
-      }
-
-      // 2. Upload current state (merged if download occurred)
-      const data = exportInventoryData(mergedDataResult ? {
-        inventoryState: mergedDataResult.inventoryState,
-        availableIngredientIds: mergedDataResult.availableIngredientIds,
-        shoppingIngredientIds: mergedDataResult.shoppingIngredientIds,
-        ratingsByCocktailId: mergedDataResult.ratings,
-        commentsByCocktailId: mergedDataResult.comments,
-        translationOverrides: mergedDataResult.translationOverrides,
-      } : undefined);
-      const photoEntries = exportInventoryPhotoEntries(mergedDataResult ? {
-        inventoryState: mergedDataResult.inventoryState
-      } : undefined);
-      if (data && photoEntries) {
-        const files: { path: string; contents: Uint8Array }[] = [];
-        const encoder = new TextEncoder();
-        data.forEach((file) => {
-          const path = file.kind === 'base' ? 'base.json' : `translations.${file.locale}.json`;
-          files.push({
-            path,
-            contents: encoder.encode(JSON.stringify(file, null, 2)),
-          });
-        });
-
-        for (const entry of photoEntries) {
-          if (entry.uri) {
-            const info = await FileSystem.getInfoAsync(entry.uri);
-            if (info.exists && !info.isDirectory) {
-              const baseName = buildPhotoBaseName(entry.id || 'photo', entry.name ?? 'photo');
-              const fileName = `${baseName}.jpg`;
-              const contentsBase64 = await FileSystem.readAsStringAsync(entry.uri, {
-                encoding: FileSystem.EncodingType.Base64,
-              });
-              files.push({ path: `${entry.type}/${fileName}`, contents: base64ToBytes(contentsBase64) });
-            }
-          }
-        }
-
-        const archiveBase64 = createTarArchive(files);
-        await uploadToGoogleDrive(accessToken, archiveBase64);
-
-        const metadata = await getFileMetadata(accessToken);
-        setLastSyncTime(metadata?.modifiedTime || new Date().toISOString());
-      }
-    } catch (error) {
-      console.error('Google Drive sync failed', error);
-    } finally {
-      setIsSyncing(false);
+    const accessToken = await getGoogleAccessToken();
+    if (!accessToken) {
+      setSyncState('error');
+      setSyncError('Please sign in again to sync with Google Drive.');
+      return;
     }
-  }, [googleUser, isSyncing, exportInventoryData, exportInventoryPhotoEntries, importInventoryData, importInventoryPhotos]);
 
+    setSyncState('syncing');
+    setSyncError(null);
+
+    try {
+      const localEnvelope = buildLocalCloudEnvelope();
+      const remoteResult = await fetchCloudSyncSnapshot<InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>>(accessToken);
+
+      if (mode === 'restore') {
+        if (!remoteResult) {
+          throw new Error('No cloud backup found yet. Run Sync Now first.');
+        }
+
+        restoreSnapshotFromCloud(remoteResult.envelope.snapshot);
+        setLastSyncTime(remoteResult.file.modifiedTime ?? new Date().toISOString());
+        setSyncState('idle');
+        return;
+      }
+
+      if (!localEnvelope) {
+        throw new Error('Local inventory is not ready to sync yet.');
+      }
+
+      let winner: CloudSyncEnvelope<InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>> = localEnvelope;
+      if (remoteResult) {
+        const winnerSide = chooseLatestEnvelope(localEnvelope, remoteResult.envelope);
+        if (winnerSide === 'remote') {
+          winner = remoteResult.envelope;
+          restoreSnapshotFromCloud(remoteResult.envelope.snapshot);
+        }
+      }
+
+      const uploaded = await upsertCloudSyncSnapshot(accessToken, winner);
+      syncRevisionRef.current = winner.syncRevision;
+      setLastSyncTime(uploaded.modifiedTime ?? winner.exportedAt);
+      setSyncState('idle');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Sync failed. Please try again.';
+      setSyncState('error');
+      setSyncError(message);
+    }
+  }, [buildLocalCloudEnvelope, googleUser, restoreSnapshotFromCloud, syncState]);
+
+  const handleSignInWithGoogle = useCallback(async () => {
+    if (syncState === 'signing_in') {
+      return;
+    }
+
+    setSyncState('signing_in');
+    setSyncError(null);
+
+    try {
+      const user = await signInWithGoogleNative();
+      setGoogleUser(user);
+      setSyncState('idle');
+      await runSyncWithGoogleDrive('sync');
+    } catch (error) {
+      if (isGoogleSignInCancelled(error)) {
+        setSyncState('idle');
+        return;
+      }
+
+      const message = error instanceof Error ? error.message : 'Google sign-in failed.';
+      setSyncState('error');
+      setSyncError(message);
+    }
+  }, [runSyncWithGoogleDrive, syncState]);
+
+  const handleSignOutFromGoogle = useCallback(async () => {
+    await clearGoogleAuthSession();
+    setGoogleUser(null);
+    setSyncState('idle');
+    setSyncError(null);
+  }, []);
+
+  const handleSyncWithGoogleDrive = useCallback(async () => {
+    await runSyncWithGoogleDrive('sync');
+  }, [runSyncWithGoogleDrive]);
+
+  const handleRestoreFromGoogleDrive = useCallback(async () => {
+    await runSyncWithGoogleDrive('restore');
+  }, [runSyncWithGoogleDrive]);
+
+  useEffect(() => {
+    if (!googleUser) {
+      return;
+    }
+
+    void runSyncWithGoogleDrive('sync');
+  }, [googleUser, runSyncWithGoogleDrive]);
   const handleDeleteBar = useCallback((id: string) => {
     setBars((prev) => {
       if (prev.length <= 1) {
@@ -2829,6 +2979,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      syncState,
+      syncError,
       isSyncing,
       lastSyncTime,
       googleUser,
@@ -2853,6 +3005,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStep,
       onboardingCompleted,
       onboardingStarterApplied,
+      syncState,
+      syncError,
       isSyncing,
       lastSyncTime,
       googleUser,
@@ -2906,6 +3060,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       signInWithGoogle: handleSignInWithGoogle,
       signOutFromGoogle: handleSignOutFromGoogle,
       syncWithGoogleDrive: handleSyncWithGoogleDrive,
+      restoreFromGoogleDrive: handleRestoreFromGoogleDrive,
     }),
     [
       setIngredientAvailability,
@@ -2950,6 +3105,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleCreateBar,
       handleUpdateBar,
       handleDeleteBar,
+      handleRestoreFromGoogleDrive,
     ],
   );
 

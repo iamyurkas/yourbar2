@@ -174,8 +174,11 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     signInWithGoogle,
     signOutFromGoogle,
     syncWithGoogleDrive,
+    restoreFromGoogleDrive,
+    syncState,
     isSyncing,
     lastSyncTime,
+    syncError,
     googleUser,
   } = useInventory();
   const Colors = useAppColors();
@@ -410,6 +413,10 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     } else {
       await signInWithGoogle();
     }
+  };
+
+  const handleGoogleRestorePress = async () => {
+    await restoreFromGoogleDrive();
   };
 
   const handleGoogleSignOut = () => {
@@ -1223,27 +1230,48 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                   {googleUser ? t("sideMenu.googleSync") : t("sideMenu.googleSignIn")}
                 </Text>
                 <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
-                  {isSyncing
-                    ? t("sideMenu.syncing")
-                    : googleUser
-                      ? (lastSyncTime ? t("sideMenu.lastSync", { time: new Date(lastSyncTime).toLocaleString() }) : googleUser.email)
-                      : t("sideMenu.googleSignInCaption")}
+                  {syncState === 'signing_in'
+                    ? t("sideMenu.googleSigningIn")
+                    : isSyncing
+                      ? t("sideMenu.syncing")
+                      : syncState === 'error'
+                        ? (syncError || t("sideMenu.syncError"))
+                        : googleUser
+                          ? (lastSyncTime
+                            ? t("sideMenu.lastSync", { time: new Date(lastSyncTime).toLocaleString() })
+                            : googleUser.email)
+                          : t("sideMenu.googleSignInCaption")}
                 </Text>
               </View>
               {googleUser && !isSyncing && (
-                <Pressable
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    handleGoogleSignOut();
-                  }}
-                  hitSlop={12}
-                >
-                  <MaterialCommunityIcons
-                    name="logout-variant"
-                    size={20}
-                    color={Colors.onSurfaceVariant}
-                  />
-                </Pressable>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                  <Pressable
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      void handleGoogleRestorePress();
+                    }}
+                    hitSlop={12}
+                  >
+                    <MaterialCommunityIcons
+                      name="cloud-download-outline"
+                      size={20}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                  <Pressable
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleGoogleSignOut();
+                    }}
+                    hitSlop={12}
+                  >
+                    <MaterialCommunityIcons
+                      name="logout-variant"
+                      size={20}
+                      color={Colors.onSurfaceVariant}
+                    />
+                  </Pressable>
+                </View>
               )}
               {isSyncing && (
                 <Animated.View style={{ transform: [{

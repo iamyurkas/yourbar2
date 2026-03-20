@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 
 import type { AmazonStoreKey, AmazonStoreOverride } from '@/libs/amazon-stores';
-import { type StartScreen, type AppLocale, type AppTheme, type Bar, type GoogleUser } from '@/providers/inventory-types';
+import { type StartScreen, type AppLocale, type AppTheme, type Bar, type GoogleUser, type SyncState } from '@/providers/inventory-types';
 
 export type InventorySettingsContextValue = {
   ignoreGarnish: boolean;
@@ -22,8 +22,10 @@ export type InventorySettingsContextValue = {
   onboardingStep: number;
   onboardingCompleted: boolean;
   onboardingStarterApplied: boolean;
+  syncState: SyncState;
   isSyncing: boolean;
   lastSyncTime?: string | null;
+  syncError?: string | null;
   googleUser?: GoogleUser | null;
 };
 

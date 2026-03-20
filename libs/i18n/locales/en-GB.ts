@@ -493,6 +493,8 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.googleSignInCaption": "Sync your data across devices",
   "sideMenu.googleSync": "Sync with Google Drive",
   "sideMenu.syncing": "Syncing...",
+  "sideMenu.googleSigningIn": "Signing in...",
+  "sideMenu.syncError": "Sync failed. Tap to try again.",
   "sideMenu.lastSync": "Last sync: {{time}}",
   "sideMenu.syncSuccess": "Synced successfully",
   "sideMenu.googleSignOutTitle": "Sign out",

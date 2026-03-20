@@ -498,6 +498,8 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.googleSignInCaption": "Синхронізуйте дані між пристроями",
   "sideMenu.googleSync": "Синхронізувати з Google Drive",
   "sideMenu.syncing": "Синхронізація...",
+  "sideMenu.googleSigningIn": "Вхід...",
+  "sideMenu.syncError": "Помилка синхронізації. Натисніть, щоб повторити.",
   "sideMenu.lastSync": "Остання синхронізація: {{time}}",
   "sideMenu.syncSuccess": "Синхронізовано успішно",
   "sideMenu.googleSignOutTitle": "Вийти з акаунта",

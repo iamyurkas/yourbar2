@@ -2,6 +2,7 @@ import type { AmazonStoreOverride } from '@/libs/amazon-stores';
 import type {
   AppLocale,
   AppTheme,
+  SyncState,
   Bar,
   CocktailTag,
   GoogleUser,
@@ -35,6 +36,10 @@ export type InventoryRuntimeCache = {
   onboardingStep: number | undefined;
   onboardingCompleted: boolean | undefined;
   onboardingStarterApplied: boolean | undefined;
+  syncState: SyncState | undefined;
+  syncError: string | null | undefined;
+  syncRevision: number | undefined;
+  syncDeviceId: string | undefined;
   isSyncing: boolean | undefined;
   lastSyncTime: string | null | undefined;
   googleUser: GoogleUser | null | undefined;
@@ -90,6 +95,14 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryOnboardingStarterApplied: boolean | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventorySyncState: SyncState | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventorySyncError: string | null | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventorySyncRevision: number | undefined;
+  // eslint-disable-next-line no-var
+  var __yourbarInventorySyncDeviceId: string | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryIsSyncing: boolean | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryLastSyncTime: string | null | undefined;
@@ -123,6 +136,10 @@ export function readInventoryRuntimeCache(): InventoryRuntimeCache {
     onboardingStep: globalThis.__yourbarInventoryOnboardingStep,
     onboardingCompleted: globalThis.__yourbarInventoryOnboardingCompleted,
     onboardingStarterApplied: globalThis.__yourbarInventoryOnboardingStarterApplied,
+    syncState: globalThis.__yourbarInventorySyncState,
+    syncError: globalThis.__yourbarInventorySyncError,
+    syncRevision: globalThis.__yourbarInventorySyncRevision,
+    syncDeviceId: globalThis.__yourbarInventorySyncDeviceId,
     isSyncing: globalThis.__yourbarInventoryIsSyncing,
     lastSyncTime: globalThis.__yourbarInventoryLastSyncTime,
     googleUser: globalThis.__yourbarInventoryGoogleUser,
@@ -154,6 +171,10 @@ export function writeInventoryRuntimeCache(cache: InventoryRuntimeCache): void {
   globalThis.__yourbarInventoryOnboardingStep = cache.onboardingStep;
   globalThis.__yourbarInventoryOnboardingCompleted = cache.onboardingCompleted;
   globalThis.__yourbarInventoryOnboardingStarterApplied = cache.onboardingStarterApplied;
+  globalThis.__yourbarInventorySyncState = cache.syncState;
+  globalThis.__yourbarInventorySyncError = cache.syncError;
+  globalThis.__yourbarInventorySyncRevision = cache.syncRevision;
+  globalThis.__yourbarInventorySyncDeviceId = cache.syncDeviceId;
   globalThis.__yourbarInventoryIsSyncing = cache.isSyncing;
   globalThis.__yourbarInventoryLastSyncTime = cache.lastSyncTime;
   globalThis.__yourbarInventoryGoogleUser = cache.googleUser;

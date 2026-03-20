@@ -67,6 +67,7 @@ export type InventoryActionsContextValue = {
   signInWithGoogle: () => Promise<void>;
   signOutFromGoogle: () => Promise<void>;
   syncWithGoogleDrive: () => Promise<void>;
+  restoreFromGoogleDrive: () => Promise<void>;
 };
 
 export const InventoryActionsContext = createContext<InventoryActionsContextValue | undefined>(undefined);

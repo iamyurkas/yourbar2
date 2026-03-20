@@ -124,9 +124,13 @@ export type GoogleUser = {
   picture?: string;
 };
 
+export type SyncState = 'idle' | 'signing_in' | 'syncing' | 'error';
+
 export type SyncStatus = {
+  syncState: SyncState;
   isSyncing: boolean;
   lastSyncTime?: string | null;
+  syncError?: string | null;
   googleUser?: GoogleUser | null;
 };
 
