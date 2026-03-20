@@ -489,7 +489,7 @@ export const enGBTranslations: TranslationDictionary = {
   "tabs.ingredients": "Ingredients",
 
   "sideMenu.settingsTitle": "Settings",
-  "sideMenu.bars": "My Bars",
+  "sideMenu.bars": "Your Bars",
   "sideMenu.manageBars": "Manage Bars",
   "sideMenu.ignoreGarnish": "Ignore garnish",
   "sideMenu.ignoreGarnishCaption": "All garnishes are optional",
@@ -784,7 +784,7 @@ export const enGBTranslations: TranslationDictionary = {
   "common.somethingWentWrong": "Something went wrong",
   "common.tryAgain": "Try again",
   "sideMenu.googleDriveSignIn": "Sign in with Google",
-  "sideMenu.googleDriveSignInCaption": "Sync your bar data across devices",
+  "sideMenu.googleDriveSignInCaption": "Sync data across devices",
   "sideMenu.googleDriveSyncNow": "Sync now",
   "sideMenu.googleDriveSync": "Sync",
   "sideMenu.googleDriveSignOut": "Sign out",

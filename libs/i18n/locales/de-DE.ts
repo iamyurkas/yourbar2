@@ -498,7 +498,7 @@ export const deDETranslations: TranslationDictionary = {
   "tabs.ingredients": "Zutaten",
 
   "sideMenu.settingsTitle": "Einstellungen",
-  "sideMenu.bars": "Meine Bars",
+  "sideMenu.bars": "Deine Bars",
   "sideMenu.manageBars": "Bars verwalten",
   "sideMenu.ignoreGarnish": "Dekoration ignorieren",
   "sideMenu.ignoreGarnishCaption": "Alle Dekorationen sind optional",
@@ -807,7 +807,7 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.googleDriveSignIn": "Mit Google anmelden",
   "sideMenu.googleDriveSignInCaption":
     "Synchronisiere deine Bar-Daten geräteübergreifend",
-  "sideMenu.googleDriveSyncNow": "Jetzt synchronisieren",
+  "sideMenu.googleDriveSyncNow": "Synchronisieren",
   "sideMenu.googleDriveSync": "Synchronisieren",
   "sideMenu.googleDriveSignOut": "Abmelden",
   "sideMenu.googleDriveStatusIdle": "Bereit zum Synchronisieren",
