@@ -43,8 +43,9 @@ const DEVICE_ID_KEY = 'google_drive_sync_device_id';
 const LAST_SYNC_KEY = 'google_drive_last_sync_at';
 const LAST_SYNC_ERROR_KEY = 'google_drive_last_sync_error';
 const SYNC_REVISION_KEY = 'google_drive_sync_revision';
+const LAST_SYNC_SNAPSHOT_KEY = 'google_drive_last_sync_snapshot';
 const SYNC_TIMEOUT_MS = 20000;
-const AUTO_PULL_INTERVAL_MS = 15000;
+const AUTO_PULL_INTERVAL_MS = 5 * 60 * 1000;
 
 function logSync(step: string, details?: Record<string, unknown>) {
   const timestamp = new Date().toISOString();
@@ -173,6 +174,143 @@ function shouldUseRemote(remote: { syncRevision: number; exportedAt: string }, l
   return remote.exportedAt > local.exportedAt;
 }
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function deepEqual(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) {
+    return true;
+  }
+
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) {
+      return false;
+    }
+    for (let i = 0; i < a.length; i += 1) {
+      if (!deepEqual(a[i], b[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  if (isPlainObject(a) && isPlainObject(b)) {
+    const aKeys = Object.keys(a);
+    const bKeys = Object.keys(b);
+    if (aKeys.length !== bKeys.length) {
+      return false;
+    }
+    for (const key of aKeys) {
+      if (!(key in b) || !deepEqual(a[key], b[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  return false;
+}
+
+function isPrimitiveArray(values: readonly unknown[]): boolean {
+  return values.every((value) => value === null || ['string', 'number', 'boolean'].includes(typeof value));
+}
+
+function mergePrimitiveArrayByDelta(baseValue: unknown, localValue: unknown, remoteValue: unknown): unknown {
+  if (!Array.isArray(baseValue) || !Array.isArray(localValue) || !Array.isArray(remoteValue)) {
+    return remoteValue;
+  }
+
+  if (!isPrimitiveArray(baseValue) || !isPrimitiveArray(localValue) || !isPrimitiveArray(remoteValue)) {
+    return remoteValue;
+  }
+
+  const baseSet = new Set(baseValue);
+  const localSet = new Set(localValue);
+  const remoteSet = new Set(remoteValue);
+
+  const localAdds = new Set(Array.from(localSet).filter((value) => !baseSet.has(value)));
+  const localRemoves = new Set(Array.from(baseSet).filter((value) => !localSet.has(value)));
+  const remoteAdds = new Set(Array.from(remoteSet).filter((value) => !baseSet.has(value)));
+  const remoteRemoves = new Set(Array.from(baseSet).filter((value) => !remoteSet.has(value)));
+
+  const mergedSet = new Set(baseSet);
+  localAdds.forEach((value) => mergedSet.add(value));
+  remoteAdds.forEach((value) => mergedSet.add(value));
+  localRemoves.forEach((value) => mergedSet.delete(value));
+  remoteRemoves.forEach((value) => mergedSet.delete(value));
+
+  const merged = Array.from(mergedSet);
+  if (merged.every((value) => typeof value === 'number')) {
+    return merged.map((value) => Number(value)).sort((a, b) => a - b);
+  }
+
+  return merged;
+}
+
+function threeWayMerge(baseValue: unknown, localValue: unknown, remoteValue: unknown): unknown {
+  if (deepEqual(localValue, remoteValue)) {
+    return localValue;
+  }
+
+  if (deepEqual(localValue, baseValue)) {
+    return remoteValue;
+  }
+
+  if (deepEqual(remoteValue, baseValue)) {
+    return localValue;
+  }
+
+  if (Array.isArray(baseValue) && Array.isArray(localValue) && Array.isArray(remoteValue)) {
+    return mergePrimitiveArrayByDelta(baseValue, localValue, remoteValue);
+  }
+
+  if (isPlainObject(baseValue) && isPlainObject(localValue) && isPlainObject(remoteValue)) {
+    const keys = new Set([
+      ...Object.keys(baseValue),
+      ...Object.keys(localValue),
+      ...Object.keys(remoteValue),
+    ]);
+    const merged: Record<string, unknown> = {};
+    keys.forEach((key) => {
+      merged[key] = threeWayMerge(baseValue[key], localValue[key], remoteValue[key]);
+    });
+    return merged;
+  }
+
+  return remoteValue;
+}
+
+function mergeSyncSnapshotsWithBase(params: {
+  baseSnapshot: InventorySyncStateSnapshot | null;
+  localSnapshot: InventorySyncStateSnapshot;
+  remoteSnapshot: InventorySyncStateSnapshot;
+}): InventorySyncStateSnapshot {
+  const { baseSnapshot, localSnapshot, remoteSnapshot } = params;
+  if (!baseSnapshot) {
+    return remoteSnapshot;
+  }
+
+  return threeWayMerge(baseSnapshot, localSnapshot, remoteSnapshot) as InventorySyncStateSnapshot;
+}
+
+async function getLastSyncedSnapshot(): Promise<InventorySyncStateSnapshot | null> {
+  const raw = await SecureStore.getItemAsync(LAST_SYNC_SNAPSHOT_KEY);
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(raw) as InventorySyncStateSnapshot;
+  } catch {
+    return null;
+  }
+}
+
+async function setLastSyncedSnapshot(snapshot: InventorySyncStateSnapshot): Promise<void> {
+  await SecureStore.setItemAsync(LAST_SYNC_SNAPSHOT_KEY, JSON.stringify(snapshot));
+}
+
 export function GoogleDriveSyncProvider({ children }: { children: React.ReactNode }) {
   const { exportInventorySyncState, importInventorySyncState, loading } = useInventory();
   const [account, setAccount] = useState<GoogleDriveSession | null>(null);
@@ -181,7 +319,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [diagnostics, setDiagnostics] = useState<string | null>(null);
   const lastFingerprintRef = useRef<string | null>(null);
-  const pushDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasPendingChangesRef = useRef(false);
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncInFlightRef = useRef<Promise<void> | null>(null);
   const performSyncRef = useRef<((mode: 'push' | 'pull') => Promise<void>) | null>(null);
@@ -234,6 +372,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
       });
 
       if (mode === 'pull') {
+        const baseSnapshot = await getLastSyncedSnapshot();
         const remoteFile = await withTimeout(
           readGoogleDriveSnapshot<InventorySyncStateSnapshot>(accessToken),
           SYNC_TIMEOUT_MS,
@@ -255,13 +394,23 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
             logSync('performSync:pull_applying_remote_snapshot', {
               remoteRevision: remoteFile.envelope.syncRevision,
             });
-            importInventorySyncState(remoteFile.envelope.snapshot);
-            lastFingerprintRef.current = JSON.stringify(remoteFile.envelope.snapshot);
+            const mergedRemoteSnapshot = mergeSyncSnapshotsWithBase({
+              baseSnapshot,
+              localSnapshot: snapshot,
+              remoteSnapshot: remoteFile.envelope.snapshot,
+            });
+            importInventorySyncState(mergedRemoteSnapshot);
+            lastFingerprintRef.current = JSON.stringify(mergedRemoteSnapshot);
             await SecureStore.setItemAsync(SYNC_REVISION_KEY, String(remoteFile.envelope.syncRevision));
+            await setLastSyncedSnapshot(mergedRemoteSnapshot);
           }
           else {
             logSync('performSync:pull_kept_local_snapshot');
+            await setLastSyncedSnapshot(snapshot);
           }
+        }
+        else {
+          await setLastSyncedSnapshot(snapshot);
         }
 
         const completedAt = new Date().toISOString();
@@ -281,6 +430,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
       await withTimeout(upsertGoogleDriveSnapshot({ accessToken, envelope }), SYNC_TIMEOUT_MS);
       await SecureStore.setItemAsync(SYNC_REVISION_KEY, String(nextRevision));
+      await setLastSyncedSnapshot(envelope.snapshot);
       logSync('performSync:push_uploaded', {
         nextRevision,
         exportedAt: envelope.exportedAt,
@@ -310,6 +460,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     try {
       await performSync('pull');
       await performSync('push');
+      hasPendingChangesRef.current = false;
       logSync('syncNow:completed_bidirectional');
     } catch (error) {
       logSync('syncNow:error', {
@@ -381,6 +532,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   const signOut = useCallback(async () => {
     logSync('signOut:requested');
     await signOutFromGoogleDrive();
+    await SecureStore.deleteItemAsync(LAST_SYNC_SNAPSHOT_KEY);
     setAccount(null);
     setStatus('idle');
     setErrorMessage(null);
@@ -413,8 +565,9 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
       setErrorMessage(storedError ?? null);
 
       if (session) {
-        logSync('bootstrap:initial_pull');
+        logSync('bootstrap:initial_sync');
         await performSyncRef.current?.('pull');
+        await performSyncRef.current?.('push');
       }
       logSync('bootstrap:done');
     })();
@@ -422,16 +575,16 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
-      if (nextState === 'active' && account) {
-        logSync('appState:active_trigger_pull');
-        void performSync('pull').catch(() => undefined);
+      if (nextState === 'active' && account && hasPendingChangesRef.current) {
+        logSync('appState:active_trigger_sync_with_pending_changes');
+        void syncNow().catch(() => undefined);
       }
     });
 
     return () => {
       subscription.remove();
     };
-  }, [account, performSync]);
+  }, [account, syncNow]);
 
   useEffect(() => {
     if (!account) {
@@ -439,14 +592,19 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     }
 
     const interval = setInterval(() => {
-      logSync('autoPull:interval_trigger_pull', { intervalMs: AUTO_PULL_INTERVAL_MS });
-      void performSync('pull').catch(() => undefined);
+      if (!hasPendingChangesRef.current) {
+        logSync('autoSync:interval_skipped_no_pending_changes', { intervalMs: AUTO_PULL_INTERVAL_MS });
+        return;
+      }
+
+      logSync('autoSync:interval_trigger_sync', { intervalMs: AUTO_PULL_INTERVAL_MS });
+      void syncNow().catch(() => undefined);
     }, AUTO_PULL_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
     };
-  }, [account, performSync]);
+  }, [account, syncNow]);
 
   useEffect(() => {
     if (!account || loading) {
@@ -459,28 +617,21 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     }
 
     const nextFingerprint = JSON.stringify(snapshot);
+    if (lastFingerprintRef.current === null) {
+      lastFingerprintRef.current = nextFingerprint;
+      logSync('autoSync:fingerprint_initialized');
+      return;
+    }
+
     if (lastFingerprintRef.current === nextFingerprint) {
-      logSync('autoPush:skipped_same_fingerprint');
+      logSync('autoSync:skipped_same_fingerprint');
       return;
     }
 
     lastFingerprintRef.current = nextFingerprint;
-
-    if (pushDebounceRef.current) {
-      clearTimeout(pushDebounceRef.current);
-    }
-
-    pushDebounceRef.current = setTimeout(() => {
-      logSync('autoPush:debounced_sync');
-      void syncNow();
-    }, 2000);
-
-    return () => {
-      if (pushDebounceRef.current) {
-        clearTimeout(pushDebounceRef.current);
-      }
-    };
-  }, [account, exportInventorySyncState, loading, syncNow]);
+    hasPendingChangesRef.current = true;
+    logSync('autoSync:marked_pending_changes');
+  }, [account, exportInventorySyncState, loading]);
 
   const value = useMemo(() => ({
     account,
