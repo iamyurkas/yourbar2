@@ -7,6 +7,46 @@ type ExpoIosConfig = {
 
 export default ({ config }: { config: ExpoConfig }) => {
   const baseExpo = base.expo ?? {};
+  const schemeSet = new Set<string>();
+  const addScheme = (value?: string | null) => {
+    if (!value) {
+      return;
+    }
+    const normalized = value.trim();
+    if (!normalized) {
+      return;
+    }
+    schemeSet.add(normalized);
+  };
+  const addGoogleClientScheme = (clientId?: string | null) => {
+    if (!clientId) {
+      return;
+    }
+    const suffix = ".apps.googleusercontent.com";
+    if (!clientId.endsWith(suffix)) {
+      return;
+    }
+    const appIdPrefix = clientId.slice(0, -suffix.length).trim();
+    if (!appIdPrefix) {
+      return;
+    }
+    addScheme(`com.googleusercontent.apps.${appIdPrefix}`);
+  };
+
+  if (Array.isArray(baseExpo.scheme)) {
+    baseExpo.scheme.forEach((value) => addScheme(typeof value === "string" ? value : null));
+  } else {
+    addScheme(typeof baseExpo.scheme === "string" ? baseExpo.scheme : null);
+  }
+  if (Array.isArray(config.scheme)) {
+    config.scheme.forEach((value) => addScheme(typeof value === "string" ? value : null));
+  } else {
+    addScheme(typeof config.scheme === "string" ? config.scheme : null);
+  }
+
+  addGoogleClientScheme(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null);
+  addGoogleClientScheme(process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null);
+  const mergedSchemes = Array.from(schemeSet);
 
   return {
     expo: {
@@ -15,7 +55,7 @@ export default ({ config }: { config: ExpoConfig }) => {
 
       name: baseExpo.name,
       slug: baseExpo.slug,
-      scheme: baseExpo.scheme,
+      scheme: mergedSchemes,
       version: baseExpo.version,
 
       ios: {

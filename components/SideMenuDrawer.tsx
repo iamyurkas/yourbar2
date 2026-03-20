@@ -1079,13 +1079,19 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
         return { request, result };
       };
 
-      const fallbackSpecs = [
-        { forceClientSource: "default" as const, preferProxyRedirect: true },
-        { forceClientSource: "default" as const, preferProxyRedirect: false },
-        { forceClientSource: "web" as const, preferProxyRedirect: true },
-        { forceClientSource: "web" as const, preferProxyRedirect: false },
-        { forceClientSource: "android" as const, preferProxyRedirect: false },
-      ];
+      const fallbackSpecs: {
+        forceClientSource: "default" | "web" | "android";
+        preferProxyRedirect: boolean;
+      }[] = [];
+      if (proxyRedirectUri) {
+        fallbackSpecs.push(
+          { forceClientSource: "default", preferProxyRedirect: true },
+          { forceClientSource: "default", preferProxyRedirect: false },
+          { forceClientSource: "web", preferProxyRedirect: true },
+          { forceClientSource: "web", preferProxyRedirect: false },
+        );
+      }
+      fallbackSpecs.push({ forceClientSource: "android", preferProxyRedirect: false });
 
       let sessionResult = await runOAuthSession(initialAuthRequest);
       if (sessionResult?.result.type !== "success" && Platform.OS === "android") {
