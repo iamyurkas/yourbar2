@@ -26,6 +26,7 @@ type GoogleSigninModule = {
     getCurrentUser: () => Promise<{ user?: { email?: string; name?: string } } | null>;
     hasPlayServices: (options?: { showPlayServicesUpdateDialog?: boolean }) => Promise<boolean>;
     signIn: () => Promise<{ data?: { user?: { email?: string; name?: string } } | null }>;
+    signInSilently?: () => Promise<{ data?: { user?: { email?: string; name?: string } } | null }>;
     getTokens: () => Promise<{ accessToken: string }>;
     signOut: () => Promise<void>;
   };
@@ -101,6 +102,15 @@ function mapUserToSession(user: { user?: { email?: string; name?: string } } | n
   };
 }
 
+async function getStoredGoogleDriveSession(): Promise<GoogleDriveSession | null> {
+  const storedEmail = await SecureStore.getItemAsync(SECURE_EMAIL_KEY);
+  if (!storedEmail) {
+    return null;
+  }
+
+  return { email: storedEmail };
+}
+
 export async function getGoogleDriveSession(): Promise<GoogleDriveSession | null> {
   configureGoogleDriveSignIn();
   if (Platform.OS === 'web') {
@@ -108,15 +118,20 @@ export async function getGoogleDriveSession(): Promise<GoogleDriveSession | null
   }
 
   const { GoogleSignin } = requireGoogleSigninModule();
-  const signedIn = await GoogleSignin.isSignedIn();
-  if (!signedIn) {
-    return null;
+  let user = await GoogleSignin.getCurrentUser();
+  let session = mapUserToSession(user);
+
+  if (!session) {
+    const signedIn = await GoogleSignin.isSignedIn();
+    if (signedIn && GoogleSignin.signInSilently) {
+      const silentUser = await GoogleSignin.signInSilently();
+      user = silentUser.data ?? null;
+      session = mapUserToSession(user);
+    }
   }
 
-  const user = await GoogleSignin.getCurrentUser();
-  const session = mapUserToSession(user);
   if (!session) {
-    return null;
+    return getStoredGoogleDriveSession();
   }
 
   await SecureStore.setItemAsync(SECURE_EMAIL_KEY, session.email);
