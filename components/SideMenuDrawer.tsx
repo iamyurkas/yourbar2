@@ -192,6 +192,9 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [barEditorTarget, setBarEditorTarget] = useState<{ id: string, name: string } | null>(null);
   const [barEditorValue, setBarEditorValue] = useState("");
   const [isBarEditorSubmitting, setBarEditorSubmitting] = useState(false);
+  const [isBarDeleteVisible, setBarDeleteVisible] = useState(false);
+  const [barDeleteTarget, setBarDeleteTarget] = useState<{ id: string, name: string } | null>(null);
+  const [isBarDeleteSubmitting, setBarDeleteSubmitting] = useState(false);
 
   const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
@@ -479,6 +482,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setBarEditorSubmitting(false);
   };
 
+  const handleCloseBarDelete = () => {
+    setBarDeleteVisible(false);
+    setBarDeleteTarget(null);
+    setBarDeleteSubmitting(false);
+  };
+
   const handleSaveBarEditor = () => {
     if (isBarEditorSubmitting) {
       return;
@@ -507,21 +516,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
 
     scheduleAfterBarManagerClose(() => {
-      setDialogOptions({
-        title: t("barManager.deleteBar"),
-        message: t("barManager.deleteConfirm", { name: bar.name }),
-        actions: [
-          { label: t("common.cancel"), variant: "secondary" },
-          {
-            label: t("common.delete"),
-            variant: "destructive",
-            onPress: () => {
-              deleteBar(bar.id);
-            },
-          },
-        ],
-      });
+      setBarDeleteTarget(bar);
+      setBarDeleteSubmitting(false);
+      setBarDeleteVisible(true);
     });
+  };
+
+  const handleConfirmDeleteBar = () => {
+    if (!barDeleteTarget || isBarDeleteSubmitting) {
+      return;
+    }
+
+    setBarDeleteSubmitting(true);
+    setTimeout(() => {
+      deleteBar(barDeleteTarget.id);
+      handleCloseBarDelete();
+    }, 0);
   };
 
   const handleCloseLanguageModal = () => {
@@ -2845,6 +2855,77 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               >
                 <Text style={[styles.modalFooterButtonLabel, { color: Colors.onPrimary }]}>
                   {barEditorMode === "create" ? t("common.create") : t("common.save")}
+                </Text>
+              </Pressable>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      <Modal
+        transparent
+        visible={isBarDeleteVisible}
+        animationType="fade"
+        onRequestClose={handleCloseBarDelete}
+      >
+        <Pressable
+          style={styles.barEditorOverlay}
+          onPress={handleCloseBarDelete}
+          accessibilityRole="button"
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              MODAL_CARD_STYLE,
+            ]}
+            onPress={() => { }}
+          >
+            <View style={styles.modalHeader}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  { color: Colors.onSurface, flex: 1 },
+                ]}
+              >
+                {t("barManager.deleteBar")}
+              </Text>
+            </View>
+            <View style={styles.tagSection}>
+              <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                {t("barManager.deleteConfirm", { name: barDeleteTarget?.name ?? "" })}
+              </Text>
+            </View>
+            <View style={styles.modalFooter}>
+              <Pressable
+                onPress={handleCloseBarDelete}
+                disabled={isBarDeleteSubmitting}
+                style={({ pressed }) => [
+                  styles.modalFooterButton,
+                  {
+                    borderColor: Colors.outlineVariant,
+                    backgroundColor: Colors.surface,
+                    opacity: isBarDeleteSubmitting ? 0.6 : pressed ? 0.8 : 1,
+                  },
+                ]}
+              >
+                <Text style={[styles.modalFooterButtonLabel, { color: Colors.onSurfaceVariant }]}>
+                  {t("common.cancel")}
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={handleConfirmDeleteBar}
+                disabled={isBarDeleteSubmitting}
+                style={({ pressed }) => [
+                  styles.modalFooterButton,
+                  {
+                    backgroundColor: Colors.danger,
+                    borderColor: Colors.danger,
+                    opacity: isBarDeleteSubmitting ? 0.6 : pressed ? 0.8 : 1,
+                  }
+                ]}
+              >
+                <Text style={[styles.modalFooterButtonLabel, { color: Colors.onPrimary }]}>
+                  {t("common.delete")}
                 </Text>
               </Pressable>
             </View>
