@@ -2943,5 +2943,9 @@
   "cocktail.620.name": "Redwood Heights",
   "cocktail.620.synonyms": "Redwood Heights",
   "cocktail.620.description": "An elegant and complex gin-based cocktail that offers a refreshing herbal alternative to a Manhattan. The botanical notes of gin are layered with sweet vermouth and the bitter, earthy depth of Cynar, finished with an absinthe-rinsed glass for a lingering aromatic finish.",
-  "cocktail.620.instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Fill a mixing glass with **ice**.\n4. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish."
+  "cocktail.620.instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Fill a mixing glass with **ice**.\n4. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish.",
+  "ingredient.367.name": "Ginger liqueur",
+  "ingredient.367.description": "Sweet, aromatic spirit made by macerating ginger root in alcohol, often enhanced with citrus oil, sugar, and sometimes botanicals. Typically has an ABV of 25-30%.",
+  "ingredient.368.name": "Saline solution (4:1)",
+  "ingredient.368.description": "A 4:1 saline solution for cocktails is a 20% concentration used to enhance flavor, typically made by dissolving 1 part salt into 4 parts water by weight (for example, 20 g salt to 80 g water or 1 oz salt to 4 oz water)."
 }

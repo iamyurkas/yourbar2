@@ -2969,5 +2969,9 @@
   "cocktail.620.name": "Redwood Heights",
   "cocktail.620.synonyms": "Redwood Heights",
   "cocktail.620.description": "Ein eleganter und komplexer Cocktail auf Gin-Basis, der eine erfrischende kräuterige Alternative zu einem Manhattan darstellt. Die botanischen Noten des Gins werden mit süßem Wermut und der bitteren, erdigen Tiefe von Cynar geschichtet, vollendet in einem mit Absinth ausgespülten Glas für ein lang anhaltendes aromatisches Finish.",
-  "cocktail.620.instructions": "1. Eine Coupette auswählen und vorkühlen.\n2. Das gekühlte Glas mit **Absinth** ausspülen (schwenken und den Überschuss wegschütten).\n3. Ein Rührglas mit **Eis** füllen.\n4. 60 ml **Gin**, 30 ml **roten Wermut**, 15 ml **Cynar** und 1 Spritzer **Orangenbitter** hinzufügen.\n5. Etwa 30 Sekunden lang vorsichtig rühren, bis der Drink gut gekühlt ist.\n6. In das mit Absinth ausgespülte Glas abseihen.\n7. Die Öle einer **Orangenschale** über dem Drink ausdrücken und diese als Garnitur verwenden."
+  "cocktail.620.instructions": "1. Eine Coupette auswählen und vorkühlen.\n2. Das gekühlte Glas mit **Absinth** ausspülen (schwenken und den Überschuss wegschütten).\n3. Ein Rührglas mit **Eis** füllen.\n4. 60 ml **Gin**, 30 ml **roten Wermut**, 15 ml **Cynar** und 1 Spritzer **Orangenbitter** hinzufügen.\n5. Etwa 30 Sekunden lang vorsichtig rühren, bis der Drink gut gekühlt ist.\n6. In das mit Absinth ausgespülte Glas abseihen.\n7. Die Öle einer **Orangenschale** über dem Drink ausdrücken und diese als Garnitur verwenden.",
+  "ingredient.367.name": "Ingwerlikör",
+  "ingredient.367.description": "Süßer, aromatischer Likör, der durch Mazeration von Ingwerwurzel in Alkohol hergestellt wird und oft mit Zitrusölen, Zucker und gelegentlich Botanicals verfeinert ist. Typischer Alkoholgehalt: 25-30 % vol.",
+  "ingredient.368.name": "Salzlösung (4:1)",
+  "ingredient.368.description": "Eine 4:1-Salzlösung für Cocktails ist eine 20%ige Mischung zur Geschmacksverstärkung. Üblicherweise wird sie hergestellt, indem 1 Teil Salz in 4 Teilen Wasser nach Gewicht gelöst wird (z. B. 20 g Salz in 80 g Wasser oder 1 oz Salz in 4 oz Wasser)."
 }
