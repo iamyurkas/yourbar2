@@ -1239,16 +1239,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.googleDriveActions}>
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={t("sideMenu.googleDriveSync")}
-                  onPress={handleGoogleDriveSyncPress}
-                  style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
-                >
-                  <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurface }]}>
-                    {t("sideMenu.googleDriveSync")}
-                  </Text>
-                </Pressable>
-                <Pressable
-                  accessibilityRole="button"
                   accessibilityLabel={t("sideMenu.googleDriveSignOut")}
                   onPress={handleGoogleDriveSignOutPress}
                   style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
