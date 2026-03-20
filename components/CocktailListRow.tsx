@@ -149,7 +149,7 @@ const CocktailListRowComponent = ({
   const normalizedRating = Math.max(0, Math.min(MAX_RATING, Number(ratingValue) || 0));
 
   const ratingContent = useMemo(() => {
-    if (normalizedRating <= 0 && !showPartySelectionControl) {
+    if (normalizedRating <= 0 && !showPartySelectionControl && !isPartySelected) {
       return null;
     }
 
