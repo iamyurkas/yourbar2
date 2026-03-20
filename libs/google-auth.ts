@@ -60,8 +60,12 @@ function getSecureStoreModule(): SecureStoreModule | null {
 async function setStoredValue(key: string, value: string): Promise<void> {
   const secureStore = getSecureStoreModule();
   if (secureStore) {
-    await secureStore.setItemAsync(key, value);
-    return;
+    try {
+      await secureStore.setItemAsync(key, value);
+      return;
+    } catch {
+      // fall back to in-memory storage when native secure storage is unavailable at runtime
+    }
   }
 
   memorySession.set(key, value);
@@ -70,7 +74,11 @@ async function setStoredValue(key: string, value: string): Promise<void> {
 async function getStoredValue(key: string): Promise<string | null> {
   const secureStore = getSecureStoreModule();
   if (secureStore) {
-    return await secureStore.getItemAsync(key);
+    try {
+      return await secureStore.getItemAsync(key);
+    } catch {
+      // fall back to in-memory storage when native secure storage is unavailable at runtime
+    }
   }
 
   return memorySession.get(key) ?? null;
@@ -79,8 +87,12 @@ async function getStoredValue(key: string): Promise<string | null> {
 async function deleteStoredValue(key: string): Promise<void> {
   const secureStore = getSecureStoreModule();
   if (secureStore) {
-    await secureStore.deleteItemAsync(key);
-    return;
+    try {
+      await secureStore.deleteItemAsync(key);
+      return;
+    } catch {
+      // fall back to in-memory storage when native secure storage is unavailable at runtime
+    }
   }
 
   memorySession.delete(key);
