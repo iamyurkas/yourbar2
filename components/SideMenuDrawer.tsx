@@ -191,6 +191,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const [barEditorMode, setBarEditorMode] = useState<"create" | "rename">("create");
   const [barEditorTarget, setBarEditorTarget] = useState<{ id: string, name: string } | null>(null);
   const [barEditorValue, setBarEditorValue] = useState("");
+  const [isBarEditorSubmitting, setBarEditorSubmitting] = useState(false);
 
   const amazonStoreModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
@@ -465,6 +466,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setBarEditorMode(mode);
     setBarEditorTarget(bar ?? null);
     setBarEditorValue(bar?.name ?? "");
+    setBarEditorSubmitting(false);
     scheduleAfterBarManagerClose(() => {
       setBarEditorVisible(true);
     });
@@ -474,13 +476,20 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setBarEditorVisible(false);
     setBarEditorTarget(null);
     setBarEditorValue("");
+    setBarEditorSubmitting(false);
   };
 
   const handleSaveBarEditor = () => {
+    if (isBarEditorSubmitting) {
+      return;
+    }
+
     const trimmedName = barEditorValue.trim();
     if (!trimmedName) {
       return;
     }
+
+    setBarEditorSubmitting(true);
 
     if (barEditorMode === "create") {
       createBar(trimmedName);
@@ -2808,23 +2817,33 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             <View style={styles.modalFooter}>
               <Pressable
                 onPress={handleCloseBarEditor}
-                style={[styles.modalFooterButton, { borderColor: Colors.outlineVariant }]}
+                disabled={isBarEditorSubmitting}
+                style={({ pressed }) => [
+                  styles.modalFooterButton,
+                  {
+                    borderColor: Colors.outlineVariant,
+                    backgroundColor: Colors.surface,
+                    opacity: isBarEditorSubmitting ? 0.6 : pressed ? 0.8 : 1,
+                  },
+                ]}
               >
-                <Text style={{ color: Colors.onSurfaceVariant }}>{t("common.cancel")}</Text>
+                <Text style={[styles.modalFooterButtonLabel, { color: Colors.onSurfaceVariant }]}>
+                  {t("common.cancel")}
+                </Text>
               </Pressable>
               <Pressable
                 onPress={handleSaveBarEditor}
-                disabled={!barEditorValue.trim()}
-                style={[
+                disabled={!barEditorValue.trim() || isBarEditorSubmitting}
+                style={({ pressed }) => [
                   styles.modalFooterButton,
                   {
                     backgroundColor: Colors.tint,
                     borderColor: Colors.tint,
-                    opacity: !barEditorValue.trim() ? 0.5 : 1,
+                    opacity: !barEditorValue.trim() || isBarEditorSubmitting ? 0.6 : pressed ? 0.8 : 1,
                   }
                 ]}
               >
-                <Text style={{ color: Colors.background, fontWeight: "600" }}>
+                <Text style={[styles.modalFooterButtonLabel, { color: Colors.onPrimary }]}>
                   {barEditorMode === "create" ? t("common.create") : t("common.save")}
                 </Text>
               </Pressable>
@@ -3088,19 +3107,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   modalFooter: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: "column",
     gap: 12,
-    marginTop: 8,
+    marginTop: 4,
   },
   modalFooterButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
+    width: "100%",
+    height: 56,
+    paddingHorizontal: 20,
+    borderRadius: 12,
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 80,
+  },
+  modalFooterButtonLabel: {
+    fontSize: 16,
+    fontWeight: "600",
   },
   importStatusCloseButton: {
     position: "absolute",
