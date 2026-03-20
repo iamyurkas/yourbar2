@@ -44,6 +44,7 @@ const LAST_SYNC_KEY = 'google_drive_last_sync_at';
 const LAST_SYNC_ERROR_KEY = 'google_drive_last_sync_error';
 const SYNC_REVISION_KEY = 'google_drive_sync_revision';
 const SYNC_TIMEOUT_MS = 20000;
+const AUTO_PULL_INTERVAL_MS = 15000;
 
 function logSync(step: string, details?: Record<string, unknown>) {
   const timestamp = new Date().toISOString();
@@ -424,6 +425,21 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
     return () => {
       subscription.remove();
+    };
+  }, [account, performSync]);
+
+  useEffect(() => {
+    if (!account) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      logSync('autoPull:interval_trigger_pull', { intervalMs: AUTO_PULL_INTERVAL_MS });
+      void performSync('pull').catch(() => undefined);
+    }, AUTO_PULL_INTERVAL_MS);
+
+    return () => {
+      clearInterval(interval);
     };
   }, [account, performSync]);
 

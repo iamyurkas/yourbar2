@@ -30,6 +30,12 @@ Android Google OAuth should use Google Play Services native sign-in for best rel
 
 The snapshot includes complete user state (bars, ingredients, cocktails, settings, tags, onboarding state, and related persisted app state).
 
+### Delta vs full payload
+
+- **On Google Drive we store one full sync envelope** (`yourbar-sync.json`) that contains the latest `snapshot`.
+- Inside that `snapshot`, cocktails and ingredients are represented as a **delta against the built-in catalog** (created/updated/deleted), plus full user settings/state maps.
+- So transport-wise the app exchanges the latest full envelope file, but snapshot content is already compacted via internal delta structures.
+
 ## Conflict policy
 
 - Deterministic last-write-wins using `syncRevision` first, then timestamp (`exportedAt`) as tie-breaker.
