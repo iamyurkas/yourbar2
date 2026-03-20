@@ -183,7 +183,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     lastSyncAt: googleDriveLastSyncAt,
     errorMessage: googleDriveErrorMessage,
     signIn: signInToGoogleDrive,
-    signOut: signOutFromGoogleDrive,
     syncNow: syncGoogleDriveNow,
   } = useGoogleDriveSync();
   const [isMounted, setIsMounted] = useState(visible);
@@ -452,11 +451,6 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const handleGoogleDriveSyncPress = () => {
     void syncGoogleDriveNow();
   };
-
-  const handleGoogleDriveSignOutPress = () => {
-    void signOutFromGoogleDrive();
-  };
-
 
   const handleStartScreenPress = () => {
     setStartScreenModalVisible(true);
@@ -1236,7 +1230,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               </View>
               <Pressable onPress={googleDriveAccount ? handleGoogleDriveSyncPress : handleGoogleDrivePrimaryPress}>
                 <MaterialCommunityIcons
-                  name={googleDriveAccount ? "sync" : "chevron-right"}
+                  name={googleDriveAccount ? "logout" : "chevron-right"}
                   size={20}
                   color={Colors.onSurfaceVariant}
                 />
@@ -1247,12 +1241,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               <View style={styles.googleDriveActions}>
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={t("sideMenu.googleDriveSignOut")}
-                  onPress={handleGoogleDriveSignOutPress}
+                  accessibilityLabel={t("sideMenu.googleDriveSyncNow")}
+                  onPress={handleGoogleDriveSyncPress}
                   style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
                 >
                   <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurfaceVariant }]}>
-                    {t("sideMenu.googleDriveSignOut")}
+                    {t("sideMenu.googleDriveSyncNow")}
                   </Text>
                 </Pressable>
               </View>
