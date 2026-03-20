@@ -131,11 +131,30 @@ async function getDeviceId(): Promise<string> {
     return existing;
   }
 
-  const generated = [
-    Application.androidId,
-    await Application.getIosIdForVendorAsync(),
-    `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-  ].find(Boolean) ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  let generated: string | null = null;
+  if (Application.applicationId) {
+    if (Application.nativeApplicationVersion && Application.nativeBuildVersion) {
+      logSync('getDeviceId:app_info', {
+        applicationId: Application.applicationId,
+        nativeVersion: Application.nativeApplicationVersion,
+        nativeBuildVersion: Application.nativeBuildVersion,
+      });
+    }
+  }
+
+  if (Application.androidId) {
+    generated = Application.androidId;
+  } else {
+    try {
+      generated = await Application.getIosIdForVendorAsync();
+    } catch {
+      generated = null;
+    }
+  }
+
+  if (!generated) {
+    generated = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  }
 
   await SecureStore.setItemAsync(DEVICE_ID_KEY, generated);
   return generated;
