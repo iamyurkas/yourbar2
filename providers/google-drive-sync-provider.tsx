@@ -173,6 +173,41 @@ function shouldUseRemote(remote: { syncRevision: number; exportedAt: string }, l
   return remote.exportedAt > local.exportedAt;
 }
 
+function mergeNumberIds(
+  remoteIds: number[] | undefined,
+  localIds: number[] | undefined,
+): number[] | undefined {
+  const merged = new Set<number>();
+
+  [remoteIds, localIds].forEach((ids) => {
+    (ids ?? []).forEach((id) => {
+      const normalized = Number(id);
+      if (!Number.isFinite(normalized) || normalized < 0) {
+        return;
+      }
+
+      merged.add(Math.trunc(normalized));
+    });
+  });
+
+  if (merged.size === 0) {
+    return undefined;
+  }
+
+  return Array.from(merged).sort((a, b) => a - b);
+}
+
+function mergeSyncSnapshotDelta(
+  remote: InventorySyncStateSnapshot,
+  local: InventorySyncStateSnapshot,
+): InventorySyncStateSnapshot {
+  return {
+    ...remote,
+    availableIngredientIds: mergeNumberIds(remote.availableIngredientIds, local.availableIngredientIds),
+    shoppingIngredientIds: mergeNumberIds(remote.shoppingIngredientIds, local.shoppingIngredientIds),
+  };
+}
+
 export function GoogleDriveSyncProvider({ children }: { children: React.ReactNode }) {
   const { exportInventorySyncState, importInventorySyncState, loading } = useInventory();
   const [account, setAccount] = useState<GoogleDriveSession | null>(null);
@@ -255,8 +290,9 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
             logSync('performSync:pull_applying_remote_snapshot', {
               remoteRevision: remoteFile.envelope.syncRevision,
             });
-            importInventorySyncState(remoteFile.envelope.snapshot);
-            lastFingerprintRef.current = JSON.stringify(remoteFile.envelope.snapshot);
+            const mergedRemoteSnapshot = mergeSyncSnapshotDelta(remoteFile.envelope.snapshot, snapshot);
+            importInventorySyncState(mergedRemoteSnapshot);
+            lastFingerprintRef.current = JSON.stringify(mergedRemoteSnapshot);
             await SecureStore.setItemAsync(SYNC_REVISION_KEY, String(remoteFile.envelope.syncRevision));
           }
           else {
