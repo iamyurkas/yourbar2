@@ -9,6 +9,7 @@ import {
   getGoogleDriveAccessToken,
   getGoogleDriveSession,
   isGoogleSignInCancelled,
+  isGoogleSignInUnavailable,
   signInToGoogleDrive,
   signOutFromGoogleDrive,
   type GoogleDriveSession,
@@ -153,6 +154,12 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     try {
       await performSync('push');
     } catch (error) {
+      if (isGoogleSignInUnavailable(error)) {
+        await persistSyncState(lastSyncAt, 'Google sync is unavailable in Expo Go. Use a development build.');
+        setStatus('error');
+        return;
+      }
+
       const message = 'Unable to sync now. Please check your internet connection and try again.';
       await persistSyncState(lastSyncAt, message);
       setStatus('error');
@@ -165,7 +172,13 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   const restoreFromCloud = useCallback(async () => {
     try {
       await performSync('pull');
-    } catch {
+    } catch (error) {
+      if (isGoogleSignInUnavailable(error)) {
+        await persistSyncState(lastSyncAt, 'Google sync is unavailable in Expo Go. Use a development build.');
+        setStatus('error');
+        return;
+      }
+
       const message = 'Unable to restore from cloud right now. Please try again.';
       await persistSyncState(lastSyncAt, message);
       setStatus('error');
@@ -187,6 +200,12 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
         return;
       }
 
+      if (isGoogleSignInUnavailable(error)) {
+        setStatus('error');
+        setErrorMessage('Google sign-in requires a native development/production build (not Expo Go).');
+        return;
+      }
+
       setStatus('error');
       setErrorMessage('Google sign-in failed. Please try again.');
     }
@@ -200,10 +219,18 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   }, []);
 
   useEffect(() => {
-    configureGoogleDriveSignIn();
     void (async () => {
-      const [session, storedSyncAt, storedError] = await Promise.all([
-        getGoogleDriveSession(),
+      let session: GoogleDriveSession | null = null;
+      try {
+        configureGoogleDriveSignIn();
+        session = await getGoogleDriveSession();
+      } catch (error) {
+        if (isGoogleSignInUnavailable(error)) {
+          setErrorMessage('Google sign-in requires a native development/production build (not Expo Go).');
+        }
+      }
+
+      const [storedSyncAt, storedError] = await Promise.all([
         SecureStore.getItemAsync(LAST_SYNC_KEY),
         SecureStore.getItemAsync(LAST_SYNC_ERROR_KEY),
       ]);

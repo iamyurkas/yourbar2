@@ -1,4 +1,3 @@
-import { GoogleSignin, statusCodes, type User } from '@react-native-google-signin/google-signin';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
@@ -18,6 +17,45 @@ type GoogleDriveAuthConfig = {
 };
 
 let isConfigured = false;
+const GOOGLE_SIGNIN_UNAVAILABLE_CODE = 'google_signin_unavailable';
+
+type GoogleSigninModule = {
+  GoogleSignin: {
+    configure: (config: Record<string, unknown>) => void;
+    isSignedIn: () => Promise<boolean>;
+    getCurrentUser: () => Promise<{ user?: { email?: string; name?: string } } | null>;
+    hasPlayServices: (options?: { showPlayServicesUpdateDialog?: boolean }) => Promise<boolean>;
+    signIn: () => Promise<{ data?: { user?: { email?: string; name?: string } } | null }>;
+    getTokens: () => Promise<{ accessToken: string }>;
+    signOut: () => Promise<void>;
+  };
+  statusCodes?: {
+    SIGN_IN_CANCELLED?: string;
+  };
+};
+
+function loadGoogleSigninModule(): GoogleSigninModule | null {
+  if (Platform.OS === 'web') {
+    return null;
+  }
+
+  try {
+    return require('@react-native-google-signin/google-signin') as GoogleSigninModule;
+  } catch {
+    return null;
+  }
+}
+
+function requireGoogleSigninModule(): GoogleSigninModule {
+  const module = loadGoogleSigninModule();
+  if (!module) {
+    const error = new Error('Native Google Sign-In is not available in this build.');
+    (error as Error & { code?: string }).code = GOOGLE_SIGNIN_UNAVAILABLE_CODE;
+    throw error;
+  }
+
+  return module;
+}
 
 function getGoogleDriveAuthConfig(): GoogleDriveAuthConfig {
   const androidClientId = process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID?.trim() ?? '';
@@ -36,6 +74,7 @@ export function configureGoogleDriveSignIn() {
     return;
   }
 
+  const { GoogleSignin } = requireGoogleSigninModule();
   const config = getGoogleDriveAuthConfig();
   GoogleSignin.configure({
     scopes: [GOOGLE_DRIVE_SCOPE],
@@ -47,7 +86,7 @@ export function configureGoogleDriveSignIn() {
   isConfigured = true;
 }
 
-function mapUserToSession(user: User | null): GoogleDriveSession | null {
+function mapUserToSession(user: { user?: { email?: string; name?: string } } | null): GoogleDriveSession | null {
   if (!user?.user?.email) {
     return null;
   }
@@ -64,6 +103,7 @@ export async function getGoogleDriveSession(): Promise<GoogleDriveSession | null
     return null;
   }
 
+  const { GoogleSignin } = requireGoogleSigninModule();
   const signedIn = await GoogleSignin.isSignedIn();
   if (!signedIn) {
     return null;
@@ -85,6 +125,7 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
     throw new Error('Google Drive sync is only supported on iOS and Android.');
   }
 
+  const { GoogleSignin } = requireGoogleSigninModule();
   const config = getGoogleDriveAuthConfig();
   if (!config.androidClientId || !config.iosClientId) {
     throw new Error('Google Drive client IDs are missing.');
@@ -109,14 +150,18 @@ export async function signInToGoogleDrive(): Promise<GoogleDriveSession> {
 
 export async function getGoogleDriveAccessToken(): Promise<string> {
   configureGoogleDriveSignIn();
+  const { GoogleSignin } = requireGoogleSigninModule();
   const tokens = await GoogleSignin.getTokens();
   await SecureStore.setItemAsync(SECURE_ACCESS_TOKEN_KEY, tokens.accessToken);
   return tokens.accessToken;
 }
 
 export async function signOutFromGoogleDrive() {
+  const module = loadGoogleSigninModule();
   try {
-    await GoogleSignin.signOut();
+    if (module) {
+      await module.GoogleSignin.signOut();
+    }
   } finally {
     await Promise.all([
       SecureStore.deleteItemAsync(SECURE_EMAIL_KEY),
@@ -126,8 +171,17 @@ export async function signOutFromGoogleDrive() {
 }
 
 export function isGoogleSignInCancelled(error: unknown): boolean {
+  const module = loadGoogleSigninModule();
+  const cancelledCode = module?.statusCodes?.SIGN_IN_CANCELLED;
   return typeof error === 'object'
     && error != null
     && 'code' in error
-    && (error as { code?: string }).code === statusCodes.SIGN_IN_CANCELLED;
+    && (error as { code?: string }).code === cancelledCode;
+}
+
+export function isGoogleSignInUnavailable(error: unknown): boolean {
+  return typeof error === 'object'
+    && error != null
+    && 'code' in error
+    && (error as { code?: string }).code === GOOGLE_SIGNIN_UNAVAILABLE_CODE;
 }
