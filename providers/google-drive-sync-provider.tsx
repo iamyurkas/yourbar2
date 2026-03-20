@@ -184,6 +184,7 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
   const pushDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncInFlightRef = useRef<Promise<void> | null>(null);
+  const performSyncRef = useRef<((mode: 'push' | 'pull') => Promise<void>) | null>(null);
 
   const persistSyncState = useCallback(async (nextSyncAt: string | null, nextError: string | null) => {
     setLastSyncAt(nextSyncAt);
@@ -300,6 +301,10 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
     return syncPromise;
   }, [exportInventorySyncState, importInventorySyncState, loading, persistSyncState]);
 
+  useEffect(() => {
+    performSyncRef.current = performSync;
+  }, [performSync]);
+
   const syncNow = useCallback(async () => {
     logSync('syncNow:requested');
     try {
@@ -409,11 +414,11 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
 
       if (session) {
         logSync('bootstrap:initial_pull');
-        await performSync('pull');
+        await performSyncRef.current?.('pull');
       }
       logSync('bootstrap:done');
     })();
-  }, [performSync]);
+  }, []);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
