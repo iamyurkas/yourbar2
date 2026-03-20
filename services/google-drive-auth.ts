@@ -8,6 +8,7 @@ const SECURE_ACCESS_TOKEN_KEY = 'google_drive_sync_access_token';
 export type GoogleDriveSession = {
   email: string;
   name?: string;
+  photoUrl?: string;
 };
 
 type GoogleDriveAuthConfig = {
@@ -23,10 +24,10 @@ type GoogleSigninModule = {
   GoogleSignin: {
     configure: (config: Record<string, unknown>) => void;
     isSignedIn: () => Promise<boolean>;
-    getCurrentUser: () => Promise<{ user?: { email?: string; name?: string } } | null>;
+    getCurrentUser: () => Promise<{ user?: { email?: string; name?: string; photo?: string; photoUrl?: string } } | null>;
     hasPlayServices: (options?: { showPlayServicesUpdateDialog?: boolean }) => Promise<boolean>;
-    signIn: () => Promise<{ data?: { user?: { email?: string; name?: string } } | null }>;
-    signInSilently?: () => Promise<{ data?: { user?: { email?: string; name?: string } } | null }>;
+    signIn: () => Promise<{ data?: { user?: { email?: string; name?: string; photo?: string; photoUrl?: string } } | null }>;
+    signInSilently?: () => Promise<{ data?: { user?: { email?: string; name?: string; photo?: string; photoUrl?: string } } | null }>;
     getTokens: () => Promise<{ accessToken: string }>;
     signOut: () => Promise<void>;
   };
@@ -91,7 +92,7 @@ export function configureGoogleDriveSignIn() {
   isConfigured = true;
 }
 
-function mapUserToSession(user: { user?: { email?: string; name?: string } } | null): GoogleDriveSession | null {
+function mapUserToSession(user: { user?: { email?: string; name?: string; photo?: string; photoUrl?: string } } | null): GoogleDriveSession | null {
   if (!user?.user?.email) {
     return null;
   }
@@ -99,6 +100,7 @@ function mapUserToSession(user: { user?: { email?: string; name?: string } } | n
   return {
     email: user.user.email,
     name: user.user.name ?? undefined,
+    photoUrl: user.user.photoUrl ?? user.user.photo ?? undefined,
   };
 }
 
