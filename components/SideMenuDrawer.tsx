@@ -1059,6 +1059,31 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   useEffect(() => {
+    if (visible) {
+      return;
+    }
+
+    clearTimeoutRef(startScreenModalCloseTimeout);
+    clearTimeoutRef(amazonStoreModalCloseTimeout);
+    clearTimeoutRef(languageModalCloseTimeout);
+    clearTimeoutRef(barManagerTransitionTimeout);
+    clearTimeoutRef(tagManagerTransitionTimeout);
+    clearTimeoutRef(tagEditorReturnTimeout);
+    clearTimeoutRef(backupRestoreActionTimeout);
+
+    setStartScreenModalVisible(false);
+    setAmazonStoreModalVisible(false);
+    setLanguageModalVisible(false);
+    setBackupRestoreModalVisible(false);
+    setBarManagerVisible(false);
+    setBarEditorVisible(false);
+    setTagManagerVisible(false);
+    setTagEditorVisible(false);
+    setIsIngredientStatusImportModalVisible(false);
+    setDialogOptions(null);
+  }, [visible]);
+
+  useEffect(() => {
     return () => {
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
