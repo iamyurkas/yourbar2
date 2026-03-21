@@ -184,3 +184,30 @@ test('feature flag disabled keeps JSON fallback adapter', async () => {
   await adapter.persistStateDelta({ version: 3, delta: {} });
   assert.deepEqual(persisted, { version: 3, delta: {} });
 });
+
+test('schema bootstrap deduplicates bar_state keys before unique index creation', async () => {
+  const fakeDb = createFakeDb();
+  const module = loadAdapterModule({
+    'expo-file-system/legacy': {
+      documentDirectory: '/tmp',
+      cacheDirectory: '/tmp',
+      getInfoAsync: async () => ({ exists: true }),
+      writeAsStringAsync: async () => {},
+    },
+    '@/libs/inventory-storage': {
+      loadInventorySnapshot: async () => undefined,
+      persistInventorySnapshot: async () => {},
+    },
+    '@/providers/inventory-types': {},
+  });
+
+  const { SqliteInventoryStorageAdapter } = module.__internal();
+  const adapter = new SqliteInventoryStorageAdapter({
+    openDatabaseAsync: async () => fakeDb,
+  });
+
+  await adapter.persistStateDelta({ version: 3, delta: {} });
+  assert.ok(
+    fakeDb.commands.some((command) => command.includes('DELETE FROM bar_state') && command.includes('GROUP BY bar_id')),
+  );
+});

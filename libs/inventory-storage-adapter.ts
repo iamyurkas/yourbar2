@@ -115,6 +115,23 @@ async function ensureColumnExists(
   await db.execAsync(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnSql}`);
 }
 
+async function dedupeRowsByKey(
+  db: SqliteDatabase,
+  tableName: string,
+  keyColumn: string,
+): Promise<void> {
+  await db.execAsync(`
+    DELETE FROM ${tableName}
+    WHERE ${keyColumn} IS NOT NULL
+      AND rowid NOT IN (
+        SELECT MAX(rowid)
+        FROM ${tableName}
+        WHERE ${keyColumn} IS NOT NULL
+        GROUP BY ${keyColumn}
+      );
+  `);
+}
+
 async function ensureSchema(db: SqliteDatabase): Promise<void> {
   await db.execAsync(`
     PRAGMA journal_mode = WAL;
@@ -201,6 +218,16 @@ async function ensureSchema(db: SqliteDatabase): Promise<void> {
   await ensureColumnExists(db, 'tags', 'color', 'TEXT');
   await ensureColumnExists(db, 'storage_meta', 'key', 'TEXT');
   await ensureColumnExists(db, 'storage_meta', 'value', 'TEXT');
+
+  await dedupeRowsByKey(db, 'cocktails', 'entity_id');
+  await dedupeRowsByKey(db, 'ingredients', 'entity_id');
+  await dedupeRowsByKey(db, 'bars', 'bar_id');
+  await dedupeRowsByKey(db, 'bar_state', 'bar_id');
+  await dedupeRowsByKey(db, 'feedback', 'cocktail_key');
+  await dedupeRowsByKey(db, 'party_selection', 'cocktail_key');
+  await dedupeRowsByKey(db, 'translation_overrides', 'locale');
+  await dedupeRowsByKey(db, 'settings', 'key');
+  await dedupeRowsByKey(db, 'storage_meta', 'key');
 
   await db.execAsync(`
     CREATE UNIQUE INDEX IF NOT EXISTS idx_cocktails_entity_id ON cocktails(entity_id);
