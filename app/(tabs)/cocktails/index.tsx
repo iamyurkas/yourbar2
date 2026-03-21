@@ -82,6 +82,7 @@ export default function CocktailsScreen() {
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
   const lastScrollOffset = useRef(0);
   const pendingReturnScrollOffset = useRef<number | null>(null);
+  const pendingFocusCocktailKey = useRef<string | null>(null);
   const hasAppliedReturnScrollOffset = useRef(true);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -118,6 +119,7 @@ export default function CocktailsScreen() {
     sort?: string | string[];
     desc?: string | string[];
     scroll?: string | string[];
+    focusCocktail?: string | string[];
   }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
@@ -174,9 +176,13 @@ export default function CocktailsScreen() {
       pendingReturnScrollOffset.current = null;
       hasAppliedReturnScrollOffset.current = true;
     }
+
+    const parsedFocusCocktail = getParamValue(params.focusCocktail).trim();
+    pendingFocusCocktailKey.current = parsedFocusCocktail.length > 0 ? parsedFocusCocktail : null;
   }, [
     getParamValue,
     params.desc,
+    params.focusCocktail,
     params.methods,
     params.query,
     params.ratings,
@@ -723,19 +729,46 @@ export default function CocktailsScreen() {
       return;
     }
 
-    const restoreOffset = pendingReturnScrollOffset.current;
-    if (restoreOffset == null) {
-      hasAppliedReturnScrollOffset.current = true;
-      return;
-    }
+    const focusCocktailKey = pendingFocusCocktailKey.current;
+    const restoreOffset = pendingReturnScrollOffset.current ?? 0;
+    const myTabActive = activeTab === 'my';
 
     requestAnimationFrame(() => {
+      if (focusCocktailKey) {
+        const focusIndex = myTabActive
+          ? visibleMyTabItems.findIndex(
+            (item) =>
+              item.type === 'cocktail' &&
+              String(item.cocktail.id ?? item.cocktail.name) === focusCocktailKey,
+          )
+          : sortedCocktails.findIndex((cocktail) => String(cocktail.id ?? cocktail.name) === focusCocktailKey);
+
+        if (focusIndex >= 0) {
+          listRef.current?.scrollToIndex({ index: focusIndex, animated: false, viewPosition: 0.5 });
+          pendingFocusCocktailKey.current = null;
+          pendingReturnScrollOffset.current = null;
+          hasAppliedReturnScrollOffset.current = true;
+          return;
+        }
+      }
+
       listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
       lastScrollOffset.current = restoreOffset;
+      pendingFocusCocktailKey.current = null;
       pendingReturnScrollOffset.current = null;
       hasAppliedReturnScrollOffset.current = true;
     });
-  }, [activeTab, loading, sortedCocktails.length, visibleMyTabItems.length]);
+  }, [activeTab, loading, sortedCocktails, visibleMyTabItems]);
+
+  const handleScrollToIndexFailed = useCallback(
+    ({ averageItemLength, index }: { averageItemLength: number; index: number }) => {
+      if (!Number.isFinite(averageItemLength) || averageItemLength <= 0) {
+        return;
+      }
+      listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
+    },
+    [],
+  );
 
 
 
@@ -758,7 +791,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
-        returnToParams: getReturnToParamsWithScroll(),
+        returnToParams: {
+          ...getReturnToParamsWithScroll(),
+          focusCocktail: String(candidateId),
+        },
       });
     },
     [getReturnToParamsWithScroll],
@@ -1340,6 +1376,7 @@ export default function CocktailsScreen() {
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
             onScroll={handleScroll}
+            onScrollToIndexFailed={handleScrollToIndexFailed}
             scrollEventThrottle={16}
             ListEmptyComponent={
               <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
@@ -1362,6 +1399,7 @@ export default function CocktailsScreen() {
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
             onScroll={handleScroll}
+            onScrollToIndexFailed={handleScrollToIndexFailed}
             scrollEventThrottle={16}
             ListEmptyComponent={
               <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>

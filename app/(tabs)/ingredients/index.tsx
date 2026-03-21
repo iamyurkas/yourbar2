@@ -214,7 +214,10 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
-      returnToParams: getReturnToParams?.(),
+      returnToParams: {
+        ...getReturnToParams?.(),
+        focusIngredient: String(routeParam),
+      },
     });
   }, [getReturnToParams, ingredient.id, ingredient.name]);
 
@@ -251,6 +254,7 @@ export default function IngredientsScreen() {
     sort?: string | string[];
     desc?: string | string[];
     scroll?: string | string[];
+    focusIngredient?: string | string[];
   }>();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
@@ -271,6 +275,7 @@ export default function IngredientsScreen() {
   const listRef = useRef<FlatList<Ingredient>>(null);
   const lastScrollOffset = useRef(0);
   const pendingReturnScrollOffset = useRef<number | null>(null);
+  const pendingFocusIngredientKey = useRef<string | null>(null);
   const hasAppliedReturnScrollOffset = useRef(true);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -299,10 +304,12 @@ export default function IngredientsScreen() {
     const rawSort = getParamValue(params.sort);
     const rawDesc = getParamValue(params.desc);
     const rawScroll = getParamValue(params.scroll);
-    const hasListParams = [rawQuery, rawTab, rawTags, rawSort, rawDesc, rawScroll].some((value) => value.length > 0);
+    const rawFocusIngredient = getParamValue(params.focusIngredient).trim();
+    const hasListParams = [rawQuery, rawTab, rawTags, rawSort, rawDesc, rawScroll, rawFocusIngredient].some((value) => value.length > 0);
 
     if (!hasListParams) {
       pendingReturnScrollOffset.current = null;
+      pendingFocusIngredientKey.current = null;
       hasAppliedReturnScrollOffset.current = true;
       return;
     }
@@ -335,7 +342,9 @@ export default function IngredientsScreen() {
       pendingReturnScrollOffset.current = null;
       hasAppliedReturnScrollOffset.current = true;
     }
-  }, [getParamValue, params.desc, params.query, params.scroll, params.sort, params.tab, params.tags]);
+
+    pendingFocusIngredientKey.current = rawFocusIngredient.length > 0 ? rawFocusIngredient : null;
+  }, [getParamValue, params.desc, params.focusIngredient, params.query, params.scroll, params.sort, params.tab, params.tags]);
 
   const listReturnToParams = useMemo<Record<string, string | undefined>>(
     () => ({
@@ -374,11 +383,11 @@ export default function IngredientsScreen() {
       return;
     }
 
-    const restoreOffset = pendingReturnScrollOffset.current;
-    if (restoreOffset == null) {
-      hasAppliedReturnScrollOffset.current = true;
+    if (pendingFocusIngredientKey.current) {
       return;
     }
+
+    const restoreOffset = pendingReturnScrollOffset.current ?? 0;
 
     requestAnimationFrame(() => {
       listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
@@ -784,6 +793,42 @@ export default function IngredientsScreen() {
     [compareIngredientsBySelectedSort, filteredIngredients],
   );
 
+  useEffect(() => {
+    if (loading || hasAppliedReturnScrollOffset.current) {
+      return;
+    }
+
+    const focusIngredientKey = pendingFocusIngredientKey.current;
+    if (!focusIngredientKey) {
+      return;
+    }
+
+    const focusIndex = sortedIngredients.findIndex(
+      (ingredient) => String(ingredient.id ?? ingredient.name) === focusIngredientKey,
+    );
+    if (focusIndex < 0) {
+      pendingFocusIngredientKey.current = null;
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToIndex({ index: focusIndex, animated: false, viewPosition: 0.5 });
+      pendingFocusIngredientKey.current = null;
+      pendingReturnScrollOffset.current = null;
+      hasAppliedReturnScrollOffset.current = true;
+    });
+  }, [loading, sortedIngredients]);
+
+  const handleScrollToIndexFailed = useCallback(
+    ({ averageItemLength, index }: { averageItemLength: number; index: number }) => {
+      if (!Number.isFinite(averageItemLength) || averageItemLength <= 0) {
+        return;
+      }
+      listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
+    },
+    [],
+  );
+
   const highlightColor = Colors.highlightFaint ?? Colors.tint;
   const isFilterActive =
     selectedTagKeys.size > 0 || selectedSortOption !== 'alphabetical' || isSortDescending;
@@ -1139,6 +1184,7 @@ export default function IngredientsScreen() {
             // Let the first tap both dismiss the keyboard and activate the row.
             keyboardShouldPersistTaps="handled"
             onScroll={handleScroll}
+            onScrollToIndexFailed={handleScrollToIndexFailed}
             scrollEventThrottle={16}
             ListEmptyComponent={
               <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>{emptyMessage}</Text>
