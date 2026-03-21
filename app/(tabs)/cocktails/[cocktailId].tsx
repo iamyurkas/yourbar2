@@ -808,23 +808,33 @@ export default function CocktailDetailsScreen() {
   const [editableTags, setEditableTags] = useState<CocktailTag[]>(() => cocktail?.tags ?? []);
   const editableTagsRef = useRef<CocktailTag[]>(cocktail?.tags ?? []);
   const initialTagIdsRef = useRef<string>("");
+  const tagSaveRegistrationRef = useRef(false);
   const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
+
+  const toSortedTagIdsKey = useCallback((tags: CocktailTag[]) => (
+    tags
+      .map((tag) => Number(tag.id ?? -1))
+      .filter((id) => Number.isFinite(id) && id >= 0)
+      .sort((left, right) => left - right)
+      .join(",")
+  ), []);
 
   useEffect(() => {
     const nextTags = cocktail?.tags ?? [];
     setEditableTags(nextTags);
     editableTagsRef.current = nextTags;
     initialTagIdsRef.current = nextTags
-      .map((tag) => Number(tag.id ?? -1))
-      .filter((id) => Number.isFinite(id) && id >= 0)
-      .sort((left, right) => left - right)
-      .join(",");
+      ? toSortedTagIdsKey(nextTags)
+      : "";
+    tagSaveRegistrationRef.current = false;
     setIsTagPickerVisible(false);
-  }, [cocktail]);
+  }, [cocktail, toSortedTagIdsKey]);
 
   useEffect(() => {
     editableTagsRef.current = editableTags;
-  }, [editableTags]);
+    tagSaveRegistrationRef.current =
+      toSortedTagIdsKey(editableTags) !== initialTagIdsRef.current;
+  }, [editableTags, toSortedTagIdsKey]);
 
   const allCocktailTags = useMemo(() => {
     const merged = new Map<number, CocktailTag>();
@@ -878,13 +888,9 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    const nextTagIds = editableTagsRef.current
-      .map((tag) => Number(tag.id ?? -1))
-      .filter((id) => Number.isFinite(id) && id >= 0)
-      .sort((left, right) => left - right)
-      .join(",");
+    const nextTagIds = toSortedTagIdsKey(editableTagsRef.current);
     const hasCommentChange = commentDraft.trim() !== userComment;
-    if (nextTagIds === initialTagIdsRef.current) {
+    if (!tagSaveRegistrationRef.current) {
       console.log(
         `[CocktailDetails] saving cocktail: ${hasCommentChange ? "comment-only" : "none"}`,
       );
@@ -896,7 +902,8 @@ export default function CocktailDetailsScreen() {
     );
     updateCocktailTags(Number(cocktail.id), editableTagsRef.current);
     initialTagIdsRef.current = nextTagIds;
-  }, [cocktail, commentDraft, updateCocktailTags, userComment]);
+    tagSaveRegistrationRef.current = false;
+  }, [cocktail, commentDraft, toSortedTagIdsKey, updateCocktailTags, userComment]);
 
   useFocusEffect(
     useCallback(() => {
@@ -932,11 +939,7 @@ export default function CocktailDetailsScreen() {
     }
 
     const hasTagChange =
-      editableTagsRef.current
-        .map((tag) => Number(tag.id ?? -1))
-        .filter((id) => Number.isFinite(id) && id >= 0)
-        .sort((left, right) => left - right)
-        .join(",") !== initialTagIdsRef.current;
+      tagSaveRegistrationRef.current;
     console.log(
       `[CocktailDetails] saving cocktail: ${hasTagChange ? "comment+tags" : "comment-only"}`,
     );

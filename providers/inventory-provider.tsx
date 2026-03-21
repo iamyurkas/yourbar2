@@ -2044,21 +2044,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       const existing = prev.cocktails[existingIndex];
       const nextTags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
-      const previousTagIds = (existing.tags ?? [])
-        .map((tag) => Number(tag.id ?? -1))
-        .filter((tagId) => Number.isFinite(tagId) && tagId >= 0)
-        .sort((left, right) => left - right)
-        .join(',');
-      const nextTagIds = (nextTags ?? [])
-        .map((tag) => Number(tag.id ?? -1))
-        .filter((tagId) => Number.isFinite(tagId) && tagId >= 0)
-        .sort((left, right) => left - right)
-        .join(',');
-      if (previousTagIds === nextTagIds) {
-        updated = existing;
-        return prev;
-      }
-
       updated = {
         ...existing,
         tags: nextTags,
