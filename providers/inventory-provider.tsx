@@ -11,10 +11,10 @@ import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   type CocktailTagDeltaSnapshot,
   loadCocktailTagDeltaSnapshot,
-  loadInventorySnapshot,
   persistCocktailTagDeltaSnapshot,
-  persistInventorySnapshot,
 } from '@/libs/inventory-storage';
+import { getInventoryStorageFlag } from '@/libs/inventory-storage-adapter';
+import { createInventoryStorageAdapter } from '@/libs/inventory-storage-sqlite-adapter';
 import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
@@ -198,6 +198,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const baseMaps = useMemo(() => createInventoryBaseMaps(loadInventoryData()), []);
   const baseInventoryData = baseMaps.baseData;
   const runtimeCache = useMemo(() => readInventoryRuntimeCache(), []);
+  const inventoryStorageAdapter = useMemo(() => createInventoryStorageAdapter(getInventoryStorageFlag()), []);
   const [inventoryState, setInventoryState] = useState<InventoryState | undefined>(
     () => runtimeCache.inventoryState,
   );
@@ -450,7 +451,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const tagDelta = await loadCocktailTagDeltaSnapshot();
         cocktailTagDeltaRef.current = tagDelta;
 
-        const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
+        const stored = await inventoryStorageAdapter.loadState();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || (stored as any).version === 2 || (stored as any).version === 1) && !cancelled) {
           const bootstrap = buildBootstrapFromSnapshot(stored as InventorySyncStateSnapshot);
           bootstrap.inventoryState = applyCocktailTagDeltaToInventoryState(
@@ -515,7 +516,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return () => {
       cancelled = true;
     };
-  }, [applyInventoryBootstrap, buildBootstrapFromSnapshot, inventoryState, shouldDefaultToImperialUnits]);
+  }, [applyInventoryBootstrap, buildBootstrapFromSnapshot, inventoryState, shouldDefaultToImperialUnits, inventoryStorageAdapter]);
 
   useEffect(() => {
     if (!activeBarId) {
@@ -615,7 +616,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       lastPersistedSnapshot.current = serialized;
 
-      void persistInventorySnapshot(snapshot).catch((error) => {
+      void inventoryStorageAdapter.persistStateDelta(snapshot).catch((error) => {
         console.error('Failed to persist inventory snapshot', error);
       });
 
@@ -668,6 +669,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     onboardingStep,
     onboardingCompleted,
     onboardingStarterApplied,
+    inventoryStorageAdapter,
   ]);
 
   useEffect(() => {
@@ -1486,7 +1488,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
   const importInventorySyncState = useCallback((snapshot: InventorySyncStateSnapshot) => {
     applyInventoryBootstrap(buildBootstrapFromSnapshot(snapshot));
-  }, [applyInventoryBootstrap, buildBootstrapFromSnapshot]);
+    void inventoryStorageAdapter.importSnapshot(snapshot).catch((error) => {
+      console.error('Failed to import inventory snapshot into persistent storage', error);
+    });
+  }, [applyInventoryBootstrap, buildBootstrapFromSnapshot, inventoryStorageAdapter]);
 
   const exportInventoryPhotoEntries = useCallback((): PhotoBackupEntry[] | null => {
     if (!inventoryState) {
