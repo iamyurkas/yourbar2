@@ -733,31 +733,49 @@ export default function CocktailsScreen() {
     const restoreOffset = pendingReturnScrollOffset.current ?? 0;
     const myTabActive = activeTab === 'my';
 
-    requestAnimationFrame(() => {
-      if (focusCocktailKey) {
-        const focusIndex = myTabActive
-          ? visibleMyTabItems.findIndex(
-            (item) =>
-              item.type === 'cocktail' &&
-              String(item.cocktail.id ?? item.cocktail.name) === focusCocktailKey,
-          )
-          : sortedCocktails.findIndex((cocktail) => String(cocktail.id ?? cocktail.name) === focusCocktailKey);
+    if (focusCocktailKey) {
+      if (myTabActive) {
+        const focusItem = visibleMyTabItems.find(
+          (item) =>
+            item.type === 'cocktail' &&
+            String(item.cocktail.id ?? item.cocktail.name) === focusCocktailKey,
+        );
 
-        if (focusIndex >= 0) {
-          listRef.current?.scrollToIndex({ index: focusIndex, animated: false, viewPosition: 0.5 });
+        if (focusItem) {
+          (listRef.current as FlatList<MyTabListItem> | null)?.scrollToItem({
+            item: focusItem,
+            animated: false,
+            viewPosition: 0.5,
+          });
+          pendingFocusCocktailKey.current = null;
+          pendingReturnScrollOffset.current = null;
+          hasAppliedReturnScrollOffset.current = true;
+          return;
+        }
+      } else {
+        const focusItem = sortedCocktails.find(
+          (cocktail) => String(cocktail.id ?? cocktail.name) === focusCocktailKey,
+        );
+
+        if (focusItem) {
+          (listRef.current as FlatList<Cocktail> | null)?.scrollToItem({
+            item: focusItem,
+            animated: false,
+            viewPosition: 0.5,
+          });
           pendingFocusCocktailKey.current = null;
           pendingReturnScrollOffset.current = null;
           hasAppliedReturnScrollOffset.current = true;
           return;
         }
       }
+    }
 
-      listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
-      lastScrollOffset.current = restoreOffset;
-      pendingFocusCocktailKey.current = null;
-      pendingReturnScrollOffset.current = null;
-      hasAppliedReturnScrollOffset.current = true;
-    });
+    listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+    lastScrollOffset.current = restoreOffset;
+    pendingFocusCocktailKey.current = null;
+    pendingReturnScrollOffset.current = null;
+    hasAppliedReturnScrollOffset.current = true;
   }, [activeTab, loading, sortedCocktails, visibleMyTabItems]);
 
   const handleScrollToIndexFailed = useCallback(
@@ -766,6 +784,9 @@ export default function CocktailsScreen() {
         return;
       }
       listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
+      pendingFocusCocktailKey.current = null;
+      pendingReturnScrollOffset.current = null;
+      hasAppliedReturnScrollOffset.current = true;
     },
     [],
   );

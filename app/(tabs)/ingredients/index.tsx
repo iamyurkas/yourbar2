@@ -389,12 +389,10 @@ export default function IngredientsScreen() {
 
     const restoreOffset = pendingReturnScrollOffset.current ?? 0;
 
-    requestAnimationFrame(() => {
-      listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
-      lastScrollOffset.current = restoreOffset;
-      pendingReturnScrollOffset.current = null;
-      hasAppliedReturnScrollOffset.current = true;
-    });
+    listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+    lastScrollOffset.current = restoreOffset;
+    pendingReturnScrollOffset.current = null;
+    hasAppliedReturnScrollOffset.current = true;
   }, [activeTab, ingredients.length, isSortDescending, loading, query, selectedSortOption, selectedTagKeys]);
 
   const getReturnToParamsWithScroll = useCallback(() => {
@@ -811,12 +809,16 @@ export default function IngredientsScreen() {
       return;
     }
 
-    requestAnimationFrame(() => {
-      listRef.current?.scrollToIndex({ index: focusIndex, animated: false, viewPosition: 0.5 });
+    const focusItem = sortedIngredients[focusIndex];
+    if (!focusItem) {
       pendingFocusIngredientKey.current = null;
-      pendingReturnScrollOffset.current = null;
-      hasAppliedReturnScrollOffset.current = true;
-    });
+      return;
+    }
+
+    listRef.current?.scrollToItem({ item: focusItem, animated: false, viewPosition: 0.5 });
+    pendingFocusIngredientKey.current = null;
+    pendingReturnScrollOffset.current = null;
+    hasAppliedReturnScrollOffset.current = true;
   }, [loading, sortedIngredients]);
 
   const handleScrollToIndexFailed = useCallback(
@@ -825,6 +827,9 @@ export default function IngredientsScreen() {
         return;
       }
       listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
+      pendingFocusIngredientKey.current = null;
+      pendingReturnScrollOffset.current = null;
+      hasAppliedReturnScrollOffset.current = true;
     },
     [],
   );
