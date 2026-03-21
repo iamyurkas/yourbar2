@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Image as RNImage,
   Modal,
   Pressable,
   StyleSheet,
@@ -10,17 +11,16 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import {
-  CropZoom,
-  type CropZoomType,
-  useImageResolution,
-} from "react-native-zoom-toolkit";
 
 type ImageCropperModalProps = {
   visible: boolean;
   imageUri: string | null;
   onCancel: () => void;
   onApply: (uri: string) => void;
+};
+
+type ToolkitModule = {
+  CropZoom: React.ComponentType<any>;
 };
 
 const MIN_CROP_SIZE = 120;
@@ -34,16 +34,18 @@ export function ImageCropperModal({
   onCancel,
   onApply,
 }: ImageCropperModalProps) {
-  const cropRef = useRef<CropZoomType>(null);
+  const cropRef = useRef<any>(null);
   const [isCropping, setIsCropping] = useState(false);
   const [cropWidth, setCropWidth] = useState(240);
   const [cropHeight, setCropHeight] = useState(240);
+  const [resolution, setResolution] = useState<{ width: number; height: number } | null>(null);
+  const [isFetchingResolution, setIsFetchingResolution] = useState(false);
+  const [CropZoomComponent, setCropZoomComponent] = useState<React.ComponentType<any> | null>(null);
+  const [toolkitAvailable, setToolkitAvailable] = useState(true);
 
   const { width, height } = useWindowDimensions();
   const maxCropWidth = Math.max(MIN_CROP_SIZE, Math.floor(width * 0.9));
   const maxCropHeight = Math.max(MIN_CROP_SIZE, Math.floor(height * 0.6));
-
-  const { isFetching, resolution } = useImageResolution({ uri: imageUri ?? "" });
 
   useEffect(() => {
     if (!visible) {
@@ -52,6 +54,66 @@ export function ImageCropperModal({
     setCropWidth(Math.floor(maxCropWidth * 0.8));
     setCropHeight(Math.floor(maxCropHeight * 0.8));
   }, [maxCropHeight, maxCropWidth, visible, imageUri]);
+
+  useEffect(() => {
+    if (!visible || !imageUri) {
+      return;
+    }
+
+    let isMounted = true;
+    setIsFetchingResolution(true);
+    RNImage.getSize(
+      imageUri,
+      (w, h) => {
+        if (!isMounted) {
+          return;
+        }
+        setResolution({ width: w, height: h });
+        setIsFetchingResolution(false);
+      },
+      () => {
+        if (!isMounted) {
+          return;
+        }
+        setResolution(null);
+        setIsFetchingResolution(false);
+      },
+    );
+
+    return () => {
+      isMounted = false;
+    };
+  }, [imageUri, visible]);
+
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+
+    let isMounted = true;
+    const loadToolkit = async () => {
+      try {
+        const toolkit = (await import("react-native-zoom-toolkit")) as ToolkitModule;
+        if (!isMounted) {
+          return;
+        }
+        setCropZoomComponent(() => toolkit.CropZoom);
+        setToolkitAvailable(true);
+      } catch {
+        if (!isMounted) {
+          return;
+        }
+        setCropZoomComponent(null);
+        setToolkitAvailable(false);
+      }
+    };
+
+    void loadToolkit();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [visible]);
 
   const cropSize = useMemo(
     () => ({
@@ -81,8 +143,14 @@ export function ImageCropperModal({
       return;
     }
 
-    const result = cropRef.current?.crop();
+    if (!toolkitAvailable) {
+      onApply(imageUri);
+      return;
+    }
+
+    const result = cropRef.current?.crop?.();
     if (!result) {
+      onApply(imageUri);
       return;
     }
 
@@ -90,13 +158,13 @@ export function ImageCropperModal({
     if (result.resize) {
       actions.push({ resize: result.resize });
     }
-    if (result.context.flipHorizontal) {
+    if (result.context?.flipHorizontal) {
       actions.push({ flip: "horizontal" });
     }
-    if (result.context.flipVertical) {
+    if (result.context?.flipVertical) {
       actions.push({ flip: "vertical" });
     }
-    if (result.context.rotationAngle !== 0) {
+    if (result.context?.rotationAngle) {
       actions.push({ rotate: result.context.rotationAngle });
     }
     actions.push({ crop: result.crop });
@@ -136,7 +204,7 @@ export function ImageCropperModal({
     } finally {
       setIsCropping(false);
     }
-  }, [imageUri, onApply]);
+  }, [imageUri, onApply, toolkitAvailable]);
 
   const renderOverlay = useCallback(
     () => (
@@ -156,22 +224,31 @@ export function ImageCropperModal({
     return null;
   }
 
+  const canUseCropZoom = Boolean(imageUri && CropZoomComponent && resolution && !isFetchingResolution);
+  const CropZoomView = CropZoomComponent as React.ComponentType<any>;
+
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="fullScreen">
       <View style={styles.root}>
-        {imageUri && resolution && !isFetching ? (
-          <CropZoom
+        {canUseCropZoom ? (
+          <CropZoomView
             ref={cropRef}
             cropSize={cropSize}
             resolution={resolution}
             OverlayComponent={renderOverlay}
             maxScale={8}
           >
-            <Image source={{ uri: imageUri }} style={styles.imageFill} contentFit="contain" />
-          </CropZoom>
+            <Image source={{ uri: imageUri! }} style={styles.imageFill} contentFit="contain" />
+          </CropZoomView>
         ) : (
           <View style={styles.loaderWrap}>
-            <ActivityIndicator color="#fff" size="large" />
+            {toolkitAvailable ? (
+              <ActivityIndicator color="#fff" size="large" />
+            ) : (
+              <Text style={styles.fallbackText}>
+                Crop toolkit unavailable in current runtime. Original image will be used.
+              </Text>
+            )}
           </View>
         )}
 
@@ -198,7 +275,7 @@ export function ImageCropperModal({
             <Pressable
               onPress={handleApplyCrop}
               style={[styles.actionButton, styles.applyButton]}
-              disabled={isCropping}
+              disabled={isCropping || !imageUri}
             >
               {isCropping ? (
                 <ActivityIndicator color="#001f1d" size="small" />
@@ -226,6 +303,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 24,
+  },
+  fallbackText: {
+    color: "#fff",
+    textAlign: "center",
   },
   overlayRoot: {
     ...StyleSheet.absoluteFillObject,
