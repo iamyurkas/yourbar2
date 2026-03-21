@@ -9,7 +9,10 @@ import type { SupportedLocale } from '@/libs/i18n/types';
 import { localizeCocktails, localizeIngredients } from '@/libs/i18n/catalog-overlay';
 import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
+  type CocktailTagDeltaSnapshot,
+  loadCocktailTagDeltaSnapshot,
   loadInventorySnapshot,
+  persistCocktailTagDeltaSnapshot,
   persistInventorySnapshot,
 } from '@/libs/inventory-storage';
 import {
@@ -147,6 +150,50 @@ function sanitizeCocktailTagInput(tags: readonly CocktailTag[] | null | undefine
   return Array.from(tagMap.values());
 }
 
+function applyCocktailTagDeltaToInventoryState(
+  state: InventoryState,
+  delta: CocktailTagDeltaSnapshot,
+): InventoryState {
+  const entries = Object.entries(delta);
+  if (entries.length === 0) {
+    return state;
+  }
+
+  let changed = false;
+  const nextCocktails = state.cocktails.map((cocktail) => {
+    const cocktailId = Number(cocktail.id ?? -1);
+    if (!Number.isFinite(cocktailId) || cocktailId < 0) {
+      return cocktail;
+    }
+
+    const deltaValue = delta[String(Math.trunc(cocktailId))];
+    if (deltaValue === undefined) {
+      return cocktail;
+    }
+
+    const normalizedTags = sanitizeCocktailTagInput(deltaValue ?? undefined);
+    const existingTags = sanitizeCocktailTagInput(cocktail.tags as CocktailTag[] | undefined);
+    if (JSON.stringify(existingTags ?? []) === JSON.stringify(normalizedTags ?? [])) {
+      return cocktail;
+    }
+
+    changed = true;
+    return {
+      ...cocktail,
+      tags: normalizedTags,
+    } satisfies Cocktail;
+  });
+
+  if (!changed) {
+    return state;
+  }
+
+  return {
+    ...state,
+    cocktails: nextCocktails,
+  } satisfies InventoryState;
+}
+
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const baseMaps = useMemo(() => createInventoryBaseMaps(loadInventoryData()), []);
   const baseInventoryData = baseMaps.baseData;
@@ -238,6 +285,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     [amazonStoreOverride, detectedAmazonStore],
   );
   const lastPersistedSnapshot = useRef<string | undefined>(undefined);
+  const cocktailTagDeltaRef = useRef<CocktailTagDeltaSnapshot>({});
+  const deferFullSnapshotPersistRef = useRef(false);
+  const deferredSnapshotPersistTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inventoryDelta = useMemo(
     () => (inventoryState ? buildInventoryDelta(inventoryState, baseMaps) : null),
     [inventoryState, baseMaps],
@@ -397,9 +447,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     void (async () => {
       try {
+        const tagDelta = await loadCocktailTagDeltaSnapshot();
+        cocktailTagDeltaRef.current = tagDelta;
+
         const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || (stored as any).version === 2 || (stored as any).version === 1) && !cancelled) {
-          applyInventoryBootstrap(buildBootstrapFromSnapshot(stored as InventorySyncStateSnapshot));
+          const bootstrap = buildBootstrapFromSnapshot(stored as InventorySyncStateSnapshot);
+          bootstrap.inventoryState = applyCocktailTagDeltaToInventoryState(
+            bootstrap.inventoryState,
+            tagDelta,
+          );
+          applyInventoryBootstrap(bootstrap);
           return;
         }
       } catch (error) {
@@ -409,8 +467,12 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       try {
         const data = baseInventoryData;
         if (!cancelled) {
+          const hydratedInventoryState = applyCocktailTagDeltaToInventoryState(
+            createInventoryStateFromData(data, true),
+            cocktailTagDeltaRef.current,
+          );
           applyInventoryBootstrap({
-            inventoryState: createInventoryStateFromData(data, true),
+            inventoryState: hydratedInventoryState,
             availableIngredientIds: new Set(),
             shoppingIngredientIds: new Set(),
             ratingsByCocktailId: {},
@@ -518,43 +580,67 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       onboardingStarterApplied,
     });
 
-    const snapshot = buildInventorySnapshot(inventoryDelta, {
-      availableIngredientIds,
-      shoppingIngredientIds,
-      ratingsByCocktailId,
-      commentsByCocktailId,
-      partySelectedCocktailKeys,
-      ignoreGarnish,
-      allowAllSubstitutes,
-      useImperialUnits,
-      keepScreenAwake,
-      shakerSmartFilteringEnabled,
-      showTabCounters,
-      ratingFilterThreshold,
-      startScreen,
-      appTheme,
-      appLocale,
-      translationOverrides,
-      amazonStoreOverride,
-      customCocktailTags,
-      customIngredientTags,
-      bars,
-      activeBarId,
-      onboardingStep,
-      onboardingCompleted,
-      onboardingStarterApplied,
-    });
-    const serialized = JSON.stringify(snapshot);
+    const persistSnapshot = () => {
+      const snapshot = buildInventorySnapshot(inventoryDelta, {
+        availableIngredientIds,
+        shoppingIngredientIds,
+        ratingsByCocktailId,
+        commentsByCocktailId,
+        partySelectedCocktailKeys,
+        ignoreGarnish,
+        allowAllSubstitutes,
+        useImperialUnits,
+        keepScreenAwake,
+        shakerSmartFilteringEnabled,
+        showTabCounters,
+        ratingFilterThreshold,
+        startScreen,
+        appTheme,
+        appLocale,
+        translationOverrides,
+        amazonStoreOverride,
+        customCocktailTags,
+        customIngredientTags,
+        bars,
+        activeBarId,
+        onboardingStep,
+        onboardingCompleted,
+        onboardingStarterApplied,
+      });
+      const serialized = JSON.stringify(snapshot);
 
-    if (lastPersistedSnapshot.current === serialized) {
+      if (lastPersistedSnapshot.current === serialized) {
+        return;
+      }
+
+      lastPersistedSnapshot.current = serialized;
+
+      void persistInventorySnapshot(snapshot).catch((error) => {
+        console.error('Failed to persist inventory snapshot', error);
+      });
+
+      if (Object.keys(cocktailTagDeltaRef.current).length > 0) {
+        cocktailTagDeltaRef.current = {};
+        void persistCocktailTagDeltaSnapshot({}).catch((error) => {
+          console.error('Failed to reset cocktail tag delta snapshot', error);
+        });
+      }
+    };
+
+    if (deferFullSnapshotPersistRef.current) {
+      if (deferredSnapshotPersistTimeoutRef.current) {
+        clearTimeout(deferredSnapshotPersistTimeoutRef.current);
+      }
+
+      deferredSnapshotPersistTimeoutRef.current = setTimeout(() => {
+        deferFullSnapshotPersistRef.current = false;
+        persistSnapshot();
+        deferredSnapshotPersistTimeoutRef.current = null;
+      }, 900);
       return;
     }
 
-    lastPersistedSnapshot.current = serialized;
-
-    void persistInventorySnapshot(snapshot).catch((error) => {
-      console.error('Failed to persist inventory snapshot', error);
-    });
+    persistSnapshot();
   }, [
     inventoryState,
     inventoryDelta,
@@ -583,6 +669,14 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     onboardingCompleted,
     onboardingStarterApplied,
   ]);
+
+  useEffect(() => {
+    return () => {
+      if (deferredSnapshotPersistTimeoutRef.current) {
+        clearTimeout(deferredSnapshotPersistTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const cocktails = useMemo(
     () => [...(inventoryState?.cocktails ?? [])].sort((a, b) => compareOptionalGlobalAlphabet(a.name, b.name)),
@@ -691,6 +785,17 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     }
 
     const normalizedTags = sanitizeCocktailTagInput(tags);
+    const normalizedId = String(Math.trunc(targetId));
+    deferFullSnapshotPersistRef.current = true;
+
+    cocktailTagDeltaRef.current = {
+      ...cocktailTagDeltaRef.current,
+      [normalizedId]: normalizedTags ?? null,
+    };
+
+    void persistCocktailTagDeltaSnapshot(cocktailTagDeltaRef.current).catch((error) => {
+      console.error('Failed to persist cocktail tag delta snapshot', error);
+    });
 
     setInventoryState((prev) => {
       if (!prev) {
