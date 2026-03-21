@@ -50,12 +50,8 @@ const SYNC_TIMEOUT_MS = 20000;
 const AUTO_PULL_INTERVAL_MS = 5 * 60 * 1000;
 
 function logSync(step: string, details?: Record<string, unknown>) {
-  const timestamp = new Date().toISOString();
-  if (details) {
-    console.log(`[GoogleDriveSyncProvider][${timestamp}] ${step}`, details);
-    return;
-  }
-  console.log(`[GoogleDriveSyncProvider][${timestamp}] ${step}`);
+  void step;
+  void details;
 }
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {

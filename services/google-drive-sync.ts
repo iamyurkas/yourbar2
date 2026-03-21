@@ -19,12 +19,8 @@ export class GoogleDriveSyncError extends Error {
 }
 
 function logDrive(step: string, details?: Record<string, unknown>) {
-  const timestamp = new Date().toISOString();
-  if (details) {
-    console.log(`[GoogleDriveSync][${timestamp}] ${step}`, details);
-    return;
-  }
-  console.log(`[GoogleDriveSync][${timestamp}] ${step}`);
+  void step;
+  void details;
 }
 
 export type GoogleDriveSyncEnvelope<TSnapshot> = {
