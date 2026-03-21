@@ -275,17 +275,30 @@ async function persistBars(db: SqliteDatabase, bars: Bar[] | undefined, activeBa
   await db.runAsync('DELETE FROM bar_state');
   await db.runAsync('DELETE FROM bars');
 
+  const persistedBarIds: string[] = [];
   for (const bar of bars ?? []) {
-    await db.runAsync('INSERT INTO bars (bar_id, name) VALUES (?, ?)', bar.id, bar.name);
+    const normalizedBarId = typeof bar.id === 'string' ? bar.id.trim() : '';
+    if (!normalizedBarId) {
+      continue;
+    }
+
+    const normalizedName = typeof bar.name === 'string' && bar.name.trim().length > 0 ? bar.name.trim() : 'My Bar';
+    await db.runAsync('INSERT INTO bars (bar_id, name) VALUES (?, ?)', normalizedBarId, normalizedName);
     await db.runAsync(
       'INSERT INTO bar_state (bar_id, available_ingredient_ids, shopping_ingredient_ids) VALUES (?, ?, ?)',
-      bar.id,
+      normalizedBarId,
       JSON.stringify(bar.availableIngredientIds ?? []),
       JSON.stringify(bar.shoppingIngredientIds ?? []),
     );
+    persistedBarIds.push(normalizedBarId);
   }
 
-  await db.runAsync('INSERT OR REPLACE INTO storage_meta (key, value) VALUES (?, ?)', 'active_bar_id', activeBarId ?? '');
+  const normalizedActiveBarId = typeof activeBarId === 'string' ? activeBarId.trim() : '';
+  const resolvedActiveBarId = normalizedActiveBarId && persistedBarIds.includes(normalizedActiveBarId)
+    ? normalizedActiveBarId
+    : (persistedBarIds[0] ?? '');
+
+  await db.runAsync('INSERT OR REPLACE INTO storage_meta (key, value) VALUES (?, ?)', 'active_bar_id', resolvedActiveBarId);
 }
 
 async function persistFeedback(

@@ -37,7 +37,7 @@ function loadAdapterModule(stubs, env = {}) {
   return module.exports;
 }
 
-function createFakeDb({ failOnRun = null } = {}) {
+function createFakeDb({ failOnRun = null, failOnNullBarStateId = false } = {}) {
   const commands = [];
   const state = {
     cocktails: [],
@@ -55,6 +55,9 @@ function createFakeDb({ failOnRun = null } = {}) {
       commands.push(sql.trim());
       if (failOnRun && sql.includes(failOnRun)) {
         throw new Error('forced write failure');
+      }
+      if (failOnNullBarStateId && sql.startsWith('INSERT INTO bar_state') && (params[0] == null || params[0] === '')) {
+        throw new Error('bar_state.bar_id must be non-empty');
       }
 
       if (sql.startsWith('DELETE FROM cocktails')) state.cocktails = [];
@@ -210,4 +213,36 @@ test('schema bootstrap deduplicates bar_state keys before unique index creation'
   assert.ok(
     fakeDb.commands.some((command) => command.includes('DELETE FROM bar_state') && command.includes('GROUP BY bar_id')),
   );
+});
+
+test('persistBars skips invalid bar ids to avoid NOT NULL bar_state failures', async () => {
+  const fakeDb = createFakeDb({ failOnNullBarStateId: true });
+  const module = loadAdapterModule({
+    'expo-file-system/legacy': {
+      documentDirectory: '/tmp',
+      cacheDirectory: '/tmp',
+      getInfoAsync: async () => ({ exists: true }),
+      writeAsStringAsync: async () => {},
+    },
+    '@/libs/inventory-storage': {
+      loadInventorySnapshot: async () => undefined,
+      persistInventorySnapshot: async () => {},
+    },
+    '@/providers/inventory-types': {},
+  });
+
+  const { SqliteInventoryStorageAdapter } = module.__internal();
+  const adapter = new SqliteInventoryStorageAdapter({
+    openDatabaseAsync: async () => fakeDb,
+  });
+
+  await assert.doesNotReject(() => adapter.persistStateDelta({
+    version: 3,
+    delta: {},
+    bars: [
+      { id: '', name: 'Bad', availableIngredientIds: [], shoppingIngredientIds: [] },
+      { id: 'bar-1', name: 'Primary', availableIngredientIds: [], shoppingIngredientIds: [] },
+    ],
+    activeBarId: '',
+  }));
 });
