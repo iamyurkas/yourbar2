@@ -37,7 +37,7 @@ function loadAdapterModule(stubs, env = {}) {
   return module.exports;
 }
 
-function createFakeDb({ failOnRun = null, failOnNullBarStateId = false } = {}) {
+function createFakeDb({ failOnRun = null, failOnNullBarStateId = false, legacyBarStateSchema = false } = {}) {
   const commands = [];
   const state = {
     cocktails: [],
@@ -85,6 +85,22 @@ function createFakeDb({ failOnRun = null, failOnNullBarStateId = false } = {}) {
       return null;
     },
     async getAllAsync(sql) {
+      if (sql.includes('PRAGMA table_info(bar_state)')) {
+        if (legacyBarStateSchema) {
+          return [
+            { name: 'bar_id', notnull: 1 },
+            { name: 'ingredient_id', notnull: 1 },
+            { name: 'is_available', notnull: 0 },
+            { name: 'is_shopping', notnull: 0 },
+          ];
+        }
+
+        return [
+          { name: 'bar_id', notnull: 1 },
+          { name: 'available_ingredient_ids', notnull: 1 },
+          { name: 'shopping_ingredient_ids', notnull: 1 },
+        ];
+      }
       if (sql.includes('FROM cocktails')) return state.cocktails.map((row) => ({ ...row, search_name_normalized: null }));
       if (sql.includes('FROM ingredients')) return state.ingredients.map((row) => ({ ...row, search_name_normalized: null }));
       return [];
@@ -248,4 +264,39 @@ test('persistBars skips invalid bar ids to avoid NOT NULL bar_state failures', a
     ],
     activeBarId: '',
   }));
+});
+
+test('schema bootstrap migrates legacy bar_state schema with ingredient_id rows', async () => {
+  const fakeDb = createFakeDb({ legacyBarStateSchema: true });
+  const module = loadAdapterModule({
+    'expo-file-system/legacy': {
+      documentDirectory: '/tmp',
+      cacheDirectory: '/tmp',
+      getInfoAsync: async () => ({ exists: true }),
+      writeAsStringAsync: async () => {},
+    },
+    '@/libs/inventory-storage': {
+      loadInventorySnapshot: async () => undefined,
+      persistInventorySnapshot: async () => {},
+    },
+    '@/providers/inventory-types': {},
+  });
+
+  const { SqliteInventoryStorageAdapter } = module.__internal();
+  const adapter = new SqliteInventoryStorageAdapter({
+    openDatabaseAsync: async () => fakeDb,
+  });
+
+  await assert.doesNotReject(() => adapter.persistStateDelta({
+    version: 3,
+    delta: {},
+    bars: [
+      { id: 'bar-1', name: 'Primary', availableIngredientIds: [1, 2], shoppingIngredientIds: [3] },
+    ],
+    activeBarId: 'bar-1',
+  }));
+
+  assert.ok(
+    fakeDb.commands.some((command) => command.includes('DROP TABLE bar_state') && command.includes('RENAME TO bar_state')),
+  );
 });

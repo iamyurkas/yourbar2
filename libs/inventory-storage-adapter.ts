@@ -35,6 +35,7 @@ type InventoryRow = {
 
 type TableInfoRow = {
   name: string;
+  notnull?: number;
 };
 
 function resolveMigrationMarkerPath(): string | undefined {
@@ -113,6 +114,60 @@ async function ensureColumnExists(
   }
 
   await db.execAsync(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnSql}`);
+}
+
+function buildLegacyIdArrayExpression(flagColumn: string): string {
+  return `'[' || COALESCE(group_concat(CASE WHEN COALESCE(${flagColumn}, 0) = 1 THEN CAST(ingredient_id AS TEXT) END), '') || ']'`;
+}
+
+async function ensureBarStateSchemaCompatibility(db: SqliteDatabase): Promise<void> {
+  const columns = await db.getAllAsync<TableInfoRow>('PRAGMA table_info(bar_state)');
+  if (columns.length === 0) {
+    return;
+  }
+
+  const columnNames = new Set(columns.map((column) => column.name));
+  const hasLegacyIngredientId = columnNames.has('ingredient_id');
+  const hasModernColumns = columnNames.has('available_ingredient_ids') && columnNames.has('shopping_ingredient_ids');
+
+  if (!hasLegacyIngredientId && hasModernColumns) {
+    return;
+  }
+
+  const canAggregateLegacyRows = columnNames.has('is_available') && columnNames.has('is_shopping');
+  const populateNewTableSql = canAggregateLegacyRows
+    ? `
+      INSERT INTO bar_state_next (bar_id, available_ingredient_ids, shopping_ingredient_ids)
+      SELECT
+        bar_id,
+        ${buildLegacyIdArrayExpression('is_available')} AS available_ingredient_ids,
+        ${buildLegacyIdArrayExpression('is_shopping')} AS shopping_ingredient_ids
+      FROM bar_state
+      WHERE bar_id IS NOT NULL AND TRIM(bar_id) <> ''
+      GROUP BY bar_id;
+    `
+    : `
+      INSERT INTO bar_state_next (bar_id, available_ingredient_ids, shopping_ingredient_ids)
+      SELECT
+        bar_id,
+        COALESCE(available_ingredient_ids, '[]'),
+        COALESCE(shopping_ingredient_ids, '[]')
+      FROM bar_state
+      WHERE bar_id IS NOT NULL AND TRIM(bar_id) <> '';
+    `;
+
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS bar_state_next (
+      bar_id TEXT PRIMARY KEY,
+      available_ingredient_ids TEXT NOT NULL,
+      shopping_ingredient_ids TEXT NOT NULL,
+      FOREIGN KEY(bar_id) REFERENCES bars(bar_id) ON DELETE CASCADE
+    );
+    DELETE FROM bar_state_next;
+    ${populateNewTableSql}
+    DROP TABLE bar_state;
+    ALTER TABLE bar_state_next RENAME TO bar_state;
+  `);
 }
 
 async function dedupeRowsByKey(
@@ -195,6 +250,8 @@ async function ensureSchema(db: SqliteDatabase): Promise<void> {
       value TEXT
     );
   `);
+
+  await ensureBarStateSchemaCompatibility(db);
 
   await ensureColumnExists(db, 'cocktails', 'search_name_normalized', 'TEXT');
   await ensureColumnExists(db, 'cocktails', 'entity_id', 'INTEGER');
