@@ -883,12 +883,20 @@ export default function CocktailDetailsScreen() {
       .filter((id) => Number.isFinite(id) && id >= 0)
       .sort((left, right) => left - right)
       .join(",");
+    const hasCommentChange = commentDraft.trim() !== userComment;
     if (nextTagIds === initialTagIdsRef.current) {
+      console.log(
+        `[CocktailDetails] saving cocktail: ${hasCommentChange ? "comment-only" : "none"}`,
+      );
       return;
     }
 
+    console.log(
+      `[CocktailDetails] saving cocktail: ${hasCommentChange ? "comment+tags" : "tags-only"}`,
+    );
     updateCocktailTags(Number(cocktail.id), editableTagsRef.current);
-  }, [cocktail, updateCocktailTags]);
+    initialTagIdsRef.current = nextTagIds;
+  }, [cocktail, commentDraft, updateCocktailTags, userComment]);
 
   useFocusEffect(
     useCallback(() => {
@@ -923,6 +931,15 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
+    const hasTagChange =
+      editableTagsRef.current
+        .map((tag) => Number(tag.id ?? -1))
+        .filter((id) => Number.isFinite(id) && id >= 0)
+        .sort((left, right) => left - right)
+        .join(",") !== initialTagIdsRef.current;
+    console.log(
+      `[CocktailDetails] saving cocktail: ${hasTagChange ? "comment+tags" : "comment-only"}`,
+    );
     setCocktailComment(cocktail, trimmedDraft);
   }, [cocktail, commentDraft, setCocktailComment, userComment]);
 
