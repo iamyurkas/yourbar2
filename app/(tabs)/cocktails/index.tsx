@@ -115,6 +115,7 @@ export default function CocktailsScreen() {
     ratings?: string | string[];
     sort?: string | string[];
     desc?: string | string[];
+    offset?: string | string[];
   }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
@@ -126,6 +127,22 @@ export default function CocktailsScreen() {
 
     return value ?? '';
   }, []);
+
+  const requestedRestoreOffset = useMemo(() => {
+    const rawValue = getParamValue(params.offset);
+    if (rawValue.length === 0) {
+      return undefined;
+    }
+
+    const parsedOffset = Number(rawValue);
+    if (!Number.isFinite(parsedOffset) || parsedOffset < 0) {
+      return undefined;
+    }
+
+    return parsedOffset;
+  }, [getParamValue, params.offset]);
+
+  const hasRestoredOffsetRef = useRef(false);
 
   useEffect(() => {
     const parsedQuery = getParamValue(params.query);
@@ -456,6 +473,23 @@ export default function CocktailsScreen() {
     return { text: normalized, tokens };
   }, [query]);
 
+  useEffect(() => {
+    if (requestedRestoreOffset == null) {
+      hasRestoredOffsetRef.current = false;
+      return;
+    }
+
+    if (hasRestoredOffsetRef.current) {
+      return;
+    }
+
+    hasRestoredOffsetRef.current = true;
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: requestedRestoreOffset, animated: false });
+      lastScrollOffset.current = requestedRestoreOffset;
+    });
+  }, [requestedRestoreOffset]);
+
   const filteredByStarRatings = useMemo(() => {
     const base = baseTabCocktails;
     if (selectedStarRatings.size === 0) {
@@ -718,7 +752,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
-        returnToParams: listReturnToParams,
+        returnToParams: {
+          ...listReturnToParams,
+          offset: String(Math.max(lastScrollOffset.current, 0)),
+        },
       });
     },
     [listReturnToParams],
@@ -731,7 +768,10 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
-          returnToParams: listReturnToParams,
+          returnToParams: {
+            ...listReturnToParams,
+            offset: String(Math.max(lastScrollOffset.current, 0)),
+          },
         });
       }
     },

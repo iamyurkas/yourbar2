@@ -67,6 +67,7 @@ type IngredientListItemProps = {
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
   returnToParams?: Record<string, string | undefined>;
+  getReturnToParams?: () => Record<string, string | undefined>;
 };
 
 type IngredientRowMeta = {
@@ -91,7 +92,8 @@ const areIngredientPropsEqual = (
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
   prev.onShoppingToggle === next.onShoppingToggle &&
-  prev.returnToParams === next.returnToParams;
+  prev.returnToParams === next.returnToParams &&
+  prev.getReturnToParams === next.getReturnToParams;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -106,6 +108,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
   returnToParams,
+  getReturnToParams,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -214,9 +217,9 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       pathname: '/ingredients/[ingredientId]',
       params: { ingredientId: String(routeParam) },
       returnToPath: '/ingredients',
-      returnToParams,
+      returnToParams: getReturnToParams ? getReturnToParams() : returnToParams,
     });
-  }, [ingredient.id, ingredient.name, returnToParams]);
+  }, [getReturnToParams, ingredient.id, ingredient.name, returnToParams]);
 
   const row = (
     <ListRow
@@ -250,6 +253,7 @@ export default function IngredientsScreen() {
     tags?: string | string[];
     sort?: string | string[];
     desc?: string | string[];
+    offset?: string | string[];
   }>();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
@@ -288,6 +292,22 @@ export default function IngredientsScreen() {
 
     return value ?? '';
   }, []);
+
+  const requestedRestoreOffset = useMemo(() => {
+    const rawValue = getParamValue(params.offset);
+    if (rawValue.length === 0) {
+      return undefined;
+    }
+
+    const parsedOffset = Number(rawValue);
+    if (!Number.isFinite(parsedOffset) || parsedOffset < 0) {
+      return undefined;
+    }
+
+    return parsedOffset;
+  }, [getParamValue, params.offset]);
+
+  const hasRestoredOffsetRef = useRef(false);
 
   useEffect(() => {
     const rawQuery = getParamValue(params.query);
@@ -353,6 +373,31 @@ export default function IngredientsScreen() {
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     lastScrollOffset.current = event.nativeEvent.contentOffset.y;
   }, []);
+
+  useEffect(() => {
+    if (requestedRestoreOffset == null) {
+      hasRestoredOffsetRef.current = false;
+      return;
+    }
+
+    if (hasRestoredOffsetRef.current) {
+      return;
+    }
+
+    hasRestoredOffsetRef.current = true;
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: requestedRestoreOffset, animated: false });
+      lastScrollOffset.current = requestedRestoreOffset;
+    });
+  }, [requestedRestoreOffset]);
+
+  const getListReturnToParams = useCallback(
+    () => ({
+      ...listReturnToParams,
+      offset: String(Math.max(lastScrollOffset.current, 0)),
+    }),
+    [listReturnToParams],
+  );
 
   useEffect(() => {
     setLastIngredientTab(activeTab);
@@ -887,7 +932,7 @@ export default function IngredientsScreen() {
           isOnShoppingList={isOnShoppingList}
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
-          returnToParams={listReturnToParams}
+          getReturnToParams={getListReturnToParams}
         />
       );
     },
@@ -902,7 +947,7 @@ export default function IngredientsScreen() {
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
-      listReturnToParams,
+      getListReturnToParams,
     ],
   );
 
