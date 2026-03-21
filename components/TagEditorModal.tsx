@@ -184,9 +184,12 @@ export function TagEditorModal({
             accessibilityRole="button"
             accessibilityState={{ disabled: !canSave }}
             onPress={handleSave}
-            style={[
+            style={({ pressed }) => [
               styles.saveButton,
-              { backgroundColor: canSave ? Colors.tint : Colors.outlineVariant },
+              {
+                backgroundColor: Colors.tint,
+                opacity: !canSave ? 0.6 : pressed ? 0.8 : 1,
+              },
             ]}
           >
             <Text style={[styles.saveLabel, { color: Colors.onPrimary }]}>{confirmLabel}</Text>
@@ -341,14 +344,14 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     borderRadius: 12,
-    paddingVertical: 12,
+    height: 56,
+    width: '100%',
     alignItems: 'center',
     paddingHorizontal: 20,
-    borderWidth: StyleSheet.hairlineWidth,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   saveLabel: {
-    fontSize: 14,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

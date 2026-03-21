@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
@@ -10,6 +11,7 @@ export type DialogAction = {
   onPress?: () => void;
   accessibilityLabel?: string;
   variant?: 'primary' | 'secondary' | 'destructive';
+  disableOnPress?: boolean;
 };
 
 export type DialogOptions = {
@@ -27,6 +29,13 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
   const Colors = useAppColors();
   const { t } = useI18n();
   const normalizedMessage = message?.replace(/\\n/g, '\n');
+  const [disabledActionIndices, setDisabledActionIndices] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    if (!visible) {
+      setDisabledActionIndices(new Set());
+    }
+  }, [visible]);
 
   if (!visible) {
     return null;
@@ -85,12 +94,33 @@ export function AppDialog({ visible, title, message, actions, onRequestClose }: 
                 <Pressable
                   key={`${action.label}-${index}`}
                   onPress={() => {
+                    if (disabledActionIndices.has(index)) {
+                      return;
+                    }
+
+                    if (action.disableOnPress) {
+                      setDisabledActionIndices((prev) => {
+                        const next = new Set(prev);
+                        next.add(index);
+                        return next;
+                      });
+                    }
+
                     onRequestClose?.();
                     action.onPress?.();
                   }}
+                  disabled={disabledActionIndices.has(index)}
+                  accessibilityState={{ disabled: disabledActionIndices.has(index) }}
                   accessibilityRole="button"
                   accessibilityLabel={action.accessibilityLabel ?? action.label}
-                  style={[styles.actionButton, { backgroundColor, borderColor }]}
+                  style={[
+                    styles.actionButton,
+                    {
+                      backgroundColor,
+                      borderColor,
+                      opacity: disabledActionIndices.has(index) ? 0.6 : 1,
+                    },
+                  ]}
                   hitSlop={4}>
                   <Text style={[styles.actionLabel, { color: textColor }]}>{action.label}</Text>
                 </Pressable>
@@ -124,7 +154,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   message: {
-    fontSize: 15,
+    fontSize: 16,
     lineHeight: 22,
     textAlign: 'center',
   },
@@ -134,13 +164,16 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   actionButton: {
-    paddingVertical: 12,
+    height: 56,
+    paddingHorizontal: 20,
     borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   actionLabel: {
     textAlign: 'center',
     fontWeight: '600',
-    fontSize: 15,
+    fontSize: 16,
   },
 });

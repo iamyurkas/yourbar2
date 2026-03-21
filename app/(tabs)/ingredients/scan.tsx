@@ -166,7 +166,7 @@ export default function ScanIngredientScreen() {
   const permissionDenied = permission?.granted === false;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}> 
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Stack.Screen
         options={{
           title: t('barcode.scanBarcode'),
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   caption: { textAlign: 'center' },
   card: { gap: 10, borderRadius: 16, padding: 16 },
   title: { fontSize: 18, fontWeight: '700' },
-  message: { fontSize: 15 },
+  message: { fontSize: 16 },
   previewImage: { width: '100%', height: 180, borderRadius: 12 },
   button: {
     minWidth: 250,
