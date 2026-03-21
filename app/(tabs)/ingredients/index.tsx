@@ -385,10 +385,26 @@ export default function IngredientsScreen() {
     }
 
     hasRestoredOffsetRef.current = true;
-    requestAnimationFrame(() => {
+    let attempt = 0;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    const restoreOffset = () => {
       listRef.current?.scrollToOffset({ offset: requestedRestoreOffset, animated: false });
       lastScrollOffset.current = requestedRestoreOffset;
-    });
+
+      attempt += 1;
+      if (attempt < 4) {
+        timeoutId = setTimeout(restoreOffset, 60);
+      }
+    };
+
+    requestAnimationFrame(restoreOffset);
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [requestedRestoreOffset]);
 
   const getListReturnToParams = useCallback(
