@@ -194,6 +194,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   > | null>(null);
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [optimisticLanguageSelection, setOptimisticLanguageSelection] = useState<SupportedLocale | null>(null);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const [isBarManagerVisible, setBarManagerVisible] = useState(false);
   const barManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -484,6 +485,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleLanguagePress = () => {
+    setOptimisticLanguageSelection(locale);
     setLanguageModalVisible(true);
   };
 
@@ -565,10 +567,12 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleCloseLanguageModal = () => {
     clearTimeoutRef(languageModalCloseTimeout);
+    setOptimisticLanguageSelection(null);
     setLanguageModalVisible(false);
   };
 
   const handleSelectLanguage = (value: SupportedLocale) => {
+    setOptimisticLanguageSelection(value);
     setLocale(value);
     scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
@@ -1095,6 +1099,16 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       showDialogMessage(t("common.error"), t("common.tryAgainLater"));
     }
   };
+
+  useEffect(() => {
+    if (!isLanguageModalVisible) {
+      setOptimisticLanguageSelection(null);
+    }
+  }, [isLanguageModalVisible]);
+
+  useEffect(() => {
+    setOptimisticLanguageSelection(null);
+  }, [locale]);
 
   useEffect(() => {
     return () => {
@@ -2553,7 +2567,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               keyboardShouldPersistTaps="handled"
             >
               {languageOptions.map((option) => {
-                const isSelected = locale === option.code;
+                const effectiveLanguageSelection = optimisticLanguageSelection ?? locale;
+                const isSelected = effectiveLanguageSelection === option.code;
                 const localizedLanguageName = t(`language.${option.code}`);
                 return (
                   <Pressable
