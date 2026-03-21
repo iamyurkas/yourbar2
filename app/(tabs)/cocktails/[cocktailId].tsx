@@ -35,6 +35,7 @@ import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
+import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
@@ -64,6 +65,7 @@ import { tagColors } from "@/theme/theme";
 
 type RecipeIngredient = NonNullable<Cocktail["ingredients"]>[number];
 type CocktailTag = NonNullable<Cocktail["tags"]>[number];
+type CocktailTagOption = { id: number; name: string; color: string };
 
 const METRIC_UNIT_ID = 11;
 const IMPERIAL_UNIT_ID = 12;
@@ -541,6 +543,8 @@ export default function CocktailDetailsScreen() {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    customCocktailTags,
+    setCocktailTags,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -636,7 +640,53 @@ export default function CocktailDetailsScreen() {
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
   const persistCommentDraftRef = useRef<() => void>(() => { });
+  const persistTagSelectionRef = useRef<() => void>(() => { });
   const shouldNavigateAway = !loading && !cocktail;
+  const [isAddTagListVisible, setIsAddTagListVisible] = useState(false);
+  const [pendingTagIds, setPendingTagIds] = useState<number[]>([]);
+
+  const normalizedCocktailTagIds = useMemo(() => {
+    const ids = new Set<number>();
+    (cocktail?.tags ?? []).forEach((rawTag) => {
+      const candidateId =
+        typeof rawTag === "number"
+          ? rawTag
+          : Number((rawTag as Partial<CocktailTag>)?.id ?? -1);
+      if (Number.isFinite(candidateId) && candidateId >= 0) {
+        ids.add(Math.trunc(candidateId));
+      }
+    });
+    return ids;
+  }, [cocktail?.tags]);
+
+  const tagOptions = useMemo(() => {
+    const byId = new Map<number, CocktailTagOption>();
+    BUILTIN_COCKTAIL_TAGS.forEach((tag) => {
+      byId.set(tag.id, { id: tag.id, name: tag.name, color: tag.color });
+    });
+    customCocktailTags.forEach((tag) => {
+      const tagId = Number(tag.id ?? -1);
+      if (!Number.isFinite(tagId) || tagId < 0) {
+        return;
+      }
+      byId.set(Math.trunc(tagId), {
+        id: Math.trunc(tagId),
+        name: tag.name ?? "",
+        color: tag.color ?? Colors.tint,
+      });
+    });
+    return Array.from(byId.values());
+  }, [Colors.tint, customCocktailTags]);
+
+  const visiblePendingTagIds = useMemo(
+    () => pendingTagIds.filter((tagId) => !normalizedCocktailTagIds.has(tagId)),
+    [normalizedCocktailTagIds, pendingTagIds],
+  );
+
+  const nonAddedTagOptions = useMemo(
+    () => tagOptions.filter((tag) => !normalizedCocktailTagIds.has(tag.id)),
+    [normalizedCocktailTagIds, tagOptions],
+  );
 
   useEffect(() => {
     setIngredientDisplayMode((current) =>
@@ -646,6 +696,7 @@ export default function CocktailDetailsScreen() {
 
   const handleReturn = useCallback(() => {
     persistCommentDraftRef.current();
+    persistTagSelectionRef.current();
 
     if (returnToPath === "/cocktails" && !returnToParams) {
       skipDuplicateBack(navigation);
@@ -654,6 +705,60 @@ export default function CocktailDetailsScreen() {
 
     returnToSourceOrBack(navigation, { returnToPath, returnToParams });
   }, [navigation, returnToParams, returnToPath]);
+
+  const handleTogglePendingTag = useCallback((tagId: number) => {
+    setPendingTagIds((prev) => {
+      if (normalizedCocktailTagIds.has(tagId)) {
+        return prev;
+      }
+      if (prev.includes(tagId)) {
+        return prev.filter((id) => id !== tagId);
+      }
+      return [...prev, tagId];
+    });
+  }, [normalizedCocktailTagIds]);
+
+  const persistTagSelection = useCallback(() => {
+    if (!cocktail?.id || visiblePendingTagIds.length === 0) {
+      return;
+    }
+
+    const tagOptionMap = new Map<number, CocktailTagOption>();
+    tagOptions.forEach((tag) => {
+      tagOptionMap.set(tag.id, tag);
+    });
+
+    const nextTagsById = new Map<number, CocktailTag>();
+    (cocktail.tags ?? []).forEach((rawTag) => {
+      if (typeof rawTag === "number") {
+        const option = tagOptionMap.get(rawTag);
+        if (option) {
+          nextTagsById.set(option.id, { id: option.id, name: option.name, color: option.color });
+        }
+        return;
+      }
+
+      const tagId = Number((rawTag as Partial<CocktailTag>)?.id ?? -1);
+      if (!Number.isFinite(tagId) || tagId < 0) {
+        return;
+      }
+      nextTagsById.set(Math.trunc(tagId), {
+        id: Math.trunc(tagId),
+        name: (rawTag as Partial<CocktailTag>).name ?? "",
+        color: (rawTag as Partial<CocktailTag>).color ?? Colors.tint,
+      });
+    });
+
+    visiblePendingTagIds.forEach((tagId) => {
+      const option = tagOptionMap.get(tagId);
+      if (option) {
+        nextTagsById.set(option.id, { id: option.id, name: option.name, color: option.color });
+      }
+    });
+
+    setCocktailTags(cocktail.id, Array.from(nextTagsById.values()));
+    setPendingTagIds([]);
+  }, [Colors.tint, cocktail?.id, cocktail?.tags, setCocktailTags, tagOptions, visiblePendingTagIds]);
 
   useEffect(() => {
     if (!shouldNavigateAway || isHandlingBackRef.current) {
@@ -836,8 +941,13 @@ export default function CocktailDetailsScreen() {
   }, [persistCommentDraft]);
 
   useEffect(() => {
+    persistTagSelectionRef.current = persistTagSelection;
+  }, [persistTagSelection]);
+
+  useEffect(() => {
     return () => {
       persistCommentDraftRef.current();
+      persistTagSelectionRef.current();
     };
   }, []);
 
@@ -845,6 +955,7 @@ export default function CocktailDetailsScreen() {
     const subscription = AppState.addEventListener("change", (nextState) => {
       if (nextState !== "active") {
         persistCommentDraftRef.current();
+        persistTagSelectionRef.current();
       }
     });
 
@@ -1430,50 +1541,85 @@ export default function CocktailDetailsScreen() {
               />
             ) : null}
 
-            {cocktail.tags && cocktail.tags.length ? (
-              <View style={styles.tagList}>
-                {(cocktail.tags as unknown[]).map((rawTag, index) => {
-                  if (typeof rawTag === "number") {
-                    const fallbackName = t(`cocktailTag.${rawTag}`);
+            {(cocktail.tags && cocktail.tags.length) || nonAddedTagOptions.length ? (
+              <View style={styles.tagBlock}>
+                <View style={styles.tagList}>
+                  {(cocktail.tags as unknown[] | undefined)?.map((rawTag, index) => {
+                    if (typeof rawTag === "number") {
+                      const fallbackName = t(`cocktailTag.${rawTag}`);
+                      const finalName =
+                        fallbackName !== `cocktailTag.${rawTag}`
+                          ? fallbackName
+                          : t("cocktailDetails.tag");
+                      return (
+                        <TagPill
+                          key={`tag-${rawTag}-${index}`}
+                          label={finalName}
+                          color={Colors.tint}
+                          selected
+                          accessibilityLabel={finalName}
+                        />
+                      );
+                    }
+
+                    const tag = (rawTag ?? {}) as Partial<CocktailTag>;
+                    const tagKey =
+                      tag.id != null
+                        ? `tag-${tag.id}`
+                        : tag.name
+                          ? `tag-${tag.name}`
+                          : `tag-${index}`;
+
+                    const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
                     const finalName =
-                      fallbackName !== `cocktailTag.${rawTag}`
-                        ? fallbackName
-                        : t("cocktailDetails.tag");
+                      tagName && tag.id != null && tagName !== `cocktailTag.${tag.id}`
+                        ? tagName
+                        : (tag.name ?? t("cocktailDetails.tag"));
+
                     return (
                       <TagPill
-                        key={`tag-${rawTag}-${index}`}
+                        key={tagKey}
                         label={finalName}
-                        color={Colors.tint}
+                        color={tag.color ?? Colors.tint}
                         selected
                         accessibilityLabel={finalName}
                       />
                     );
-                  }
-
-                  const tag = (rawTag ?? {}) as Partial<CocktailTag>;
-                  const tagKey =
-                    tag.id != null
-                      ? `tag-${tag.id}`
-                      : tag.name
-                        ? `tag-${tag.name}`
-                        : `tag-${index}`;
-
-                  const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
-                  const finalName =
-                    tagName && tag.id != null && tagName !== `cocktailTag.${tag.id}`
-                      ? tagName
-                      : (tag.name ?? t("cocktailDetails.tag"));
-
-                  return (
+                  })}
+                  {nonAddedTagOptions.length ? (
                     <TagPill
-                      key={tagKey}
-                      label={finalName}
-                      color={tag.color ?? Colors.tint}
-                      selected
-                      accessibilityLabel={finalName}
+                      label="+Add"
+                      color={Colors.primary}
+                      onPress={() => setIsAddTagListVisible((prev) => !prev)}
+                      style={{ backgroundColor: Colors.onPrimary }}
+                      accessibilityRole="button"
+                      accessibilityLabel="+Add tag"
                     />
-                  );
-                })}
+                  ) : null}
+                </View>
+
+                {isAddTagListVisible && nonAddedTagOptions.length ? (
+                  <View style={styles.tagList}>
+                    {nonAddedTagOptions.map((tag) => {
+                      const translatedName = t(`cocktailTag.${tag.id}`);
+                      const finalName =
+                        translatedName !== `cocktailTag.${tag.id}` ? translatedName : tag.name;
+                      const selected = visiblePendingTagIds.includes(tag.id);
+                      return (
+                        <TagPill
+                          key={`available-tag-${tag.id}`}
+                          label={finalName}
+                          color={tag.color}
+                          selected={selected}
+                          onPress={() => handleTogglePendingTag(tag.id)}
+                          accessibilityRole="checkbox"
+                          accessibilityState={{ checked: selected }}
+                          accessibilityLabel={finalName}
+                        />
+                      );
+                    })}
+                  </View>
+                ) : null}
               </View>
             ) : null}
 
@@ -2176,6 +2322,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "flex-start",
+    gap: 8,
+    alignSelf: "stretch",
+  },
+  tagBlock: {
     gap: 8,
     alignSelf: "stretch",
   },
