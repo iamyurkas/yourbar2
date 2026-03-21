@@ -127,6 +127,26 @@ type InventoryProviderProps = {
   children: React.ReactNode;
 };
 
+function sanitizeCocktailTagInput(tags: readonly CocktailTag[] | null | undefined): CocktailTag[] | undefined {
+  const tagMap = new Map<number, CocktailTag>();
+  (tags ?? []).forEach((tag) => {
+    const tagId = Number(tag.id ?? -1);
+    if (!Number.isFinite(tagId) || tagId < 0) {
+      return;
+    }
+
+    if (!tagMap.has(tagId)) {
+      tagMap.set(tagId, { id: tagId, name: tag.name, color: tag.color });
+    }
+  });
+
+  if (tagMap.size === 0) {
+    return undefined;
+  }
+
+  return Array.from(tagMap.values());
+}
+
 export function InventoryProvider({ children }: InventoryProviderProps) {
   const baseMaps = useMemo(() => createInventoryBaseMaps(loadInventoryData()), []);
   const baseInventoryData = baseMaps.baseData;
@@ -663,6 +683,47 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     },
     [resolveCocktailKey],
   );
+
+  const updateCocktailTags = useCallback((cocktail: Cocktail, tags: CocktailTag[]) => {
+    const targetId = Number(cocktail.id ?? -1);
+    if (!Number.isFinite(targetId) || targetId < 0) {
+      return;
+    }
+
+    const normalizedTags = sanitizeCocktailTagInput(tags);
+
+    setInventoryState((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      const existingIndex = prev.cocktails.findIndex(
+        (item) => Number(item.id ?? -1) === Math.trunc(targetId),
+      );
+      if (existingIndex < 0) {
+        return prev;
+      }
+
+      const existing = prev.cocktails[existingIndex];
+      const existingTags = sanitizeCocktailTagInput(existing.tags as CocktailTag[] | undefined);
+      const existingSignature = JSON.stringify(existingTags ?? []);
+      const nextSignature = JSON.stringify(normalizedTags ?? []);
+      if (existingSignature === nextSignature) {
+        return prev;
+      }
+
+      const nextCocktails = [...prev.cocktails];
+      nextCocktails[existingIndex] = {
+        ...existing,
+        tags: normalizedTags,
+      } satisfies Cocktail;
+
+      return {
+        ...prev,
+        cocktails: nextCocktails,
+      } satisfies InventoryState;
+    });
+  }, []);
 
   const getCocktailComment = useCallback(
     (cocktail: Cocktail) => {
@@ -2701,6 +2762,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       deleteCustomIngredientTag,
       setCocktailRating,
       setCocktailComment,
+      updateCocktailTags,
       setIgnoreGarnish: handleSetIgnoreGarnish,
       setAllowAllSubstitutes: handleSetAllowAllSubstitutes,
       setUseImperialUnits: handleSetUseImperialUnits,
@@ -2747,6 +2809,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       deleteCustomIngredientTag,
       setCocktailRating,
       setCocktailComment,
+      updateCocktailTags,
       handleSetIgnoreGarnish,
       handleSetAllowAllSubstitutes,
       handleSetUseImperialUnits,
