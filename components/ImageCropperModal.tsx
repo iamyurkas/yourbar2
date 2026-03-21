@@ -176,6 +176,21 @@ export function ImageCropperModal({
       let verticalFlipValue: unknown = "vertical";
       let jpegFormatValue: unknown = "jpeg";
       try {
+        try {
+          const expoModulesCore = await import("expo-modules-core");
+          const requireOptionalNativeModule = (expoModulesCore as any).requireOptionalNativeModule;
+          if (typeof requireOptionalNativeModule === "function") {
+            const nativeModule = requireOptionalNativeModule("ExpoImageManipulator");
+            if (!nativeModule) {
+              onApply(imageUri);
+              return;
+            }
+          }
+        } catch {
+          onApply(imageUri);
+          return;
+        }
+
         const loadedModule = await import("expo-image-manipulator");
         const defaultExport = (loadedModule as any).default;
         manipulatorApi =
