@@ -2,7 +2,6 @@ import { loadInventoryData, type InventoryData } from '@/libs/inventory-data';
 import { type InventoryDeltaSnapshot, type InventoryDeltaSnapshotV3 } from '@/libs/inventory-storage';
 import type { AmazonStoreOverride } from '@/libs/amazon-stores';
 import {
-  areStorageRecordsEqual,
   toCocktailStorageRecord,
   toIngredientStorageRecord,
 } from '@/libs/inventory-utils';
@@ -23,6 +22,8 @@ export type InventoryBaseMaps = {
   baseData: InventoryData;
   baseCocktails: Map<number, CocktailStorageRecord>;
   baseIngredients: Map<number, IngredientStorageRecord>;
+  baseCocktailSerialized: Map<number, string>;
+  baseIngredientSerialized: Map<number, string>;
 };
 
 export type InventoryDeltaBase = Pick<
@@ -36,6 +37,8 @@ export function createInventoryBaseMaps(data?: InventoryData): InventoryBaseMaps
   const baseData = data ?? loadInventoryData();
   const baseCocktails = new Map<number, CocktailStorageRecord>();
   const baseIngredients = new Map<number, IngredientStorageRecord>();
+  const baseCocktailSerialized = new Map<number, string>();
+  const baseIngredientSerialized = new Map<number, string>();
 
   baseData.cocktails.forEach((cocktail) => {
     const normalized = toCocktailStorageRecord(cocktail);
@@ -43,7 +46,9 @@ export function createInventoryBaseMaps(data?: InventoryData): InventoryBaseMaps
     if (!Number.isFinite(id) || id < 0) {
       return;
     }
-    baseCocktails.set(Math.trunc(id), normalized);
+    const normalizedId = Math.trunc(id);
+    baseCocktails.set(normalizedId, normalized);
+    baseCocktailSerialized.set(normalizedId, JSON.stringify(normalized));
   });
 
   baseData.ingredients.forEach((ingredient) => {
@@ -52,10 +57,12 @@ export function createInventoryBaseMaps(data?: InventoryData): InventoryBaseMaps
     if (!Number.isFinite(id) || id < 0) {
       return;
     }
-    baseIngredients.set(Math.trunc(id), normalized);
+    const normalizedId = Math.trunc(id);
+    baseIngredients.set(normalizedId, normalized);
+    baseIngredientSerialized.set(normalizedId, JSON.stringify(normalized));
   });
 
-  return { baseData, baseCocktails, baseIngredients };
+  return { baseData, baseCocktails, baseIngredients, baseCocktailSerialized, baseIngredientSerialized };
 }
 
 export function buildInventoryDelta(
@@ -82,7 +89,9 @@ export function buildInventoryDelta(
       return;
     }
 
-    if (!areStorageRecordsEqual(normalized, baseRecord)) {
+    const serialized = JSON.stringify(normalized);
+    const baseSerialized = baseMaps.baseCocktailSerialized.get(normalizedId);
+    if (!baseSerialized || serialized !== baseSerialized) {
       updatedCocktails.push(normalized);
     }
   });
@@ -111,7 +120,9 @@ export function buildInventoryDelta(
       return;
     }
 
-    if (!areStorageRecordsEqual(normalized, baseRecord)) {
+    const serialized = JSON.stringify(normalized);
+    const baseSerialized = baseMaps.baseIngredientSerialized.get(normalizedId);
+    if (!baseSerialized || serialized !== baseSerialized) {
       updatedIngredients.push(normalized);
     }
   });
