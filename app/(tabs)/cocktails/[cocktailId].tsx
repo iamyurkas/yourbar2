@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -35,6 +35,7 @@ import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
+import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
@@ -526,6 +527,7 @@ export default function CocktailDetailsScreen() {
   const { cocktailId } = params;
   const {
     cocktails,
+    customCocktailTags,
     ingredients,
     loading,
     availableIngredientIds,
@@ -533,6 +535,7 @@ export default function CocktailDetailsScreen() {
     partySelectedCocktailKeys,
     togglePartyCocktailSelection,
     toggleIngredientShopping,
+    updateCocktail,
     setCocktailRating,
     setCocktailComment,
     getCocktailRating,
@@ -801,7 +804,131 @@ export default function CocktailDetailsScreen() {
 
   const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
+  const [isTagPickerVisible, setIsTagPickerVisible] = useState(false);
+  const [editableTags, setEditableTags] = useState<CocktailTag[]>(() => cocktail?.tags ?? []);
+  const editableTagsRef = useRef<CocktailTag[]>(cocktail?.tags ?? []);
+  const initialTagIdsRef = useRef<string>("");
   const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
+
+  useEffect(() => {
+    const nextTags = cocktail?.tags ?? [];
+    setEditableTags(nextTags);
+    editableTagsRef.current = nextTags;
+    initialTagIdsRef.current = nextTags
+      .map((tag) => Number(tag.id ?? -1))
+      .filter((id) => Number.isFinite(id) && id >= 0)
+      .sort((left, right) => left - right)
+      .join(",");
+    setIsTagPickerVisible(false);
+  }, [cocktail]);
+
+  useEffect(() => {
+    editableTagsRef.current = editableTags;
+  }, [editableTags]);
+
+  const allCocktailTags = useMemo(() => {
+    const merged = new Map<number, CocktailTag>();
+    [...BUILTIN_COCKTAIL_TAGS, ...customCocktailTags].forEach((tag) => {
+      const id = Number(tag.id ?? -1);
+      if (!Number.isFinite(id) || id < 0 || merged.has(id)) {
+        return;
+      }
+
+      merged.set(id, { id, name: tag.name, color: tag.color });
+    });
+
+    return Array.from(merged.values()).sort((left, right) => left.id - right.id);
+  }, [customCocktailTags]);
+
+  const editableTagIdSet = useMemo(() => {
+    const set = new Set<number>();
+    editableTags.forEach((tag) => {
+      const id = Number(tag.id ?? -1);
+      if (Number.isFinite(id) && id >= 0) {
+        set.add(id);
+      }
+    });
+    return set;
+  }, [editableTags]);
+
+  const availableTagsToAdd = useMemo(
+    () => allCocktailTags.filter((tag) => !editableTagIdSet.has(tag.id)),
+    [allCocktailTags, editableTagIdSet],
+  );
+
+  const resolveTagLabel = useCallback(
+    (tag: Partial<CocktailTag> | number) => {
+      if (typeof tag === "number") {
+        const translated = t(`cocktailTag.${tag}`);
+        return translated !== `cocktailTag.${tag}` ? translated : t("cocktailDetails.tag");
+      }
+
+      const translated = tag.id != null ? t(`cocktailTag.${tag.id}`) : "";
+      if (tag.id != null && translated !== `cocktailTag.${tag.id}`) {
+        return translated;
+      }
+
+      return tag.name ?? t("cocktailDetails.tag");
+    },
+    [t],
+  );
+
+  const persistTags = useCallback(() => {
+    if (!cocktail?.id) {
+      return;
+    }
+
+    const nextTagIds = editableTagsRef.current
+      .map((tag) => Number(tag.id ?? -1))
+      .filter((id) => Number.isFinite(id) && id >= 0)
+      .sort((left, right) => left - right)
+      .join(",");
+    if (nextTagIds === initialTagIdsRef.current) {
+      return;
+    }
+
+    updateCocktail(Number(cocktail.id), {
+      name: cocktail.name,
+      description: cocktail.description,
+      instructions: cocktail.instructions,
+      video: cocktail.video,
+      synonyms: cocktail.synonyms,
+      photoUri: cocktail.photoUri,
+      glassId: cocktail.glassId,
+      methodIds: cocktail.methodIds,
+      tags: editableTagsRef.current,
+      defaultServings: cocktail.defaultServings,
+      ingredients: (cocktail.ingredients ?? []).map((ingredient, index) => ({
+        order: index + 1,
+        ingredientId: ingredient.ingredientId,
+        name: ingredient.name,
+        amount: ingredient.amount,
+        unitId: ingredient.unitId,
+        optional: ingredient.optional,
+        garnish: ingredient.garnish,
+        process: ingredient.process,
+        serving: ingredient.serving,
+        allowBaseSubstitution: ingredient.allowBaseSubstitution,
+        allowBrandSubstitution: ingredient.allowBrandSubstitution,
+        allowStyleSubstitution: ingredient.allowStyleSubstitution,
+        substitutes: (ingredient.substitutes ?? []).map((substitute) => ({
+          ingredientId: substitute.ingredientId,
+          name: substitute.name,
+          amount: substitute.amount,
+          unitId: substitute.unitId,
+          brand: substitute.brand,
+        })),
+      })),
+    });
+  }, [cocktail, updateCocktail]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        persistTags();
+      };
+    }, [persistTags]),
+  );
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -1430,15 +1557,10 @@ export default function CocktailDetailsScreen() {
               />
             ) : null}
 
-            {cocktail.tags && cocktail.tags.length ? (
-              <View style={styles.tagList}>
-                {(cocktail.tags as unknown[]).map((rawTag, index) => {
+            <View style={styles.tagList}>
+              {editableTags.map((rawTag, index) => {
                   if (typeof rawTag === "number") {
-                    const fallbackName = t(`cocktailTag.${rawTag}`);
-                    const finalName =
-                      fallbackName !== `cocktailTag.${rawTag}`
-                        ? fallbackName
-                        : t("cocktailDetails.tag");
+                    const finalName = resolveTagLabel(rawTag);
                     return (
                       <TagPill
                         key={`tag-${rawTag}-${index}`}
@@ -1458,11 +1580,7 @@ export default function CocktailDetailsScreen() {
                         ? `tag-${tag.name}`
                         : `tag-${index}`;
 
-                  const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
-                  const finalName =
-                    tagName && tag.id != null && tagName !== `cocktailTag.${tag.id}`
-                      ? tagName
-                      : (tag.name ?? t("cocktailDetails.tag"));
+                  const finalName = resolveTagLabel(tag);
 
                   return (
                     <TagPill
@@ -1470,6 +1588,38 @@ export default function CocktailDetailsScreen() {
                       label={finalName}
                       color={tag.color ?? Colors.tint}
                       selected
+                      accessibilityLabel={finalName}
+                    />
+                  );
+                })}
+              <TagPill
+                label="+Add"
+                color={Colors.outlineVariant}
+                onPress={() => setIsTagPickerVisible((current) => !current)}
+                accessibilityRole="button"
+                accessibilityLabel="+Add tag"
+              />
+            </View>
+            {isTagPickerVisible ? (
+              <View style={styles.tagList}>
+                {availableTagsToAdd.map((tag) => {
+                  const finalName = resolveTagLabel(tag);
+                  return (
+                    <TagPill
+                      key={`tag-option-${tag.id}`}
+                      label={finalName}
+                      color={tag.color ?? Colors.outlineVariant}
+                      onPress={() => {
+                        setEditableTags((current) => {
+                          if (current.some((item) => Number(item.id ?? -1) === tag.id)) {
+                            return current;
+                          }
+
+                          return [...current, tag];
+                        });
+                        setIsTagPickerVisible(false);
+                      }}
+                      accessibilityRole="button"
                       accessibilityLabel={finalName}
                     />
                   );
