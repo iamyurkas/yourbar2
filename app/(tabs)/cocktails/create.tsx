@@ -12,6 +12,7 @@ import React, {
 } from "react";
 import {
   FlatList,
+  InteractionManager,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -1007,6 +1008,14 @@ export default function CreateCocktailScreen() {
   }, [beginImagePicking, endImagePicking, ensureCameraPermission, isPickingImage, showDialog, t]);
 
   const handleSelectImageSource = useCallback(() => {
+    const runAfterDialogDismiss = (callback: () => void) => {
+      InteractionManager.runAfterInteractions(() => {
+        requestAnimationFrame(() => {
+          callback();
+        });
+      });
+    };
+
     showDialog({
       title: t("cocktailForm.addPhoto"),
       message: t("cocktailForm.addPhotoMessage"),
@@ -1014,13 +1023,17 @@ export default function CreateCocktailScreen() {
         {
           label: t("cocktailForm.takePhoto"),
           onPress: () => {
-            void handleTakePhoto();
+            runAfterDialogDismiss(() => {
+              void handleTakePhoto();
+            });
           },
         },
         {
           label: t("cocktailForm.chooseFromGallery"),
           onPress: () => {
-            void handlePickImage();
+            runAfterDialogDismiss(() => {
+              void handlePickImage();
+            });
           },
         },
         { label: t("common.cancel"), variant: "secondary" },

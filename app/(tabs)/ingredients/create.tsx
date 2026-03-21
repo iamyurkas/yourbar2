@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   BackHandler,
   FlatList,
+  InteractionManager,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -576,6 +577,14 @@ export default function IngredientFormScreen() {
   }, [ensureCameraPermission, isPickingImage, showDialog, t]);
 
   const handleSelectImageSource = useCallback(() => {
+    const runAfterDialogDismiss = (callback: () => void) => {
+      InteractionManager.runAfterInteractions(() => {
+        requestAnimationFrame(() => {
+          callback();
+        });
+      });
+    };
+
     showDialog({
       title: t('ingredientForm.addPhotoTitle'),
       message: t('ingredientForm.addPhotoMessage'),
@@ -583,13 +592,17 @@ export default function IngredientFormScreen() {
         {
           label: t('ingredientForm.takePhoto'),
           onPress: () => {
-            void handleTakePhoto();
+            runAfterDialogDismiss(() => {
+              void handleTakePhoto();
+            });
           },
         },
         {
           label: t('ingredientForm.chooseFromGallery'),
           onPress: () => {
-            void handlePickImage();
+            runAfterDialogDismiss(() => {
+              void handlePickImage();
+            });
           },
         },
         { label: t('common.cancel'), variant: 'secondary' },

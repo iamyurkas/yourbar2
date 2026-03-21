@@ -33,6 +33,7 @@
         "expo-image-picker",
         {
           "photosPermission": "Allow Your Bar to access your photos so you can attach images to cocktails and ingredients.",
+          "cameraPermission": "Allow Your Bar to use your camera so you can take photos for cocktails and ingredients.",
           "microphonePermission": false
         }
       ],
