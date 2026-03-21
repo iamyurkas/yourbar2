@@ -166,14 +166,7 @@ export async function ensureBarsTableShape(db: SQLiteDatabase): Promise<void> {
     return;
   }
 
-  await db.execAsync('BEGIN IMMEDIATE TRANSACTION');
-  try {
-    await rebuildBarsTable(db);
-    await db.execAsync('COMMIT');
-  } catch (error) {
-    await db.execAsync('ROLLBACK');
-    throw error;
-  }
+  await rebuildBarsTable(db);
 }
 
 export async function ensureRuntimeColumnShape(db: SQLiteDatabase): Promise<void> {

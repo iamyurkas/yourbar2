@@ -96,9 +96,7 @@ test('ensureBarsTableShape runs corrective rebuild outside full schema migration
 
   await mod.ensureBarsTableShape(db);
   const joined = execCalls.join('\n');
-  assert.match(joined, /BEGIN IMMEDIATE TRANSACTION/);
   assert.match(joined, /ALTER TABLE bars_new RENAME TO bars/);
-  assert.match(joined, /COMMIT/);
 });
 
 test('rebuildBarsTable handles legacy bars tables without updated_at column', async () => {
