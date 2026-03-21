@@ -14,6 +14,7 @@ import {
   loadInventorySnapshot,
   persistCocktailTagDeltaSnapshot,
   persistInventorySnapshot,
+  syncBundledCatalogIfNeeded,
 } from '@/libs/inventory-storage';
 import {
   areStorageRecordsEqual,
@@ -171,7 +172,7 @@ function applyCocktailTagDeltaToInventoryState(
       return cocktail;
     }
 
-    const normalizedTags = sanitizeCocktailTagInput(deltaValue ?? undefined);
+    const normalizedTags = sanitizeCocktailTagInput(deltaValue as CocktailTag[] | undefined);
     const existingTags = sanitizeCocktailTagInput(cocktail.tags as CocktailTag[] | undefined);
     if (JSON.stringify(existingTags ?? []) === JSON.stringify(normalizedTags ?? [])) {
       return cocktail;
@@ -447,6 +448,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     void (async () => {
       try {
+        await syncBundledCatalogIfNeeded();
         const tagDelta = await loadCocktailTagDeltaSnapshot();
         cocktailTagDeltaRef.current = tagDelta;
 
