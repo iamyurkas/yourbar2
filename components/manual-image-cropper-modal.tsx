@@ -28,7 +28,7 @@ const clamp = (value: number, min: number, max: number) =>
 const MIN_CROP_WIDTH = 80;
 const MIN_CROP_HEIGHT = 80;
 const CROP_VIEW_SIZE = 320;
-const HANDLE_SIZE = 26;
+const HANDLE_TOUCH_SIZE = 44;
 
 export function ManualImageCropperModal({
   visible,
@@ -88,12 +88,13 @@ export function ManualImageCropperModal({
   }, [layout.drawHeight, layout.drawWidth, layout.offsetX, layout.offsetY, visible]);
 
   const dragStart = useRef<CropRect | null>(null);
+  const isResizingRef = useRef(false);
 
   const moveResponder = useMemo(
     () =>
       PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onMoveShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponder: () => !isResizingRef.current,
+        onMoveShouldSetPanResponder: () => !isResizingRef.current,
         onPanResponderGrant: () => {
           dragStart.current = cropRect;
         },
@@ -126,8 +127,11 @@ export function ManualImageCropperModal({
     () =>
       PanResponder.create({
         onStartShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
         onMoveShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponderCapture: () => true,
         onPanResponderGrant: () => {
+          isResizingRef.current = true;
           resizeStart.current = cropRect;
         },
         onPanResponderMove: (_, gesture) => {
@@ -150,6 +154,12 @@ export function ManualImageCropperModal({
           );
 
           setCropRect({ ...start, width: nextWidth, height: nextHeight });
+        },
+        onPanResponderRelease: () => {
+          isResizingRef.current = false;
+        },
+        onPanResponderTerminate: () => {
+          isResizingRef.current = false;
         },
       }),
     [cropRect, layout.drawHeight, layout.drawWidth, layout.offsetX, layout.offsetY],
@@ -202,8 +212,8 @@ export function ManualImageCropperModal({
               style={[
                 styles.handle,
                 {
-                  left: cropRect.x + cropRect.width - HANDLE_SIZE / 2,
-                  top: cropRect.y + cropRect.height - HANDLE_SIZE / 2,
+                  left: cropRect.x + cropRect.width - HANDLE_TOUCH_SIZE / 2,
+                  top: cropRect.y + cropRect.height - HANDLE_TOUCH_SIZE / 2,
                 },
               ]}
               {...resizeResponder.panHandlers}
@@ -269,9 +279,11 @@ const styles = StyleSheet.create({
   },
   handle: {
     position: "absolute",
-    width: HANDLE_SIZE,
-    height: HANDLE_SIZE,
-    borderRadius: HANDLE_SIZE / 2,
+    width: HANDLE_TOUCH_SIZE,
+    height: HANDLE_TOUCH_SIZE,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: HANDLE_TOUCH_SIZE / 2,
     backgroundColor: Colors.tint,
     borderWidth: 2,
     borderColor: Colors.surface,
