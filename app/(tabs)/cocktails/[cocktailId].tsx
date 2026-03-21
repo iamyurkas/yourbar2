@@ -860,8 +860,11 @@ export default function CocktailDetailsScreen() {
 
   useEffect(() => {
     setTagDraftIds(persistedTagIds);
-    setIsAddTagsVisible(false);
   }, [cocktailSelectionKey, persistedTagIds]);
+
+  useEffect(() => {
+    setIsAddTagsVisible(false);
+  }, [cocktailSelectionKey]);
 
   const hasPendingTagChanges = useMemo(() => {
     if (tagDraftIds.length !== persistedTagIds.length) {
