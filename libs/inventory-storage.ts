@@ -218,15 +218,31 @@ export async function loadInventorySnapshot<TCocktail, TIngredient>(): Promise<
 export async function persistInventorySnapshot<TCocktail, TIngredient>(
   snapshot: InventorySnapshot<TCocktail, TIngredient>,
 ): Promise<void> {
+  const startedAt = Date.now();
+  const startedAtIso = new Date(startedAt).toISOString();
   const storagePath = resolveStoragePath();
 
   if (!storagePath) {
+    console.info(`[inventory-save][${startedAtIso}] skipped: storage path is unavailable`);
     return;
   }
 
   try {
-    await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
+    const payload = JSON.stringify(snapshot);
+    console.info(
+      `[inventory-save][${startedAtIso}] start path=${storagePath} bytes=${payload.length}`,
+    );
+    await FileSystem.writeAsStringAsync(storagePath, payload);
+    const finishedAt = Date.now();
+    console.info(
+      `[inventory-save][${new Date(finishedAt).toISOString()}] success durationMs=${finishedAt - startedAt}`,
+    );
   } catch (error) {
+    const failedAt = Date.now();
+    console.error(
+      `[inventory-save][${new Date(failedAt).toISOString()}] failed durationMs=${failedAt - startedAt}`,
+      error,
+    );
     console.error('Unable to persist inventory snapshot', error);
     throw error;
   }
@@ -264,14 +280,30 @@ export async function loadCocktailTagDeltaSnapshot(): Promise<CocktailTagDeltaSn
 export async function persistCocktailTagDeltaSnapshot(
   snapshot: CocktailTagDeltaSnapshot,
 ): Promise<void> {
+  const startedAt = Date.now();
+  const startedAtIso = new Date(startedAt).toISOString();
   const storagePath = resolveCocktailTagDeltaStoragePath();
   if (!storagePath) {
+    console.info(`[inventory-tag-delta-save][${startedAtIso}] skipped: storage path is unavailable`);
     return;
   }
 
   try {
-    await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
+    const payload = JSON.stringify(snapshot);
+    console.info(
+      `[inventory-tag-delta-save][${startedAtIso}] start path=${storagePath} bytes=${payload.length}`,
+    );
+    await FileSystem.writeAsStringAsync(storagePath, payload);
+    const finishedAt = Date.now();
+    console.info(
+      `[inventory-tag-delta-save][${new Date(finishedAt).toISOString()}] success durationMs=${finishedAt - startedAt}`,
+    );
   } catch (error) {
+    const failedAt = Date.now();
+    console.error(
+      `[inventory-tag-delta-save][${new Date(failedAt).toISOString()}] failed durationMs=${failedAt - startedAt}`,
+      error,
+    );
     console.error('Unable to persist cocktail tag delta snapshot', error);
     throw error;
   }
