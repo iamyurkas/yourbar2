@@ -213,6 +213,9 @@ test('schema bootstrap deduplicates bar_state keys before unique index creation'
   assert.ok(
     fakeDb.commands.some((command) => command.includes('DELETE FROM bar_state') && command.includes('GROUP BY bar_id')),
   );
+  assert.ok(
+    fakeDb.commands.some((command) => command.includes('PRAGMA synchronous = NORMAL')),
+  );
 });
 
 test('persistBars skips invalid bar ids to avoid NOT NULL bar_state failures', async () => {

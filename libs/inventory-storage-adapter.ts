@@ -135,6 +135,9 @@ async function dedupeRowsByKey(
 async function ensureSchema(db: SqliteDatabase): Promise<void> {
   await db.execAsync(`
     PRAGMA journal_mode = WAL;
+    PRAGMA synchronous = NORMAL;
+    PRAGMA temp_store = MEMORY;
+    PRAGMA cache_size = -8000;
     PRAGMA foreign_keys = ON;
 
     CREATE TABLE IF NOT EXISTS cocktails (
