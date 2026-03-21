@@ -410,8 +410,12 @@ export const deDETranslations: TranslationDictionary = {
     "Es befinden sich noch keine Zutaten auf Ihrer\nEinkaufsliste.",
   "ingredients.emptyList": "Keine Zutaten in der Liste",
   "ingredients.makeCount.one": "{{count}} Cocktail zubereiten",
+  "ingredients.makeCount.few": "{{count}} Cocktails zubereiten",
+  "ingredients.makeCount.many": "{{count}} Cocktails zubereiten",
   "ingredients.makeCount.other": "{{count}} Cocktails zubereiten",
   "ingredients.recipeCount.one": "{{count}} Rezept",
+  "ingredients.recipeCount.few": "{{count}} Rezepte",
+  "ingredients.recipeCount.many": "{{count}} Rezepte",
   "ingredients.recipeCount.other": "{{count}} Rezepte",
   "ingredients.helpAllFullText":
     "Dieser Bildschirm zeigt alle Zutaten in der App.\n\nNutzen Sie die Suche, wechseln Sie zwischen den Tabs und filtern Sie nach Tags.\n\nTippen Sie auf ein Kontrollkästchen, um die Verfügbarkeit zu markieren.",
@@ -485,6 +489,7 @@ export const deDETranslations: TranslationDictionary = {
 
   "tagEditor.tagName": "Tag-Name",
   "tagEditor.newTag": "Neuer Tag",
+  "tagEditor.editTag": "Tag bearbeiten",
   "tagEditor.color": "Farbe",
 
   "tags.unnamed": "Unbenannter Tag",
@@ -493,7 +498,7 @@ export const deDETranslations: TranslationDictionary = {
   "tabs.ingredients": "Zutaten",
 
   "sideMenu.settingsTitle": "Einstellungen",
-  "sideMenu.bars": "Meine Bars",
+  "sideMenu.bars": "Deine Bars",
   "sideMenu.manageBars": "Bars verwalten",
   "sideMenu.ignoreGarnish": "Dekoration ignorieren",
   "sideMenu.ignoreGarnishCaption": "Alle Dekorationen sind optional",
@@ -799,4 +804,16 @@ export const deDETranslations: TranslationDictionary = {
   "common.back": "Zurück",
   "common.somethingWentWrong": "Etwas ist schiefgelaufen",
   "common.tryAgain": "Erneut versuchen",
+  "sideMenu.googleDriveSignIn": "Mit Google anmelden",
+  "sideMenu.googleDriveSignInCaption":
+    "Synchronisiere deine Bar-Daten geräteübergreifend",
+  "sideMenu.googleDriveSyncNow": "Synchronisieren",
+  "sideMenu.googleDriveSync": "Synchronisieren",
+  "sideMenu.googleDriveSignOut": "Abmelden",
+  "sideMenu.googleDriveStatusIdle": "Bereit zum Synchronisieren",
+  "sideMenu.googleDriveStatusSyncing": "Wird mit Google Drive synchronisiert…",
+  "sideMenu.googleDriveLastSynced": "Zuletzt synchronisiert:\n{{value}}",
+  "sideMenu.googleDriveDebugTitle": "Google-Drive-Synchronisierungsdetails",
+  "sideMenu.googleDriveDebugEmpty":
+    "Es sind noch keine Diagnosedetails verfügbar.",
 };

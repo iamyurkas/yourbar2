@@ -489,7 +489,7 @@ export const enGBTranslations: TranslationDictionary = {
   "tabs.ingredients": "Ingredients",
 
   "sideMenu.settingsTitle": "Settings",
-  "sideMenu.bars": "My Bars",
+  "sideMenu.bars": "Your Bars",
   "sideMenu.manageBars": "Manage Bars",
   "sideMenu.ignoreGarnish": "Ignore garnish",
   "sideMenu.ignoreGarnishCaption": "All garnishes are optional",
@@ -783,4 +783,14 @@ export const enGBTranslations: TranslationDictionary = {
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
   "common.tryAgain": "Try again",
+  "sideMenu.googleDriveSignIn": "Sign in with Google",
+  "sideMenu.googleDriveSignInCaption": "Sync data across devices",
+  "sideMenu.googleDriveSyncNow": "Sync now",
+  "sideMenu.googleDriveSync": "Sync",
+  "sideMenu.googleDriveSignOut": "Sign out",
+  "sideMenu.googleDriveStatusIdle": "Ready to sync",
+  "sideMenu.googleDriveStatusSyncing": "Syncing with Google Drive…",
+  "sideMenu.googleDriveLastSynced": "Last synced:\n{{value}}",
+  "sideMenu.googleDriveDebugTitle": "Google Drive sync details",
+  "sideMenu.googleDriveDebugEmpty": "No diagnostic details are available yet.",
 };

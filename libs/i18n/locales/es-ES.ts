@@ -530,7 +530,7 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.amazonStore": "Tienda de Amazon",
   "sideMenu.amazonStoreCurrent": "Actual: {{label}}",
   "sideMenu.language": "Idioma de la app",
-  "sideMenu.bars": "Mis bares",
+  "sideMenu.bars": "Tus bares",
   "sideMenu.manageBars": "Gestionar bares",
   "sideMenu.languageCurrent": "{{name}}",
   "sideMenu.reportIssueTitle": "¿Algo va mal?",
@@ -780,4 +780,17 @@ export const esESTranslations: TranslationDictionary = {
   "common.back": "Atrás",
   "common.somethingWentWrong": "Algo salió mal",
   "common.tryAgain": "Inténtalo de nuevo",
+  "sideMenu.googleDriveSignIn": "Iniciar sesión con Google",
+  "sideMenu.googleDriveSignInCaption":
+    "Sincroniza los datos de tu bar entre dispositivos",
+  "sideMenu.googleDriveSyncNow": "Sincronizar",
+  "sideMenu.googleDriveSync": "Sincronizar",
+  "sideMenu.googleDriveSignOut": "Cerrar sesión",
+  "sideMenu.googleDriveStatusIdle": "Listo para sincronizar",
+  "sideMenu.googleDriveStatusSyncing": "Sincronizando con Google Drive…",
+  "sideMenu.googleDriveLastSynced": "Última sincronización:\n{{value}}",
+  "sideMenu.googleDriveDebugTitle":
+    "Detalles de sincronización de Google Drive",
+  "sideMenu.googleDriveDebugEmpty":
+    "Todavía no hay detalles de diagnóstico disponibles.",
 };

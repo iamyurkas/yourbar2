@@ -11,6 +11,7 @@ import type {
   InventoryExportData,
   InventoryExportFile,
   InventoryImportOptions,
+  InventorySyncStateSnapshot,
   PhotoBackupEntry,
   ImportedPhotoEntry,
   StartScreen,
@@ -34,6 +35,8 @@ export type InventoryActionsContextValue = {
     options?: InventoryImportOptions,
   ) => void;
   importInventoryPhotos: (entries: ImportedPhotoEntry[]) => number;
+  exportInventorySyncState: () => InventorySyncStateSnapshot | null;
+  importInventorySyncState: (snapshot: InventorySyncStateSnapshot) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;
@@ -46,6 +49,7 @@ export type InventoryActionsContextValue = {
   deleteCustomIngredientTag: (id: number) => boolean;
   setCocktailRating: (cocktail: Cocktail, rating: number) => void;
   setCocktailComment: (cocktail: Cocktail, comment: string) => void;
+  updateCocktailTags: (cocktail: Cocktail, tags: CocktailTag[]) => void;
   setIgnoreGarnish: (value: boolean) => void;
   setAllowAllSubstitutes: (value: boolean) => void;
   setUseImperialUnits: (value: boolean) => void;

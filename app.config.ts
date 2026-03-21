@@ -7,6 +7,15 @@ type ExpoIosConfig = {
 
 export default ({ config }: { config: ExpoConfig }) => {
   const baseExpo = base.expo ?? {};
+  const iosClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID?.trim() ?? "";
+  const iosUrlScheme = iosClientId
+    ? iosClientId.split(".").reverse().join(".")
+    : undefined;
+  const googleSignInPlugin = [
+    "@react-native-google-signin/google-signin",
+    ...(iosUrlScheme ? [{ iosUrlScheme }] : []),
+  ];
 
   return {
     expo: {
@@ -42,7 +51,11 @@ export default ({ config }: { config: ExpoConfig }) => {
         package: "com.yourbarapp.free",
       },
 
-      plugins: [...(baseExpo.plugins ?? []), ...(config.plugins ?? [])],
+      plugins: [
+        ...(baseExpo.plugins ?? []),
+        ...(config.plugins ?? []),
+        googleSignInPlugin,
+      ],
 
       extra: {
         ...(baseExpo.extra ?? {}),
@@ -55,6 +68,12 @@ export default ({ config }: { config: ExpoConfig }) => {
           process.env.EXPO_PUBLIC_ANDROID_PLAY_STORE_COUNTRY_CODE ?? null,
 
         buildTime: new Date().toISOString(),
+        googleDriveAuth: {
+          androidClientId:
+            process.env.EXPO_PUBLIC_GOOGLE_DRIVE_ANDROID_CLIENT_ID ?? null,
+          iosClientId: process.env.EXPO_PUBLIC_GOOGLE_DRIVE_IOS_CLIENT_ID ?? null,
+          webClientId: process.env.EXPO_PUBLIC_GOOGLE_DRIVE_WEB_CLIENT_ID ?? null,
+        },
       },
     },
   };

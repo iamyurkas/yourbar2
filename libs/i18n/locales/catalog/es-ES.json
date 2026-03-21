@@ -3211,5 +3211,9 @@
   "cocktail.620.name": "Redwood Heights",
   "cocktail.620.synonyms": "Redwood Heights",
   "cocktail.620.description": "Un cóctel a base de ginebra elegante y complejo que ofrece una refrescante alternativa herbal al Manhattan. Las notas botánicas de la ginebra se mezclan con el vermut dulce y la profundidad amarga y terrosa del Cynar, servido en una copa enjuagada con absenta para un final aromático persistente.",
-  "cocktail.620.instructions": "1. Selecciona y enfría previamente una copa coupé.\n2. Enjuaga la copa fría con **absenta** (hazla girar y desecha el exceso).\n3. Llena un vaso mezclador con **hielo**.\n4. Añade 60 ml de **ginebra**, 30 ml de **vermut rojo**, 15 ml de **Cynar** y 1 gota de **amargos de naranja**.\n5. Remueve suavemente durante unos 30 segundos hasta que esté bien frío.\n6. Cuela en la copa enjuagada con absenta.\n7. Exprime los aceites de una piel de **naranja** sobre la bebida y úsala como adorno."
+  "cocktail.620.instructions": "1. Selecciona y enfría previamente una copa coupé.\n2. Enjuaga la copa fría con **absenta** (hazla girar y desecha el exceso).\n3. Llena un vaso mezclador con **hielo**.\n4. Añade 60 ml de **ginebra**, 30 ml de **vermut rojo**, 15 ml de **Cynar** y 1 gota de **amargos de naranja**.\n5. Remueve suavemente durante unos 30 segundos hasta que esté bien frío.\n6. Cuela en la copa enjuagada con absenta.\n7. Exprime los aceites de una piel de **naranja** sobre la bebida y úsala como adorno.",
+  "ingredient.367.name": "Licor de jengibre",
+  "ingredient.367.description": "Licor dulce y aromático elaborado macerando raíz de jengibre en alcohol, a menudo reforzado con aceites cítricos, azúcar y, en ocasiones, botánicos. Suele tener una graduación de 25-30% vol.",
+  "ingredient.368.name": "Solución salina (4:1)",
+  "ingredient.368.description": "Una solución salina 4:1 para cócteles es una mezcla al 20% usada para potenciar sabores. Normalmente se prepara disolviendo 1 parte de sal en 4 partes de agua por peso (por ejemplo, 20 g de sal en 80 g de agua o 1 oz de sal en 4 oz de agua)."
 }

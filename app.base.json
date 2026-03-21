@@ -2,7 +2,7 @@
   "expo": {
     "name": "Your Bar",
     "slug": "yourbar",
-    "version": "1.4.7",
+    "version": "1.5.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",

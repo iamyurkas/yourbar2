@@ -39,6 +39,7 @@ import type { SupportedLocale } from "@/libs/i18n/types";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { buildPhotoBaseName } from "@/libs/photo-utils";
 import { useInventory, type AppTheme, type StartScreen } from "@/providers/inventory-provider";
+import { useGoogleDriveSync } from "@/providers/google-drive-sync-provider";
 import {
   type ImportedPhotoEntry,
   type InventoryExportData,
@@ -176,6 +177,15 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   const insets = useSafeAreaInsets();
   const { t, locale, setLocale, languageOptions, currentLanguage } = useI18n();
   const { startOnboarding } = useOnboarding();
+  const {
+    account: googleDriveAccount,
+    status: googleDriveStatus,
+    lastSyncAt: googleDriveLastSyncAt,
+    errorMessage: googleDriveErrorMessage,
+    signIn: signInToGoogleDrive,
+    signOut: signOutFromGoogleDrive,
+    syncNow: syncGoogleDriveNow,
+  } = useGoogleDriveSync();
   const [isMounted, setIsMounted] = useState(visible);
   const [isStartScreenModalVisible, setStartScreenModalVisible] =
     useState(false);
@@ -184,6 +194,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   > | null>(null);
   const [isAmazonStoreModalVisible, setAmazonStoreModalVisible] = useState(false);
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [optimisticLanguageSelection, setOptimisticLanguageSelection] = useState<SupportedLocale>(locale);
   const [isBackupRestoreModalVisible, setBackupRestoreModalVisible] = useState(false);
   const [isBarManagerVisible, setBarManagerVisible] = useState(false);
   const barManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -197,6 +208,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     null,
   );
   const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const languageApplyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const tagManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tagEditorReturnTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -292,6 +304,28 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     return AMAZON_STORES[effectiveAmazonStore].label;
   }, [effectiveAmazonStore, t]);
 
+  const googleDriveSyncCaption = useMemo(() => {
+    if (!googleDriveAccount) {
+      return t("sideMenu.googleDriveSignInCaption");
+    }
+
+    if (googleDriveStatus === "syncing") {
+      return t("sideMenu.googleDriveStatusSyncing");
+    }
+
+    if (googleDriveErrorMessage) {
+      return googleDriveErrorMessage;
+    }
+
+    if (googleDriveLastSyncAt) {
+      return t("sideMenu.googleDriveLastSynced", {
+        value: new Date(googleDriveLastSyncAt).toLocaleString(),
+      });
+    }
+
+    return t("sideMenu.googleDriveStatusIdle");
+  }, [googleDriveAccount, googleDriveErrorMessage, googleDriveLastSyncAt, googleDriveStatus, t]);
+
   const renderStartScreenIcon = (
     option: StartScreenOption,
     isSelected: boolean,
@@ -358,30 +392,34 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     }
   }, [backdropOpacity, translateX, visible]);
 
-  useEffect(() => {
-    if (visible) {
-      return;
-    }
+useEffect(() => {
+  setOptimisticLanguageSelection(locale);
+}, [locale]);
 
-    clearTimeoutRef(startScreenModalCloseTimeout);
-    clearTimeoutRef(amazonStoreModalCloseTimeout);
-    clearTimeoutRef(languageModalCloseTimeout);
-    clearTimeoutRef(barManagerTransitionTimeout);
-    clearTimeoutRef(tagManagerTransitionTimeout);
-    clearTimeoutRef(tagEditorReturnTimeout);
-    clearTimeoutRef(backupRestoreActionTimeout);
+useEffect(() => {
+  if (visible) {
+    return;
+  }
 
-    setStartScreenModalVisible(false);
-    setAmazonStoreModalVisible(false);
-    setLanguageModalVisible(false);
-    setBackupRestoreModalVisible(false);
-    setBarManagerVisible(false);
-    setBarEditorVisible(false);
-    setTagManagerVisible(false);
-    setTagEditorVisible(false);
-    closeIngredientStatusImportModal(null);
-    setDialogOptions(null);
-  }, [visible]);
+  clearTimeoutRef(startScreenModalCloseTimeout);
+  clearTimeoutRef(amazonStoreModalCloseTimeout);
+  clearTimeoutRef(languageModalCloseTimeout);
+  clearTimeoutRef(barManagerTransitionTimeout);
+  clearTimeoutRef(tagManagerTransitionTimeout);
+  clearTimeoutRef(tagEditorReturnTimeout);
+  clearTimeoutRef(backupRestoreActionTimeout);
+
+  setStartScreenModalVisible(false);
+  setAmazonStoreModalVisible(false);
+  setLanguageModalVisible(false);
+  setBackupRestoreModalVisible(false);
+  setBarManagerVisible(false);
+  setBarEditorVisible(false);
+  setTagManagerVisible(false);
+  setTagEditorVisible(false);
+  closeIngredientStatusImportModal(null);
+  setDialogOptions(null);
+}, [visible]);
 
   const toggleIgnoreGarnish = () => {
     setIgnoreGarnish(!ignoreGarnish);
@@ -434,6 +472,22 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     });
   };
 
+  const handleGoogleDrivePrimaryPress = () => {
+    if (googleDriveAccount) {
+      void syncGoogleDriveNow();
+      return;
+    }
+
+    void signInToGoogleDrive();
+  };
+
+  const handleGoogleDriveSyncPress = () => {
+    void syncGoogleDriveNow();
+  };
+
+  const handleGoogleDriveSignOutPress = () => {
+    void signOutFromGoogleDrive();
+  };
 
   const handleStartScreenPress = () => {
     setStartScreenModalVisible(true);
@@ -462,6 +516,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
   };
 
   const handleLanguagePress = () => {
+    setOptimisticLanguageSelection(locale);
     setLanguageModalVisible(true);
   };
 
@@ -552,11 +607,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleCloseLanguageModal = () => {
     clearTimeoutRef(languageModalCloseTimeout);
+    clearTimeoutRef(languageApplyTimeout);
+    setOptimisticLanguageSelection(locale);
     setLanguageModalVisible(false);
   };
 
   const handleSelectLanguage = (value: SupportedLocale) => {
-    setLocale(value);
+    setOptimisticLanguageSelection(value);
+    clearTimeoutRef(languageApplyTimeout);
+    languageApplyTimeout.current = setTimeout(() => {
+      setLocale(value);
+      languageApplyTimeout.current = null;
+    }, 0);
     scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
 
@@ -1088,6 +1150,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
       clearTimeoutRef(languageModalCloseTimeout);
+      clearTimeoutRef(languageApplyTimeout);
       clearTimeoutRef(barManagerTransitionTimeout);
       clearTimeoutRef(tagManagerTransitionTimeout);
       clearTimeoutRef(tagEditorReturnTimeout);
@@ -1187,6 +1250,76 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={googleDriveAccount ? t("sideMenu.googleDriveSyncNow") : t("sideMenu.googleDriveSignIn")}
+              onPress={handleGoogleDrivePrimaryPress}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View style={[styles.checkbox, googleDriveAccount?.photoUrl ? styles.googleDriveAvatarContainer : null, SURFACE_ICON_STYLE]}>
+                {googleDriveAccount?.photoUrl ? (
+                  <Image
+                    source={{ uri: googleDriveAccount.photoUrl }}
+                    style={styles.googleDriveAvatar}
+                    contentFit="cover"
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="google-drive"
+                    size={16}
+                    color={Colors.tint}
+                  />
+                )}
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={[styles.settingLabel, styles.googleDriveAccountLabel, { color: Colors.onSurface }]}
+                >
+                  {googleDriveAccount ? (googleDriveAccount.name || googleDriveAccount.email) : t("sideMenu.googleDriveSignIn")}
+                </Text>
+                <Text style={[styles.settingCaption, { color: Colors.onSurfaceVariant }]}>
+                  {googleDriveSyncCaption}
+                </Text>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={googleDriveAccount ? t("sideMenu.googleDriveSignOut") : t("sideMenu.googleDriveSignIn")}
+                onPress={(event) => {
+                  event.stopPropagation();
+
+                  if (googleDriveAccount) {
+                    handleGoogleDriveSignOutPress();
+                    return;
+                  }
+
+                  handleGoogleDrivePrimaryPress();
+                }}
+              >
+                <MaterialCommunityIcons
+                  name={googleDriveAccount ? "logout" : "chevron-right"}
+                  size={20}
+                  color={Colors.onSurfaceVariant}
+                />
+              </Pressable>
+            </Pressable>
+
+            {googleDriveAccount ? (
+              <View style={styles.googleDriveActions}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t("sideMenu.googleDriveSyncNow")}
+                  onPress={handleGoogleDriveSyncPress}
+                  style={[styles.googleDriveActionChip, { borderColor: Colors.outlineVariant }]}
+                >
+                  <Text style={[styles.googleDriveActionChipLabel, { color: Colors.onSurfaceVariant }]}>
+                    {t("sideMenu.googleDriveSyncNow")}
+                  </Text>
+                </Pressable>
+              </View>
+            ) : null}
+
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t("sideMenu.manageBars")}
@@ -2470,7 +2603,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
               keyboardShouldPersistTaps="handled"
             >
               {languageOptions.map((option) => {
-                const isSelected = locale === option.code;
+                const isSelected = optimisticLanguageSelection === option.code;
                 const localizedLanguageName = t(`language.${option.code}`);
                 return (
                   <Pressable
@@ -2958,6 +3091,23 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
   },
+  googleDriveActions: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: -4,
+    marginBottom: 4,
+    marginLeft: 34,
+  },
+  googleDriveActionChip: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  googleDriveActionChipLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
   backupRestoreModalActionRow: {
     paddingLeft: 8,
   },
@@ -2976,6 +3126,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  googleDriveAvatarContainer: {
+    borderRadius: 999,
+    overflow: "hidden",
+    borderWidth: 0,
+  },
+  googleDriveAvatar: {
+    width: "100%",
+    height: "100%",
+  },
   settingTextContainer: {
     flex: 1,
     gap: 4,
@@ -2993,6 +3152,9 @@ const styles = StyleSheet.create({
   settingLabel: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  googleDriveAccountLabel: {
+    flexShrink: 1,
   },
   settingCaption: {
     fontSize: 12,

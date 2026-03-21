@@ -494,7 +494,7 @@ export const ukUATranslations: TranslationDictionary = {
   "tabs.ingredients": "Інгредієнти",
 
   "sideMenu.settingsTitle": "Налаштування",
-  "sideMenu.bars": "Мої бари",
+  "sideMenu.bars": "Ваші бари",
   "sideMenu.manageBars": "Керування барами",
   "sideMenu.ignoreGarnish": "Ігнорувати декор",
   "sideMenu.ignoreGarnishCaption": "Весь декор є опційним",
@@ -844,4 +844,14 @@ export const ukUATranslations: TranslationDictionary = {
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
   "common.tryAgain": "Try again",
+  "sideMenu.googleDriveSignIn": "Увійти через Google",
+  "sideMenu.googleDriveSignInCaption": "Синхронізуйте дані між пристроями",
+  "sideMenu.googleDriveSyncNow": "Синхронізувати",
+  "sideMenu.googleDriveSync": "Синхронізація",
+  "sideMenu.googleDriveSignOut": "Вийти",
+  "sideMenu.googleDriveStatusIdle": "Готово до синхронізації",
+  "sideMenu.googleDriveStatusSyncing": "Синхронізація з Google Drive…",
+  "sideMenu.googleDriveLastSynced": "Остання синхронізація:\n{{value}}",
+  "sideMenu.googleDriveDebugTitle": "Деталі синхронізації Google Drive",
+  "sideMenu.googleDriveDebugEmpty": "Діагностичні відомості поки недоступні.",
 };

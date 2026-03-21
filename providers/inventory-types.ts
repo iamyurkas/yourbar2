@@ -1,5 +1,6 @@
 import { type CocktailMethodId } from "@/constants/cocktail-methods";
 import type { SupportedLocale } from "@/libs/i18n/types";
+import type { InventoryDeltaSnapshotV3 } from "@/libs/inventory-storage";
 import { type InventoryData } from "@/libs/inventory-data";
 
 export type BaseCocktailRecord = InventoryData["cocktails"][number];
@@ -236,3 +237,6 @@ export type InventoryTranslationsExportFile = {
 export type InventoryExportFile =
   | InventoryBaseExportFile
   | InventoryTranslationsExportFile;
+
+export type InventorySyncStateSnapshot =
+  InventoryDeltaSnapshotV3<CocktailStorageRecord, IngredientStorageRecord>;
