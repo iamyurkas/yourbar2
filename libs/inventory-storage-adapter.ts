@@ -33,6 +33,10 @@ type InventoryRow = {
   data: string;
 };
 
+type TableInfoRow = {
+  name: string;
+};
+
 function resolveMigrationMarkerPath(): string | undefined {
   const baseDirectory = FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
   return baseDirectory ? `${baseDirectory.replace(/\/?$/, '/')}${SQLITE_MIGRATION_MARKER_FILENAME}` : undefined;
@@ -97,6 +101,20 @@ function parseJsonSafe<T>(input: string | null | undefined, fallback: T): T {
   }
 }
 
+async function ensureColumnExists(
+  db: SqliteDatabase,
+  tableName: string,
+  columnName: string,
+  columnSql: string,
+): Promise<void> {
+  const columns = await db.getAllAsync<TableInfoRow>(`PRAGMA table_info(${tableName})`);
+  if (columns.some((column) => column.name === columnName)) {
+    return;
+  }
+
+  await db.execAsync(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnSql}`);
+}
+
 async function ensureSchema(db: SqliteDatabase): Promise<void> {
   await db.execAsync(`
     PRAGMA journal_mode = WAL;
@@ -104,13 +122,11 @@ async function ensureSchema(db: SqliteDatabase): Promise<void> {
 
     CREATE TABLE IF NOT EXISTS cocktails (
       entity_id INTEGER PRIMARY KEY,
-      search_name_normalized TEXT,
       data TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS ingredients (
       entity_id INTEGER PRIMARY KEY,
-      search_name_normalized TEXT,
       data TEXT NOT NULL
     );
 
@@ -158,7 +174,12 @@ async function ensureSchema(db: SqliteDatabase): Promise<void> {
       key TEXT PRIMARY KEY,
       value TEXT
     );
+  `);
 
+  await ensureColumnExists(db, 'cocktails', 'search_name_normalized', 'TEXT');
+  await ensureColumnExists(db, 'ingredients', 'search_name_normalized', 'TEXT');
+
+  await db.execAsync(`
     CREATE INDEX IF NOT EXISTS idx_cocktails_search_name ON cocktails(search_name_normalized);
     CREATE INDEX IF NOT EXISTS idx_ingredients_search_name ON ingredients(search_name_normalized);
     CREATE INDEX IF NOT EXISTS idx_feedback_rating ON feedback(rating);
