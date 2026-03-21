@@ -76,6 +76,10 @@ type IngredientRowMeta = {
   subtitleText?: string;
 };
 
+const LIST_ROW_HEIGHT = 76;
+const LIST_SEPARATOR_HEIGHT = StyleSheet.hairlineWidth;
+const LIST_ITEM_LAYOUT_HEIGHT = LIST_ROW_HEIGHT + LIST_SEPARATOR_HEIGHT;
+
 const areIngredientPropsEqual = (
   prev: Readonly<IngredientListItemProps>,
   next: Readonly<IngredientListItemProps>,
@@ -820,6 +824,11 @@ export default function IngredientsScreen() {
   );
 
   const keyExtractor = useCallback((item: Ingredient) => String(item.id ?? item.name), []);
+  const getItemLayout = useCallback((_: ArrayLike<Ingredient> | null | undefined, index: number) => ({
+    length: LIST_ITEM_LAYOUT_HEIGHT,
+    offset: LIST_ITEM_LAYOUT_HEIGHT * index,
+    index,
+  }), []);
 
 
   const ingredientRowMetaByKey = useMemo(() => {
@@ -1086,12 +1095,14 @@ export default function IngredientsScreen() {
             ref={listRef}
             data={sortedIngredients}
             keyExtractor={keyExtractor}
+            getItemLayout={getItemLayout}
             renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={styles.listContent}
             initialNumToRender={16}
             maxToRenderPerBatch={16}
             windowSize={7}
+            removeClippedSubviews
             showsVerticalScrollIndicator
             keyboardDismissMode="on-drag"
             // Let the first tap both dismiss the keyboard and activate the row.

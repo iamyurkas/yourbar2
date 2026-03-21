@@ -48,6 +48,9 @@ type CocktailMethodOption = {
 };
 
 const METHOD_ICON_SIZE = 16;
+const LIST_ROW_HEIGHT = 76;
+const LIST_SEPARATOR_HEIGHT = StyleSheet.hairlineWidth;
+const LIST_ITEM_LAYOUT_HEIGHT = LIST_ROW_HEIGHT + LIST_SEPARATOR_HEIGHT;
 type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailability>;
 
 export default function CocktailsScreen() {
@@ -706,6 +709,16 @@ export default function CocktailsScreen() {
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);
+  const getCocktailItemLayout = useCallback((_: ArrayLike<Cocktail> | null | undefined, index: number) => ({
+    length: LIST_ITEM_LAYOUT_HEIGHT,
+    offset: LIST_ITEM_LAYOUT_HEIGHT * index,
+    index,
+  }), []);
+  const getMyTabItemLayout = useCallback((_: ArrayLike<MyTabListItem> | null | undefined, index: number) => ({
+    length: LIST_ITEM_LAYOUT_HEIGHT,
+    offset: LIST_ITEM_LAYOUT_HEIGHT * index,
+    index,
+  }), []);
 
   const handleSelectCocktail = useCallback(
     (cocktail: Cocktail) => {
@@ -1290,12 +1303,14 @@ export default function CocktailsScreen() {
             ref={listRef as React.RefObject<FlatList<MyTabListItem>>}
             data={visibleMyTabItems}
             keyExtractor={myTabKeyExtractor}
+            getItemLayout={getMyTabItemLayout}
             renderItem={renderMyItem}
             ItemSeparatorComponent={renderMySeparator}
             contentContainerStyle={styles.listContent}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
             windowSize={5}
+            removeClippedSubviews
             showsVerticalScrollIndicator
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
@@ -1312,12 +1327,14 @@ export default function CocktailsScreen() {
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
             data={sortedCocktails}
             keyExtractor={keyExtractor}
+            getItemLayout={getCocktailItemLayout}
             renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={styles.listContent}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
             windowSize={5}
+            removeClippedSubviews
             showsVerticalScrollIndicator
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"

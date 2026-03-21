@@ -67,6 +67,9 @@ function resolveCocktailByKey(key: string, cocktails: Cocktail[]) {
 }
 
 const METHOD_ICON_SIZE = 16;
+const LIST_ROW_HEIGHT = 76;
+const LIST_SEPARATOR_HEIGHT = StyleSheet.hairlineWidth;
+const LIST_ITEM_LAYOUT_HEIGHT = LIST_ROW_HEIGHT + LIST_SEPARATOR_HEIGHT;
 
 function countRequiredIngredients(cocktail: Cocktail, ignoreGarnish: boolean): number {
   return (cocktail.ingredients ?? []).filter(
@@ -721,6 +724,12 @@ export default function ShakerResultsScreen() {
     },
     [Colors, availabilitySummaryByKey],
   );
+  const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
+  const getItemLayout = useCallback((_: ArrayLike<Cocktail> | null | undefined, index: number) => ({
+    length: LIST_ITEM_LAYOUT_HEIGHT,
+    offset: LIST_ITEM_LAYOUT_HEIGHT * index,
+    index,
+  }), []);
 
   return (
     <SafeAreaView
@@ -822,13 +831,15 @@ export default function ShakerResultsScreen() {
         <FlatList
           ref={listRef}
           data={sortedCocktails}
-          keyExtractor={(item) => String(item.id ?? item.name)}
+          keyExtractor={keyExtractor}
+          getItemLayout={getItemLayout}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
           contentContainerStyle={styles.listContent}
           initialNumToRender={12}
           maxToRenderPerBatch={12}
           windowSize={5}
+          removeClippedSubviews
           ListEmptyComponent={
             <Text style={[styles.emptyLabel, { color: Colors.onSurfaceVariant }]}>
               {t("shakerResults.emptyMatchingRecipes")}
