@@ -148,6 +148,21 @@ export function ImageCropperModal({
       return;
     }
 
+    const directCropResult = await cropRef.current?.crop?.(1280);
+    if (typeof directCropResult === "string" && directCropResult.length > 0) {
+      onApply(directCropResult);
+      return;
+    }
+    if (
+      directCropResult
+      && typeof directCropResult === "object"
+      && "uri" in directCropResult
+      && typeof (directCropResult as { uri?: unknown }).uri === "string"
+    ) {
+      onApply((directCropResult as { uri: string }).uri);
+      return;
+    }
+
     const result = cropRef.current?.crop?.();
     if (!result) {
       onApply(imageUri);
