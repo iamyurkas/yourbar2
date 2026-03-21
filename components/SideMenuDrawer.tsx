@@ -207,6 +207,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     null,
   );
   const languageModalCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const languageApplyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTagManagerVisible, setTagManagerVisible] = useState(false);
   const tagManagerTransitionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tagEditorReturnTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -571,13 +572,18 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
 
   const handleCloseLanguageModal = () => {
     clearTimeoutRef(languageModalCloseTimeout);
+    clearTimeoutRef(languageApplyTimeout);
     setOptimisticLanguageSelection(locale);
     setLanguageModalVisible(false);
   };
 
   const handleSelectLanguage = (value: SupportedLocale) => {
     setOptimisticLanguageSelection(value);
-    setLocale(value);
+    clearTimeoutRef(languageApplyTimeout);
+    languageApplyTimeout.current = setTimeout(() => {
+      setLocale(value);
+      languageApplyTimeout.current = null;
+    }, 0);
     scheduleModalClose(languageModalCloseTimeout, setLanguageModalVisible);
   };
 
@@ -1109,6 +1115,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
       clearTimeoutRef(startScreenModalCloseTimeout);
       clearTimeoutRef(amazonStoreModalCloseTimeout);
       clearTimeoutRef(languageModalCloseTimeout);
+      clearTimeoutRef(languageApplyTimeout);
       clearTimeoutRef(barManagerTransitionTimeout);
       clearTimeoutRef(tagManagerTransitionTimeout);
       clearTimeoutRef(tagEditorReturnTimeout);
