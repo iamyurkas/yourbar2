@@ -27,6 +27,7 @@ export async function rebuildBarsTable(db: SQLiteDatabase): Promise<void> {
   const existingColumns = await getTableColumns(db, 'bars');
   const hasPayload = existingColumns.has('payload_json');
   const hasName = existingColumns.has('name');
+  const hasUpdatedAt = existingColumns.has('updated_at');
 
   await db.execAsync(`
     CREATE TABLE IF NOT EXISTS bars_new (
@@ -35,13 +36,18 @@ export async function rebuildBarsTable(db: SQLiteDatabase): Promise<void> {
       updated_at INTEGER NOT NULL
     );
   `);
+
+  const updatedAtExpression = hasUpdatedAt
+    ? "COALESCE(updated_at, CAST(strftime('%s','now') AS INTEGER))"
+    : "CAST(strftime('%s','now') AS INTEGER)";
+
   if (hasPayload) {
     await db.execAsync(`
       INSERT INTO bars_new(id, payload_json, updated_at)
       SELECT
         CAST(id AS TEXT),
         payload_json,
-        COALESCE(updated_at, CAST(strftime('%s','now') AS INTEGER))
+        ${updatedAtExpression}
       FROM bars;
     `);
   } else if (hasName) {
@@ -55,7 +61,21 @@ export async function rebuildBarsTable(db: SQLiteDatabase): Promise<void> {
           'availableIngredientIds', '[]',
           'shoppingIngredientIds', '[]'
         ),
-        COALESCE(updated_at, CAST(strftime('%s','now') AS INTEGER))
+        ${updatedAtExpression}
+      FROM bars;
+    `);
+  } else {
+    await db.execAsync(`
+      INSERT INTO bars_new(id, payload_json, updated_at)
+      SELECT
+        CAST(id AS TEXT),
+        json_object(
+          'id', CAST(id AS TEXT),
+          'name', 'My Bar',
+          'availableIngredientIds', '[]',
+          'shoppingIngredientIds', '[]'
+        ),
+        ${updatedAtExpression}
       FROM bars;
     `);
   }

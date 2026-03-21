@@ -100,3 +100,32 @@ test('ensureBarsTableShape runs corrective rebuild outside full schema migration
   assert.match(joined, /ALTER TABLE bars_new RENAME TO bars/);
   assert.match(joined, /COMMIT/);
 });
+
+test('rebuildBarsTable handles legacy bars tables without updated_at column', async () => {
+  const execCalls = [];
+  const db = {
+    execAsync: async (sql) => {
+      execCalls.push(sql);
+    },
+    getAllAsync: async (sql) => {
+      if (sql === 'PRAGMA table_info(bars)') {
+        return [{ name: 'id' }, { name: 'name' }];
+      }
+      return [];
+    },
+  };
+
+  const mod = loadTsModule(path.resolve(__dirname, '../libs/storage/sqlite/migrations.ts'), {
+    '@/libs/storage/sqlite/schema': {
+      SQLITE_SCHEMA_VERSION: 2,
+      TABLE_DEFINITIONS: {
+        bars: 'CREATE TABLE IF NOT EXISTS bars (id TEXT PRIMARY KEY, payload_json TEXT NOT NULL, updated_at INTEGER NOT NULL)',
+      },
+      INDEX_DEFINITIONS: [],
+    },
+  });
+
+  await mod.rebuildBarsTable(db);
+  const joined = execCalls.join('\n');
+  assert.match(joined, /CAST\(strftime\('%s','now'\) AS INTEGER\)/);
+});
