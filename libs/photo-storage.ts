@@ -17,6 +17,14 @@ type StorePhotoInput = {
   suffix?: string;
 };
 
+type CropPhotoInput = {
+  uri: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 const ensurePhotoDirectory = async (category: PhotoCategory) => {
   const rootDirectory =
     FileSystem.documentDirectory ?? FileSystem.cacheDirectory;
@@ -157,3 +165,56 @@ export const storePhoto = async ({
 
 export const shouldStorePhoto = (uri?: string | null) =>
   typeof uri === "string" && isLocalFileUri(uri);
+
+export const cropPhotoToTempFile = async ({
+  uri,
+  x,
+  y,
+  width,
+  height,
+}: CropPhotoInput) => {
+  const base64 = await FileSystem.readAsStringAsync(uri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+  const data = Skia.Data.fromBase64(base64);
+  const img = Skia.Image.MakeImageFromEncoded(data);
+  if (!img) {
+    throw new Error("Skia: failed to decode image for crop");
+  }
+
+  const safeX = Math.max(0, Math.min(x, img.width() - 1));
+  const safeY = Math.max(0, Math.min(y, img.height() - 1));
+  const safeWidth = Math.max(1, Math.min(width, img.width() - safeX));
+  const safeHeight = Math.max(1, Math.min(height, img.height() - safeY));
+
+  const surface = Skia.Surface.MakeOffscreen(safeWidth, safeHeight);
+  if (!surface) {
+    throw new Error("Skia: failed to create crop surface");
+  }
+
+  const canvas = surface.getCanvas();
+  const paint = Skia.Paint();
+  canvas.drawImageRect(
+    img,
+    Skia.XYWHRect(safeX, safeY, safeWidth, safeHeight),
+    Skia.XYWHRect(0, 0, safeWidth, safeHeight),
+    paint,
+  );
+  surface.flush();
+
+  const snapshot = surface.makeImageSnapshot();
+  const jpegBase64 = snapshot.encodeToBase64(ImageFormat.JPEG, 92);
+  if (!jpegBase64) {
+    throw new Error("Skia: failed to encode cropped JPEG");
+  }
+
+  const outputUri =
+    `${FileSystem.cacheDirectory ?? FileSystem.documentDirectory ?? ""}` +
+    `crop_${Date.now()}.jpg`;
+
+  await FileSystem.writeAsStringAsync(outputUri, jpegBase64, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  return outputUri;
+};

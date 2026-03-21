@@ -32,6 +32,7 @@ import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
+import { ManualImageCropperModal } from "@/components/manual-image-cropper-modal";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
@@ -57,7 +58,7 @@ import {
   parseReturnToParams,
   skipDuplicateBack,
 } from "@/libs/navigation";
-import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
+import { cropPhotoToTempFile, shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
   useInventory,
@@ -76,6 +77,7 @@ const INGREDIENT_REORDER_TRANSITION = LinearTransition.duration(180);
 const MIN_DEFAULT_SERVINGS = 1;
 const MAX_DEFAULT_SERVINGS = 6;
 const DEFAULT_SERVINGS_OPTIONS = [1, 2, 3, 4, 5, 6] as const;
+type CropCandidate = { uri: string; width: number; height: number };
 
 type EditableSubstitute = {
   key: string;
@@ -376,6 +378,8 @@ export default function CreateCocktailScreen() {
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [cropCandidate, setCropCandidate] = useState<CropCandidate | null>(null);
+  const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
   const [video, setVideo] = useState("");
@@ -933,7 +937,14 @@ export default function CreateCocktailScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
-        if (asset?.uri) {
+        if (asset?.uri && asset.width && asset.height) {
+          setCropCandidate({
+            uri: asset.uri,
+            width: asset.width,
+            height: asset.height,
+          });
+          setIsCropModalVisible(true);
+        } else if (asset?.uri) {
           setImageUri(asset.uri);
         }
       }
@@ -991,7 +1002,14 @@ export default function CreateCocktailScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
-        if (asset?.uri) {
+        if (asset?.uri && asset.width && asset.height) {
+          setCropCandidate({
+            uri: asset.uri,
+            width: asset.width,
+            height: asset.height,
+          });
+          setIsCropModalVisible(true);
+        } else if (asset?.uri) {
           setImageUri(asset.uri);
         }
       }
@@ -1044,6 +1062,34 @@ export default function CreateCocktailScreen() {
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
   }, []);
+
+  const handleCancelCrop = useCallback(() => {
+    setIsCropModalVisible(false);
+    setCropCandidate(null);
+  }, []);
+
+  const handleConfirmCrop = useCallback(
+    async (crop: { x: number; y: number; width: number; height: number }) => {
+      if (!cropCandidate) {
+        return;
+      }
+
+      try {
+        const croppedUri = await cropPhotoToTempFile({
+          uri: cropCandidate.uri,
+          ...crop,
+        });
+        setImageUri(croppedUri);
+      } catch (error) {
+        console.warn("Failed to crop image", error);
+        setImageUri(cropCandidate.uri);
+      } finally {
+        setIsCropModalVisible(false);
+        setCropCandidate(null);
+      }
+    },
+    [cropCandidate],
+  );
 
   const isSaveDisabled = isSaving || isPickingImage;
 
@@ -2821,6 +2867,17 @@ export default function CreateCocktailScreen() {
         confirmLabel={t("common.create")}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
+      />
+
+      <ManualImageCropperModal
+        visible={isCropModalVisible}
+        imageUri={cropCandidate?.uri ?? null}
+        imageWidth={cropCandidate?.width ?? 0}
+        imageHeight={cropCandidate?.height ?? 0}
+        onCancel={handleCancelCrop}
+        onConfirm={(crop) => {
+          void handleConfirmCrop(crop);
+        }}
       />
     </>
   );

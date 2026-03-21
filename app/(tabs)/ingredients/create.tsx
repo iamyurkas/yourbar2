@@ -25,6 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
+import { ManualImageCropperModal } from '@/components/manual-image-cropper-modal';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
@@ -35,7 +36,7 @@ import { useI18n } from '@/libs/i18n/use-i18n';
 import { resolveImageSource } from '@/libs/image-source';
 import { getIngredientSaveNavigationPlan } from '@/libs/ingredient-save-navigation';
 import { skipDuplicateBack } from '@/libs/navigation';
-import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
+import { cropPhotoToTempFile, shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
@@ -49,6 +50,8 @@ type IngredientFormSnapshot = {
   styleIngredientId: number | null;
   selectedTagIds: number[];
 };
+
+type CropCandidate = { uri: string; width: number; height: number };
 
 function getParamValue(value?: string | string[]): string | undefined {
   if (Array.isArray(value)) {
@@ -213,6 +216,8 @@ export default function IngredientFormScreen() {
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [cropCandidate, setCropCandidate] = useState<CropCandidate | null>(null);
+  const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
   );
@@ -503,7 +508,14 @@ export default function IngredientFormScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
-        if (asset?.uri) {
+        if (asset?.uri && asset.width && asset.height) {
+          setCropCandidate({
+            uri: asset.uri,
+            width: asset.width,
+            height: asset.height,
+          });
+          setIsCropModalVisible(true);
+        } else if (asset?.uri) {
           setImageUri(asset.uri);
         }
       }
@@ -560,7 +572,14 @@ export default function IngredientFormScreen() {
 
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
-        if (asset?.uri) {
+        if (asset?.uri && asset.width && asset.height) {
+          setCropCandidate({
+            uri: asset.uri,
+            width: asset.width,
+            height: asset.height,
+          });
+          setIsCropModalVisible(true);
+        } else if (asset?.uri) {
           setImageUri(asset.uri);
         }
       }
@@ -1112,6 +1131,34 @@ export default function IngredientFormScreen() {
   const handleRemoveImage = useCallback(() => {
     setImageUri(null);
   }, []);
+
+  const handleCancelCrop = useCallback(() => {
+    setIsCropModalVisible(false);
+    setCropCandidate(null);
+  }, []);
+
+  const handleConfirmCrop = useCallback(
+    async (crop: { x: number; y: number; width: number; height: number }) => {
+      if (!cropCandidate) {
+        return;
+      }
+
+      try {
+        const croppedUri = await cropPhotoToTempFile({
+          uri: cropCandidate.uri,
+          ...crop,
+        });
+        setImageUri(croppedUri);
+      } catch (error) {
+        console.warn('Failed to crop image', error);
+        setImageUri(cropCandidate.uri);
+      } finally {
+        setIsCropModalVisible(false);
+        setCropCandidate(null);
+      }
+    },
+    [cropCandidate],
+  );
 
   const normalizedBaseQuery = useMemo(() => normalizeSearchText(baseSearch), [baseSearch]);
 
@@ -1988,6 +2035,17 @@ export default function IngredientFormScreen() {
         confirmLabel={t('common.create')}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
+      />
+
+      <ManualImageCropperModal
+        visible={isCropModalVisible}
+        imageUri={cropCandidate?.uri ?? null}
+        imageWidth={cropCandidate?.width ?? 0}
+        imageHeight={cropCandidate?.height ?? 0}
+        onCancel={handleCancelCrop}
+        onConfirm={(crop) => {
+          void handleConfirmCrop(crop);
+        }}
       />
     </>
   );
