@@ -6,7 +6,7 @@ import {
   readRawFileSnapshot,
 } from '@/libs/storage/file-storage';
 import { syncBundledCatalogIfNeeded as syncBundledCatalogTables } from '@/libs/storage/sqlite/catalog-sync';
-import { ensureSqliteSchema } from '@/libs/storage/sqlite/migrations';
+import { ensureBarsTableShape, ensureSqliteSchema } from '@/libs/storage/sqlite/migrations';
 import { APP_STATE_KEYS, SQLITE_DB_NAME } from '@/libs/storage/sqlite/schema';
 import type {
   CocktailTagDeltaSnapshot,
@@ -92,6 +92,7 @@ async function writeTags(
 }
 
 async function writeBars(db: SQLite.SQLiteDatabase, bars: Bar[] | undefined): Promise<void> {
+  await ensureBarsTableShape(db);
   await db.execAsync('DELETE FROM bars');
 
   for (const bar of bars ?? []) {
@@ -199,6 +200,7 @@ async function writeCocktailTagDelta(db: SQLite.SQLiteDatabase, delta: CocktailT
 }
 
 async function hydrateSnapshot<TCocktail, TIngredient>(db: SQLite.SQLiteDatabase): Promise<InventorySnapshot<TCocktail, TIngredient> | undefined> {
+  await ensureBarsTableShape(db);
   const version = Number((await getAppState(db, 'snapshotVersion')) ?? 0);
   if (version <= 0) {
     return undefined;
@@ -384,9 +386,13 @@ async function initializeSqliteStorage(): Promise<void> {
   initializePromise = (async () => {
     const db = await getDb();
     await ensureSqliteSchema(db);
+    await ensureBarsTableShape(db);
     await syncBundledCatalogTables(db);
     await importFileSnapshotIfNeeded(db);
-  })();
+  })().catch((error) => {
+    initializePromise = undefined;
+    throw error;
+  });
 
   return initializePromise;
 }

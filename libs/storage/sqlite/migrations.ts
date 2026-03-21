@@ -22,7 +22,7 @@ async function tableHasRequiredColumns(
   return requiredColumns.every((column) => columns.has(column));
 }
 
-async function rebuildBarsTable(db: SQLiteDatabase): Promise<void> {
+export async function rebuildBarsTable(db: SQLiteDatabase): Promise<void> {
   console.info('[sqlite] Rebuilding bars table to ensure payload_json column exists');
   const existingColumns = await getTableColumns(db, 'bars');
   const hasPayload = existingColumns.has('payload_json');
@@ -115,4 +115,26 @@ export async function ensureSqliteSchema(db: SQLiteDatabase): Promise<void> {
 export async function hasColumn(db: SQLiteDatabase, tableName: string, columnName: string): Promise<boolean> {
   const columns = await getTableColumns(db, tableName);
   return columns.has(columnName);
+}
+
+export async function ensureBarsTableShape(db: SQLiteDatabase): Promise<void> {
+  const barsColumnsOk = await tableHasRequiredColumns(db, 'bars', ['id', 'payload_json', 'updated_at']);
+  if (barsColumnsOk) {
+    return;
+  }
+
+  const barsExists = (await getTableColumns(db, 'bars')).size > 0;
+  if (!barsExists) {
+    await db.execAsync(`${TABLE_DEFINITIONS.bars};`);
+    return;
+  }
+
+  await db.execAsync('BEGIN IMMEDIATE TRANSACTION');
+  try {
+    await rebuildBarsTable(db);
+    await db.execAsync('COMMIT');
+  } catch (error) {
+    await db.execAsync('ROLLBACK');
+    throw error;
+  }
 }

@@ -69,3 +69,34 @@ test('ensureSqliteSchema rebuilds bars table when payload_json is missing', asyn
   assert.match(joined, /DROP TABLE bars/);
   assert.match(joined, /ALTER TABLE bars_new RENAME TO bars/);
 });
+
+test('ensureBarsTableShape runs corrective rebuild outside full schema migration', async () => {
+  const execCalls = [];
+  const db = {
+    execAsync: async (sql) => {
+      execCalls.push(sql);
+    },
+    getAllAsync: async (sql) => {
+      if (sql === 'PRAGMA table_info(bars)') {
+        return [{ name: 'id' }, { name: 'name' }, { name: 'updated_at' }];
+      }
+      return [];
+    },
+  };
+
+  const mod = loadTsModule(path.resolve(__dirname, '../libs/storage/sqlite/migrations.ts'), {
+    '@/libs/storage/sqlite/schema': {
+      SQLITE_SCHEMA_VERSION: 2,
+      TABLE_DEFINITIONS: {
+        bars: 'CREATE TABLE IF NOT EXISTS bars (id TEXT PRIMARY KEY, payload_json TEXT NOT NULL, updated_at INTEGER NOT NULL)',
+      },
+      INDEX_DEFINITIONS: [],
+    },
+  });
+
+  await mod.ensureBarsTableShape(db);
+  const joined = execCalls.join('\n');
+  assert.match(joined, /BEGIN IMMEDIATE TRANSACTION/);
+  assert.match(joined, /ALTER TABLE bars_new RENAME TO bars/);
+  assert.match(joined, /COMMIT/);
+});
