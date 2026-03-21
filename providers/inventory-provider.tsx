@@ -130,7 +130,9 @@ type InventoryProviderProps = {
   children: React.ReactNode;
 };
 
-function sanitizeCocktailTagInput(tags: readonly CocktailTag[] | null | undefined): CocktailTag[] | undefined {
+function sanitizeCocktailTagInput(
+  tags: ReadonlyArray<{ id: number; name?: string; color?: string }> | ReadonlyArray<CocktailTag> | null | undefined,
+): CocktailTag[] | undefined {
   const tagMap = new Map<number, CocktailTag>();
   (tags ?? []).forEach((tag) => {
     const tagId = Number(tag.id ?? -1);
@@ -139,6 +141,9 @@ function sanitizeCocktailTagInput(tags: readonly CocktailTag[] | null | undefine
     }
 
     if (!tagMap.has(tagId)) {
+      if (!tag.name || !tag.color) {
+        return;
+      }
       tagMap.set(tagId, { id: tagId, name: tag.name, color: tag.color });
     }
   });
