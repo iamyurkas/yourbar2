@@ -9,10 +9,8 @@ import {
   useMemo,
   useRef,
   useState,
-  useTransition,
 } from "react";
 import {
-  AppState,
   findNodeHandle,
   Linking,
   Platform,
@@ -653,7 +651,6 @@ export default function CocktailDetailsScreen() {
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
-  const persistFeedbackDraftRef = useRef<() => void>(() => { });
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -663,8 +660,6 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    persistFeedbackDraftRef.current();
-
     if (returnToPath === "/cocktails" && !returnToParams) {
       skipDuplicateBack(navigation);
       return;
@@ -697,7 +692,6 @@ export default function CocktailDetailsScreen() {
       }
 
       event.preventDefault();
-      persistFeedbackDraftRef.current();
 
       isHandlingBackRef.current = true;
       handleReturn();
@@ -805,10 +799,7 @@ export default function CocktailDetailsScreen() {
     return getCocktailRating(cocktail);
   }, [cocktail, getCocktailRating]);
 
-  const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
-  const [, startRatingTransition] = useTransition();
-  const [, startTagTransition] = useTransition();
-  const displayedRating = optimisticRating ?? userRating;
+  const displayedRating = userRating;
 
   const userComment = useMemo(() => {
     if (!cocktail) {
@@ -819,32 +810,14 @@ export default function CocktailDetailsScreen() {
   }, [cocktail, getCocktailComment]);
 
   const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
-  const [commentDraft, setCommentDraft] = useState("");
-  const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
+  const hasComment = userComment.trim().length > 0;
   const [isAddTagsVisible, setIsAddTagsVisible] = useState(false);
   const persistedTagIds = useMemo(() => resolveCocktailTagIds(cocktail), [cocktail]);
-  const persistedTagSignature = useMemo(() => persistedTagIds.join(","), [persistedTagIds]);
   const [tagDraftIds, setTagDraftIds] = useState<number[]>(persistedTagIds);
-  const tagDraftIdsRef = useRef<number[]>(persistedTagIds);
 
   useEffect(() => {
-    setOptimisticRating((previous) => {
-      if (previous == null) {
-        return previous;
-      }
-
-      return previous === userRating ? null : previous;
-    });
-  }, [userRating]);
-
-  useEffect(() => {
-    setCommentDraft(userComment);
     setIsCommentFieldVisible((current) => current || userComment.length > 0);
   }, [userComment]);
-
-  useEffect(() => {
-    tagDraftIdsRef.current = tagDraftIds;
-  }, [tagDraftIds]);
 
   const availableCocktailTags = useMemo(() => {
     const sortedCustom = [...customCocktailTags].sort((left, right) =>
@@ -863,69 +836,9 @@ export default function CocktailDetailsScreen() {
     setIsAddTagsVisible(false);
   }, [cocktailSelectionKey, persistedTagIds]);
 
-  const hasPendingTagChanges = useMemo(() => {
-    if (tagDraftIds.length !== persistedTagIds.length) {
-      return true;
-    }
-
-    return tagDraftIds.some((id, index) => id !== persistedTagIds[index]);
-  }, [persistedTagIds, tagDraftIds]);
-
-  const persistFeedbackDraft = useCallback(() => {
-    if (!cocktail) {
-      return;
-    }
-
-    const trimmedDraft = commentDraft.trim();
-    if (trimmedDraft !== userComment) {
-      setCocktailComment(cocktail, trimmedDraft);
-    }
-  }, [
-    cocktail,
-    commentDraft,
-    setCocktailComment,
-    userComment,
-  ]);
-
-  useEffect(() => {
-    persistFeedbackDraftRef.current = persistFeedbackDraft;
-  }, [persistFeedbackDraft]);
-
-  useEffect(() => {
-    return () => {
-      persistFeedbackDraftRef.current();
-    };
-  }, []);
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextState) => {
-      if (nextState !== "active") {
-        persistFeedbackDraftRef.current();
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
   const handleToggleCommentField = useCallback(() => {
-    setIsCommentFieldVisible((current) => {
-      if (current) {
-        persistFeedbackDraftRef.current();
-      }
-
-      return !current;
-    });
+    setIsCommentFieldVisible((current) => !current);
   }, []);
-
-  useEffect(() => {
-    if (hasPendingTagChanges) {
-      return;
-    }
-
-    setTagDraftIds(persistedTagIds);
-  }, [hasPendingTagChanges, persistedTagSignature, persistedTagIds]);
 
   const selectedTagSet = useMemo(() => new Set(tagDraftIds), [tagDraftIds]);
 
@@ -947,23 +860,20 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    const currentTagIds = tagDraftIdsRef.current;
+    const currentTagIds = tagDraftIds;
     const hasTag = currentTagIds.includes(tagId);
     const nextTagIds = hasTag
       ? currentTagIds.filter((currentId) => currentId !== tagId)
       : [...currentTagIds, tagId].sort((left, right) => left - right);
 
     setTagDraftIds(nextTagIds);
-    tagDraftIdsRef.current = nextTagIds;
 
     const nextTags = nextTagIds
       .map((nextTagId) => availableTagMap.get(nextTagId))
       .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
 
-    startTagTransition(() => {
-      updateCocktailTags(cocktail, nextTags);
-    });
-  }, [availableTagMap, cocktail, startTagTransition, updateCocktailTags]);
+    updateCocktailTags(cocktail, nextTags);
+  }, [availableTagMap, cocktail, tagDraftIds, updateCocktailTags]);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
@@ -972,13 +882,9 @@ export default function CocktailDetailsScreen() {
       }
 
       const nextRating = displayedRating === value ? 0 : value;
-      setOptimisticRating(nextRating);
-
-      startRatingTransition(() => {
-        setCocktailRating(cocktail, nextRating);
-      });
+      setCocktailRating(cocktail, nextRating);
     },
-    [cocktail, displayedRating, setCocktailRating, startRatingTransition],
+    [cocktail, displayedRating, setCocktailRating],
   );
 
   const instructionsParagraphs = useMemo(() => {
@@ -1513,9 +1419,14 @@ export default function CocktailDetailsScreen() {
 
             {isCommentFieldVisible ? (
               <TextInput
-                value={commentDraft}
-                onChangeText={setCommentDraft}
-                onBlur={persistFeedbackDraft}
+                value={userComment}
+                onChangeText={(value) => {
+                  if (!cocktail) {
+                    return;
+                  }
+
+                  setCocktailComment(cocktail, value);
+                }}
                 onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
                 placeholder={t("cocktailDetails.commentPlaceholder")}
                 placeholderTextColor={Colors.onSurfaceVariant}

@@ -786,8 +786,6 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
     const normalizedTags = sanitizeCocktailTagInput(tags);
     const normalizedId = String(Math.trunc(targetId));
-    deferFullSnapshotPersistRef.current = true;
-
     cocktailTagDeltaRef.current = {
       ...cocktailTagDeltaRef.current,
       [normalizedId]: normalizedTags ?? null,
