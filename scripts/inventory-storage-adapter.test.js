@@ -91,7 +91,7 @@ function createFakeDb({ failOnRun = null } = {}) {
 
 test('sqlite adapter rollbacks transaction when delta persist fails', async () => {
   let storedSnapshot;
-  const fakeDb = createFakeDb({ failOnRun: 'INSERT INTO ingredients' });
+  const fakeDb = createFakeDb({ failOnRun: 'ingredients' });
   const module = loadAdapterModule({
     'expo-file-system/legacy': {
       documentDirectory: '/tmp',

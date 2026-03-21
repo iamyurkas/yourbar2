@@ -177,9 +177,42 @@ async function ensureSchema(db: SqliteDatabase): Promise<void> {
   `);
 
   await ensureColumnExists(db, 'cocktails', 'search_name_normalized', 'TEXT');
+  await ensureColumnExists(db, 'cocktails', 'entity_id', 'INTEGER');
+  await ensureColumnExists(db, 'cocktails', 'data', 'TEXT');
   await ensureColumnExists(db, 'ingredients', 'search_name_normalized', 'TEXT');
+  await ensureColumnExists(db, 'ingredients', 'entity_id', 'INTEGER');
+  await ensureColumnExists(db, 'ingredients', 'data', 'TEXT');
+  await ensureColumnExists(db, 'bars', 'bar_id', 'TEXT');
+  await ensureColumnExists(db, 'bars', 'name', 'TEXT');
+  await ensureColumnExists(db, 'bar_state', 'bar_id', 'TEXT');
+  await ensureColumnExists(db, 'bar_state', 'available_ingredient_ids', 'TEXT');
+  await ensureColumnExists(db, 'bar_state', 'shopping_ingredient_ids', 'TEXT');
+  await ensureColumnExists(db, 'feedback', 'cocktail_key', 'TEXT');
+  await ensureColumnExists(db, 'feedback', 'rating', 'INTEGER');
+  await ensureColumnExists(db, 'feedback', 'comment', 'TEXT');
+  await ensureColumnExists(db, 'party_selection', 'cocktail_key', 'TEXT');
+  await ensureColumnExists(db, 'translation_overrides', 'locale', 'TEXT');
+  await ensureColumnExists(db, 'translation_overrides', 'payload', 'TEXT');
+  await ensureColumnExists(db, 'settings', 'key', 'TEXT');
+  await ensureColumnExists(db, 'settings', 'value', 'TEXT');
+  await ensureColumnExists(db, 'tags', 'entity_type', 'TEXT');
+  await ensureColumnExists(db, 'tags', 'tag_id', 'INTEGER');
+  await ensureColumnExists(db, 'tags', 'name', 'TEXT');
+  await ensureColumnExists(db, 'tags', 'color', 'TEXT');
+  await ensureColumnExists(db, 'storage_meta', 'key', 'TEXT');
+  await ensureColumnExists(db, 'storage_meta', 'value', 'TEXT');
 
   await db.execAsync(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_cocktails_entity_id ON cocktails(entity_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_ingredients_entity_id ON ingredients(entity_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_bars_bar_id ON bars(bar_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_bar_state_bar_id ON bar_state(bar_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_feedback_cocktail_key ON feedback(cocktail_key);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_party_selection_cocktail_key ON party_selection(cocktail_key);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_translation_overrides_locale ON translation_overrides(locale);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_settings_key ON settings(key);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_storage_meta_key ON storage_meta(key);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_tags_entity_tag ON tags(entity_type, tag_id);
     CREATE INDEX IF NOT EXISTS idx_cocktails_search_name ON cocktails(search_name_normalized);
     CREATE INDEX IF NOT EXISTS idx_ingredients_search_name ON ingredients(search_name_normalized);
     CREATE INDEX IF NOT EXISTS idx_feedback_rating ON feedback(rating);
@@ -318,7 +351,7 @@ async function upsertInventoryRows(
     }
 
     await db.runAsync(
-      `INSERT INTO ${table} (entity_id, search_name_normalized, data) VALUES (?, ?, ?)\n       ON CONFLICT(entity_id) DO UPDATE SET search_name_normalized = excluded.search_name_normalized, data = excluded.data`,
+      `INSERT OR REPLACE INTO ${table} (entity_id, search_name_normalized, data) VALUES (?, ?, ?)`,
       entityId,
       (item as { searchNameNormalized?: string }).searchNameNormalized ?? null,
       JSON.stringify(item),
