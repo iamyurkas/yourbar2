@@ -171,35 +171,37 @@ export function ImageCropperModal({
 
     try {
       setIsCropping(true);
-      let manipulateAsync: ((uri: string, actions: unknown[], options?: unknown) => Promise<{ uri: string }>) | null = null;
+      let manipulatorApi: any = null;
       let horizontalFlipValue: unknown = "horizontal";
       let verticalFlipValue: unknown = "vertical";
       let jpegFormatValue: unknown = "jpeg";
       try {
         const loadedModule = await import("expo-image-manipulator");
-        const resolved = (loadedModule as any).default ?? loadedModule;
-        manipulateAsync =
-          (loadedModule as any).manipulateAsync ??
-          resolved?.manipulateAsync ??
-          null;
+        const defaultExport = (loadedModule as any).default;
+        manipulatorApi =
+          defaultExport?.manipulateAsync
+            ? defaultExport
+            : (loadedModule as any).manipulateAsync
+              ? loadedModule
+              : null;
         horizontalFlipValue =
+          manipulatorApi?.FlipType?.Horizontal ??
           (loadedModule as any).FlipType?.Horizontal ??
-          resolved?.FlipType?.Horizontal ??
           "horizontal";
         verticalFlipValue =
+          manipulatorApi?.FlipType?.Vertical ??
           (loadedModule as any).FlipType?.Vertical ??
-          resolved?.FlipType?.Vertical ??
           "vertical";
         jpegFormatValue =
+          manipulatorApi?.SaveFormat?.JPEG ??
           (loadedModule as any).SaveFormat?.JPEG ??
-          resolved?.SaveFormat?.JPEG ??
           "jpeg";
       } catch {
         onApply(imageUri);
         return;
       }
 
-      if (!manipulateAsync) {
+      if (!manipulatorApi?.manipulateAsync) {
         onApply(imageUri);
         return;
       }
@@ -216,7 +218,7 @@ export function ImageCropperModal({
         return action;
       });
 
-      const croppedImage = await manipulateAsync(
+      const croppedImage = await manipulatorApi.manipulateAsync(
         imageUri,
         normalizedActions,
         {
