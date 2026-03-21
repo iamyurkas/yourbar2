@@ -63,8 +63,12 @@ async function openSqliteModule(): Promise<SqliteModule | null> {
   }
 
   try {
-    const dynamicImport = new Function('moduleName', 'return import(moduleName);') as (moduleName: string) => Promise<unknown>;
-    return (await dynamicImport('expo-sqlite')) as SqliteModule;
+    const dynamicRequire = (0, eval)('require') as undefined | ((moduleName: string) => unknown);
+    if (!dynamicRequire) {
+      return null;
+    }
+
+    return dynamicRequire('expo-sqlite') as SqliteModule;
   } catch (error) {
     console.warn('SQLite storage requested but expo-sqlite is unavailable, falling back to JSON snapshot', error);
     return null;
