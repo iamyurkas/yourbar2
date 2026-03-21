@@ -200,7 +200,10 @@ export function ImageCropperModal({
           format: manipulatorModule.SaveFormat.JPEG,
         },
       );
-      onApply(croppedImage.uri);
+      onApply(croppedImage?.uri ?? imageUri);
+    } catch (error) {
+      console.warn("Failed to apply crop, fallback to original image", error);
+      onApply(imageUri);
     } finally {
       setIsCropping(false);
     }
