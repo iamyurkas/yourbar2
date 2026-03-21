@@ -171,11 +171,35 @@ export function ImageCropperModal({
 
     try {
       setIsCropping(true);
-      let manipulatorModule: any = null;
+      let manipulateAsync: ((uri: string, actions: unknown[], options?: unknown) => Promise<{ uri: string }>) | null = null;
+      let horizontalFlipValue: unknown = "horizontal";
+      let verticalFlipValue: unknown = "vertical";
+      let jpegFormatValue: unknown = "jpeg";
       try {
         const loadedModule = await import("expo-image-manipulator");
-        manipulatorModule = (loadedModule as any).default ?? loadedModule;
+        const resolved = (loadedModule as any).default ?? loadedModule;
+        manipulateAsync =
+          (loadedModule as any).manipulateAsync ??
+          resolved?.manipulateAsync ??
+          null;
+        horizontalFlipValue =
+          (loadedModule as any).FlipType?.Horizontal ??
+          resolved?.FlipType?.Horizontal ??
+          "horizontal";
+        verticalFlipValue =
+          (loadedModule as any).FlipType?.Vertical ??
+          resolved?.FlipType?.Vertical ??
+          "vertical";
+        jpegFormatValue =
+          (loadedModule as any).SaveFormat?.JPEG ??
+          resolved?.SaveFormat?.JPEG ??
+          "jpeg";
       } catch {
+        onApply(imageUri);
+        return;
+      }
+
+      if (!manipulateAsync) {
         onApply(imageUri);
         return;
       }
@@ -185,19 +209,19 @@ export function ImageCropperModal({
           return {
             flip:
               action.flip === "horizontal"
-                ? manipulatorModule.FlipType.Horizontal
-                : manipulatorModule.FlipType.Vertical,
+                ? horizontalFlipValue
+                : verticalFlipValue,
           };
         }
         return action;
       });
 
-      const croppedImage = await manipulatorModule.manipulateAsync(
+      const croppedImage = await manipulateAsync(
         imageUri,
         normalizedActions,
         {
           compress: 1,
-          format: manipulatorModule.SaveFormat.JPEG,
+          format: jpegFormatValue,
         },
       );
       onApply(croppedImage?.uri ?? imageUri);
