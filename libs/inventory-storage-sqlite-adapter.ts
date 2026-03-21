@@ -193,6 +193,26 @@ export class SqliteInventoryStorageAdapter implements InventoryStorageAdapter {
       CREATE INDEX IF NOT EXISTS idx_bar_state_shopping ON bar_state(bar_id, shopping, ingredient_id);
       CREATE INDEX IF NOT EXISTS idx_party_selection_key ON party_selection(cocktail_key);
     `);
+
+    await this.ensureColumnExists(db, 'cocktails', 'search_name_normalized', 'TEXT');
+    await this.ensureColumnExists(db, 'cocktails', 'updated_at', 'INTEGER NOT NULL DEFAULT (strftime(\'%s\',\'now\'))');
+    await this.ensureColumnExists(db, 'ingredients', 'search_name_normalized', 'TEXT');
+    await this.ensureColumnExists(db, 'ingredients', 'updated_at', 'INTEGER NOT NULL DEFAULT (strftime(\'%s\',\'now\'))');
+  }
+
+  private async ensureColumnExists(
+    db: SqliteDatabaseLike,
+    tableName: string,
+    columnName: string,
+    columnSqlType: string,
+  ): Promise<void> {
+    const tableInfo = await db.getAllAsync<{ name?: string }>(`PRAGMA table_info(${tableName});`);
+    const hasColumn = tableInfo.some((column) => column?.name === columnName);
+    if (hasColumn) {
+      return;
+    }
+
+    await db.execAsync(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnSqlType};`);
   }
 
   async loadState(): Promise<InventorySnapshotRecord | undefined> {
