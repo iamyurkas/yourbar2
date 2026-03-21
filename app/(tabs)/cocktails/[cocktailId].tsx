@@ -807,6 +807,7 @@ export default function CocktailDetailsScreen() {
 
   const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
   const [, startRatingTransition] = useTransition();
+  const [, startTagTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
 
   const userComment = useMemo(() => {
@@ -824,6 +825,7 @@ export default function CocktailDetailsScreen() {
   const persistedTagIds = useMemo(() => resolveCocktailTagIds(cocktail), [cocktail]);
   const persistedTagSignature = useMemo(() => persistedTagIds.join(","), [persistedTagIds]);
   const [tagDraftIds, setTagDraftIds] = useState<number[]>(persistedTagIds);
+  const tagDraftIdsRef = useRef<number[]>(persistedTagIds);
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -839,6 +841,10 @@ export default function CocktailDetailsScreen() {
     setCommentDraft(userComment);
     setIsCommentFieldVisible((current) => current || userComment.length > 0);
   }, [userComment]);
+
+  useEffect(() => {
+    tagDraftIdsRef.current = tagDraftIds;
+  }, [tagDraftIds]);
 
   const availableCocktailTags = useMemo(() => {
     const sortedCustom = [...customCocktailTags].sort((left, right) =>
@@ -941,19 +947,23 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    const hasTag = tagDraftIds.includes(tagId);
+    const currentTagIds = tagDraftIdsRef.current;
+    const hasTag = currentTagIds.includes(tagId);
     const nextTagIds = hasTag
-      ? tagDraftIds.filter((currentId) => currentId !== tagId)
-      : [...tagDraftIds, tagId].sort((left, right) => left - right);
+      ? currentTagIds.filter((currentId) => currentId !== tagId)
+      : [...currentTagIds, tagId].sort((left, right) => left - right);
 
     setTagDraftIds(nextTagIds);
+    tagDraftIdsRef.current = nextTagIds;
 
     const nextTags = nextTagIds
       .map((nextTagId) => availableTagMap.get(nextTagId))
       .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
 
-    updateCocktailTags(cocktail, nextTags);
-  }, [availableTagMap, cocktail, tagDraftIds, updateCocktailTags]);
+    startTagTransition(() => {
+      updateCocktailTags(cocktail, nextTags);
+    });
+  }, [availableTagMap, cocktail, startTagTransition, updateCocktailTags]);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
