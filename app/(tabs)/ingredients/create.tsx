@@ -24,6 +24,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
+import { FreeformImageCropModal } from '@/components/FreeformImageCropModal';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
@@ -213,6 +214,8 @@ export default function IngredientFormScreen() {
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [isCropVisible, setIsCropVisible] = useState(false);
+  const [pendingCropUri, setPendingCropUri] = useState<string | null>(null);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
   );
@@ -496,7 +499,7 @@ export default function IngredientFormScreen() {
       setIsPickingImage(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -504,7 +507,8 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
+          setIsCropVisible(true);
         }
       }
     } catch (error) {
@@ -553,7 +557,7 @@ export default function IngredientFormScreen() {
     try {
       setIsPickingImage(true);
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -561,7 +565,8 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
+          setIsCropVisible(true);
         }
       }
     } catch (error) {
@@ -585,30 +590,45 @@ export default function IngredientFormScreen() {
       });
     };
 
+    const actions: DialogOptions['actions'] = [
+      {
+        label: t('ingredientForm.takePhoto'),
+        onPress: () => {
+          runAfterDialogDismiss(() => {
+            void handleTakePhoto();
+          });
+        },
+      },
+      {
+        label: t('ingredientForm.chooseFromGallery'),
+        onPress: () => {
+          runAfterDialogDismiss(() => {
+            void handlePickImage();
+          });
+        },
+      },
+    ];
+
+    if (imageUri) {
+      actions.push({
+        label: t('ingredientForm.cropCurrentPhoto'),
+        onPress: () => {
+          runAfterDialogDismiss(() => {
+            setPendingCropUri(imageUri);
+            setIsCropVisible(true);
+          });
+        },
+      });
+    }
+
+    actions.push({ label: t('common.cancel'), variant: 'secondary' });
+
     showDialog({
       title: t('ingredientForm.addPhotoTitle'),
       message: t('ingredientForm.addPhotoMessage'),
-      actions: [
-        {
-          label: t('ingredientForm.takePhoto'),
-          onPress: () => {
-            runAfterDialogDismiss(() => {
-              void handleTakePhoto();
-            });
-          },
-        },
-        {
-          label: t('ingredientForm.chooseFromGallery'),
-          onPress: () => {
-            runAfterDialogDismiss(() => {
-              void handlePickImage();
-            });
-          },
-        },
-        { label: t('common.cancel'), variant: 'secondary' },
-      ],
+      actions,
     });
-  }, [handlePickImage, handleTakePhoto, showDialog, t]);
+  }, [handlePickImage, handleTakePhoto, imageUri, showDialog, t]);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -1555,6 +1575,33 @@ export default function IngredientFormScreen() {
           </Pressable>
         ) : null}
       </View>
+      <FreeformImageCropModal
+        visible={isCropVisible}
+        imageUri={pendingCropUri}
+        accentColor={Colors.tint}
+        onSurfaceColor={Colors.onSurface}
+        title={t('ingredientForm.cropPhotoTitle')}
+        cancelLabel={t('common.cancel')}
+        applyLabel={t('common.save')}
+        onCancel={() => {
+          setIsCropVisible(false);
+          setPendingCropUri(null);
+        }}
+        onApply={(uri) => {
+          setImageUri(uri);
+          setIsCropVisible(false);
+          setPendingCropUri(null);
+        }}
+        onError={() => {
+          setIsCropVisible(false);
+          setPendingCropUri(null);
+          showDialog({
+            title: t('ingredientForm.couldNotCropImage'),
+            message: t('common.tryAgainLater'),
+            actions: [{ label: t('common.ok') }],
+          });
+        }}
+      />
 
       <View style={styles.photoTileWrapper}>
         <Pressable

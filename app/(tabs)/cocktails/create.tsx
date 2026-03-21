@@ -31,6 +31,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { FreeformImageCropModal } from "@/components/FreeformImageCropModal";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
@@ -376,6 +377,8 @@ export default function CreateCocktailScreen() {
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [isCropVisible, setIsCropVisible] = useState(false);
+  const [pendingCropUri, setPendingCropUri] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
   const [video, setVideo] = useState("");
@@ -926,7 +929,7 @@ export default function CreateCocktailScreen() {
       beginImagePicking();
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -934,7 +937,8 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
+          setIsCropVisible(true);
         }
       }
     } catch (error) {
@@ -984,7 +988,7 @@ export default function CreateCocktailScreen() {
     try {
       beginImagePicking();
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -992,7 +996,8 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
+          setIsCropVisible(true);
         }
       }
     } catch (error) {
@@ -1016,30 +1021,44 @@ export default function CreateCocktailScreen() {
       });
     };
 
+    const actions: DialogOptions["actions"] = [
+      {
+        label: t("cocktailForm.takePhoto"),
+        onPress: () => {
+          runAfterDialogDismiss(() => {
+            void handleTakePhoto();
+          });
+        },
+      },
+      {
+        label: t("cocktailForm.chooseFromGallery"),
+        onPress: () => {
+          runAfterDialogDismiss(() => {
+            void handlePickImage();
+          });
+        },
+      },
+    ];
+
+    if (imageUri) {
+      actions.push({
+        label: t("cocktailForm.cropCurrentPhoto"),
+        onPress: () => {
+          runAfterDialogDismiss(() => {
+            setPendingCropUri(imageUri);
+            setIsCropVisible(true);
+          });
+        },
+      });
+    }
+    actions.push({ label: t("common.cancel"), variant: "secondary" });
+
     showDialog({
       title: t("cocktailForm.addPhoto"),
       message: t("cocktailForm.addPhotoMessage"),
-      actions: [
-        {
-          label: t("cocktailForm.takePhoto"),
-          onPress: () => {
-            runAfterDialogDismiss(() => {
-              void handleTakePhoto();
-            });
-          },
-        },
-        {
-          label: t("cocktailForm.chooseFromGallery"),
-          onPress: () => {
-            runAfterDialogDismiss(() => {
-              void handlePickImage();
-            });
-          },
-        },
-        { label: t("common.cancel"), variant: "secondary" },
-      ],
+      actions,
     });
-  }, [handlePickImage, handleTakePhoto, showDialog, t]);
+  }, [handlePickImage, handleTakePhoto, imageUri, showDialog, t]);
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
@@ -2797,6 +2816,33 @@ export default function CreateCocktailScreen() {
         excludedIngredientId={substituteModalIngredient?.ingredientId}
         selectedSubstituteIds={substituteModalSelectionIds}
         selectedSubstituteNames={substituteModalSelectionNames}
+      />
+      <FreeformImageCropModal
+        visible={isCropVisible}
+        imageUri={pendingCropUri}
+        accentColor={Colors.tint}
+        onSurfaceColor={Colors.onSurface}
+        title={t("cocktailForm.cropPhotoTitle")}
+        cancelLabel={t("common.cancel")}
+        applyLabel={t("common.save")}
+        onCancel={() => {
+          setIsCropVisible(false);
+          setPendingCropUri(null);
+        }}
+        onApply={(uri) => {
+          setImageUri(uri);
+          setIsCropVisible(false);
+          setPendingCropUri(null);
+        }}
+        onError={() => {
+          setIsCropVisible(false);
+          setPendingCropUri(null);
+          showDialog({
+            title: t("cocktailForm.couldNotCropImage"),
+            message: t("common.tryAgainLater"),
+            actions: [{ label: t("common.ok") }],
+          });
+        }}
       />
 
       <AppDialog

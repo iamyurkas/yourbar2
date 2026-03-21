@@ -74,6 +74,9 @@ export const deDETranslations: TranslationDictionary = {
     "Wählen Sie, wie Sie ein Zutatenfoto hinzufügen möchten.",
   "ingredientForm.takePhoto": "Foto aufnehmen",
   "ingredientForm.chooseFromGallery": "Aus Galerie auswählen",
+  "ingredientForm.cropCurrentPhoto": "Aktuelles Foto zuschneiden",
+  "ingredientForm.cropPhotoTitle": "Zutat-Foto zuschneiden",
+  "ingredientForm.couldNotCropImage": "Bild konnte nicht zugeschnitten werden",
   "ingredientForm.nameRequiredTitle": "Name erforderlich",
   "ingredientForm.nameRequiredMessage":
     "Bitte geben Sie einen Zutatennamen ein.",
@@ -148,6 +151,9 @@ export const deDETranslations: TranslationDictionary = {
     "Wählen Sie, wie Sie ein Cocktailfoto hinzufügen möchten.",
   "cocktailForm.takePhoto": "Foto aufnehmen",
   "cocktailForm.chooseFromGallery": "Aus Galerie auswählen",
+  "cocktailForm.cropCurrentPhoto": "Aktuelles Foto zuschneiden",
+  "cocktailForm.cropPhotoTitle": "Cocktail-Foto zuschneiden",
+  "cocktailForm.couldNotCropImage": "Bild konnte nicht zugeschnitten werden",
   "cocktailForm.nameRequired": "Name erforderlich",
   "cocktailForm.nameRequiredMessage":
     "Bitte geben Sie einen Cocktailnamen ein.",
