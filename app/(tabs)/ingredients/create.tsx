@@ -25,6 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
+import { ImageCropperModal } from '@/components/ImageCropperModal';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
@@ -212,6 +213,7 @@ export default function IngredientFormScreen() {
   const [name, setName] = useState(() => (isEditMode ? '' : suggestedNameParam ?? ''));
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [pendingCropUri, setPendingCropUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
@@ -250,6 +252,7 @@ export default function IngredientFormScreen() {
     setName(suggestedNameParam ?? '');
     setDescription(prefillDescriptionParam ?? '');
     setImageUri(prefillImageUrlParam ?? null);
+    setPendingCropUri(null);
     setSelectedTagIds(prefillTagIdsParam.length > 0
       ? prefillTagIdsParam
       : defaultIngredientTagId == null
@@ -290,6 +293,7 @@ export default function IngredientFormScreen() {
     setName(ingredient.name ?? '');
     setDescription(ingredient.description ?? '');
     setImageUri(ingredient.photoUri ?? null);
+    setPendingCropUri(null);
     setBaseIngredientId(
       ingredient.baseIngredientId != null ? Number(ingredient.baseIngredientId) : null,
     );
@@ -504,7 +508,7 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
         }
       }
     } catch (error) {
@@ -561,7 +565,7 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
         }
       }
     } catch (error) {
@@ -1111,6 +1115,16 @@ export default function IngredientFormScreen() {
 
   const handleRemoveImage = useCallback(() => {
     setImageUri(null);
+    setPendingCropUri(null);
+  }, []);
+
+  const handleCancelCrop = useCallback(() => {
+    setPendingCropUri(null);
+  }, []);
+
+  const handleApplyCrop = useCallback((uri: string) => {
+    setImageUri(uri);
+    setPendingCropUri(null);
   }, []);
 
   const normalizedBaseQuery = useMemo(() => normalizeSearchText(baseSearch), [baseSearch]);
@@ -1980,6 +1994,12 @@ export default function IngredientFormScreen() {
         message={dialogOptions?.message}
         actions={dialogOptions?.actions ?? []}
         onRequestClose={closeDialog}
+      />
+      <ImageCropperModal
+        visible={pendingCropUri != null}
+        imageUri={pendingCropUri}
+        onCancel={handleCancelCrop}
+        onApply={handleApplyCrop}
       />
 
       <TagEditorModal

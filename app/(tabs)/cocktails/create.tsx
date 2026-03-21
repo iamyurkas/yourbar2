@@ -32,6 +32,7 @@ import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
+import { ImageCropperModal } from "@/components/ImageCropperModal";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
@@ -375,6 +376,7 @@ export default function CreateCocktailScreen() {
   const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [pendingCropUri, setPendingCropUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -750,6 +752,7 @@ export default function CreateCocktailScreen() {
     setInstructions("");
     setVideo("");
     setImageUri(null);
+    setPendingCropUri(null);
     setSelectedTagIds([]);
     setInitialSnapshot(null);
 
@@ -799,6 +802,7 @@ export default function CreateCocktailScreen() {
       setInstructions(baseCocktail.instructions ?? "");
       setVideo(baseCocktail.video ?? "");
       setImageUri(baseCocktail.photoUri ?? null);
+      setPendingCropUri(null);
       const mappedTags = (baseCocktail.tags ?? [])
         .map((tag) => Number(tag.id ?? -1))
         .filter((id): id is number => Number.isFinite(id) && id >= 0)
@@ -934,7 +938,7 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
         }
       }
     } catch (error) {
@@ -992,7 +996,7 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropUri(asset.uri);
         }
       }
     } catch (error) {
@@ -1043,6 +1047,16 @@ export default function CreateCocktailScreen() {
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
+    setPendingCropUri(null);
+  }, []);
+
+  const handleCancelCrop = useCallback(() => {
+    setPendingCropUri(null);
+  }, []);
+
+  const handleApplyCrop = useCallback((uri: string) => {
+    setImageUri(uri);
+    setPendingCropUri(null);
   }, []);
 
   const isSaveDisabled = isSaving || isPickingImage;
@@ -2813,6 +2827,12 @@ export default function CreateCocktailScreen() {
         message={dialogOptions?.message}
         actions={dialogOptions?.actions ?? []}
         onRequestClose={closeDialog}
+      />
+      <ImageCropperModal
+        visible={pendingCropUri != null}
+        imageUri={pendingCropUri}
+        onCancel={handleCancelCrop}
+        onApply={handleApplyCrop}
       />
 
       <TagEditorModal
