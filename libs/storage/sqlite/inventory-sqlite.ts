@@ -104,9 +104,26 @@ async function getDatabase(): Promise<SQLiteDatabase> {
   return databasePromise;
 }
 
+async function runInTransaction(db: SQLiteDatabase, task: () => Promise<void>): Promise<void> {
+  await db.execAsync('BEGIN IMMEDIATE TRANSACTION;');
+  let committed = false;
+  try {
+    await task();
+    await db.execAsync('COMMIT;');
+    committed = true;
+  } finally {
+    if (!committed) {
+      try {
+        await db.execAsync('ROLLBACK;');
+      } catch {
+        // Ignore rollback failures because SQLite may already auto-close a failed transaction.
+      }
+    }
+  }
+}
+
 async function ensureSchema(db: SQLiteDatabase): Promise<void> {
-  await db.withTransactionAsync(async () => {
-    await db.execAsync(`
+  await db.execAsync(`
       CREATE TABLE IF NOT EXISTS meta (
         key TEXT PRIMARY KEY NOT NULL,
         value TEXT NOT NULL
@@ -211,11 +228,10 @@ async function ensureSchema(db: SQLiteDatabase): Promise<void> {
         ON ingredient_overrides (deleted);
     `);
 
-    await db.runAsync(
-      'INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)',
-      ['schema_version', String(CURRENT_SCHEMA_VERSION)],
-    );
-  });
+  await db.runAsync(
+    'INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)',
+    ['schema_version', String(CURRENT_SCHEMA_VERSION)],
+  );
 }
 
 async function readMetaValue(db: SQLiteDatabase, key: string): Promise<string | undefined> {
@@ -599,7 +615,7 @@ async function saveSnapshotInternal<TCocktail, TIngredient>(
     return;
   }
 
-  await db.withTransactionAsync(async () => {
+  await runInTransaction(db, async () => {
     await writeDeltaRows(db, normalizedDelta);
 
     const availableIngredientIds = normalizeArrayOfIds((snapshot as InventoryDeltaSnapshotV3<unknown, unknown>).availableIngredientIds);
@@ -728,7 +744,7 @@ export async function persistCocktailTagDeltaSnapshotToSQLite(
 ): Promise<void> {
   const db = await getDatabase();
 
-  await db.withTransactionAsync(async () => {
+  await runInTransaction(db, async () => {
     await db.runAsync("DELETE FROM cocktail_tag_links WHERE source = 'custom'");
 
     for (const [cocktailKey, tags] of Object.entries(snapshot)) {
@@ -756,8 +772,6 @@ export async function migrateLegacySnapshotToSQLite<TCocktail, TIngredient>(
   snapshot: InventorySnapshot<TCocktail, TIngredient>,
 ): Promise<void> {
   const db = await getDatabase();
-  await db.withTransactionAsync(async () => {
-    await saveSnapshotInternal(db, snapshot);
-    await writeMetaValue(db, MIGRATION_KEY, '1');
-  });
+  await saveSnapshotInternal(db, snapshot);
+  await writeMetaValue(db, MIGRATION_KEY, '1');
 }
