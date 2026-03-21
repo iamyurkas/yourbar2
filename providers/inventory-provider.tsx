@@ -2012,6 +2012,70 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     return updated;
   }, [appLocale]);
 
+  const updateCocktailTags = useCallback((id: number, tagsInput: CocktailTag[] | null | undefined) => {
+    let updated: Cocktail | undefined;
+
+    setInventoryState((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      const targetId = Number(id);
+      if (!Number.isFinite(targetId) || targetId < 0) {
+        return prev;
+      }
+
+      const existingIndex = prev.cocktails.findIndex(
+        (cocktail) => Number(cocktail.id ?? -1) === Math.trunc(targetId),
+      );
+      if (existingIndex < 0) {
+        return prev;
+      }
+
+      const tagMap = new Map<number, CocktailTag>();
+      (tagsInput ?? []).forEach((tag) => {
+        const tagId = Number(tag.id ?? -1);
+        if (!Number.isFinite(tagId) || tagId < 0 || tagMap.has(tagId)) {
+          return;
+        }
+
+        tagMap.set(tagId, { id: tagId, name: tag.name, color: tag.color });
+      });
+
+      const existing = prev.cocktails[existingIndex];
+      const nextTags = tagMap.size > 0 ? Array.from(tagMap.values()) : undefined;
+      const previousTagIds = (existing.tags ?? [])
+        .map((tag) => Number(tag.id ?? -1))
+        .filter((tagId) => Number.isFinite(tagId) && tagId >= 0)
+        .sort((left, right) => left - right)
+        .join(',');
+      const nextTagIds = (nextTags ?? [])
+        .map((tag) => Number(tag.id ?? -1))
+        .filter((tagId) => Number.isFinite(tagId) && tagId >= 0)
+        .sort((left, right) => left - right)
+        .join(',');
+      if (previousTagIds === nextTagIds) {
+        updated = existing;
+        return prev;
+      }
+
+      updated = {
+        ...existing,
+        tags: nextTags,
+      } satisfies Cocktail;
+
+      const nextCocktails = [...prev.cocktails];
+      nextCocktails.splice(existingIndex, 1, updated);
+
+      return {
+        ...prev,
+        cocktails: nextCocktails,
+      } satisfies InventoryState;
+    });
+
+    return updated;
+  }, []);
+
   const deleteIngredient = useCallback((id: number) => {
     const normalizedId = Number(id);
     if (!Number.isFinite(normalizedId) || normalizedId < 0) {
@@ -2690,6 +2754,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventorySyncState,
       importInventorySyncState,
       updateCocktail,
+      updateCocktailTags,
       updateIngredient,
       deleteCocktail,
       deleteIngredient,
@@ -2736,6 +2801,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       exportInventorySyncState,
       importInventorySyncState,
       updateCocktail,
+      updateCocktailTags,
       updateIngredient,
       deleteCocktail,
       deleteIngredient,

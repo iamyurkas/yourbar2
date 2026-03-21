@@ -535,7 +535,7 @@ export default function CocktailDetailsScreen() {
     partySelectedCocktailKeys,
     togglePartyCocktailSelection,
     toggleIngredientShopping,
-    updateCocktail,
+    updateCocktailTags,
     setCocktailRating,
     setCocktailComment,
     getCocktailRating,
@@ -887,40 +887,8 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
-    updateCocktail(Number(cocktail.id), {
-      name: cocktail.name,
-      description: cocktail.description,
-      instructions: cocktail.instructions,
-      video: cocktail.video,
-      synonyms: cocktail.synonyms,
-      photoUri: cocktail.photoUri,
-      glassId: cocktail.glassId,
-      methodIds: cocktail.methodIds,
-      tags: editableTagsRef.current,
-      defaultServings: cocktail.defaultServings,
-      ingredients: (cocktail.ingredients ?? []).map((ingredient, index) => ({
-        order: index + 1,
-        ingredientId: ingredient.ingredientId,
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unitId: ingredient.unitId,
-        optional: ingredient.optional,
-        garnish: ingredient.garnish,
-        process: ingredient.process,
-        serving: ingredient.serving,
-        allowBaseSubstitution: ingredient.allowBaseSubstitution,
-        allowBrandSubstitution: ingredient.allowBrandSubstitution,
-        allowStyleSubstitution: ingredient.allowStyleSubstitution,
-        substitutes: (ingredient.substitutes ?? []).map((substitute) => ({
-          ingredientId: substitute.ingredientId,
-          name: substitute.name,
-          amount: substitute.amount,
-          unitId: substitute.unitId,
-          brand: substitute.brand,
-        })),
-      })),
-    });
-  }, [cocktail, updateCocktail]);
+    updateCocktailTags(Number(cocktail.id), editableTagsRef.current);
+  }, [cocktail, updateCocktailTags]);
 
   useFocusEffect(
     useCallback(() => {

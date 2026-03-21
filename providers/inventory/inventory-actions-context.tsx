@@ -39,6 +39,7 @@ export type InventoryActionsContextValue = {
   importInventorySyncState: (snapshot: InventorySyncStateSnapshot) => void;
   updateIngredient: (id: number, input: CreateIngredientInput) => Ingredient | undefined;
   updateCocktail: (id: number, input: CreateCocktailInput) => Cocktail | undefined;
+  updateCocktailTags: (id: number, tags: CocktailTag[] | null | undefined) => Cocktail | undefined;
   deleteCocktail: (id: number) => boolean;
   deleteIngredient: (id: number) => boolean;
   createCustomCocktailTag: (input: { name: string; color?: string | null }) => CocktailTag | undefined;
