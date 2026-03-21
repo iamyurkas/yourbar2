@@ -665,7 +665,7 @@ export default function CocktailDetailsScreen() {
   const handleReturn = useCallback(() => {
     persistFeedbackDraftRef.current();
 
-    if (returnToPath === "/cocktails" && !returnToParams) {
+    if (returnToPath === "/cocktails") {
       skipDuplicateBack(navigation);
       return;
     }
