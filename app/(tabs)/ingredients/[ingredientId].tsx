@@ -955,7 +955,7 @@ export default function IngredientDetailsScreen() {
   );
 
   const handleReturn = useCallback(() => {
-    if (returnToPath === "/ingredients" && !returnToParams) {
+    if (returnToPath === "/ingredients") {
       skipDuplicateBack(navigation);
       return;
     }
