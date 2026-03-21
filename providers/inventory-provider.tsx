@@ -11,10 +11,9 @@ import { loadInventoryData, reloadInventoryData } from '@/libs/inventory-data';
 import {
   type CocktailTagDeltaSnapshot,
   loadCocktailTagDeltaSnapshot,
-  loadInventorySnapshot,
   persistCocktailTagDeltaSnapshot,
-  persistInventorySnapshot,
 } from '@/libs/inventory-storage';
+import { getInventoryStorageAdapter } from '@/libs/inventory-storage-adapter';
 import {
   areStorageRecordsEqual,
   hydrateInventoryTagsFromCode,
@@ -450,7 +449,8 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         const tagDelta = await loadCocktailTagDeltaSnapshot();
         cocktailTagDeltaRef.current = tagDelta;
 
-        const stored = await loadInventorySnapshot<CocktailStorageRecord, IngredientStorageRecord>();
+        const storageAdapter = await getInventoryStorageAdapter();
+        const stored = await storageAdapter.loadState<CocktailStorageRecord, IngredientStorageRecord>();
         if (stored && (stored.version === INVENTORY_SNAPSHOT_VERSION || (stored as any).version === 2 || (stored as any).version === 1) && !cancelled) {
           const bootstrap = buildBootstrapFromSnapshot(stored as InventorySyncStateSnapshot);
           bootstrap.inventoryState = applyCocktailTagDeltaToInventoryState(
@@ -615,9 +615,11 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
 
       lastPersistedSnapshot.current = serialized;
 
-      void persistInventorySnapshot(snapshot).catch((error) => {
-        console.error('Failed to persist inventory snapshot', error);
-      });
+      void getInventoryStorageAdapter()
+        .then((storageAdapter) => storageAdapter.persistStateDelta(snapshot))
+        .catch((error) => {
+          console.error('Failed to persist inventory snapshot', error);
+        });
 
       if (Object.keys(cocktailTagDeltaRef.current).length > 0) {
         cocktailTagDeltaRef.current = {};
