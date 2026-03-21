@@ -32,6 +32,7 @@ import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
+import { ImageCropModal } from "@/components/ImageCropModal";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
@@ -375,6 +376,8 @@ export default function CreateCocktailScreen() {
   const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [pendingImageUri, setPendingImageUri] = useState<string | null>(null);
+  const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -926,7 +929,7 @@ export default function CreateCocktailScreen() {
       beginImagePicking();
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -934,7 +937,8 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingImageUri(asset.uri);
+          setIsCropModalVisible(true);
         }
       }
     } catch (error) {
@@ -984,7 +988,7 @@ export default function CreateCocktailScreen() {
     try {
       beginImagePicking();
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -992,7 +996,8 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingImageUri(asset.uri);
+          setIsCropModalVisible(true);
         }
       }
     } catch (error) {
@@ -2821,6 +2826,20 @@ export default function CreateCocktailScreen() {
         confirmLabel={t("common.create")}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
+      />
+
+      <ImageCropModal
+        visible={isCropModalVisible}
+        imageUri={pendingImageUri}
+        onClose={() => {
+          setIsCropModalVisible(false);
+          setPendingImageUri(null);
+        }}
+        onConfirm={(croppedUri) => {
+          setImageUri(croppedUri);
+          setIsCropModalVisible(false);
+          setPendingImageUri(null);
+        }}
       />
     </>
   );

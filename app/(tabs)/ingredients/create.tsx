@@ -25,6 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppDialog, type DialogOptions } from '@/components/AppDialog';
 import { AppImage } from '@/components/AppImage';
 import { HeaderIconButton } from '@/components/HeaderIconButton';
+import { ImageCropModal } from '@/components/ImageCropModal';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
@@ -212,6 +213,8 @@ export default function IngredientFormScreen() {
   const [name, setName] = useState(() => (isEditMode ? '' : suggestedNameParam ?? ''));
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [pendingImageUri, setPendingImageUri] = useState<string | null>(null);
+  const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
@@ -496,7 +499,7 @@ export default function IngredientFormScreen() {
       setIsPickingImage(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -504,7 +507,8 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingImageUri(asset.uri);
+          setIsCropModalVisible(true);
         }
       }
     } catch (error) {
@@ -553,7 +557,7 @@ export default function IngredientFormScreen() {
     try {
       setIsPickingImage(true);
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -561,7 +565,8 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingImageUri(asset.uri);
+          setIsCropModalVisible(true);
         }
       }
     } catch (error) {
@@ -1988,6 +1993,20 @@ export default function IngredientFormScreen() {
         confirmLabel={t('common.create')}
         onClose={handleCloseTagModal}
         onSave={handleCreateTag}
+      />
+
+      <ImageCropModal
+        visible={isCropModalVisible}
+        imageUri={pendingImageUri}
+        onClose={() => {
+          setIsCropModalVisible(false);
+          setPendingImageUri(null);
+        }}
+        onConfirm={(croppedUri) => {
+          setImageUri(croppedUri);
+          setIsCropModalVisible(false);
+          setPendingImageUri(null);
+        }}
       />
     </>
   );

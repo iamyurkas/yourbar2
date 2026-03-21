@@ -129,6 +129,15 @@ export const enUSTranslations: TranslationDictionary = {
     "Use this screen to create a new ingredient card.\n\nAdd a name, optional photo, tags, base ingredient or style ingredient, and notes, then tap Save.\n\nA style ingredient can only link to a base ingredient that is neither branded nor styled.",
   "ingredientForm.newTag": "New tag",
 
+  "crop.rotate": "Rotate",
+  "crop.free": "Free",
+  "crop.original": "Original",
+  "crop.square": "Square",
+  "crop.3_4": "3:4",
+  "crop.4_3": "4:3",
+  "crop.16_9": "16:9",
+  "crop.9_16": "9:16",
+
   "cocktailForm.editTitle": "Edit cocktail",
   "cocktailForm.addTitle": "Add new cocktail",
   "cocktailForm.changePhoto": "Change photo",
