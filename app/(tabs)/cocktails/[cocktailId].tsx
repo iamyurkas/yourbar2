@@ -1567,6 +1567,12 @@ export default function CocktailDetailsScreen() {
                         label={finalName}
                         color={Colors.tint}
                         selected
+                        onPress={() => {
+                          setEditableTags((current) =>
+                            current.filter((_, currentIndex) => currentIndex !== index),
+                          );
+                        }}
+                        accessibilityRole="button"
                         accessibilityLabel={finalName}
                       />
                     );
@@ -1588,13 +1594,20 @@ export default function CocktailDetailsScreen() {
                       label={finalName}
                       color={tag.color ?? Colors.tint}
                       selected
+                      onPress={() => {
+                        setEditableTags((current) =>
+                          current.filter((item) => Number(item.id ?? -1) !== Number(tag.id ?? -1)),
+                        );
+                      }}
+                      accessibilityRole="button"
                       accessibilityLabel={finalName}
                     />
                   );
                 })}
               <TagPill
                 label="+Add"
-                color={Colors.outlineVariant}
+                color={Colors.primary}
+                style={{ backgroundColor: Colors.onPrimary }}
                 onPress={() => setIsTagPickerVisible((current) => !current)}
                 accessibilityRole="button"
                 accessibilityLabel="+Add tag"
