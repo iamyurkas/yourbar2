@@ -129,3 +129,38 @@ test('rebuildBarsTable handles legacy bars tables without updated_at column', as
   const joined = execCalls.join('\n');
   assert.match(joined, /CAST\(strftime\('%s','now'\) AS INTEGER\)/);
 });
+
+test('ensureRuntimeColumnShape adds missing deleted_at columns', async () => {
+  const execCalls = [];
+  const db = {
+    execAsync: async (sql) => {
+      execCalls.push(sql);
+    },
+    getAllAsync: async (sql) => {
+      if (sql === 'PRAGMA table_info(custom_cocktail_tags)') {
+        return [{ name: 'id' }, { name: 'name' }, { name: 'color' }];
+      }
+      if (sql === 'PRAGMA table_info(custom_ingredient_tags)') {
+        return [{ name: 'id' }, { name: 'name' }, { name: 'color' }];
+      }
+      if (sql === 'PRAGMA table_info(user_entity_overrides)') {
+        return [{ name: 'entity_type' }, { name: 'entity_id' }, { name: 'payload_json' }];
+      }
+      return [];
+    },
+  };
+
+  const mod = loadTsModule(path.resolve(__dirname, '../libs/storage/sqlite/migrations.ts'), {
+    '@/libs/storage/sqlite/schema': {
+      SQLITE_SCHEMA_VERSION: 2,
+      TABLE_DEFINITIONS: {},
+      INDEX_DEFINITIONS: [],
+    },
+  });
+
+  await mod.ensureRuntimeColumnShape(db);
+  const joined = execCalls.join('\n');
+  assert.match(joined, /ALTER TABLE custom_cocktail_tags ADD COLUMN deleted_at INTEGER NULL/);
+  assert.match(joined, /ALTER TABLE custom_ingredient_tags ADD COLUMN deleted_at INTEGER NULL/);
+  assert.match(joined, /ALTER TABLE user_entity_overrides ADD COLUMN deleted_at INTEGER NULL/);
+});

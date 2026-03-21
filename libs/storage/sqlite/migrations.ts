@@ -119,6 +119,8 @@ export async function ensureSqliteSchema(db: SQLiteDatabase): Promise<void> {
       await db.execAsync(`${TABLE_DEFINITIONS.app_state};`);
     }
 
+    await ensureRuntimeColumnShape(db);
+
     await db.execAsync(`PRAGMA user_version = ${SQLITE_SCHEMA_VERSION}`);
     await db.execAsync('COMMIT');
   } catch (error) {
@@ -135,6 +137,21 @@ export async function ensureSqliteSchema(db: SQLiteDatabase): Promise<void> {
 export async function hasColumn(db: SQLiteDatabase, tableName: string, columnName: string): Promise<boolean> {
   const columns = await getTableColumns(db, tableName);
   return columns.has(columnName);
+}
+
+async function ensureColumn(
+  db: SQLiteDatabase,
+  tableName: string,
+  columnName: string,
+  columnDefinitionSql: string,
+): Promise<void> {
+  const present = await hasColumn(db, tableName, columnName);
+  if (present) {
+    return;
+  }
+
+  console.info(`[sqlite] Adding missing column ${tableName}.${columnName}`);
+  await db.execAsync(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDefinitionSql};`);
 }
 
 export async function ensureBarsTableShape(db: SQLiteDatabase): Promise<void> {
@@ -157,4 +174,13 @@ export async function ensureBarsTableShape(db: SQLiteDatabase): Promise<void> {
     await db.execAsync('ROLLBACK');
     throw error;
   }
+}
+
+export async function ensureRuntimeColumnShape(db: SQLiteDatabase): Promise<void> {
+  await ensureColumn(db, 'custom_cocktail_tags', 'deleted_at', 'INTEGER NULL');
+  await ensureColumn(db, 'custom_ingredient_tags', 'deleted_at', 'INTEGER NULL');
+  await ensureColumn(db, 'user_entity_overrides', 'deleted_at', 'INTEGER NULL');
+  await ensureColumn(db, 'user_entity_overrides', 'updated_at', 'INTEGER NOT NULL DEFAULT 0');
+  await ensureColumn(db, 'custom_cocktail_tags', 'updated_at', 'INTEGER NOT NULL DEFAULT 0');
+  await ensureColumn(db, 'custom_ingredient_tags', 'updated_at', 'INTEGER NOT NULL DEFAULT 0');
 }

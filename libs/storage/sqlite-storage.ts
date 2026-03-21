@@ -6,7 +6,7 @@ import {
   readRawFileSnapshot,
 } from '@/libs/storage/file-storage';
 import { syncBundledCatalogIfNeeded as syncBundledCatalogTables } from '@/libs/storage/sqlite/catalog-sync';
-import { ensureBarsTableShape, ensureSqliteSchema } from '@/libs/storage/sqlite/migrations';
+import { ensureBarsTableShape, ensureRuntimeColumnShape, ensureSqliteSchema } from '@/libs/storage/sqlite/migrations';
 import { APP_STATE_KEYS, SQLITE_DB_NAME } from '@/libs/storage/sqlite/schema';
 import type {
   CocktailTagDeltaSnapshot,
@@ -74,6 +74,7 @@ async function writeTags(
   table: 'custom_cocktail_tags' | 'custom_ingredient_tags',
   tags?: Array<{ id: number; name: string; color: string }>,
 ): Promise<void> {
+  await ensureRuntimeColumnShape(db);
   await clearSoftDeleteTable(db, table);
   for (const tag of tags ?? []) {
     const id = Math.trunc(Number(tag.id ?? -1));
@@ -201,6 +202,7 @@ async function writeCocktailTagDelta(db: SQLite.SQLiteDatabase, delta: CocktailT
 
 async function hydrateSnapshot<TCocktail, TIngredient>(db: SQLite.SQLiteDatabase): Promise<InventorySnapshot<TCocktail, TIngredient> | undefined> {
   await ensureBarsTableShape(db);
+  await ensureRuntimeColumnShape(db);
   const version = Number((await getAppState(db, 'snapshotVersion')) ?? 0);
   if (version <= 0) {
     return undefined;
@@ -387,6 +389,7 @@ async function initializeSqliteStorage(): Promise<void> {
     const db = await getDb();
     await ensureSqliteSchema(db);
     await ensureBarsTableShape(db);
+    await ensureRuntimeColumnShape(db);
     await syncBundledCatalogTables(db);
     await importFileSnapshotIfNeeded(db);
   })().catch((error) => {
