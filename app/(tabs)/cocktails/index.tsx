@@ -81,6 +81,8 @@ export default function CocktailsScreen() {
   const [, startPartySelectionTransition] = useTransition();
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
   const lastScrollOffset = useRef(0);
+  const pendingReturnScrollOffset = useRef<number | null>(null);
+  const hasAppliedReturnScrollOffset = useRef(true);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
 
@@ -115,6 +117,7 @@ export default function CocktailsScreen() {
     ratings?: string | string[];
     sort?: string | string[];
     desc?: string | string[];
+    scroll?: string | string[];
   }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
@@ -162,12 +165,22 @@ export default function CocktailsScreen() {
 
     const nextSortDescending = getParamValue(params.desc) === '1';
     setSortDescending((previous) => (previous === nextSortDescending ? previous : nextSortDescending));
+
+    const parsedScroll = Number(getParamValue(params.scroll));
+    if (Number.isFinite(parsedScroll) && parsedScroll >= 0) {
+      pendingReturnScrollOffset.current = parsedScroll;
+      hasAppliedReturnScrollOffset.current = false;
+    } else {
+      pendingReturnScrollOffset.current = null;
+      hasAppliedReturnScrollOffset.current = true;
+    }
   }, [
     getParamValue,
     params.desc,
     params.methods,
     params.query,
     params.ratings,
+    params.scroll,
     params.sort,
     params.tab,
     params.tags,
@@ -185,6 +198,14 @@ export default function CocktailsScreen() {
     }),
     [activeTab, isSortDescending, query, selectedMethodIds, selectedSortOption, selectedStarRatings, selectedTagKeys],
   );
+
+  const getReturnToParamsWithScroll = useCallback(() => {
+    const roundedOffset = Math.max(0, Math.round(lastScrollOffset.current));
+    return {
+      ...listReturnToParams,
+      scroll: String(roundedOffset),
+    };
+  }, [listReturnToParams]);
 
   useEffect(() => {
     setLastCocktailTab(activeTab);
@@ -697,6 +718,25 @@ export default function CocktailsScreen() {
     },
   ], [cocktailsByTab.all.length, myReadyCocktailsCount, partySelectedCount, showTabCounters, t]);
 
+  useEffect(() => {
+    if (loading || hasAppliedReturnScrollOffset.current) {
+      return;
+    }
+
+    const restoreOffset = pendingReturnScrollOffset.current;
+    if (restoreOffset == null) {
+      hasAppliedReturnScrollOffset.current = true;
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset: restoreOffset, animated: false });
+      lastScrollOffset.current = restoreOffset;
+      pendingReturnScrollOffset.current = null;
+      hasAppliedReturnScrollOffset.current = true;
+    });
+  }, [activeTab, loading, sortedCocktails.length, visibleMyTabItems.length]);
+
 
 
   useEffect(() => {
@@ -718,10 +758,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
-        returnToParams: listReturnToParams,
+        returnToParams: getReturnToParamsWithScroll(),
       });
     },
-    [listReturnToParams],
+    [getReturnToParamsWithScroll],
   );
 
   const handleSelectIngredient = useCallback(
@@ -731,11 +771,11 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
-          returnToParams: listReturnToParams,
+          returnToParams: getReturnToParamsWithScroll(),
         });
       }
     },
-    [listReturnToParams],
+    [getReturnToParamsWithScroll],
   );
 
   const handleShoppingToggle = useCallback(
