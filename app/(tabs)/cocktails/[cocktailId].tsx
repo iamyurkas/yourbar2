@@ -654,7 +654,6 @@ export default function CocktailDetailsScreen() {
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
   const persistFeedbackDraftRef = useRef<() => void>(() => { });
-  const registeredCocktailForTagSaveRef = useRef<string | null>(null);
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -808,6 +807,7 @@ export default function CocktailDetailsScreen() {
 
   const [optimisticRating, setOptimisticRating] = useState<number | null>(null);
   const [, startRatingTransition] = useTransition();
+  const [, startTagTransition] = useTransition();
   const displayedRating = optimisticRating ?? userRating;
 
   const userComment = useMemo(() => {
@@ -825,6 +825,7 @@ export default function CocktailDetailsScreen() {
   const persistedTagIds = useMemo(() => resolveCocktailTagIds(cocktail), [cocktail]);
   const persistedTagSignature = useMemo(() => persistedTagIds.join(","), [persistedTagIds]);
   const [tagDraftIds, setTagDraftIds] = useState<number[]>(persistedTagIds);
+  const tagDraftIdsRef = useRef<number[]>(persistedTagIds);
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -841,6 +842,10 @@ export default function CocktailDetailsScreen() {
     setIsCommentFieldVisible((current) => current || userComment.length > 0);
   }, [userComment]);
 
+  useEffect(() => {
+    tagDraftIdsRef.current = tagDraftIds;
+  }, [tagDraftIds]);
+
   const availableCocktailTags = useMemo(() => {
     const sortedCustom = [...customCocktailTags].sort((left, right) =>
       (left.name ?? "").localeCompare(right.name ?? "", locale),
@@ -854,10 +859,6 @@ export default function CocktailDetailsScreen() {
   );
 
   useEffect(() => {
-    if (registeredCocktailForTagSaveRef.current === cocktailSelectionKey) {
-      return;
-    }
-
     setTagDraftIds(persistedTagIds);
     setIsAddTagsVisible(false);
   }, [cocktailSelectionKey, persistedTagIds]);
@@ -870,15 +871,6 @@ export default function CocktailDetailsScreen() {
     return tagDraftIds.some((id, index) => id !== persistedTagIds[index]);
   }, [persistedTagIds, tagDraftIds]);
 
-  useEffect(() => {
-    if (!cocktailSelectionKey) {
-      registeredCocktailForTagSaveRef.current = null;
-      return;
-    }
-
-    registeredCocktailForTagSaveRef.current = hasPendingTagChanges ? cocktailSelectionKey : null;
-  }, [cocktailSelectionKey, hasPendingTagChanges]);
-
   const persistFeedbackDraft = useCallback(() => {
     if (!cocktail) {
       return;
@@ -888,26 +880,10 @@ export default function CocktailDetailsScreen() {
     if (trimmedDraft !== userComment) {
       setCocktailComment(cocktail, trimmedDraft);
     }
-
-    if (
-      registeredCocktailForTagSaveRef.current === cocktailSelectionKey &&
-      hasPendingTagChanges
-    ) {
-      const nextTags = tagDraftIds
-        .map((tagId) => availableTagMap.get(tagId))
-        .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
-      updateCocktailTags(cocktail, nextTags);
-      registeredCocktailForTagSaveRef.current = null;
-    }
   }, [
-    availableTagMap,
     cocktail,
-    cocktailSelectionKey,
     commentDraft,
-    hasPendingTagChanges,
-    tagDraftIds,
     setCocktailComment,
-    updateCocktailTags,
     userComment,
   ]);
 
@@ -967,15 +943,27 @@ export default function CocktailDetailsScreen() {
   );
 
   const handleToggleTag = useCallback((tagId: number) => {
-    setTagDraftIds((previous) => {
-      const hasTag = previous.includes(tagId);
-      if (hasTag) {
-        return previous.filter((currentId) => currentId !== tagId);
-      }
+    if (!cocktail) {
+      return;
+    }
 
-      return [...previous, tagId].sort((left, right) => left - right);
+    const currentTagIds = tagDraftIdsRef.current;
+    const hasTag = currentTagIds.includes(tagId);
+    const nextTagIds = hasTag
+      ? currentTagIds.filter((currentId) => currentId !== tagId)
+      : [...currentTagIds, tagId].sort((left, right) => left - right);
+
+    setTagDraftIds(nextTagIds);
+    tagDraftIdsRef.current = nextTagIds;
+
+    const nextTags = nextTagIds
+      .map((nextTagId) => availableTagMap.get(nextTagId))
+      .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
+
+    startTagTransition(() => {
+      updateCocktailTags(cocktail, nextTags);
     });
-  }, []);
+  }, [availableTagMap, cocktail, startTagTransition, updateCocktailTags]);
 
   const handleRatingSelect = useCallback(
     (value: number) => {
