@@ -14,6 +14,7 @@ import {
 import {
   AppState,
   findNodeHandle,
+  InteractionManager,
   Linking,
   Platform,
   Pressable,
@@ -653,7 +654,8 @@ export default function CocktailDetailsScreen() {
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
-  const persistFeedbackDraftRef = useRef<() => void>(() => { });
+  const persistFeedbackDraftRef = useRef<(options?: { deferTagSave?: boolean }) => void>(() => { });
+  const deferredTagSaveTaskRef = useRef<ReturnType<typeof InteractionManager.runAfterInteractions> | null>(null);
   const registeredCocktailForTagSaveRef = useRef<string | null>(null);
   const shouldNavigateAway = !loading && !cocktail;
 
@@ -664,7 +666,7 @@ export default function CocktailDetailsScreen() {
   }, [useImperialUnits]);
 
   const handleReturn = useCallback(() => {
-    persistFeedbackDraftRef.current();
+    persistFeedbackDraftRef.current({ deferTagSave: true });
 
     if (returnToPath === "/cocktails" && !returnToParams) {
       skipDuplicateBack(navigation);
@@ -698,7 +700,7 @@ export default function CocktailDetailsScreen() {
       }
 
       event.preventDefault();
-      persistFeedbackDraftRef.current();
+      persistFeedbackDraftRef.current({ deferTagSave: true });
 
       isHandlingBackRef.current = true;
       handleReturn();
@@ -879,7 +881,7 @@ export default function CocktailDetailsScreen() {
     registeredCocktailForTagSaveRef.current = hasPendingTagChanges ? cocktailSelectionKey : null;
   }, [cocktailSelectionKey, hasPendingTagChanges]);
 
-  const persistFeedbackDraft = useCallback(() => {
+  const persistFeedbackDraft = useCallback((options?: { deferTagSave?: boolean }) => {
     if (!cocktail) {
       return;
     }
@@ -896,7 +898,16 @@ export default function CocktailDetailsScreen() {
       const nextTags = tagDraftIds
         .map((tagId) => availableTagMap.get(tagId))
         .filter((tag): tag is (typeof availableCocktailTags)[number] => Boolean(tag));
-      updateCocktailTags(cocktail, nextTags);
+      deferredTagSaveTaskRef.current?.cancel();
+
+      if (options?.deferTagSave) {
+        deferredTagSaveTaskRef.current = InteractionManager.runAfterInteractions(() => {
+          updateCocktailTags(cocktail, nextTags);
+          deferredTagSaveTaskRef.current = null;
+        });
+      } else {
+        updateCocktailTags(cocktail, nextTags);
+      }
       registeredCocktailForTagSaveRef.current = null;
     }
   }, [
@@ -910,6 +921,13 @@ export default function CocktailDetailsScreen() {
     updateCocktailTags,
     userComment,
   ]);
+
+  useEffect(() => {
+    return () => {
+      deferredTagSaveTaskRef.current?.cancel();
+      deferredTagSaveTaskRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     persistFeedbackDraftRef.current = persistFeedbackDraft;
@@ -1527,7 +1545,7 @@ export default function CocktailDetailsScreen() {
               <TextInput
                 value={commentDraft}
                 onChangeText={setCommentDraft}
-                onBlur={persistFeedbackDraft}
+                onBlur={() => persistFeedbackDraft()}
                 onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
                 placeholder={t("cocktailDetails.commentPlaceholder")}
                 placeholderTextColor={Colors.onSurfaceVariant}
