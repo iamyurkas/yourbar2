@@ -35,6 +35,7 @@ import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
+import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
@@ -42,6 +43,7 @@ import {
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
@@ -533,6 +535,8 @@ export default function CocktailDetailsScreen() {
     partySelectedCocktailKeys,
     togglePartyCocktailSelection,
     toggleIngredientShopping,
+    customCocktailTags,
+    updateCocktail,
     setCocktailRating,
     setCocktailComment,
     getCocktailRating,
@@ -728,10 +732,145 @@ export default function CocktailDetailsScreen() {
   }, [cocktail?.defaultServings]);
 
   const [servings, setServings] = useState<number>(normalizedDefaultServings);
+  const [isTagPickerVisible, setTagPickerVisible] = useState(false);
+  const [tagPickerIds, setTagPickerIds] = useState<number[]>([]);
 
   useEffect(() => {
     setServings(normalizedDefaultServings);
   }, [normalizedDefaultServings]);
+
+  const allCocktailTags = useMemo(() => {
+    const sortedCustom = [...customCocktailTags].sort((a, b) =>
+      compareOptionalGlobalAlphabet(a.name, b.name),
+    );
+    return [...BUILTIN_COCKTAIL_TAGS, ...sortedCustom];
+  }, [customCocktailTags]);
+
+  const currentCocktailTags = useMemo(() => {
+    const tagMap = new Map<number, CocktailTag>();
+    (cocktail?.tags ?? []).forEach((rawTag) => {
+      if (typeof rawTag === "number") {
+        const builtInTag = BUILTIN_COCKTAIL_TAGS.find((tag) => tag.id === rawTag);
+        if (builtInTag) {
+          tagMap.set(builtInTag.id, builtInTag);
+        }
+        return;
+      }
+
+      const tagId = Number(rawTag?.id ?? -1);
+      if (!Number.isFinite(tagId) || tagId < 0 || tagMap.has(tagId)) {
+        return;
+      }
+
+      tagMap.set(Math.trunc(tagId), {
+        id: Math.trunc(tagId),
+        name: rawTag?.name ?? t("cocktailDetails.tag"),
+        color: rawTag?.color ?? Colors.tint,
+      });
+    });
+
+    return Array.from(tagMap.values());
+  }, [Colors.tint, cocktail?.tags, t]);
+
+  const currentCocktailTagIdSet = useMemo(
+    () => new Set(currentCocktailTags.map((tag) => tag.id)),
+    [currentCocktailTags],
+  );
+
+  const availableTagById = useMemo(() => {
+    const map = new Map<number, CocktailTag>();
+    allCocktailTags.forEach((tag) => {
+      map.set(tag.id, tag);
+    });
+    currentCocktailTags.forEach((tag) => {
+      if (!map.has(tag.id)) {
+        map.set(tag.id, tag);
+      }
+    });
+    return map;
+  }, [allCocktailTags, currentCocktailTags]);
+
+  const persistCocktailTags = useCallback((nextTagIds: number[]) => {
+    if (!cocktail) {
+      return;
+    }
+
+    const cocktailNumericId = Number(cocktail.id ?? -1);
+    if (!Number.isFinite(cocktailNumericId) || cocktailNumericId < 0) {
+      return;
+    }
+
+    const tags = nextTagIds
+      .map((tagId) => availableTagById.get(tagId))
+      .filter((tag): tag is CocktailTag => Boolean(tag));
+
+    const methodIds =
+      cocktail.methodIds && cocktail.methodIds.length > 0
+        ? cocktail.methodIds
+        : cocktail.methodId
+          ? [cocktail.methodId]
+          : undefined;
+
+    updateCocktail(Math.trunc(cocktailNumericId), {
+      name: cocktail.name ?? "",
+      description: cocktail.description,
+      instructions: cocktail.instructions,
+      video: cocktail.video,
+      synonyms: cocktail.synonyms,
+      photoUri: cocktail.photoUri,
+      glassId: cocktail.glassId,
+      methodIds,
+      defaultServings: cocktail.defaultServings,
+      tags: tags.length > 0 ? tags : undefined,
+      ingredients: (cocktail.ingredients ?? []).map((ingredient, index) => ({
+        order: index + 1,
+        ingredientId: ingredient.ingredientId,
+        name: ingredient.name,
+        amount: ingredient.amount,
+        unitId: ingredient.unitId,
+        optional: ingredient.optional,
+        garnish: ingredient.garnish,
+        process: ingredient.process,
+        serving: ingredient.serving,
+        allowBaseSubstitution: ingredient.allowBaseSubstitution,
+        allowBrandSubstitution: ingredient.allowBrandSubstitution,
+        allowStyleSubstitution: ingredient.allowStyleSubstitution,
+        substitutes: ingredient.substitutes,
+      })),
+    });
+  }, [availableTagById, cocktail, updateCocktail]);
+
+  const handleToggleCocktailTag = useCallback((tagId: number) => {
+    if (!Number.isFinite(tagId) || tagId < 0) {
+      return;
+    }
+
+    const normalizedTagId = Math.trunc(tagId);
+    const nextTagIds = currentCocktailTags.map((tag) => tag.id);
+    const existingIndex = nextTagIds.indexOf(normalizedTagId);
+
+    if (existingIndex >= 0) {
+      nextTagIds.splice(existingIndex, 1);
+    } else {
+      nextTagIds.push(normalizedTagId);
+    }
+
+    persistCocktailTags(nextTagIds);
+  }, [currentCocktailTags, persistCocktailTags]);
+
+  const handleToggleTagPicker = useCallback(() => {
+    if (!isTagPickerVisible) {
+      const nonAddedTagIds = allCocktailTags
+        .filter((tag) => !currentCocktailTagIdSet.has(tag.id))
+        .map((tag) => tag.id);
+      setTagPickerIds(nonAddedTagIds);
+      setTagPickerVisible(true);
+      return;
+    }
+
+    setTagPickerVisible(false);
+    setTagPickerIds([]);
+  }, [allCocktailTags, currentCocktailTagIdSet, isTagPickerVisible]);
 
   const scaledIngredients = useMemo(
     () =>
@@ -1430,46 +1569,67 @@ export default function CocktailDetailsScreen() {
               />
             ) : null}
 
-            {cocktail.tags && cocktail.tags.length ? (
-              <View style={styles.tagList}>
-                {(cocktail.tags as unknown[]).map((rawTag, index) => {
-                  if (typeof rawTag === "number") {
-                    const fallbackName = t(`cocktailTag.${rawTag}`);
-                    const finalName =
-                      fallbackName !== `cocktailTag.${rawTag}`
-                        ? fallbackName
-                        : t("cocktailDetails.tag");
-                    return (
-                      <TagPill
-                        key={`tag-${rawTag}-${index}`}
-                        label={finalName}
-                        color={Colors.tint}
-                        selected
-                        accessibilityLabel={finalName}
-                      />
-                    );
+            <View style={styles.tagList}>
+              {currentCocktailTags.map((tag) => {
+                const translatedName = t(`cocktailTag.${tag.id}`);
+                const finalName =
+                  translatedName !== `cocktailTag.${tag.id}`
+                    ? translatedName
+                    : tag.name;
+
+                return (
+                  <TagPill
+                    key={`tag-${tag.id}`}
+                    label={finalName}
+                    color={tag.color ?? Colors.tint}
+                    selected
+                    accessibilityLabel={finalName}
+                    onPress={() => handleToggleCocktailTag(tag.id)}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: true }}
+                  />
+                );
+              })}
+              <TagPill
+                label="+Add"
+                color={Colors.primary}
+                selected={false}
+                onPress={handleToggleTagPicker}
+                style={[
+                  styles.addTagPill,
+                  { borderColor: Colors.primary, backgroundColor: Colors.onPrimary },
+                ]}
+                textStyle={{ color: Colors.primary }}
+                accessibilityRole="button"
+                accessibilityLabel="+Add"
+                accessibilityState={{ expanded: isTagPickerVisible }}
+              />
+            </View>
+
+            {isTagPickerVisible && tagPickerIds.length > 0 ? (
+              <View style={styles.tagPickerList}>
+                {tagPickerIds.map((tagId) => {
+                  const tag = availableTagById.get(tagId);
+                  if (!tag) {
+                    return null;
                   }
 
-                  const tag = (rawTag ?? {}) as Partial<CocktailTag>;
-                  const tagKey =
-                    tag.id != null
-                      ? `tag-${tag.id}`
-                      : tag.name
-                        ? `tag-${tag.name}`
-                        : `tag-${index}`;
-
-                  const tagName = tag.id != null ? t(`cocktailTag.${tag.id}`) : tag.name;
+                  const translatedName = t(`cocktailTag.${tag.id}`);
                   const finalName =
-                    tagName && tag.id != null && tagName !== `cocktailTag.${tag.id}`
-                      ? tagName
-                      : (tag.name ?? t("cocktailDetails.tag"));
+                    translatedName !== `cocktailTag.${tag.id}`
+                      ? translatedName
+                      : tag.name;
+                  const isSelected = currentCocktailTagIdSet.has(tag.id);
 
                   return (
                     <TagPill
-                      key={tagKey}
+                      key={`tag-picker-${tag.id}`}
                       label={finalName}
-                      color={tag.color ?? Colors.tint}
-                      selected
+                      color={tag.color}
+                      selected={isSelected}
+                      onPress={() => handleToggleCocktailTag(tag.id)}
+                      accessibilityRole="checkbox"
+                      accessibilityState={{ checked: isSelected }}
                       accessibilityLabel={finalName}
                     />
                   );
@@ -2178,6 +2338,17 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 8,
     alignSelf: "stretch",
+  },
+  addTagPill: {
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  tagPickerList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    gap: 8,
+    alignSelf: "stretch",
+    marginTop: 8,
   },
   methodList: {
     gap: 12,
