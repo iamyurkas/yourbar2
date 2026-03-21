@@ -11,7 +11,7 @@ import {
 
 import { Colors } from "@/constants/theme";
 
-type CropRect = { x: number; y: number; size: number };
+type CropRect = { x: number; y: number; width: number; height: number };
 
 type Props = {
   visible: boolean;
@@ -25,7 +25,8 @@ type Props = {
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
 
-const MIN_CROP_SIZE = 80;
+const MIN_CROP_WIDTH = 80;
+const MIN_CROP_HEIGHT = 80;
 const CROP_VIEW_SIZE = 320;
 const HANDLE_SIZE = 26;
 
@@ -59,7 +60,8 @@ export function ManualImageCropperModal({
   const [cropRect, setCropRect] = useState<CropRect>({
     x: layout.offsetX,
     y: layout.offsetY,
-    size: maxCropSize,
+    width: maxCropSize,
+    height: maxCropSize,
   });
 
   useEffect(() => {
@@ -67,13 +69,23 @@ export function ManualImageCropperModal({
       return;
     }
 
-    const size = Math.max(MIN_CROP_SIZE, maxCropSize * 0.7);
+    const width = Math.max(MIN_CROP_WIDTH, layout.drawWidth * 0.75);
+    const height = Math.max(MIN_CROP_HEIGHT, layout.drawHeight * 0.75);
     setCropRect({
-      x: clamp(layout.offsetX + (layout.drawWidth - size) / 2, layout.offsetX, layout.offsetX + layout.drawWidth - size),
-      y: clamp(layout.offsetY + (layout.drawHeight - size) / 2, layout.offsetY, layout.offsetY + layout.drawHeight - size),
-      size,
+      x: clamp(
+        layout.offsetX + (layout.drawWidth - width) / 2,
+        layout.offsetX,
+        layout.offsetX + layout.drawWidth - width,
+      ),
+      y: clamp(
+        layout.offsetY + (layout.drawHeight - height) / 2,
+        layout.offsetY,
+        layout.offsetY + layout.drawHeight - height,
+      ),
+      width,
+      height,
     });
-  }, [layout.drawHeight, layout.drawWidth, layout.offsetX, layout.offsetY, maxCropSize, visible]);
+  }, [layout.drawHeight, layout.drawWidth, layout.offsetX, layout.offsetY, visible]);
 
   const dragStart = useRef<CropRect | null>(null);
 
@@ -94,12 +106,12 @@ export function ManualImageCropperModal({
           const x = clamp(
             start.x + gesture.dx,
             layout.offsetX,
-            layout.offsetX + layout.drawWidth - start.size,
+            layout.offsetX + layout.drawWidth - start.width,
           );
           const y = clamp(
             start.y + gesture.dy,
             layout.offsetY,
-            layout.offsetY + layout.drawHeight - start.size,
+            layout.offsetY + layout.drawHeight - start.height,
           );
 
           setCropRect({ ...start, x, y });
@@ -126,13 +138,18 @@ export function ManualImageCropperModal({
 
           const maxByWidth = layout.offsetX + layout.drawWidth - start.x;
           const maxByHeight = layout.offsetY + layout.drawHeight - start.y;
-          const nextSize = clamp(
-            start.size + Math.max(gesture.dx, gesture.dy),
-            MIN_CROP_SIZE,
-            Math.min(maxByWidth, maxByHeight),
+          const nextWidth = clamp(
+            start.width + gesture.dx,
+            MIN_CROP_WIDTH,
+            maxByWidth,
+          );
+          const nextHeight = clamp(
+            start.height + gesture.dy,
+            MIN_CROP_HEIGHT,
+            maxByHeight,
           );
 
-          setCropRect({ ...start, size: nextSize });
+          setCropRect({ ...start, width: nextWidth, height: nextHeight });
         },
       }),
     [cropRect, layout.drawHeight, layout.drawWidth, layout.offsetX, layout.offsetY],
@@ -146,12 +163,13 @@ export function ManualImageCropperModal({
 
     const relativeX = (cropRect.x - layout.offsetX) / layout.drawWidth;
     const relativeY = (cropRect.y - layout.offsetY) / layout.drawHeight;
-    const relativeSize = cropRect.size / layout.drawWidth;
+    const relativeWidth = cropRect.width / layout.drawWidth;
+    const relativeHeight = cropRect.height / layout.drawHeight;
 
     const x = clamp(Math.round(relativeX * imageWidth), 0, imageWidth - 1);
     const y = clamp(Math.round(relativeY * imageHeight), 0, imageHeight - 1);
-    const width = clamp(Math.round(relativeSize * imageWidth), 1, imageWidth - x);
-    const height = clamp(Math.round((cropRect.size / layout.drawHeight) * imageHeight), 1, imageHeight - y);
+    const width = clamp(Math.round(relativeWidth * imageWidth), 1, imageWidth - x);
+    const height = clamp(Math.round(relativeHeight * imageHeight), 1, imageHeight - y);
 
     onConfirm({ x, y, width, height });
   }, [cropRect, imageHeight, imageUri, imageWidth, layout.drawHeight, layout.drawWidth, layout.offsetX, layout.offsetY, onCancel, onConfirm]);
@@ -161,7 +179,7 @@ export function ManualImageCropperModal({
       <View style={styles.backdrop}>
         <View style={styles.sheet}>
           <Text style={styles.title}>Crop image</Text>
-          <Text style={styles.subtitle}>Move and resize the square to pick the exact area.</Text>
+          <Text style={styles.subtitle}>Move and resize the crop area to pick the exact frame.</Text>
 
           <View style={styles.cropViewport}>
             {imageUri ? (
@@ -174,14 +192,22 @@ export function ManualImageCropperModal({
                 {
                   left: cropRect.x,
                   top: cropRect.y,
-                  width: cropRect.size,
-                  height: cropRect.size,
+                  width: cropRect.width,
+                  height: cropRect.height,
                 },
               ]}
               {...moveResponder.panHandlers}
-            >
-              <View style={styles.handle} {...resizeResponder.panHandlers} />
-            </View>
+            />
+            <View
+              style={[
+                styles.handle,
+                {
+                  left: cropRect.x + cropRect.width - HANDLE_SIZE / 2,
+                  top: cropRect.y + cropRect.height - HANDLE_SIZE / 2,
+                },
+              ]}
+              {...resizeResponder.panHandlers}
+            />
           </View>
 
           <View style={styles.actions}>
@@ -245,8 +271,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: HANDLE_SIZE,
     height: HANDLE_SIZE,
-    right: -HANDLE_SIZE / 2,
-    bottom: -HANDLE_SIZE / 2,
     borderRadius: HANDLE_SIZE / 2,
     backgroundColor: Colors.tint,
     borderWidth: 2,
