@@ -130,11 +130,17 @@ type InventoryProviderProps = {
   children: React.ReactNode;
 };
 
-function sanitizeCocktailTagInput(tags: readonly CocktailTag[] | null | undefined): CocktailTag[] | undefined {
+function sanitizeCocktailTagInput(
+  tags: readonly { id?: number; name?: string; color?: string }[] | null | undefined,
+): CocktailTag[] | undefined {
   const tagMap = new Map<number, CocktailTag>();
   (tags ?? []).forEach((tag) => {
     const tagId = Number(tag.id ?? -1);
     if (!Number.isFinite(tagId) || tagId < 0) {
+      return;
+    }
+
+    if (!tag.name || !tag.color) {
       return;
     }
 

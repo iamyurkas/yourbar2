@@ -1,11 +1,23 @@
 import * as FileSystem from 'expo-file-system/legacy';
 
+import {
+  hasCompletedSQLiteMigration,
+  isSQLiteInventoryEmpty,
+  loadCocktailTagDeltaSnapshotFromSQLite,
+  loadInventorySnapshotFromSQLite,
+  markSQLiteMigrationComplete,
+  migrateLegacySnapshotToSQLite,
+  persistCocktailTagDeltaSnapshotToSQLite,
+  persistInventorySnapshotToSQLite,
+} from '@/libs/storage/sqlite/inventory-sqlite';
+import type { InventoryStorageAdapter } from '@/libs/storage/inventory-storage-adapter';
 import type { Bar } from '@/providers/inventory-types';
 
 const STORAGE_FILENAME = 'inventory-state.json';
 const COCKTAIL_TAG_DELTA_FILENAME = 'inventory-cocktail-tag-delta.json';
 let hasLoggedDocumentDirectoryWarning = false;
 let hasLoggedCacheDirectoryWarning = false;
+let hasLoggedFileBackend = false;
 
 export type InventorySnapshotV1<TCocktail, TIngredient> = {
   version: 1;
@@ -123,6 +135,10 @@ export type CocktailTagDeltaSnapshot = Record<
   Array<{ id: number; name?: string; color?: string }> | null
 >;
 
+function isSQLiteStorageEnabled(): boolean {
+  return (process.env.EXPO_PUBLIC_USE_SQLITE_STORAGE ?? '').trim().toLowerCase() === 'true';
+}
+
 function joinDirectoryPath(directory: string | null | undefined, filename: string): string | undefined {
   if (!directory) {
     return undefined;
@@ -187,7 +203,7 @@ function resolveCocktailTagDeltaStoragePath(): string | undefined {
   return undefined;
 }
 
-export async function loadInventorySnapshot<TCocktail, TIngredient>(): Promise<
+async function loadInventorySnapshotFromFile<TCocktail, TIngredient>(): Promise<
   InventorySnapshot<TCocktail, TIngredient> | undefined
 > {
   const storagePath = resolveStoragePath();
@@ -215,7 +231,7 @@ export async function loadInventorySnapshot<TCocktail, TIngredient>(): Promise<
   }
 }
 
-export async function persistInventorySnapshot<TCocktail, TIngredient>(
+async function persistInventorySnapshotToFile<TCocktail, TIngredient>(
   snapshot: InventorySnapshot<TCocktail, TIngredient>,
 ): Promise<void> {
   const storagePath = resolveStoragePath();
@@ -224,15 +240,10 @@ export async function persistInventorySnapshot<TCocktail, TIngredient>(
     return;
   }
 
-  try {
-    await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
-  } catch (error) {
-    console.error('Unable to persist inventory snapshot', error);
-    throw error;
-  }
+  await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
 }
 
-export async function loadCocktailTagDeltaSnapshot(): Promise<CocktailTagDeltaSnapshot> {
+async function loadCocktailTagDeltaSnapshotFromFile(): Promise<CocktailTagDeltaSnapshot> {
   const storagePath = resolveCocktailTagDeltaStoragePath();
   if (!storagePath) {
     return {};
@@ -261,7 +272,7 @@ export async function loadCocktailTagDeltaSnapshot(): Promise<CocktailTagDeltaSn
   }
 }
 
-export async function persistCocktailTagDeltaSnapshot(
+async function persistCocktailTagDeltaSnapshotToFile(
   snapshot: CocktailTagDeltaSnapshot,
 ): Promise<void> {
   const storagePath = resolveCocktailTagDeltaStoragePath();
@@ -269,8 +280,107 @@ export async function persistCocktailTagDeltaSnapshot(
     return;
   }
 
+  await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
+}
+
+function createFileStorageAdapter<TCocktail, TIngredient>(): InventoryStorageAdapter<TCocktail, TIngredient> {
+  if (!hasLoggedFileBackend) {
+    console.info('[inventory-storage] using file backend');
+    hasLoggedFileBackend = true;
+  }
+
+  return {
+    loadAppState: () => loadInventorySnapshotFromFile<TCocktail, TIngredient>(),
+    saveAppState: (snapshot) => persistInventorySnapshotToFile(snapshot),
+    loadCatalogOverlayState: () => loadCocktailTagDeltaSnapshotFromFile(),
+    saveCatalogOverlayState: (snapshot) => persistCocktailTagDeltaSnapshotToFile(snapshot),
+  };
+}
+
+async function maybeMigrateFileSnapshotToSQLite<TCocktail, TIngredient>(): Promise<void> {
+  const alreadyMigrated = await hasCompletedSQLiteMigration();
+  if (alreadyMigrated) {
+    return;
+  }
+
+  const sqliteEmpty = await isSQLiteInventoryEmpty();
+  if (!sqliteEmpty) {
+    await markSQLiteMigrationComplete();
+    return;
+  }
+
+  const legacySnapshot = await loadInventorySnapshotFromFile<TCocktail, TIngredient>();
+  if (legacySnapshot) {
+    await migrateLegacySnapshotToSQLite(legacySnapshot);
+    return;
+  }
+
+  await markSQLiteMigrationComplete();
+}
+
+async function createSQLiteStorageAdapter<TCocktail, TIngredient>(): Promise<
+  InventoryStorageAdapter<TCocktail, TIngredient>
+> {
+  await maybeMigrateFileSnapshotToSQLite<TCocktail, TIngredient>();
+
+  return {
+    loadAppState: () => loadInventorySnapshotFromSQLite<TCocktail, TIngredient>(),
+    saveAppState: (snapshot) => persistInventorySnapshotToSQLite(snapshot),
+    loadCatalogOverlayState: () => loadCocktailTagDeltaSnapshotFromSQLite(),
+    saveCatalogOverlayState: (snapshot) => persistCocktailTagDeltaSnapshotToSQLite(snapshot),
+  };
+}
+
+async function getStorageAdapter<TCocktail, TIngredient>(): Promise<
+  InventoryStorageAdapter<TCocktail, TIngredient>
+> {
+  if (isSQLiteStorageEnabled()) {
+    return createSQLiteStorageAdapter<TCocktail, TIngredient>();
+  }
+
+  return createFileStorageAdapter<TCocktail, TIngredient>();
+}
+
+export async function loadInventorySnapshot<TCocktail, TIngredient>(): Promise<
+  InventorySnapshot<TCocktail, TIngredient> | undefined
+> {
   try {
-    await FileSystem.writeAsStringAsync(storagePath, JSON.stringify(snapshot));
+    const adapter = await getStorageAdapter<TCocktail, TIngredient>();
+    return adapter.loadAppState();
+  } catch (error) {
+    console.warn('Unable to load inventory snapshot', error);
+    return undefined;
+  }
+}
+
+export async function persistInventorySnapshot<TCocktail, TIngredient>(
+  snapshot: InventorySnapshot<TCocktail, TIngredient>,
+): Promise<void> {
+  try {
+    const adapter = await getStorageAdapter<TCocktail, TIngredient>();
+    await adapter.saveAppState(snapshot);
+  } catch (error) {
+    console.error('Unable to persist inventory snapshot', error);
+    throw error;
+  }
+}
+
+export async function loadCocktailTagDeltaSnapshot(): Promise<CocktailTagDeltaSnapshot> {
+  try {
+    const adapter = await getStorageAdapter<unknown, unknown>();
+    return adapter.loadCatalogOverlayState();
+  } catch (error) {
+    console.warn('Unable to load cocktail tag delta snapshot', error);
+    return {};
+  }
+}
+
+export async function persistCocktailTagDeltaSnapshot(
+  snapshot: CocktailTagDeltaSnapshot,
+): Promise<void> {
+  try {
+    const adapter = await getStorageAdapter<unknown, unknown>();
+    await adapter.saveCatalogOverlayState(snapshot);
   } catch (error) {
     console.error('Unable to persist cocktail tag delta snapshot', error);
     throw error;
