@@ -81,6 +81,7 @@ export default function CocktailsScreen() {
   const [, startPartySelectionTransition] = useTransition();
   const listRef = useRef<FlatList<MyTabListItem | Cocktail>>(null);
   const lastScrollOffset = useRef(0);
+  const lastRestoredScrollParam = useRef<string | null>(null);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
 
@@ -115,6 +116,7 @@ export default function CocktailsScreen() {
     ratings?: string | string[];
     sort?: string | string[];
     desc?: string | string[];
+    scroll?: string | string[];
   }>();
   const ingredientLookup = useMemo(() => createIngredientLookup(ingredients), [ingredients]);
   const defaultTagColor = tagColors.default ?? Colors.highlightFaint;
@@ -168,10 +170,35 @@ export default function CocktailsScreen() {
     params.methods,
     params.query,
     params.ratings,
+    params.scroll,
     params.sort,
     params.tab,
     params.tags,
   ]);
+
+  useEffect(() => {
+    const rawScroll = getParamValue(params.scroll);
+    if (!rawScroll) {
+      lastRestoredScrollParam.current = null;
+      return;
+    }
+
+    if (lastRestoredScrollParam.current === rawScroll) {
+      return;
+    }
+
+    const parsedOffset = Number(rawScroll);
+    if (!Number.isFinite(parsedOffset) || parsedOffset < 0) {
+      return;
+    }
+
+    const offset = Math.round(parsedOffset);
+    lastRestoredScrollParam.current = rawScroll;
+    requestAnimationFrame(() => {
+      listRef.current?.scrollToOffset({ offset, animated: false });
+      lastScrollOffset.current = offset;
+    });
+  }, [getParamValue, params.scroll]);
 
   const listReturnToParams = useMemo<Record<string, string | undefined>>(
     () => ({
@@ -706,6 +733,13 @@ export default function CocktailsScreen() {
 
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const myTabKeyExtractor = useCallback((item: MyTabListItem) => item.key, []);
+  const buildListReturnToParamsWithScroll = useCallback(
+    () => ({
+      ...listReturnToParams,
+      scroll: String(Math.max(0, Math.round(lastScrollOffset.current))),
+    }),
+    [listReturnToParams],
+  );
 
   const handleSelectCocktail = useCallback(
     (cocktail: Cocktail) => {
@@ -718,10 +752,10 @@ export default function CocktailsScreen() {
         pathname: '/cocktails/[cocktailId]',
         params: { cocktailId: String(candidateId) },
         returnToPath: '/cocktails',
-        returnToParams: listReturnToParams,
+        returnToParams: buildListReturnToParamsWithScroll(),
       });
     },
-    [listReturnToParams],
+    [buildListReturnToParamsWithScroll],
   );
 
   const handleSelectIngredient = useCallback(
@@ -731,11 +765,11 @@ export default function CocktailsScreen() {
           pathname: '/ingredients/[ingredientId]',
           params: { ingredientId: String(ingredientId) },
           returnToPath: '/cocktails',
-          returnToParams: listReturnToParams,
+          returnToParams: buildListReturnToParamsWithScroll(),
         });
       }
     },
-    [listReturnToParams],
+    [buildListReturnToParamsWithScroll],
   );
 
   const handleShoppingToggle = useCallback(
