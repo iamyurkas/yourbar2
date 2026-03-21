@@ -32,6 +32,7 @@ import { resolveAssetFromCatalog } from "@/assets/image-manifest";
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
+import { ImageCropperModal } from "@/components/ImageCropperModal";
 import { ListRow, Thumb } from "@/components/RowParts";
 import { SubstituteModal } from "@/components/SubstituteModal";
 import { TagEditorModal } from "@/components/TagEditorModal";
@@ -375,6 +376,8 @@ export default function CreateCocktailScreen() {
   const [methodIds, setMethodIds] = useState<CocktailMethodId[]>([]);
   const [isMethodModalVisible, setIsMethodModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [cropSourceUri, setCropSourceUri] = useState<string | null>(null);
+  const [isCropperVisible, setIsCropperVisible] = useState(false);
   const [isPickingImage, setIsPickingImage] = useState(false);
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -926,7 +929,7 @@ export default function CreateCocktailScreen() {
       beginImagePicking();
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -934,7 +937,8 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setCropSourceUri(asset.uri);
+          setIsCropperVisible(true);
         }
       }
     } catch (error) {
@@ -984,7 +988,7 @@ export default function CreateCocktailScreen() {
     try {
       beginImagePicking();
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -992,7 +996,8 @@ export default function CreateCocktailScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setCropSourceUri(asset.uri);
+          setIsCropperVisible(true);
         }
       }
     } catch (error) {
@@ -1043,6 +1048,17 @@ export default function CreateCocktailScreen() {
 
   const handleRemovePhoto = useCallback(() => {
     setImageUri(null);
+  }, []);
+
+  const handleCancelCrop = useCallback(() => {
+    setCropSourceUri(null);
+    setIsCropperVisible(false);
+  }, []);
+
+  const handleApplyCrop = useCallback((uri: string) => {
+    setImageUri(uri);
+    setCropSourceUri(null);
+    setIsCropperVisible(false);
   }, []);
 
   const isSaveDisabled = isSaving || isPickingImage;
@@ -2797,6 +2813,13 @@ export default function CreateCocktailScreen() {
         excludedIngredientId={substituteModalIngredient?.ingredientId}
         selectedSubstituteIds={substituteModalSelectionIds}
         selectedSubstituteNames={substituteModalSelectionNames}
+      />
+
+      <ImageCropperModal
+        visible={isCropperVisible}
+        uri={cropSourceUri}
+        onCancel={handleCancelCrop}
+        onApply={handleApplyCrop}
       />
 
       <AppDialog
