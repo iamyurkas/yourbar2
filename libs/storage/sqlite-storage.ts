@@ -30,6 +30,16 @@ type PersistedSnapshot<TCocktail, TIngredient> = Partial<InventoryDeltaSnapshotV
 
 let dbPromise: Promise<SQLite.SQLiteDatabase> | undefined;
 let initializePromise: Promise<void> | undefined;
+let dbOperationQueue: Promise<void> = Promise.resolve();
+
+function runSerialized<T>(operation: () => Promise<T>): Promise<T> {
+  const result = dbOperationQueue.then(operation, operation);
+  dbOperationQueue = result.then(
+    () => undefined,
+    () => undefined,
+  );
+  return result;
+}
 
 async function getDb(): Promise<SQLite.SQLiteDatabase> {
   if (!dbPromise) {
@@ -445,69 +455,79 @@ async function persistInventorySnapshotInternal<TCocktail, TIngredient>(
 
 const sqliteStorageAdapter: InventoryStorageAdapter = {
   async loadInventorySnapshot<TCocktail, TIngredient>() {
-    try {
-      await initializeSqliteStorage();
-      const db = await getDb();
-      return await hydrateSnapshot<TCocktail, TIngredient>(db);
-    } catch (error) {
-      console.error('[sqlite] loadInventorySnapshot failed; falling back to file storage', error);
-      return fileStorageAdapter.loadInventorySnapshot<TCocktail, TIngredient>();
-    }
+    return runSerialized(async () => {
+      try {
+        await initializeSqliteStorage();
+        const db = await getDb();
+        return await hydrateSnapshot<TCocktail, TIngredient>(db);
+      } catch (error) {
+        console.error('[sqlite] loadInventorySnapshot failed; falling back to file storage', error);
+        return fileStorageAdapter.loadInventorySnapshot<TCocktail, TIngredient>();
+      }
+    });
   },
 
   async persistInventorySnapshot<TCocktail, TIngredient>(snapshot: InventorySnapshot<TCocktail, TIngredient>) {
-    try {
-      await initializeSqliteStorage();
-      const db = await getDb();
-      await persistInventorySnapshotInternal(db, snapshot);
-    } catch (error) {
-      console.error('[sqlite] persistInventorySnapshot failed; falling back to file storage', error);
-      await fileStorageAdapter.persistInventorySnapshot(snapshot);
-    }
+    return runSerialized(async () => {
+      try {
+        await initializeSqliteStorage();
+        const db = await getDb();
+        await persistInventorySnapshotInternal(db, snapshot);
+      } catch (error) {
+        console.error('[sqlite] persistInventorySnapshot failed; falling back to file storage', error);
+        await fileStorageAdapter.persistInventorySnapshot(snapshot);
+      }
+    });
   },
 
   async loadCocktailTagDeltaSnapshot() {
-    try {
-      await initializeSqliteStorage();
-      const db = await getDb();
-      const rows = await db.getAllAsync<{ cocktail_key: string; payload_json: RowValue }>(
-        'SELECT cocktail_key, payload_json FROM cocktail_tag_delta',
-      );
-      const result: CocktailTagDeltaSnapshot = {};
-      for (const row of rows) {
-        if (row.payload_json == null) {
-          result[row.cocktail_key] = null;
-          continue;
+    return runSerialized(async () => {
+      try {
+        await initializeSqliteStorage();
+        const db = await getDb();
+        const rows = await db.getAllAsync<{ cocktail_key: string; payload_json: RowValue }>(
+          'SELECT cocktail_key, payload_json FROM cocktail_tag_delta',
+        );
+        const result: CocktailTagDeltaSnapshot = {};
+        for (const row of rows) {
+          if (row.payload_json == null) {
+            result[row.cocktail_key] = null;
+            continue;
+          }
+          result[row.cocktail_key] = JSON.parse(String(row.payload_json)) as Array<{ id: number; name?: string; color?: string }>;
         }
-        result[row.cocktail_key] = JSON.parse(String(row.payload_json)) as Array<{ id: number; name?: string; color?: string }>;
+        return result;
+      } catch (error) {
+        console.error('[sqlite] loadCocktailTagDeltaSnapshot failed; falling back to file storage', error);
+        return fileStorageAdapter.loadCocktailTagDeltaSnapshot();
       }
-      return result;
-    } catch (error) {
-      console.error('[sqlite] loadCocktailTagDeltaSnapshot failed; falling back to file storage', error);
-      return fileStorageAdapter.loadCocktailTagDeltaSnapshot();
-    }
+    });
   },
 
   async persistCocktailTagDeltaSnapshot(snapshot: CocktailTagDeltaSnapshot) {
-    try {
-      await initializeSqliteStorage();
-      const db = await getDb();
-      await db.execAsync('BEGIN IMMEDIATE TRANSACTION');
+    return runSerialized(async () => {
       try {
-        await writeCocktailTagDelta(db, snapshot);
-        await db.execAsync('COMMIT');
+        await initializeSqliteStorage();
+        const db = await getDb();
+        await db.execAsync('BEGIN IMMEDIATE TRANSACTION');
+        try {
+          await writeCocktailTagDelta(db, snapshot);
+          await db.execAsync('COMMIT');
+        } catch (error) {
+          await db.execAsync('ROLLBACK');
+          throw error;
+        }
       } catch (error) {
-        await db.execAsync('ROLLBACK');
-        throw error;
+        console.error('[sqlite] persistCocktailTagDeltaSnapshot failed; falling back to file storage', error);
+        await fileStorageAdapter.persistCocktailTagDeltaSnapshot(snapshot);
       }
-    } catch (error) {
-      console.error('[sqlite] persistCocktailTagDeltaSnapshot failed; falling back to file storage', error);
-      await fileStorageAdapter.persistCocktailTagDeltaSnapshot(snapshot);
-    }
+    });
   },
 
   async syncBundledCatalogIfNeeded() {
-    await initializeSqliteStorage();
+    await runSerialized(async () => {
+      await initializeSqliteStorage();
+    });
   },
 };
 
