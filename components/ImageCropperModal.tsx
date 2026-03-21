@@ -1,11 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import {
-  Action,
-  FlipType,
-  SaveFormat,
-  manipulateAsync,
-} from "expo-image-manipulator";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -92,15 +86,15 @@ export function ImageCropperModal({
       return;
     }
 
-    const actions: Action[] = [];
+    const actions: Array<Record<string, unknown>> = [];
     if (result.resize) {
       actions.push({ resize: result.resize });
     }
     if (result.context.flipHorizontal) {
-      actions.push({ flip: FlipType.Horizontal });
+      actions.push({ flip: "horizontal" });
     }
     if (result.context.flipVertical) {
-      actions.push({ flip: FlipType.Vertical });
+      actions.push({ flip: "vertical" });
     }
     if (result.context.rotationAngle !== 0) {
       actions.push({ rotate: result.context.rotationAngle });
@@ -109,10 +103,35 @@ export function ImageCropperModal({
 
     try {
       setIsCropping(true);
-      const croppedImage = await manipulateAsync(imageUri, actions, {
-        compress: 1,
-        format: SaveFormat.JPEG,
+      let manipulatorModule: any = null;
+      try {
+        const loadedModule = await import("expo-image-manipulator");
+        manipulatorModule = (loadedModule as any).default ?? loadedModule;
+      } catch {
+        onApply(imageUri);
+        return;
+      }
+
+      const normalizedActions = actions.map((action) => {
+        if ("flip" in action) {
+          return {
+            flip:
+              action.flip === "horizontal"
+                ? manipulatorModule.FlipType.Horizontal
+                : manipulatorModule.FlipType.Vertical,
+          };
+        }
+        return action;
       });
+
+      const croppedImage = await manipulatorModule.manipulateAsync(
+        imageUri,
+        normalizedActions,
+        {
+          compress: 1,
+          format: manipulatorModule.SaveFormat.JPEG,
+        },
+      );
       onApply(croppedImage.uri);
     } finally {
       setIsCropping(false);
