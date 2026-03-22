@@ -8,6 +8,33 @@ type IOSCropPickerModule = {
   openPicker: (options: Record<string, unknown>) => Promise<{ path?: string }>;
 };
 
+function resolveIosCropPickerModule(): IOSCropPickerModule | null {
+  try {
+    const loadedModule = require("react-native-image-crop-picker") as
+      | IOSCropPickerModule
+      | { default?: IOSCropPickerModule | null }
+      | null;
+    const cropPicker = (loadedModule &&
+      typeof loadedModule === "object" &&
+      "default" in loadedModule
+      ? loadedModule.default
+      : loadedModule) as IOSCropPickerModule | null | undefined;
+
+    if (
+      !cropPicker ||
+      typeof cropPicker.openCamera !== "function" ||
+      typeof cropPicker.openPicker !== "function"
+    ) {
+      return null;
+    }
+
+    return cropPicker;
+  } catch (error) {
+    console.warn("iOS cropper module loading failed, using expo-image-picker fallback", error);
+    return null;
+  }
+}
+
 function isPickerCancelError(error: unknown) {
   if (!error || typeof error !== "object") {
     return false;
@@ -21,12 +48,25 @@ function isPickerCancelError(error: unknown) {
   );
 }
 
+function isUnavailableCropperError(error: unknown) {
+  if (!error || typeof error !== "object" || !("message" in error)) {
+    return false;
+  }
+
+  const message = String(error.message ?? "").toLowerCase();
+  return (
+    message.includes("cannot read property") ||
+    message.includes("cannot convert null value to object") ||
+    message.includes("native module") ||
+    message.includes("openpicker") ||
+    message.includes("opencamera")
+  );
+}
+
 async function pickWithIosCropper(source: PickPhotoSource): Promise<string | null> {
-  let cropPicker: IOSCropPickerModule;
-  try {
-    cropPicker = require("react-native-image-crop-picker") as IOSCropPickerModule;
-  } catch (error) {
-    console.warn("iOS cropper is unavailable, using expo-image-picker fallback", error);
+  const cropPicker = resolveIosCropPickerModule();
+  if (!cropPicker) {
+    console.warn("iOS cropper is unavailable, using expo-image-picker fallback");
     return null;
   }
 
@@ -45,6 +85,10 @@ async function pickWithIosCropper(source: PickPhotoSource): Promise<string | nul
     return image?.path ?? null;
   } catch (error) {
     if (isPickerCancelError(error)) {
+      return null;
+    }
+    if (isUnavailableCropperError(error)) {
+      console.warn("iOS cropper runtime is unavailable, using expo-image-picker fallback", error);
       return null;
     }
     throw error;
