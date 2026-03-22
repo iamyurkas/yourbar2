@@ -577,6 +577,17 @@ export default function ShakerResultsScreen() {
           return isSortDescending ? -result : result;
         }
 
+        if (selectedSortOption === 'partySelected') {
+          const leftPartyScore = partySelectedCocktailKeys.has(String(left.id ?? left.name)) ? 1 : 0;
+          const rightPartyScore = partySelectedCocktailKeys.has(String(right.id ?? right.name)) ? 1 : 0;
+          if (leftPartyScore !== rightPartyScore) {
+            result = rightPartyScore - leftPartyScore;
+          } else {
+            result = compareOptionalGlobalAlphabet(leftName, rightName);
+          }
+          return isSortDescending ? -result : result;
+        }
+
         if (selectedSortOption === 'rating') {
           const leftRating = getCocktailRating(left);
           const rightRating = getCocktailRating(right);
@@ -614,7 +625,14 @@ export default function ShakerResultsScreen() {
 
       return base;
     },
-    [getCocktailRating, ignoreGarnish, isSortDescending, randomSortRanks, selectedSortOption],
+    [
+      getCocktailRating,
+      ignoreGarnish,
+      isSortDescending,
+      partySelectedCocktailKeys,
+      randomSortRanks,
+      selectedSortOption,
+    ],
   );
 
   const sortedCocktails = useMemo(() => {
@@ -805,10 +823,13 @@ export default function ShakerResultsScreen() {
                   tintColor: Colors.tint,
                   surfaceColor: Colors.surface,
                   showRequiredCountOption: false,
+                  showPartySelectedOption: true,
                   getAccessibilityLabel: (option) => {
                     switch (option) {
                       case 'alphabetical':
                         return t('cocktails.sortOptionAlphabeticalAccessibility');
+                      case 'partySelected':
+                        return t('cocktails.sortOptionPartySelectedAccessibility');
                       case 'rating':
                         return t('cocktails.sortOptionRatingAccessibility');
                       case 'recentlyAdded':
