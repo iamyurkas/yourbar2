@@ -84,6 +84,7 @@ export default function ShakerResultsScreen() {
     ingredients,
     ignoreGarnish,
     allowAllSubstitutes,
+    partySelectedCocktailKeys,
     getCocktailRating,
     getCocktailComment,
   } = useInventory();
@@ -720,6 +721,7 @@ export default function ShakerResultsScreen() {
           hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
+          isPartySelected={partySelectedCocktailKeys.has(String(item.id ?? item.name))}
         />
       );
     },
@@ -729,6 +731,7 @@ export default function ShakerResultsScreen() {
       getCocktailRating,
       handlePressCocktail,
       ingredients,
+      partySelectedCocktailKeys,
     ],
   );
 
