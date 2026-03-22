@@ -57,6 +57,7 @@ import {
   parseReturnToParams,
   skipDuplicateBack,
 } from "@/libs/navigation";
+import { pickPhotoWithCrop } from "@/libs/photo-cropper";
 import { shouldStorePhoto, storePhoto } from "@/libs/photo-storage";
 import { normalizeSearchText } from "@/libs/search-normalization";
 import {
@@ -924,18 +925,9 @@ export default function CreateCocktailScreen() {
 
     try {
       beginImagePicking();
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const photoUri = await pickPhotoWithCrop("library");
+      if (photoUri) {
+        setImageUri(photoUri);
       }
     } catch (error) {
       console.warn("Failed to pick image", error);
@@ -983,17 +975,9 @@ export default function CreateCocktailScreen() {
 
     try {
       beginImagePicking();
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const photoUri = await pickPhotoWithCrop("camera");
+      if (photoUri) {
+        setImageUri(photoUri);
       }
     } catch (error) {
       console.warn("Failed to capture image", error);

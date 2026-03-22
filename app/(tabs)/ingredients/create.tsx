@@ -35,6 +35,7 @@ import { useI18n } from '@/libs/i18n/use-i18n';
 import { resolveImageSource } from '@/libs/image-source';
 import { getIngredientSaveNavigationPlan } from '@/libs/ingredient-save-navigation';
 import { skipDuplicateBack } from '@/libs/navigation';
+import { pickPhotoWithCrop } from '@/libs/photo-cropper';
 import { shouldStorePhoto, storePhoto } from '@/libs/photo-storage';
 import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
@@ -494,18 +495,9 @@ export default function IngredientFormScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const photoUri = await pickPhotoWithCrop('library');
+      if (photoUri) {
+        setImageUri(photoUri);
       }
     } catch (error) {
       console.warn('Failed to pick image', error);
@@ -552,17 +544,9 @@ export default function IngredientFormScreen() {
 
     try {
       setIsPickingImage(true);
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        quality: 1,
-        exif: false,
-      });
-
-      if (!result.canceled && result.assets?.length) {
-        const asset = result.assets[0];
-        if (asset?.uri) {
-          setImageUri(asset.uri);
-        }
+      const photoUri = await pickPhotoWithCrop('camera');
+      if (photoUri) {
+        setImageUri(photoUri);
       }
     } catch (error) {
       console.warn('Failed to capture image', error);
