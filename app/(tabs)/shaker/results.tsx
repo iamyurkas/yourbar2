@@ -783,18 +783,17 @@ export default function ShakerResultsScreen() {
                   onSortOptionChange: handleSortOptionChange,
                   tintColor: Colors.tint,
                   surfaceColor: Colors.surface,
+                  showRequiredCountOption: false,
                   getAccessibilityLabel: (option) => {
                     switch (option) {
                       case 'alphabetical':
-                        return t('shakerResults.sortOptionAlphabetical');
-                      case 'requiredCount':
-                        return t('shakerResults.sortOptionRequiredCount');
+                        return t('cocktails.sortOptionAlphabeticalAccessibility');
                       case 'rating':
-                        return t('shakerResults.sortOptionRating');
+                        return t('cocktails.sortOptionRatingAccessibility');
                       case 'recentlyAdded':
-                        return t('shakerResults.sortOptionRecentlyAdded');
+                        return t('cocktails.sortOptionRecentlyAddedAccessibility');
                       default:
-                        return t('shakerResults.sortOptionRandom');
+                        return t('cocktails.sortOptionRandomAccessibility');
                     }
                   },
                 })}
