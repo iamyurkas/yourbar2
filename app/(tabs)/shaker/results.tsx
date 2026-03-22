@@ -84,6 +84,7 @@ export default function ShakerResultsScreen() {
     ingredients,
     ignoreGarnish,
     allowAllSubstitutes,
+    partySelectedCocktailKeys,
     getCocktailRating,
     getCocktailComment,
   } = useInventory();
@@ -548,74 +549,110 @@ export default function ShakerResultsScreen() {
     return rankMap;
   }, [filteredCocktails]);
 
+  const availableCocktailKeys = useMemo(() => {
+    return new Set(availableCocktails.map((cocktail) => String(cocktail.id ?? cocktail.name)));
+  }, [availableCocktails]);
+
+  const sortCocktailSubset = useCallback(
+    (items: Cocktail[]) => {
+      const base = [...items];
+      base.sort((left, right) => {
+        const leftName = left.name ?? '';
+        const rightName = right.name ?? '';
+        let result = 0;
+
+        if (selectedSortOption === 'alphabetical') {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
+          return isSortDescending ? -result : result;
+        }
+
+        if (selectedSortOption === 'requiredCount') {
+          const leftCount = countRequiredIngredients(left, ignoreGarnish);
+          const rightCount = countRequiredIngredients(right, ignoreGarnish);
+          if (leftCount !== rightCount) {
+            result = leftCount - rightCount;
+          } else {
+            result = compareOptionalGlobalAlphabet(leftName, rightName);
+          }
+          return isSortDescending ? -result : result;
+        }
+
+        if (selectedSortOption === 'partySelected') {
+          const leftPartyScore = partySelectedCocktailKeys.has(String(left.id ?? left.name)) ? 1 : 0;
+          const rightPartyScore = partySelectedCocktailKeys.has(String(right.id ?? right.name)) ? 1 : 0;
+          if (leftPartyScore !== rightPartyScore) {
+            result = rightPartyScore - leftPartyScore;
+          } else {
+            result = compareOptionalGlobalAlphabet(leftName, rightName);
+          }
+          return isSortDescending ? -result : result;
+        }
+
+        if (selectedSortOption === 'rating') {
+          const leftRating = getCocktailRating(left);
+          const rightRating = getCocktailRating(right);
+          if (leftRating !== rightRating) {
+            result = rightRating - leftRating;
+          } else {
+            result = compareOptionalGlobalAlphabet(leftName, rightName);
+          }
+          return isSortDescending ? -result : result;
+        }
+
+        if (selectedSortOption === 'recentlyAdded') {
+          const leftId = Number(left.id ?? -1);
+          const rightId = Number(right.id ?? -1);
+          if (leftId !== rightId) {
+            result = rightId - leftId;
+          } else {
+            result = compareOptionalGlobalAlphabet(leftName, rightName);
+          }
+          return isSortDescending ? -result : result;
+        }
+
+        const leftKey = String(left.id ?? left.name);
+        const rightKey = String(right.id ?? right.name);
+        const leftRank = randomSortRanks.get(leftKey) ?? 0;
+        const rightRank = randomSortRanks.get(rightKey) ?? 0;
+        if (leftRank !== rightRank) {
+          result = leftRank - rightRank;
+        } else {
+          result = compareOptionalGlobalAlphabet(leftName, rightName);
+        }
+
+        return isSortDescending ? -result : result;
+      });
+
+      return base;
+    },
+    [
+      getCocktailRating,
+      ignoreGarnish,
+      isSortDescending,
+      partySelectedCocktailKeys,
+      randomSortRanks,
+      selectedSortOption,
+    ],
+  );
+
   const sortedCocktails = useMemo(() => {
-    const base = [...filteredCocktails];
+    const filteredAvailable: Cocktail[] = [];
+    const filteredUnavailable: Cocktail[] = [];
 
-    base.sort((left, right) => {
-      const leftName = left.name ?? '';
-      const rightName = right.name ?? '';
-      let result = 0;
-
-      if (selectedSortOption === 'alphabetical') {
-        result = compareOptionalGlobalAlphabet(leftName, rightName);
-        return isSortDescending ? -result : result;
-      }
-
-      if (selectedSortOption === 'requiredCount') {
-        const leftCount = countRequiredIngredients(left, ignoreGarnish);
-        const rightCount = countRequiredIngredients(right, ignoreGarnish);
-        if (leftCount !== rightCount) {
-          result = leftCount - rightCount;
-        } else {
-          result = compareOptionalGlobalAlphabet(leftName, rightName);
-        }
-        return isSortDescending ? -result : result;
-      }
-
-      if (selectedSortOption === 'rating') {
-        const leftRating = getCocktailRating(left);
-        const rightRating = getCocktailRating(right);
-        if (leftRating !== rightRating) {
-          result = rightRating - leftRating;
-        } else {
-          result = compareOptionalGlobalAlphabet(leftName, rightName);
-        }
-        return isSortDescending ? -result : result;
-      }
-
-      if (selectedSortOption === 'recentlyAdded') {
-        const leftId = Number(left.id ?? -1);
-        const rightId = Number(right.id ?? -1);
-        if (leftId !== rightId) {
-          result = rightId - leftId;
-        } else {
-          result = compareOptionalGlobalAlphabet(leftName, rightName);
-        }
-        return isSortDescending ? -result : result;
-      }
-
-      const leftKey = String(left.id ?? left.name);
-      const rightKey = String(right.id ?? right.name);
-      const leftRank = randomSortRanks.get(leftKey) ?? 0;
-      const rightRank = randomSortRanks.get(rightKey) ?? 0;
-      if (leftRank !== rightRank) {
-        result = leftRank - rightRank;
+    filteredCocktails.forEach((cocktail) => {
+      const key = String(cocktail.id ?? cocktail.name);
+      if (availableCocktailKeys.has(key)) {
+        filteredAvailable.push(cocktail);
       } else {
-        result = compareOptionalGlobalAlphabet(leftName, rightName);
+        filteredUnavailable.push(cocktail);
       }
-
-      return isSortDescending ? -result : result;
     });
 
-    return base;
-  }, [
-    filteredCocktails,
-    getCocktailRating,
-    ignoreGarnish,
-    isSortDescending,
-    randomSortRanks,
-    selectedSortOption,
-  ]);
+    return [
+      ...sortCocktailSubset(filteredAvailable),
+      ...sortCocktailSubset(filteredUnavailable),
+    ];
+  }, [availableCocktailKeys, filteredCocktails, sortCocktailSubset]);
 
   const isFilterActive =
     selectedTagKeys.size > 0 ||
@@ -702,6 +739,7 @@ export default function ShakerResultsScreen() {
           hasComment={Boolean(getCocktailComment(item).trim())}
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
+          isPartySelected={partySelectedCocktailKeys.has(String(item.id ?? item.name))}
         />
       );
     },
@@ -711,6 +749,7 @@ export default function ShakerResultsScreen() {
       getCocktailRating,
       handlePressCocktail,
       ingredients,
+      partySelectedCocktailKeys,
     ],
   );
 
@@ -783,18 +822,20 @@ export default function ShakerResultsScreen() {
                   onSortOptionChange: handleSortOptionChange,
                   tintColor: Colors.tint,
                   surfaceColor: Colors.surface,
+                  showRequiredCountOption: false,
+                  showPartySelectedOption: true,
                   getAccessibilityLabel: (option) => {
                     switch (option) {
                       case 'alphabetical':
-                        return t('shakerResults.sortOptionAlphabetical');
-                      case 'requiredCount':
-                        return t('shakerResults.sortOptionRequiredCount');
+                        return t('cocktails.sortOptionAlphabeticalAccessibility');
+                      case 'partySelected':
+                        return t('cocktails.sortOptionPartySelectedAccessibility');
                       case 'rating':
-                        return t('shakerResults.sortOptionRating');
+                        return t('cocktails.sortOptionRatingAccessibility');
                       case 'recentlyAdded':
-                        return t('shakerResults.sortOptionRecentlyAdded');
+                        return t('cocktails.sortOptionRecentlyAddedAccessibility');
                       default:
-                        return t('shakerResults.sortOptionRandom');
+                        return t('cocktails.sortOptionRandomAccessibility');
                     }
                   },
                 })}
