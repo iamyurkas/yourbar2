@@ -3175,6 +3175,34 @@ function EditableIngredientRow({
   }, []);
 
   useEffect(() => {
+    setExpandedSubstituteKeys((previous) => {
+      const availableKeys = new Set(ingredient.substitutes.map((substitute) => substitute.key));
+      const next = new Set<string>();
+
+      previous.forEach((key) => {
+        if (availableKeys.has(key)) {
+          next.add(key);
+        }
+      });
+
+      ingredient.substitutes.forEach((substitute) => {
+        if (substitute.amount.trim().length > 0) {
+          next.add(substitute.key);
+        }
+      });
+
+      if (
+        next.size === previous.size &&
+        Array.from(next).every((key) => previous.has(key))
+      ) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [ingredient.substitutes]);
+
+  useEffect(() => {
     if (!isIceIngredient) {
       return;
     }
