@@ -13,6 +13,7 @@ export function getInitialBaseScale(params: {
   cropFrameWidth: number;
   cropFrameHeight: number;
 }): number {
+  'worklet';
   const { imageWidth, imageHeight, cropFrameWidth, cropFrameHeight } = params;
   if (imageWidth <= 0 || imageHeight <= 0 || cropFrameWidth <= 0 || cropFrameHeight <= 0) {
     return 1;
@@ -29,6 +30,7 @@ export function getMaxTranslation(params: {
   cropFrameWidth: number;
   cropFrameHeight: number;
 }): { maxX: number; maxY: number } {
+  'worklet';
   const { imageWidth, imageHeight, baseScale, userScale, cropFrameWidth, cropFrameHeight } = params;
   const renderedWidth = imageWidth * baseScale * userScale;
   const renderedHeight = imageHeight * baseScale * userScale;
