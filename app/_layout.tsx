@@ -94,6 +94,7 @@ function RootLayoutContent() {
       <ThemeAppWrapper>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="image-crop" options={{ headerShown: false, presentation: "fullScreenModal" }} />
         </Stack>
       </ThemeAppWrapper>
     </View>
