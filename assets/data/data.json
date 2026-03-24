@@ -2763,13 +2763,13 @@
     {
       "id": 43,
       "name": "Apple Shot",
-      "description": "A fruity, lightly sparkling shooter that blends **whiskey**, **apple schnapps**, and **cranberry juice** for a sweet-tart finish.",
-      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 20 ml of **whiskey**, 15 ml of **apple schnapps**, and 20 ml of **cranberry juice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled shooter glass.\n5. Top with 10 ml of **soda water**.",
+      "description": "A fruity three-shot serve where **whiskey**, **apple schnapps**, and **cranberry juice** are stirred and finished with a splash of **soda water** in each glass.",
+      "instructions": "1. Fill a mixing glass with **ice**.\n2. Add 45 ml of **whiskey**, 30 ml of **apple schnapps**, and 45 ml of **cranberry juice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Divide evenly between 3 chilled shooter glasses.\n5. Top each shot with 5 ml of **soda water** (15 ml total).",
       "photoUri": "assets/cocktails/43-apple-shot.jpg",
       "glassId": "shooter",
       "methodIds": ["stir"],
       "tags": [6, 9],
-      "defaultServings": 1,
+      "defaultServings": 3,
       "ingredients": [
         {
           "order": 1,
@@ -2783,7 +2783,7 @@
           "order": 2,
           "ingredientId": 352,
           "name": "Whiskey",
-          "amount": "20",
+          "amount": "45",
           "unitId": 11,
           "substitutes": [
             {
@@ -2796,7 +2796,7 @@
           "order": 3,
           "ingredientId": 29,
           "name": "Apple Schnapps",
-          "amount": "15",
+          "amount": "30",
           "unitId": 11,
           "substitutes": [
             {
@@ -2809,14 +2809,14 @@
           "order": 4,
           "ingredientId": 119,
           "name": "Cranberry Juice",
-          "amount": "20",
+          "amount": "45",
           "unitId": 11
         },
         {
           "order": 5,
           "ingredientId": 318,
           "name": "Soda Water",
-          "amount": "10",
+          "amount": "15",
           "unitId": 11
         }
       ]
