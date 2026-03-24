@@ -28,6 +28,7 @@ import { HeaderIconButton } from '@/components/HeaderIconButton';
 import { ListRow, Thumb } from '@/components/RowParts';
 import { TagEditorModal } from '@/components/TagEditorModal';
 import { TagPill } from '@/components/TagPill';
+import { ImageCropper } from '@/components/image-crop/ImageCropper';
 import { BUILTIN_INGREDIENT_TAGS } from '@/constants/ingredient-tags';
 import { useAppColors } from '@/constants/theme';
 import { compareOptionalGlobalAlphabet } from '@/libs/global-sort';
@@ -40,6 +41,7 @@ import { normalizeSearchText } from '@/libs/search-normalization';
 import { useInventory, type Ingredient } from '@/providers/inventory-provider';
 import { useUnsavedChanges } from '@/providers/unsaved-changes-provider';
 import { suggestIngredientTagIds } from '@/services/barcode/suggestIngredientTags';
+import type { ImageCropResult } from '@/libs/image-crop/types';
 
 type IngredientFormSnapshot = {
   name: string;
@@ -48,6 +50,12 @@ type IngredientFormSnapshot = {
   baseIngredientId: number | null;
   styleIngredientId: number | null;
   selectedTagIds: number[];
+};
+
+type PendingCropAsset = {
+  uri: string;
+  width?: number;
+  height?: number;
 };
 
 function getParamValue(value?: string | string[]): string | undefined {
@@ -213,6 +221,7 @@ export default function IngredientFormScreen() {
   const [description, setDescription] = useState('');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [isPickingImage, setIsPickingImage] = useState(false);
+  const [pendingCropAsset, setPendingCropAsset] = useState<PendingCropAsset | null>(null);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     isEditMode || defaultIngredientTagId == null ? [] : [defaultIngredientTagId],
   );
@@ -496,7 +505,7 @@ export default function IngredientFormScreen() {
       setIsPickingImage(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -504,7 +513,11 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropAsset({
+            uri: asset.uri,
+            width: asset.width,
+            height: asset.height,
+          });
         }
       }
     } catch (error) {
@@ -553,7 +566,7 @@ export default function IngredientFormScreen() {
     try {
       setIsPickingImage(true);
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         quality: 1,
         exif: false,
       });
@@ -561,7 +574,11 @@ export default function IngredientFormScreen() {
       if (!result.canceled && result.assets?.length) {
         const asset = result.assets[0];
         if (asset?.uri) {
-          setImageUri(asset.uri);
+          setPendingCropAsset({
+            uri: asset.uri,
+            width: asset.width,
+            height: asset.height,
+          });
         }
       }
     } catch (error) {
@@ -609,6 +626,15 @@ export default function IngredientFormScreen() {
       ],
     });
   }, [handlePickImage, handleTakePhoto, showDialog, t]);
+
+  const handleCropCancel = useCallback(() => {
+    setPendingCropAsset(null);
+  }, []);
+
+  const handleCropSave = useCallback((result: ImageCropResult) => {
+    setImageUri(result.uri);
+    setPendingCropAsset(null);
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     if (isSaving) {
@@ -1964,6 +1990,24 @@ export default function IngredientFormScreen() {
             />
           </Pressable>
         </Pressable>
+      </Modal>
+
+      <Modal
+        visible={pendingCropAsset != null}
+        animationType="slide"
+        presentationStyle="fullScreen"
+        onRequestClose={handleCropCancel}
+      >
+        {pendingCropAsset ? (
+          <ImageCropper
+            imageUri={pendingCropAsset.uri}
+            initialImageWidth={pendingCropAsset.width}
+            initialImageHeight={pendingCropAsset.height}
+            aspectRatio={1}
+            onCancel={handleCropCancel}
+            onSave={handleCropSave}
+          />
+        ) : null}
       </Modal>
 
       <AppDialog
