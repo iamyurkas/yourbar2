@@ -28,6 +28,34 @@ Sentry.init({
   // Enable Logs
   enableLogs: false,
 
+  beforeSend(event) {
+    const values = event.exception?.values ?? [];
+    const isAnrEvent = values.some(
+      (value) =>
+        value.type === "ApplicationNotResponding" ||
+        value.value?.includes("ApplicationNotResponding"),
+    );
+
+    const hasLicenseClientFrame = values.some((value) =>
+      (value.stacktrace?.frames ?? []).some(
+        (frame) => frame.filename?.includes("LicenseClient.java"),
+      ),
+    );
+
+    if (isAnrEvent && hasLicenseClientFrame && event.tags?.isSideLoaded === "true") {
+      return {
+        ...event,
+        level: "warning",
+        tags: {
+          ...event.tags,
+          issue_source: "android_license_client_sideload",
+        },
+      };
+    }
+
+    return event;
+  },
+
   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
   // spotlight: __DEV__,
 });
