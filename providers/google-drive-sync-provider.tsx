@@ -448,6 +448,31 @@ export function GoogleDriveSyncProvider({ children }: { children: React.ReactNod
         return;
       }
 
+      if (mode === 'push' && syncRevision === 0) {
+        const baseSnapshot = await getLastSyncedSnapshot();
+        if (!baseSnapshot) {
+          const remoteFile = await withTimeout(
+            readGoogleDriveSnapshot<InventorySyncStateSnapshot>(accessToken),
+            SYNC_TIMEOUT_MS,
+          );
+
+          if (remoteFile?.envelope?.snapshot) {
+            const mergedRemoteSnapshot = mergeSyncSnapshotsWithBase({
+              baseSnapshot,
+              localSnapshot: snapshot,
+              remoteSnapshot: remoteFile.envelope.snapshot,
+            });
+            importInventorySyncState(mergedRemoteSnapshot);
+            lastFingerprintRef.current = JSON.stringify(mergedRemoteSnapshot);
+            await SecureStore.setItemAsync(SYNC_REVISION_KEY, String(remoteFile.envelope.syncRevision));
+            await setLastSyncedSnapshot(mergedRemoteSnapshot);
+            await persistSyncState(new Date().toISOString(), null);
+            setDiagnostics(null);
+            return;
+          }
+        }
+      }
+
       const nextRevision = syncRevision + 1;
       const envelope = createSyncEnvelope({
         snapshot,
