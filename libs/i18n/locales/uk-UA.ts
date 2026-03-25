@@ -183,6 +183,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.instructionsPlaceholder": "1. Візьміть трохи льоду...",
   "cocktailForm.video": "Відео",
   "cocktailForm.videoPlaceholder": "Вставте посилання на відео",
+  "cocktailForm.pasteVideoLink": "Вставити посилання на відео з буфера",
   "cocktailForm.defaultServings": "Кількість порцій за замовчуванням",
   "cocktailForm.ingredients": "Інгредієнти",
   "cocktailForm.addIngredient": "Додати інгредієнт",

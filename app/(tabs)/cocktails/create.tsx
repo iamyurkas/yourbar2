@@ -402,6 +402,22 @@ export default function CreateCocktailScreen() {
   const [dialogOptions, setDialogOptions] = useState<DialogOptions | null>(
     null,
   );
+
+  const handlePasteVideoFromClipboard = useCallback(async () => {
+    try {
+      const clipboardReader = (
+        globalThis as {
+          navigator?: { clipboard?: { readText?: () => Promise<string> } };
+        }
+      ).navigator?.clipboard?.readText;
+      const clipboardText = await clipboardReader?.();
+      if (typeof clipboardText === "string") {
+        setVideo(clipboardText);
+      }
+    } catch {
+      // no-op: clipboard read is not available on all platforms/environments
+    }
+  }, []);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initialSnapshot, setInitialSnapshot] =
@@ -2190,24 +2206,41 @@ export default function CreateCocktailScreen() {
             <Text style={[styles.label, { color: Colors.onSurface }]}>
               {t("cocktailForm.video")}
             </Text>
-            <TextInput
-              value={video}
-              onChangeText={setVideo}
-              placeholder={t("cocktailForm.videoPlaceholder")}
-              placeholderTextColor={`${Colors.onSurfaceVariant}99`}
-              style={[
-                styles.input,
-                {
-                  borderColor: Colors.outlineVariant,
-                  color: Colors.text,
-                  backgroundColor: Colors.surface,
-                },
-              ]}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="url"
-              onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
-            />
+            <View style={styles.videoFieldRow}>
+              <TextInput
+                value={video}
+                onChangeText={setVideo}
+                placeholder={t("cocktailForm.videoPlaceholder")}
+                placeholderTextColor={`${Colors.onSurfaceVariant}99`}
+                style={[
+                  styles.input,
+                  styles.videoInput,
+                  {
+                    borderColor: Colors.outlineVariant,
+                    color: Colors.text,
+                    backgroundColor: Colors.surface,
+                  },
+                ]}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="url"
+                onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
+              />
+              <Pressable
+                onPress={handlePasteVideoFromClipboard}
+                accessibilityRole="button"
+                accessibilityLabel={t("cocktailForm.pasteVideoLink")}
+                style={[
+                  styles.videoPasteButton,
+                  {
+                    borderColor: Colors.outlineVariant,
+                    backgroundColor: Colors.surface,
+                  },
+                ]}
+              >
+                <MaterialIcons name="content-paste" size={20} color={Colors.onSurface} />
+              </Pressable>
+            </View>
           </View>
 
           <View style={styles.section}>
@@ -3898,6 +3931,22 @@ const styles = StyleSheet.create({
   },
   multilineInput: {
     minHeight: 120,
+  },
+  videoFieldRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  videoInput: {
+    flex: 1,
+  },
+  videoPasteButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: "center",
+    justifyContent: "center",
   },
   rowWrap: {
     flexDirection: "row",

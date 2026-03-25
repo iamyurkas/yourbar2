@@ -182,6 +182,7 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailForm.instructionsPlaceholder": "1. Grab some ice...",
   "cocktailForm.video": "Video",
   "cocktailForm.videoPlaceholder": "Paste video link",
+  "cocktailForm.pasteVideoLink": "Paste video link from clipboard",
   "cocktailForm.defaultServings": "Default servings",
   "cocktailForm.ingredients": "Ingredients",
   "cocktailForm.addIngredient": "Add ingredient",

@@ -186,6 +186,7 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailForm.instructionsPlaceholder": "1. Eis hinzufügen...",
   "cocktailForm.video": "Video",
   "cocktailForm.videoPlaceholder": "Videolink einfügen",
+  "cocktailForm.pasteVideoLink": "Videolink aus der Zwischenablage einfügen",
   "cocktailForm.defaultServings": "Standard-Portionen",
   "cocktailForm.ingredients": "Zutaten",
   "cocktailForm.addIngredient": "Zutat hinzufügen",
