@@ -179,7 +179,6 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailForm.instructionsPlaceholder": "1. Coge un poco de hielo...",
   "cocktailForm.video": "Video",
   "cocktailForm.videoPlaceholder": "Pega enlace de video",
-  "cocktailForm.pasteVideoFromClipboard": "Pegar enlace de video del portapapeles",
   "cocktailForm.defaultServings": "Porciones predeterminadas",
   "cocktailForm.ingredients": "Ingredientes",
   "cocktailForm.addIngredient": "Añadir ingrediente",
