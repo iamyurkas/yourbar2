@@ -2947,5 +2947,11 @@
   "ingredient.367.name": "Ginger liqueur",
   "ingredient.367.description": "Sweet, aromatic spirit made by macerating ginger root in alcohol, often enhanced with citrus oil, sugar, and sometimes botanicals. Typically has an ABV of 25-30%.",
   "ingredient.368.name": "Saline solution (4:1)",
-  "ingredient.368.description": "A 4:1 saline solution for cocktails is a 20% concentration used to enhance flavor, typically made by dissolving 1 part salt into 4 parts water by weight (for example, 20 g salt to 80 g water or 1 oz salt to 4 oz water)."
+  "ingredient.368.description": "A 4:1 saline solution for cocktails is a 20% concentration used to enhance flavor, typically made by dissolving 1 part salt into 4 parts water by weight (for example, 20 g salt to 80 g water or 1 oz salt to 4 oz water).",
+  "ingredient.369.name": "London Dry Gin",
+  "ingredient.369.description": "Classic dry gin style with a crisp juniper-forward profile, bright citrus peel, and no added sweeteners after distillation.",
+  "ingredient.370.name": "Plymouth Gin",
+  "ingredient.370.description": "Protected gin style from Plymouth, England, softer and earthier than London Dry with balanced juniper and rooty botanicals.",
+  "ingredient.371.name": "Botanical Gin",
+  "ingredient.371.description": "Modern aromatic gin style emphasizing expressive botanicals such as floral, herbal, and citrus notes over strict juniper dominance."
 }

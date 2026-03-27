@@ -43475,6 +43475,27 @@
       "description": "A 4:1 saline solution for cocktails is a 20% concentration mixture used to enhance flavors, typically made by dissolving 1 part salt into 4 parts water (by weight, e.g., 20g salt to 80g water or 1 oz salt to 4 oz water).",
       "tags": [8],
       "photoUri": "assets/ingredients/368-saline-solution-4-1.jpg"
+    },
+    {
+      "id": 369,
+      "name": "London Dry Gin",
+      "description": "Classic dry gin style with a crisp juniper-forward profile, bright citrus peel, and no added sweeteners after distillation.",
+      "tags": [0],
+      "styleIngredientId": 161
+    },
+    {
+      "id": 370,
+      "name": "Plymouth Gin",
+      "description": "Protected gin style from Plymouth, England, softer and earthier than London Dry with balanced juniper and rooty botanicals.",
+      "tags": [0],
+      "styleIngredientId": 161
+    },
+    {
+      "id": 371,
+      "name": "Botanical Gin",
+      "description": "Modern aromatic gin style emphasizing expressive botanicals such as floral, herbal, and citrus notes over strict juniper dominance.",
+      "tags": [0],
+      "styleIngredientId": 161
     }
   ]
 }
