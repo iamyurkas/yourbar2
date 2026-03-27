@@ -38,6 +38,12 @@
         }
       ],
       [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Your Bar to save exported cocktail images to your photo library."
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "android": {

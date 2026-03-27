@@ -267,6 +267,16 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.addCocktailIngredientsToShopping":
     "Añadir ingredientes del cóctel a la lista de compras",
   "cocktailDetails.buyAllIngredients": "Comprar todos los ingredientes",
+  "cocktailDetails.exportImage": "Exportar imagen del cóctel",
+  "cocktailDetails.exportPermissionTitle": "Se requiere acceso a fotos",
+  "cocktailDetails.exportPermissionMessage":
+    "Activa el permiso de fotos en la configuración del sistema para guardar imágenes de cócteles.",
+  "cocktailDetails.exportSuccessTitle": "Imagen guardada",
+  "cocktailDetails.exportSuccessMessage":
+    "La imagen del cóctel se guardó en tu fototeca.",
+  "cocktailDetails.exportFailedTitle": "Error de exportación",
+  "cocktailDetails.exportFailedMessage":
+    "No se pudo guardar la imagen del cóctel. Inténtalo de nuevo.",
   "cocktailDetails.copyCocktail": "Copiar cóctel",
   "cocktailDetails.editCocktail": "Editar cóctel",
   "cocktailDetails.notFound": "Cóctel no encontrado",

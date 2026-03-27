@@ -2,6 +2,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
+import * as MediaLibrary from "expo-media-library";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
   useCallback,
@@ -12,6 +13,7 @@ import {
   useTransition,
 } from "react";
 import {
+  Alert,
   AppState,
   findNodeHandle,
   Linking,
@@ -27,6 +29,7 @@ import {
   type TextLayoutEvent,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { captureRef } from "react-native-view-shot";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppDialog } from "@/components/AppDialog";
@@ -1104,6 +1107,7 @@ export default function CocktailDetailsScreen() {
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+  const [isExportingImage, setIsExportingImage] = useState(false);
   const [nameLayout, setNameLayout] = useState<{ y: number; height: number } | null>(null);
   const [isNameInHeader, setIsNameInHeader] = useState(false);
 
@@ -1183,6 +1187,48 @@ export default function CocktailDetailsScreen() {
       },
     });
   }, [cocktail, returnToParams, returnToPath]);
+
+  const handleExportPress = useCallback(async () => {
+    if (!scrollRef.current || isExportingImage) {
+      return;
+    }
+
+    setIsExportingImage(true);
+
+    try {
+      const permission = await MediaLibrary.requestPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert(
+          t("cocktailDetails.exportPermissionTitle"),
+          t("cocktailDetails.exportPermissionMessage"),
+        );
+        return;
+      }
+
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => resolve());
+      });
+
+      const imageUri = await captureRef(scrollRef, {
+        format: "png",
+        quality: 1,
+        snapshotContentContainer: true,
+      });
+
+      await MediaLibrary.saveToLibraryAsync(imageUri);
+      Alert.alert(
+        t("cocktailDetails.exportSuccessTitle"),
+        t("cocktailDetails.exportSuccessMessage"),
+      );
+    } catch {
+      Alert.alert(
+        t("cocktailDetails.exportFailedTitle"),
+        t("cocktailDetails.exportFailedMessage"),
+      );
+    } finally {
+      setIsExportingImage(false);
+    }
+  }, [isExportingImage, scrollRef, t]);
 
   const handleNameLayout = useCallback((event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout;
@@ -1265,16 +1311,28 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <HeaderIconButton
-              onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel={t("common.openScreenHelp")}
-            >
-              <MaterialCommunityIcons
-                name="help-circle-outline"
-                size={20}
-                color={Colors.onSurface}
-              />
-            </HeaderIconButton>
+            <View style={styles.headerActions}>
+              <HeaderIconButton
+                onPress={handleExportPress}
+                accessibilityLabel={t("cocktailDetails.exportImage")}
+              >
+                <MaterialCommunityIcons
+                  name="image-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+              <HeaderIconButton
+                onPress={() => setIsHelpVisible(true)}
+                accessibilityLabel={t("common.openScreenHelp")}
+              >
+                <MaterialCommunityIcons
+                  name="help-circle-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+            </View>
           ),
         }}
       />
@@ -2039,34 +2097,36 @@ export default function CocktailDetailsScreen() {
                   })}
                 </View>
 
-                <View style={styles.itemActions}>
-                  <Pressable
-                    onPress={handleCopyPress}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.copyCocktail")}
-                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="content-copy"
-                      size={18}
-                      color={Colors.primary}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleEditPress}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.editCocktail")}
-                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={18}
-                      color={Colors.primary}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
-                  </Pressable>
-                </View>
+                {!isExportingImage ? (
+                  <View style={styles.itemActions}>
+                    <Pressable
+                      onPress={handleCopyPress}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.copyCocktail")}
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    >
+                      <MaterialCommunityIcons
+                        name="content-copy"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                      <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleEditPress}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.editCocktail")}
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    >
+                      <MaterialCommunityIcons
+                        name="pencil-outline"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                      <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
+                    </Pressable>
+                  </View>
+                ) : null}
               </View>
             ) : null}
           </View>
@@ -2107,6 +2167,11 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: 16,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
   },
   name: {
     fontSize: 20,

@@ -270,6 +270,16 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.addCocktailIngredientsToShopping":
     "Add cocktail ingredients to shopping list",
   "cocktailDetails.buyAllIngredients": "Buy all ingredients",
+  "cocktailDetails.exportImage": "Export cocktail image",
+  "cocktailDetails.exportPermissionTitle": "Photo access required",
+  "cocktailDetails.exportPermissionMessage":
+    "Enable photo library permissions in system settings to save cocktail images.",
+  "cocktailDetails.exportSuccessTitle": "Image saved",
+  "cocktailDetails.exportSuccessMessage":
+    "The cocktail image was saved to your photo library.",
+  "cocktailDetails.exportFailedTitle": "Export failed",
+  "cocktailDetails.exportFailedMessage":
+    "Unable to save cocktail image. Please try again.",
   "cocktailDetails.copyCocktail": "Copy cocktail",
   "cocktailDetails.editCocktail": "Edit cocktail",
   "cocktailDetails.notFound": "Cocktail not found",

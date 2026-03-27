@@ -271,6 +271,16 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.addCocktailIngredientsToShopping":
     "Додати інгредієнти коктейлю до списку покупок",
   "cocktailDetails.buyAllIngredients": "Купити всі інгредієнти",
+  "cocktailDetails.exportImage": "Експортувати зображення коктейлю",
+  "cocktailDetails.exportPermissionTitle": "Потрібен доступ до фото",
+  "cocktailDetails.exportPermissionMessage":
+    "Увімкніть доступ до фотогалереї в налаштуваннях, щоб зберігати зображення коктейлів.",
+  "cocktailDetails.exportSuccessTitle": "Зображення збережено",
+  "cocktailDetails.exportSuccessMessage":
+    "Зображення коктейлю збережено у вашу фотогалерею.",
+  "cocktailDetails.exportFailedTitle": "Не вдалося експортувати",
+  "cocktailDetails.exportFailedMessage":
+    "Не вдалося зберегти зображення коктейлю. Спробуйте ще раз.",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
   "cocktailDetails.notFound": "Коктейль не знайдено",

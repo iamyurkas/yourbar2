@@ -274,6 +274,16 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.addCocktailIngredientsToShopping":
     "Cocktail-Zutaten zur Einkaufsliste hinzufügen",
   "cocktailDetails.buyAllIngredients": "Alle Zutaten kaufen",
+  "cocktailDetails.exportImage": "Cocktailbild exportieren",
+  "cocktailDetails.exportPermissionTitle": "Fotoberechtigung erforderlich",
+  "cocktailDetails.exportPermissionMessage":
+    "Aktiviere den Fotozugriff in den Systemeinstellungen, um Cocktailbilder zu speichern.",
+  "cocktailDetails.exportSuccessTitle": "Bild gespeichert",
+  "cocktailDetails.exportSuccessMessage":
+    "Das Cocktailbild wurde in deiner Fotomediathek gespeichert.",
+  "cocktailDetails.exportFailedTitle": "Export fehlgeschlagen",
+  "cocktailDetails.exportFailedMessage":
+    "Das Cocktailbild konnte nicht gespeichert werden. Bitte versuche es erneut.",
   "cocktailDetails.copyCocktail": "Cocktail kopieren",
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
   "cocktailDetails.notFound": "Cocktail nicht gefunden",
