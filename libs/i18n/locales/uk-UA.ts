@@ -239,6 +239,9 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Встановити рейтинг {{value}}",
   "cocktailDetails.toggleComment": "Додати коментар",
   "cocktailDetails.openVideos": "Відкрити відеоінструкцію",
+  "cocktailDetails.exportCocktail": "Експортувати коктейль",
+  "cocktailDetails.exportFallbackMessage":
+    "Зображення коктейлю експортовано. Виберіть, куди його зберегти.",
   "cocktailDetails.commentPlaceholder":
     "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
   "cocktailDetails.showInMetric": "Метрична система",

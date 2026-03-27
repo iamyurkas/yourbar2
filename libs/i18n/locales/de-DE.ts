@@ -242,6 +242,9 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Bewertung auf {{value}} setzen",
   "cocktailDetails.toggleComment": "Kommentar hinzufügen",
   "cocktailDetails.openVideos": "Videoanleitung öffnen",
+  "cocktailDetails.exportCocktail": "Cocktail exportieren",
+  "cocktailDetails.exportFallbackMessage":
+    "Das Cocktailbild wurde exportiert. Wähle, wo es gespeichert werden soll.",
   "cocktailDetails.commentPlaceholder":
     "Fügen Sie Ihren Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
   "cocktailDetails.showInMetric": "In metrischen Einheiten anzeigen",

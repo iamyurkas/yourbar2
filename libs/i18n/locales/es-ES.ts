@@ -235,6 +235,9 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Establecer valoración en {{value}}",
   "cocktailDetails.toggleComment": "Añadir comentario",
   "cocktailDetails.openVideos": "Abrir instrucciones en video",
+  "cocktailDetails.exportCocktail": "Exportar cóctel",
+  "cocktailDetails.exportFallbackMessage":
+    "La imagen del cóctel se exportó. Elige dónde guardarla.",
   "cocktailDetails.commentPlaceholder":
     "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
   "cocktailDetails.showInMetric": "Mostrar en sistema métrico",

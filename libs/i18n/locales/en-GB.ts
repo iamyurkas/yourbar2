@@ -238,6 +238,9 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.setRatingTo": "Set rating to {{value}}",
   "cocktailDetails.toggleComment": "Add comment",
   "cocktailDetails.openVideos": "Open video instructions",
+  "cocktailDetails.exportCocktail": "Export cocktail",
+  "cocktailDetails.exportFallbackMessage":
+    "Cocktail image was exported. Choose where to save it.",
   "cocktailDetails.commentPlaceholder":
     "Add your comment. It saves automatically when you leave this screen.",
   "cocktailDetails.showInMetric": "Show in metric",
