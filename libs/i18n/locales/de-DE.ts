@@ -245,6 +245,12 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.exportCocktail": "Cocktail exportieren",
   "cocktailDetails.exportFallbackMessage":
     "Das Cocktailbild wurde exportiert. Wähle, wo es gespeichert werden soll.",
+  "cocktailDetails.exportSuccessTitle": "Export abgeschlossen",
+  "cocktailDetails.exportSuccessMessage":
+    "Das Cocktailbild ist bereit. Wähle im Teilen-Menü, wo es gespeichert werden soll.",
+  "cocktailDetails.exportFailedTitle": "Export fehlgeschlagen",
+  "cocktailDetails.exportFailedMessage":
+    "Das Cocktailbild konnte nicht exportiert werden. Bitte versuche es erneut.",
   "cocktailDetails.commentPlaceholder":
     "Fügen Sie Ihren Kommentar hinzu. Er wird beim Verlassen dieses Bildschirms automatisch gespeichert.",
   "cocktailDetails.showInMetric": "In metrischen Einheiten anzeigen",

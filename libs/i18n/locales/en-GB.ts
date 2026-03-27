@@ -241,6 +241,12 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.exportCocktail": "Export cocktail",
   "cocktailDetails.exportFallbackMessage":
     "Cocktail image was exported. Choose where to save it.",
+  "cocktailDetails.exportSuccessTitle": "Export completed",
+  "cocktailDetails.exportSuccessMessage":
+    "The cocktail image is ready. Choose where to save it in the share menu.",
+  "cocktailDetails.exportFailedTitle": "Export failed",
+  "cocktailDetails.exportFailedMessage":
+    "Couldn't export this cocktail image. Please try again.",
   "cocktailDetails.commentPlaceholder":
     "Add your comment. It saves automatically when you leave this screen.",
   "cocktailDetails.showInMetric": "Show in metric",

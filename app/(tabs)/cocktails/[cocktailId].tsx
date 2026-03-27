@@ -1108,6 +1108,10 @@ export default function CocktailDetailsScreen() {
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+  const [exportDialog, setExportDialog] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
   const [nameLayout, setNameLayout] = useState<{ y: number; height: number } | null>(null);
   const [isNameInHeader, setIsNameInHeader] = useState(false);
   const contentCaptureRef = useRef<View | null>(null);
@@ -1140,7 +1144,7 @@ export default function CocktailDetailsScreen() {
   }, []);
 
   const handleExportCocktail = useCallback(async () => {
-    if (!cocktail || !contentCaptureRef.current) {
+    if (!cocktail || !contentCaptureRef.current || isExporting) {
       return;
     }
 
@@ -1184,20 +1188,28 @@ export default function CocktailDetailsScreen() {
           dialogTitle: t("cocktailDetails.exportCocktail"),
           UTI: "public.png",
         });
-        return;
+      } else {
+        await Share.share({
+          title: t("cocktailDetails.exportCocktail"),
+          message: t("cocktailDetails.exportFallbackMessage"),
+          url: fileUri,
+        });
       }
 
-      await Share.share({
-        title: t("cocktailDetails.exportCocktail"),
-        message: t("cocktailDetails.exportFallbackMessage"),
-        url: fileUri,
+      setExportDialog({
+        title: t("cocktailDetails.exportSuccessTitle"),
+        message: t("cocktailDetails.exportSuccessMessage"),
       });
     } catch (error) {
       console.error("Failed to export cocktail details screenshot", error);
+      setExportDialog({
+        title: t("cocktailDetails.exportFailedTitle"),
+        message: t("cocktailDetails.exportFailedMessage"),
+      });
     } finally {
       setIsExporting(false);
     }
-  }, [cocktail, t]);
+  }, [cocktail, isExporting, t]);
 
   const toggleMethodDescription = useCallback((methodId: string) => {
     setExpandedMethodIds((current) =>
@@ -2180,6 +2192,13 @@ export default function CocktailDetailsScreen() {
         message={t("cocktailDetails.helpMessage")}
         actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
+      />
+      <AppDialog
+        visible={Boolean(exportDialog)}
+        title={exportDialog?.title ?? ""}
+        message={exportDialog?.message ?? ""}
+        actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
+        onRequestClose={() => setExportDialog(null)}
       />
     </SafeAreaView>
   );

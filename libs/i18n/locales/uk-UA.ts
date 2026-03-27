@@ -242,6 +242,12 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.exportCocktail": "Експортувати коктейль",
   "cocktailDetails.exportFallbackMessage":
     "Зображення коктейлю експортовано. Виберіть, куди його зберегти.",
+  "cocktailDetails.exportSuccessTitle": "Експорт завершено",
+  "cocktailDetails.exportSuccessMessage":
+    "Зображення коктейлю готове. У меню поширення виберіть, куди його зберегти.",
+  "cocktailDetails.exportFailedTitle": "Помилка експорту",
+  "cocktailDetails.exportFailedMessage":
+    "Не вдалося експортувати зображення коктейлю. Спробуйте ще раз.",
   "cocktailDetails.commentPlaceholder":
     "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
   "cocktailDetails.showInMetric": "Метрична система",

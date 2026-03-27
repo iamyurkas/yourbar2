@@ -238,6 +238,12 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.exportCocktail": "Exportar cóctel",
   "cocktailDetails.exportFallbackMessage":
     "La imagen del cóctel se exportó. Elige dónde guardarla.",
+  "cocktailDetails.exportSuccessTitle": "Exportación completada",
+  "cocktailDetails.exportSuccessMessage":
+    "La imagen del cóctel está lista. Elige dónde guardarla en el menú de compartir.",
+  "cocktailDetails.exportFailedTitle": "Exportación fallida",
+  "cocktailDetails.exportFailedMessage":
+    "No se pudo exportar la imagen del cóctel. Inténtalo de nuevo.",
   "cocktailDetails.commentPlaceholder":
     "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
   "cocktailDetails.showInMetric": "Mostrar en sistema métrico",
