@@ -272,6 +272,20 @@ export const enUSTranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Buy all ingredients",
   "cocktailDetails.copyCocktail": "Copy cocktail",
   "cocktailDetails.editCocktail": "Edit cocktail",
+  "cocktailDetails.export": "Export cocktail",
+  "cocktailDetails.exportFailedTitle": "Export failed",
+  "cocktailDetails.exportFailedMessage":
+    "Could not export this cocktail screen as an image. Please try again.",
+  "cocktailDetails.exportStorageUnavailableMessage":
+    "Device storage is unavailable. Please try again later.",
+  "cocktailDetails.exportPermissionRequiredTitle":
+    "Media access required",
+  "cocktailDetails.exportPermissionRequiredMessage":
+    "Allow photo library access to export cocktail images.",
+  "cocktailDetails.exportSharingUnavailableTitle":
+    "Sharing unavailable",
+  "cocktailDetails.exportSharingUnavailableMessage":
+    "Sharing is not available on this device.",
   "cocktailDetails.notFound": "Cocktail not found",
   "cocktailDetails.helpMessage":
     "This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants.",

@@ -273,6 +273,20 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Купити всі інгредієнти",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
+  "cocktailDetails.export": "Експортувати коктейль",
+  "cocktailDetails.exportFailedTitle": "Не вдалося експортувати",
+  "cocktailDetails.exportFailedMessage":
+    "Не вдалося зберегти екран коктейлю як зображення. Спробуйте ще раз.",
+  "cocktailDetails.exportStorageUnavailableMessage":
+    "Сховище пристрою недоступне. Спробуйте пізніше.",
+  "cocktailDetails.exportPermissionRequiredTitle":
+    "Потрібен доступ до медіа",
+  "cocktailDetails.exportPermissionRequiredMessage":
+    "Дозвольте доступ до фото, щоб експортувати зображення коктейлю.",
+  "cocktailDetails.exportSharingUnavailableTitle":
+    "Поширення недоступне",
+  "cocktailDetails.exportSharingUnavailableMessage":
+    "Функція поширення недоступна на цьому пристрої.",
   "cocktailDetails.notFound": "Коктейль не знайдено",
   "cocktailDetails.helpMessage":
     "Цей екран показує деталі коктейлю, інгредієнти та інструкцію.\n\nВикористовуйте кнопки під коктейлем, щоб скопіювати або редагувати його.\n\n**Стрічки інгредієнтів**\nЛіва стрічка показує тип інгредієнта:\nсиня = брендовий інгредієнт,\nжовта = стильовий інгредієнт.\n\nПрава стрічка показує варіанти бази:\nсиня = є брендові варіанти,\nжовта = є стильові варіанти.",

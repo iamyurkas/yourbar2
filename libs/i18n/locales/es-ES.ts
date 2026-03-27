@@ -269,6 +269,20 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Comprar todos los ingredientes",
   "cocktailDetails.copyCocktail": "Copiar cóctel",
   "cocktailDetails.editCocktail": "Editar cóctel",
+  "cocktailDetails.export": "Exportar cóctel",
+  "cocktailDetails.exportFailedTitle": "No se pudo exportar",
+  "cocktailDetails.exportFailedMessage":
+    "No se pudo guardar esta pantalla como imagen. Inténtalo de nuevo.",
+  "cocktailDetails.exportStorageUnavailableMessage":
+    "El almacenamiento del dispositivo no está disponible. Inténtalo más tarde.",
+  "cocktailDetails.exportPermissionRequiredTitle":
+    "Se requiere acceso a fotos",
+  "cocktailDetails.exportPermissionRequiredMessage":
+    "Permite acceso a la galería para exportar imágenes del cóctel.",
+  "cocktailDetails.exportSharingUnavailableTitle":
+    "Compartir no disponible",
+  "cocktailDetails.exportSharingUnavailableMessage":
+    "La función de compartir no está disponible en este dispositivo.",
   "cocktailDetails.notFound": "Cóctel no encontrado",
   "cocktailDetails.helpMessage":
     "Esta pantalla muestra los detalles del cóctel, ingredientes e instrucciones.\n\nUsa los botones bajo el cóctel para copiarlo o editarlo.\n\n**Cintas de ingredientes**\nLa cinta izquierda indica el tipo de ingrediente:\nazul = ingrediente de marca,\namarillo = ingrediente de estilo.\n\nLa cinta derecha indica variantes de base:\nazul = tiene variantes de marca,\namarillo = tiene variantes de estilo.",

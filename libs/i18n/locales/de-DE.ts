@@ -276,6 +276,20 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Alle Zutaten kaufen",
   "cocktailDetails.copyCocktail": "Cocktail kopieren",
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
+  "cocktailDetails.export": "Cocktail exportieren",
+  "cocktailDetails.exportFailedTitle": "Export fehlgeschlagen",
+  "cocktailDetails.exportFailedMessage":
+    "Dieser Bildschirm konnte nicht als Bild exportiert werden. Bitte erneut versuchen.",
+  "cocktailDetails.exportStorageUnavailableMessage":
+    "Der Gerätespeicher ist nicht verfügbar. Bitte später erneut versuchen.",
+  "cocktailDetails.exportPermissionRequiredTitle":
+    "Medienzugriff erforderlich",
+  "cocktailDetails.exportPermissionRequiredMessage":
+    "Erlaube den Zugriff auf Fotos, um Cocktailbilder zu exportieren.",
+  "cocktailDetails.exportSharingUnavailableTitle":
+    "Teilen nicht verfügbar",
+  "cocktailDetails.exportSharingUnavailableMessage":
+    "Die Teilen-Funktion ist auf diesem Gerät nicht verfügbar.",
   "cocktailDetails.notFound": "Cocktail nicht gefunden",
   "cocktailDetails.helpMessage":
     "Dieser Bildschirm zeigt Cocktail-Details, Zutaten und Anleitung.\n\nVerwenden Sie die Schaltflächen unter dem Cocktail, um ihn zu kopieren oder zu bearbeiten.\n\n**Zutaten-Bänder**\nDas linke Band markiert die Zutatenart:\nblau = Markenzutat,\ngelb = Stil-Zutat.\n\nDas rechte Band markiert Basisvarianten:\nblau = hat markengebundene Varianten,\ngelb = hat Stil-Varianten.",

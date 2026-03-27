@@ -1,8 +1,12 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
+import * as FileSystem from "expo-file-system/legacy";
+import * as ImagePicker from "expo-image-picker";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router, Stack, useLocalSearchParams } from "expo-router";
+import * as Sharing from "expo-sharing";
+import { ImageFormat, makeImageFromView } from "@shopify/react-native-skia";
 import {
   useCallback,
   useEffect,
@@ -651,9 +655,13 @@ export default function CocktailDetailsScreen() {
 
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
+  const [mediaPermissionStatus, requestMediaPermission] = ImagePicker.useMediaLibraryPermissions();
   const scrollRef = useRef<ScrollView | null>(null);
+  const captureViewRef = useRef<View | null>(null);
   const isHandlingBackRef = useRef(false);
   const persistFeedbackDraftRef = useRef<() => void>(() => { });
+  const [isExporting, setIsExporting] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState<{ title: string; message: string } | null>(null);
   const shouldNavigateAway = !loading && !cocktail;
 
   useEffect(() => {
@@ -1229,6 +1237,98 @@ export default function CocktailDetailsScreen() {
     );
   }, []);
 
+  const showExportDialog = useCallback(
+    (title: string, message: string) => {
+      setDialogMessage({ title, message });
+    },
+    [],
+  );
+
+  const handleExportCocktail = useCallback(async () => {
+    if (isExporting) {
+      return;
+    }
+
+    if (!captureViewRef.current) {
+      showExportDialog(
+        t("cocktailDetails.exportFailedTitle"),
+        t("cocktailDetails.exportFailedMessage"),
+      );
+      return;
+    }
+
+    const sharingAvailable = await Sharing.isAvailableAsync();
+    if (!sharingAvailable) {
+      showExportDialog(
+        t("cocktailDetails.exportSharingUnavailableTitle"),
+        t("cocktailDetails.exportSharingUnavailableMessage"),
+      );
+      return;
+    }
+
+    const hasPermission = mediaPermissionStatus?.granted ?? false;
+    if (!hasPermission) {
+      const permissionResult = await requestMediaPermission();
+      if (!permissionResult.granted) {
+        showExportDialog(
+          t("cocktailDetails.exportPermissionRequiredTitle"),
+          t("cocktailDetails.exportPermissionRequiredMessage"),
+        );
+        return;
+      }
+    }
+
+    const baseDirectory = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
+    if (!baseDirectory) {
+      showExportDialog(
+        t("cocktailDetails.exportFailedTitle"),
+        t("cocktailDetails.exportStorageUnavailableMessage"),
+      );
+      return;
+    }
+
+    setIsExporting(true);
+
+    try {
+      const image = await makeImageFromView(captureViewRef);
+      if (!image) {
+        throw new Error("Failed to capture cocktail screen");
+      }
+
+      const encodedImage = image.encodeToBase64(ImageFormat.PNG, 100);
+      if (!encodedImage) {
+        throw new Error("Failed to encode captured cocktail screen");
+      }
+
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const fileUri = `${baseDirectory.replace(/\/?$/, "/")}cocktail-export-${timestamp}.png`;
+
+      await FileSystem.writeAsStringAsync(fileUri, encodedImage, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      await Sharing.shareAsync(fileUri, {
+        mimeType: "image/png",
+        dialogTitle: t("cocktailDetails.export"),
+        UTI: "public.png",
+      });
+    } catch (error) {
+      console.error("Failed to export cocktail screen", error);
+      showExportDialog(
+        t("cocktailDetails.exportFailedTitle"),
+        t("cocktailDetails.exportFailedMessage"),
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  }, [
+    isExporting,
+    mediaPermissionStatus?.granted,
+    requestMediaPermission,
+    showExportDialog,
+    t,
+  ]);
+
   if (shouldNavigateAway) {
     return null;
   }
@@ -1265,29 +1365,44 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <HeaderIconButton
-              onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel={t("common.openScreenHelp")}
-            >
-              <MaterialCommunityIcons
-                name="help-circle-outline"
-                size={20}
-                color={Colors.onSurface}
-              />
-            </HeaderIconButton>
+            <View style={styles.headerActions}>
+              <HeaderIconButton
+                onPress={() => {
+                  void handleExportCocktail();
+                }}
+                accessibilityLabel={t("cocktailDetails.export")}
+              >
+                <MaterialCommunityIcons
+                  name="export-variant"
+                  size={20}
+                  color={isExporting ? Colors.onSurfaceVariant : Colors.onSurface}
+                />
+              </HeaderIconButton>
+              <HeaderIconButton
+                onPress={() => setIsHelpVisible(true)}
+                accessibilityLabel={t("common.openScreenHelp")}
+              >
+                <MaterialCommunityIcons
+                  name="help-circle-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+            </View>
           ),
         }}
       />
 
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={styles.content}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-      >
-        {cocktail ? (
-          <View style={styles.section}>
+      <View ref={captureViewRef} collapsable={false} style={styles.captureRoot}>
+        <ScrollView
+          ref={scrollRef}
+          contentContainerStyle={styles.content}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          {cocktail ? (
+            <View style={styles.section}>
             <Text
               style={[styles.name, { color: Colors.onSurface }]}
               onLayout={handleNameLayout}
@@ -2069,9 +2184,9 @@ export default function CocktailDetailsScreen() {
                 </View>
               </View>
             ) : null}
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
             <MaterialCommunityIcons
               name="glass-cocktail"
               size={42}
@@ -2082,9 +2197,10 @@ export default function CocktailDetailsScreen() {
             >
               {t("cocktailDetails.notFound")}
             </Text>
-          </View>
-        )}
-      </ScrollView>
+            </View>
+          )}
+        </ScrollView>
+      </View>
 
       <AppDialog
         visible={isHelpVisible}
@@ -2093,6 +2209,13 @@ export default function CocktailDetailsScreen() {
         actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
+      <AppDialog
+        visible={Boolean(dialogMessage)}
+        title={dialogMessage?.title ?? ""}
+        message={dialogMessage?.message ?? ""}
+        actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
+        onRequestClose={() => setDialogMessage(null)}
+      />
     </SafeAreaView>
   );
 }
@@ -2100,6 +2223,14 @@ export default function CocktailDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  captureRoot: {
+    flex: 1,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
   },
   content: {
     paddingHorizontal: 24,
