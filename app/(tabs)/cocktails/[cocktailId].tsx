@@ -1,6 +1,8 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import * as FileSystem from "expo-file-system/legacy";
 import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
@@ -78,6 +80,15 @@ const MIN_SERVINGS = 0.5;
 const SERVINGS_STEP = 0.5;
 
 type VideoService = "youtube" | "instagram" | "tiktok" | "generic";
+
+function escapeXml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
 
 function resolveVideoService(link?: string | null): VideoService | null {
   const value = link?.trim();
@@ -1104,6 +1115,17 @@ export default function CocktailDetailsScreen() {
 
   const [expandedMethodIds, setExpandedMethodIds] = useState<string[]>([]);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+  const [exportDialog, setExportDialog] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
+    visible: false,
+    title: "",
+    message: "",
+  });
+  const [mediaPermissionStatus, requestMediaPermission] =
+    ImagePicker.useMediaLibraryPermissions();
   const [nameLayout, setNameLayout] = useState<{ y: number; height: number } | null>(null);
   const [isNameInHeader, setIsNameInHeader] = useState(false);
 
@@ -1162,6 +1184,133 @@ export default function CocktailDetailsScreen() {
       },
     });
   }, [cocktail, returnToParams, returnToPath]);
+
+  const showExportDialog = useCallback((title: string, message: string) => {
+    setExportDialog({
+      visible: true,
+      title,
+      message,
+    });
+  }, []);
+
+  const ensureExportPermission = useCallback(async () => {
+    if (mediaPermissionStatus?.granted) {
+      return true;
+    }
+
+    const { status, granted, canAskAgain } = await requestMediaPermission();
+    if (granted || status === ImagePicker.PermissionStatus.GRANTED) {
+      return true;
+    }
+
+    if (!canAskAgain) {
+      showExportDialog(
+        t("cocktailDetails.exportPermissionTitle"),
+        t("cocktailDetails.exportPermissionMessage"),
+      );
+    }
+
+    return false;
+  }, [mediaPermissionStatus?.granted, requestMediaPermission, showExportDialog, t]);
+
+  const handleExportCocktail = useCallback(async () => {
+    if (!cocktail) {
+      return;
+    }
+
+    const hasPermission = await ensureExportPermission();
+    if (!hasPermission) {
+      return;
+    }
+
+    try {
+      const ingredientLines = scaledIngredients.length > 0
+        ? scaledIngredients.map((ingredient) => {
+          const quantity = formatIngredientQuantity(
+            ingredient,
+            ingredientDisplayMode,
+            smallestPartAmount,
+            t("cocktailDetails.asNeeded"),
+            t,
+            locale,
+          );
+          return `${quantity} ${ingredient.name ?? ""}`.trim();
+        })
+        : ["—"];
+
+      const descriptionLines = descriptionParagraphs.length > 0
+        ? descriptionParagraphs
+        : ["—"];
+      const instructionLines = instructionsParagraphs.length > 0
+        ? instructionsParagraphs
+        : ["—"];
+      const contentLines = [
+        `${t("cocktailDetails.ingredients")}:`,
+        ...ingredientLines,
+        "",
+        `${t("cocktailDetails.instructions")}:`,
+        ...instructionLines,
+        "",
+        `${t("cocktailForm.description")}:`,
+        ...descriptionLines,
+      ];
+      const width = 1080;
+      const rowHeight = 44;
+      const height = Math.max(1200, 300 + contentLines.length * rowHeight);
+      const renderedLines = contentLines
+        .map(
+          (line, index) =>
+            `<text x="70" y="${260 + index * rowHeight}" fill="#111111" font-size="28" font-family="Arial">${escapeXml(line)}</text>`,
+        )
+        .join("");
+
+      const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+  <rect width="${width}" height="${height}" fill="#FFFFFF"/>
+  <text x="70" y="120" fill="#111111" font-size="52" font-family="Arial" font-weight="700">${escapeXml(cocktail.name ?? t("cocktailDetails.title"))}</text>
+  <text x="70" y="190" fill="#666666" font-size="28" font-family="Arial">${escapeXml(new Date().toLocaleString())}</text>
+  ${renderedLines}
+</svg>`;
+
+      const safeName = (cocktail.name ?? "cocktail")
+        .trim()
+        .replace(/[^\p{L}\p{N}]+/gu, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase();
+      const exportDir = `${FileSystem.documentDirectory}exports`;
+      const exportUri = `${exportDir}/${safeName || "cocktail"}-${Date.now()}.svg`;
+      const dirInfo = await FileSystem.getInfoAsync(exportDir);
+
+      if (!dirInfo.exists) {
+        await FileSystem.makeDirectoryAsync(exportDir, { intermediates: true });
+      }
+
+      await FileSystem.writeAsStringAsync(exportUri, svg, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      showExportDialog(
+        t("cocktailDetails.exportSuccessTitle"),
+        t("cocktailDetails.exportSuccessMessage", { path: exportUri }),
+      );
+    } catch {
+      showExportDialog(
+        t("cocktailDetails.exportFailedTitle"),
+        t("common.tryAgainLater"),
+      );
+    }
+  }, [
+    cocktail,
+    descriptionParagraphs,
+    ensureExportPermission,
+    ingredientDisplayMode,
+    instructionsParagraphs,
+    locale,
+    scaledIngredients,
+    showExportDialog,
+    smallestPartAmount,
+    t,
+  ]);
 
   const handleCopyPress = useCallback(() => {
     if (!cocktail) {
@@ -1265,16 +1414,28 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <HeaderIconButton
-              onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel={t("common.openScreenHelp")}
-            >
-              <MaterialCommunityIcons
-                name="help-circle-outline"
-                size={20}
-                color={Colors.onSurface}
-              />
-            </HeaderIconButton>
+            <View style={styles.headerActions}>
+              <HeaderIconButton
+                onPress={() => setIsHelpVisible(true)}
+                accessibilityLabel={t("common.openScreenHelp")}
+              >
+                <MaterialCommunityIcons
+                  name="help-circle-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+              <HeaderIconButton
+                onPress={handleExportCocktail}
+                accessibilityLabel={t("cocktailDetails.exportCocktail")}
+              >
+                <MaterialCommunityIcons
+                  name="export-variant"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+            </View>
           ),
         }}
       />
@@ -2093,6 +2254,17 @@ export default function CocktailDetailsScreen() {
         actions={[{ label: t("common.gotIt"), variant: "secondary" }]}
         onRequestClose={() => setIsHelpVisible(false)}
       />
+
+      <AppDialog
+        visible={exportDialog.visible}
+        title={exportDialog.title}
+        message={exportDialog.message}
+        actions={[{
+          label: t("common.ok"),
+          onPress: () => setExportDialog((current) => ({ ...current, visible: false })),
+        }]}
+        onRequestClose={() => setExportDialog((current) => ({ ...current, visible: false }))}
+      />
     </SafeAreaView>
   );
 }
@@ -2100,6 +2272,10 @@ export default function CocktailDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   content: {
     paddingHorizontal: 24,
