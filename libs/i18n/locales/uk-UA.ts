@@ -291,7 +291,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Енергійно збовтайте у шейкері з льодом. Найкраще для цитрусових, сиропів, вершків чи білка.",
   "cocktailMethod.stir.label": "Перемішувати",
   "cocktailMethod.stir.description":
-    "Перемішайте барною ложкою в окремому, наповненомому льодом, келиху. Найкраще для трав’яних міксерів.",
+    "Перемішайте барною ложкою в окремому, наповненому льодом, келиху. Найкраще для трав’яних міксерів.",
   "cocktailMethod.throw.label": "Переливати",
   "cocktailMethod.throw.description":
     "Переливайте інгредієнти між ємностями шейкера з відстані для аерації без помутніння.",
@@ -353,7 +353,7 @@ export const ukUATranslations: TranslationDictionary = {
     "Такого інгредієнта ще не існує. Ви можете створити його зараз.",
   "ingredientDetails.createMissingIngredient": "Створити цей інгредієнт",
   "ingredientDetails.helpMessage":
-    "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова заміна,\nжовта = є стильова замінка.",
+    "Цей екран показує деталі інгредієнта, посилання та повʼязані коктейлі.\n\nВикористовуйте кнопку під інгредієнтом, щоб його редагувати.\n\n**Стрічки коктейлів**\nЛіва стрічка показує склад:\nсиня = є брендові інгредієнти,\nжовта = є стильові інгредієнти.\n\nПрава стрічка показує підстановки:\nсиня = є брендова заміна,\nжовта = є стильова заміна.",
   "ingredientDetails.removeBaseTitle": "Відвʼязати базовий інгредієнт",
   "ingredientDetails.removeBaseMessage":
     "Ви впевнені, що хочете відвʼязати {{name}} від базового інгредієнта?",
@@ -380,7 +380,7 @@ export const ukUATranslations: TranslationDictionary = {
   "onboarding.start": "Почати",
   "onboarding.next": "Далі",
   "onboarding.finish": "Завершити",
-  "onboarding.skip": "Досить",
+  "onboarding.skip": "Пропустити",
   "onboarding.stepCounter": "{{current}} з {{total}}",
   "onboarding.step1.message":
     "**Вітаємо!**\nДавайте налаштуємо ваш бар, додавши кілька інгредієнтів.",
@@ -423,7 +423,7 @@ export const ukUATranslations: TranslationDictionary = {
 
   "ingredients.sortBy": "Сортувати за",
   "ingredients.sortOptionAlphabeticalAccessibility":
-    "Сортувати інгредієнти за A-z",
+    "Сортувати інгредієнти за A–Z",
   "ingredients.sortOptionUnlocksMostCocktailsAccessibility":
     "Сортувати інгредієнти за кількістю відкритих коктейлів",
   "ingredients.sortOptionMostUsedAccessibility":
@@ -445,7 +445,7 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.clearSelectedFilters": "Очистити вибрані фільтри",
 
   "cocktails.sortBy": "Сортувати за",
-  "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A-z",
+  "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A–Z",
   "cocktails.sortOptionPartySelectedAccessibility":
     "Сортувати за відібраністю для вечірки",
   "cocktails.sortOptionRequiredCountAccessibility":
@@ -548,7 +548,7 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.reportIssueCaption": "Напишіть про баг чи ідею",
   "sideMenu.rateAppTitle": "Подобається Your Bar?",
   "sideMenu.rateAppCaption": "Оцініть Your Bar!",
-  "sideMenu.backupRestore": "Резерв і віднова",
+  "sideMenu.backupRestore": "Резервне копіювання і відновлення",
   "sideMenu.backupRestoreCaption": "Зберегти дані в архів чи відновити з копії",
   "sideMenu.restartOnboarding": "Повторити знайомство",
   "sideMenu.restartOnboardingCaption": "Показати навчання ще раз",
@@ -823,28 +823,28 @@ export const ukUATranslations: TranslationDictionary = {
   "amazon.country.ES": "Іспанія",
   "amazon.country.CA": "Канада",
   "amazon.country.JP": "Японія",
-  "barcode.scanBarcode": "Scan barcode",
-  "barcode.cameraPermissionNeeded": "Camera permission needed",
-  "barcode.productAlreadyExists": "Product already exists",
-  "barcode.openExisting": "Open existing",
-  "barcode.createDuplicate": "Create duplicate",
-  "barcode.weFoundProduct": "We found a product",
-  "barcode.similarProductFound": "This looks similar to an existing ingredient",
-  "barcode.addBarcodeToExisting": "Add barcode to existing ingredient",
-  "barcode.createNewIngredient": "Create new ingredient",
-  "barcode.createIngredient": "Create ingredient",
-  "barcode.productNotFound": "Product not found",
-  "barcode.createManually": "Create manually",
-  "barcode.scanAgain": "Scan again",
-  "barcode.editBeforeSaving": "Edit before saving",
-  "barcode.loadingProductInfo": "Loading product info",
-  "barcode.helpTitle": "Barcode scan help",
+  "barcode.scanBarcode": "Сканувати штрихкод",
+  "barcode.cameraPermissionNeeded": "Потрібен доступ до камери",
+  "barcode.productAlreadyExists": "Товар уже існує",
+  "barcode.openExisting": "Відкрити наявний",
+  "barcode.createDuplicate": "Створити дублікат",
+  "barcode.weFoundProduct": "Ми знайшли товар",
+  "barcode.similarProductFound": "Це схоже на вже наявний інгредієнт",
+  "barcode.addBarcodeToExisting": "Додати штрихкод до наявного інгредієнта",
+  "barcode.createNewIngredient": "Створити новий інгредієнт",
+  "barcode.createIngredient": "Створити інгредієнт",
+  "barcode.productNotFound": "Товар не знайдено",
+  "barcode.createManually": "Створити вручну",
+  "barcode.scanAgain": "Сканувати знову",
+  "barcode.editBeforeSaving": "Відредагувати перед збереженням",
+  "barcode.loadingProductInfo": "Завантаження даних про товар",
+  "barcode.helpTitle": "Довідка зі сканування штрихкоду",
   "barcode.helpMessage":
-    "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
-  "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
-  "common.back": "Back",
-  "common.somethingWentWrong": "Something went wrong",
-  "common.tryAgain": "Try again",
+    "Наведіть камеру на штрихкод товару. Ми перевіримо, чи він уже існує, запропонуємо схожі інгредієнти та безпечно дамо змогу створити або прив’язати запис.",
+  "barcode.scannerUnavailable": "Сканер штрихкодів недоступний у цій збірці",
+  "common.back": "Назад",
+  "common.somethingWentWrong": "Щось пішло не так",
+  "common.tryAgain": "Спробуйте ще раз",
   "sideMenu.googleDriveSignIn": "Увійти через Google",
   "sideMenu.googleDriveSignInCaption": "Синхронізуйте дані між пристроями",
   "sideMenu.googleDriveSyncNow": "Синхронізувати",
