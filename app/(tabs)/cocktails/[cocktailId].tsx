@@ -2,7 +2,6 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
-import * as MediaLibrary from "expo-media-library";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
   useCallback,
@@ -29,7 +28,6 @@ import {
   type TextLayoutEvent,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { captureRef } from "react-native-view-shot";
 
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppDialog } from "@/components/AppDialog";
@@ -1196,7 +1194,12 @@ export default function CocktailDetailsScreen() {
     setIsExportingImage(true);
 
     try {
-      const permission = await MediaLibrary.requestPermissionsAsync();
+      const [{ captureRef }, mediaLibrary] = await Promise.all([
+        import("react-native-view-shot"),
+        import("expo-media-library"),
+      ]);
+
+      const permission = await mediaLibrary.requestPermissionsAsync();
       if (!permission.granted) {
         Alert.alert(
           t("cocktailDetails.exportPermissionTitle"),
@@ -1215,7 +1218,7 @@ export default function CocktailDetailsScreen() {
         snapshotContentContainer: true,
       });
 
-      await MediaLibrary.saveToLibraryAsync(imageUri);
+      await mediaLibrary.saveToLibraryAsync(imageUri);
       Alert.alert(
         t("cocktailDetails.exportSuccessTitle"),
         t("cocktailDetails.exportSuccessMessage"),
