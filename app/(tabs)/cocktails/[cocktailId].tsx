@@ -1111,6 +1111,7 @@ export default function CocktailDetailsScreen() {
   const [nameLayout, setNameLayout] = useState<{ y: number; height: number } | null>(null);
   const [isNameInHeader, setIsNameInHeader] = useState(false);
   const contentCaptureRef = useRef<View | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const smallestPartAmount = useMemo(() => {
     const convertibleAmounts = scaledIngredients
@@ -1144,6 +1145,13 @@ export default function CocktailDetailsScreen() {
     }
 
     try {
+      setIsExporting(true);
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => resolve());
+        });
+      });
+
       const screenshot = await makeImageFromView(contentCaptureRef);
       if (!screenshot) {
         throw new Error("Export screenshot capture failed.");
@@ -1186,6 +1194,8 @@ export default function CocktailDetailsScreen() {
       });
     } catch (error) {
       console.error("Failed to export cocktail details screenshot", error);
+    } finally {
+      setIsExporting(false);
     }
   }, [cocktail, t]);
 
@@ -1347,7 +1357,7 @@ export default function CocktailDetailsScreen() {
         }}
       />
 
-      <View ref={contentCaptureRef} collapsable={false} style={styles.contentCapture}>
+      <View style={styles.contentCapture}>
         <ScrollView
           ref={scrollRef}
           contentContainerStyle={styles.content}
@@ -1355,8 +1365,13 @@ export default function CocktailDetailsScreen() {
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
         >
-          {cocktail ? (
-          <View style={styles.section}>
+          <View
+            ref={contentCaptureRef}
+            collapsable={false}
+            style={[styles.contentCaptureBody, { backgroundColor: Colors.background }]}
+          >
+            {cocktail ? (
+              <View style={styles.section}>
             <Text
               style={[styles.name, { color: Colors.onSurface }]}
               onLayout={handleNameLayout}
@@ -2108,51 +2123,54 @@ export default function CocktailDetailsScreen() {
                   })}
                 </View>
 
-                <View style={styles.itemActions}>
-                  <Pressable
-                    onPress={handleCopyPress}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.copyCocktail")}
-                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="content-copy"
-                      size={18}
-                      color={Colors.primary}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleEditPress}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.editCocktail")}
-                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={18}
-                      color={Colors.primary}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
-                  </Pressable>
-                </View>
+                {!isExporting ? (
+                  <View style={styles.itemActions}>
+                    <Pressable
+                      onPress={handleCopyPress}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.copyCocktail")}
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    >
+                      <MaterialCommunityIcons
+                        name="content-copy"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                      <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleEditPress}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.editCocktail")}
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    >
+                      <MaterialCommunityIcons
+                        name="pencil-outline"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                      <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
+                    </Pressable>
+                  </View>
+                ) : null}
               </View>
             ) : null}
+              </View>
+            ) : (
+              <View style={styles.emptyState}>
+                <MaterialCommunityIcons
+                  name="glass-cocktail"
+                  size={42}
+                  color={Colors.onSurfaceVariant}
+                />
+                <Text
+                  style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
+                >
+                  {t("cocktailDetails.notFound")}
+                </Text>
+              </View>
+            )}
           </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <MaterialCommunityIcons
-              name="glass-cocktail"
-              size={42}
-              color={Colors.onSurfaceVariant}
-            />
-            <Text
-              style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
-            >
-              {t("cocktailDetails.notFound")}
-            </Text>
-          </View>
-          )}
         </ScrollView>
       </View>
 
@@ -2173,6 +2191,9 @@ const styles = StyleSheet.create({
   },
   contentCapture: {
     flex: 1,
+  },
+  contentCaptureBody: {
+    width: "100%",
   },
   headerActions: {
     flexDirection: "row",
