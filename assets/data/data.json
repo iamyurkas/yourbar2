@@ -6771,7 +6771,7 @@
     {
       "id": 95,
       "name": "Black Manhattan",
-      "description": "Black Manhattan is a modern, riff on the classic cocktail created by bartender Todd Smith in 2005. It substitutes the traditional sweet vermouth with Amaro Averna, creating a darker, more complex, and herbal flavour profile.",
+      "description": "Black Manhattan is a modern, riff on the classic cocktail created by bartender Todd Smith in 2005. It substitutes the traditional sweet vermouth with Amaro Averna, creating a darker, more complex, and herbal flavor profile.",
       "instructions": "1. Add 60 ml of **rye whiskey**, 30 ml of **amaro**, a dash of **Angostura bitters**, and a dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain the cocktail into a coupe or Nick & Nora glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/95-black-manhattan.jpg",
       "glassId": "coupe",
@@ -15530,7 +15530,7 @@
       "synonyms": [
         "Dubonnet and Gin"
       ],
-      "description": "A sophisticated and spirit-forward classic cocktail that perfectly balances the herbal complexity of **gin** with the rich, wine-based aromatics of **dubonnet** rouge. Historically known as a favourite of the British royal family, it offers a deep, velvet texture and a refined botanical finish.",
+      "description": "A sophisticated and spirit-forward classic cocktail that perfectly balances the herbal complexity of **gin** with the rich, wine-based aromatics of **dubonnet** rouge. Historically known as a favorite of the British royal family, it offers a deep, velvet texture and a refined botanical finish.",
       "instructions": "1. Add 30 ml of **gin** and 60 ml of **dubonnet** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **lemon** wedge.",
       "photoUri": "assets/cocktails/215-dubonnet-cocktail.jpg",
       "glassId": "martini",
@@ -23209,7 +23209,7 @@
       "synonyms": [
         "Sherry Cocktail"
       ],
-      "description": "Sherry depth and stoned fruit flavours.",
+      "description": "Sherry depth and stoned fruit flavors.",
       "instructions": "1. Add 15 ml of **Fino sherry**, 15 ml of **Pedro Ximenez sherry**, 30 ml of **peach schnapps**, 30 ml of **Sauvignon Blanc**, 30 ml of **plum brandy**, and 1 dash of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).",
       "photoUri": "assets/cocktails/326-jerez.jpg",
       "glassId": "rocks_glass",
@@ -24914,7 +24914,7 @@
         "Liquorice Martini",
         "Anise Martini"
       ],
-      "description": "A sophisticated, spirit-forward cocktail that highlights the botanical notes of **gin** balanced by the deep, **anise**-flavoured complexity of **black sambuca**. This drink is smooth, aromatic, and perfect for those who enjoy bold, herbal profiles.",
+      "description": "A sophisticated, spirit-forward cocktail that highlights the botanical notes of **gin** balanced by the deep, **anise**-flavored complexity of **black sambuca**. This drink is smooth, aromatic, and perfect for those who enjoy bold, herbal profiles.",
       "instructions": "1. Add 60 ml of **gin**, 7.5 ml of **black sambuca**, 5 ml of **rich simple syrup**, and a stalk of **liquorice** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.",
       "photoUri": "assets/cocktails/350-liquorice.jpg",
       "glassId": "martini",
@@ -30470,7 +30470,7 @@
     {
       "id": 427,
       "name": "Pedro Manhattan",
-      "description": "Pedro Manhattan is a variation on the classic Manhattan cocktail that replaces the traditional sweet vermouth with **Pedro Ximenez sherry**. the Pedro Manhattan is a great choice for those who enjoy the classic Manhattan cocktail but want to try something a little different, with a unique flavour profile.",
+      "description": "Pedro Manhattan is a variation on the classic Manhattan cocktail that replaces the traditional sweet vermouth with **Pedro Ximenez sherry**. the Pedro Manhattan is a great choice for those who enjoy the classic Manhattan cocktail but want to try something a little different, with a unique flavor profile.",
       "instructions": "1. Add 50 ml of **bourbon**, 20 ml of **Pedro Ximenez sherry**, a dash of **Angostura bitters**, and 2 dashes of **creole bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled martini glass.\n5. Garnish with a **maraschino cherry**.",
       "photoUri": "assets/cocktails/427-pedro-manhattan.jpg",
       "glassId": "martini",
@@ -31892,7 +31892,7 @@
     {
       "id": 446,
       "name": "Rabo de Galo",
-      "description": "A classic brazilian staple that translates to 'tail of the rooster'. This drink is a complex, bittersweet harmony of **cachaça** and herbal **amaro**, offering a deep and punchy flavour profile that is both rustic and refined.",
+      "description": "A classic brazilian staple that translates to 'tail of the rooster'. This drink is a complex, bittersweet harmony of **cachaça** and herbal **amaro**, offering a deep and punchy flavor profile that is both rustic and refined.",
       "instructions": "1. Add 60 ml of **cachaça**, 20 ml of **red vermouth**, 15 ml of **Cynar**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/446-rabo-de-galo.jpg",
       "glassId": "rocks_glass",
@@ -44028,7 +44028,7 @@
     {
       "id": 615,
       "name": "Jäger Negroni",
-      "description": "A lightly spicy **Negroni** perfectly suited as an after-dinner digestif. **Jägermeister** adds an interesting blend of herbal flavours which combine with the **gin**'s herbals to create a burst of tastes.",
+      "description": "A lightly spicy **Negroni** perfectly suited as an after-dinner digestif. **Jägermeister** adds an interesting blend of herbal flavors which combine with the **gin**'s herbals to create a burst of tastes.",
       "instructions": "1. Add 22.5 ml **gin**, 22.5 ml **red vermouth**, 22.5 ml **Jägermeister**, and 7.5 ml **Campari** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Briefly stir until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
       "glassId": "rocks_glass",
       "methodIds": [
