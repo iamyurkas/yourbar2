@@ -3189,5 +3189,14 @@
   "ingredient.367.description": "Süßer, aromatischer Likör, der durch Mazeration von Ingwerwurzel in Alkohol hergestellt wird und oft mit Zitrusölen, Zucker und gelegentlich Botanicals verfeinert ist. Typischer Alkoholgehalt: 25-30 % vol.",
   "ingredient.368.name": "Salzlösung (4:1)",
   "ingredient.368.synonyms": "Saline solution (4:1)",
-  "ingredient.368.description": "Eine 4:1-Salzlösung für Cocktails ist eine 20%ige Mischung zur Geschmacksverstärkung. Üblicherweise wird sie hergestellt, indem 1 Teil Salz in 4 Teilen Wasser nach Gewicht gelöst wird (z. B. 20 g Salz in 80 g Wasser oder 1 oz Salz in 4 oz Wasser)."
+  "ingredient.368.description": "Eine 4:1-Salzlösung für Cocktails ist eine 20%ige Mischung zur Geschmacksverstärkung. Üblicherweise wird sie hergestellt, indem 1 Teil Salz in 4 Teilen Wasser nach Gewicht gelöst wird (z. B. 20 g Salz in 80 g Wasser oder 1 oz Salz in 4 oz Wasser).",
+  "ingredient.369.name": "London Dry Gin",
+  "ingredient.369.synonyms": "London Dry Gin",
+  "ingredient.369.description": "Klassischer trockener Gin-Stil mit klarem Wacholderprofil, frischer Zitrusschale und ohne zugesetzten Zucker nach der Destillation.",
+  "ingredient.370.name": "Plymouth Gin",
+  "ingredient.370.synonyms": "Plymouth Gin",
+  "ingredient.370.description": "Geschützter Gin-Stil aus Plymouth (England), weicher und erdiger als London Dry mit ausgewogenem Wacholder und wurzeligen Botanicals.",
+  "ingredient.371.name": "Botanischer Gin",
+  "ingredient.371.synonyms": "Botanical Gin",
+  "ingredient.371.description": "Moderner aromatischer Gin-Stil mit Fokus auf ausdrucksstarke Botanicals wie florale, kräuterige und zitrische Noten statt strenger Wacholderdominanz."
 }
