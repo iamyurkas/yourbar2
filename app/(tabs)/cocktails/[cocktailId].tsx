@@ -1,8 +1,11 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { ImageFormat, makeImageFromView } from "@shopify/react-native-skia";
+import * as FileSystem from "expo-file-system/legacy";
 import { Image } from "expo-image";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router, Stack, useLocalSearchParams } from "expo-router";
+import * as Sharing from "expo-sharing";
 import {
   useCallback,
   useEffect,
@@ -18,6 +21,7 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TextInput,
@@ -35,12 +39,12 @@ import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
-import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
   type CocktailMethodId,
 } from "@/constants/cocktail-methods";
+import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { getPluralCategory } from "@/libs/i18n/plural";
@@ -1106,6 +1110,7 @@ export default function CocktailDetailsScreen() {
   const [isHelpVisible, setIsHelpVisible] = useState(false);
   const [nameLayout, setNameLayout] = useState<{ y: number; height: number } | null>(null);
   const [isNameInHeader, setIsNameInHeader] = useState(false);
+  const contentCaptureRef = useRef<View | null>(null);
 
   const smallestPartAmount = useMemo(() => {
     const convertibleAmounts = scaledIngredients
@@ -1132,6 +1137,57 @@ export default function CocktailDetailsScreen() {
   const handleSelectDisplayMode = useCallback((mode: IngredientDisplayMode) => {
     setIngredientDisplayMode(mode);
   }, []);
+
+  const handleExportCocktail = useCallback(async () => {
+    if (!cocktail || !contentCaptureRef.current) {
+      return;
+    }
+
+    try {
+      const screenshot = await makeImageFromView(contentCaptureRef);
+      if (!screenshot) {
+        throw new Error("Export screenshot capture failed.");
+      }
+      const imageBase64 = screenshot.encodeToBase64(ImageFormat.PNG, 100);
+      if (!imageBase64) {
+        throw new Error("Export screenshot encoding failed.");
+      }
+
+      const baseDirectory =
+        FileSystem.cacheDirectory ?? FileSystem.documentDirectory ?? "";
+      if (!baseDirectory) {
+        throw new Error("Export screenshot directory unavailable.");
+      }
+
+      const sanitizedName = normalizeSearchText(cocktail.name ?? "cocktail")
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "")
+        .slice(0, 40) || "cocktail";
+      const fileName = `yourbar-${sanitizedName}-${Date.now()}.png`;
+      const fileUri = `${baseDirectory.replace(/\/?$/, "/")}${fileName}`;
+
+      await FileSystem.writeAsStringAsync(fileUri, imageBase64, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, {
+          mimeType: "image/png",
+          dialogTitle: t("cocktailDetails.exportCocktail"),
+          UTI: "public.png",
+        });
+        return;
+      }
+
+      await Share.share({
+        title: t("cocktailDetails.exportCocktail"),
+        message: t("cocktailDetails.exportFallbackMessage"),
+        url: fileUri,
+      });
+    } catch (error) {
+      console.error("Failed to export cocktail details screenshot", error);
+    }
+  }, [cocktail, t]);
 
   const toggleMethodDescription = useCallback((methodId: string) => {
     setExpandedMethodIds((current) =>
@@ -1265,369 +1321,339 @@ export default function CocktailDetailsScreen() {
             </HeaderIconButton>
           ),
           headerRight: () => (
-            <HeaderIconButton
-              onPress={() => setIsHelpVisible(true)}
-              accessibilityLabel={t("common.openScreenHelp")}
-            >
-              <MaterialCommunityIcons
-                name="help-circle-outline"
-                size={20}
-                color={Colors.onSurface}
-              />
-            </HeaderIconButton>
+            <View style={styles.headerActions}>
+              <HeaderIconButton
+                onPress={() => setIsHelpVisible(true)}
+                accessibilityLabel={t("common.openScreenHelp")}
+              >
+                <MaterialCommunityIcons
+                  name="help-circle-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+              <HeaderIconButton
+                onPress={handleExportCocktail}
+                accessibilityLabel={t("cocktailDetails.exportCocktail")}
+              >
+                <MaterialCommunityIcons
+                  name="image-outline"
+                  size={20}
+                  color={Colors.onSurface}
+                />
+              </HeaderIconButton>
+            </View>
           ),
         }}
       />
 
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={styles.content}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-      >
-        {cocktail ? (
-          <View style={styles.section}>
-            <Text
-              style={[styles.name, { color: Colors.onSurface }]}
-              onLayout={handleNameLayout}
-            >
-              {cocktail.name}
-            </Text>
+      <View ref={contentCaptureRef} collapsable={false} style={styles.contentCapture}>
+        <ScrollView
+          ref={scrollRef}
+          contentContainerStyle={styles.content}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          {cocktail ? (
+            <View style={styles.section}>
+              <Text
+                style={[styles.name, { color: Colors.onSurface }]}
+                onLayout={handleNameLayout}
+              >
+                {cocktail.name}
+              </Text>
 
-            <View style={styles.mediaSection}>
-              <View style={styles.photoWrapper}>
-                {displayedImageSource ? (
-                  <AppImage
-                    source={displayedImageSource}
-                    style={[styles.photo, { backgroundColor: Colors.surfaceBright }]}
-                    contentFit="contain"
-                  />
-                ) : (
-                  <View
-                    style={[
-                      styles.photoPlaceholder,
-                      { borderColor: Colors.outline, backgroundColor: Colors.surfaceBright },
-                    ]}
-                  >
-                    <MaterialCommunityIcons
-                      name="image-off"
-                      size={36}
-                      color={Colors.onSurfaceVariant}
+              <View style={styles.mediaSection}>
+                <View style={styles.photoWrapper}>
+                  {displayedImageSource ? (
+                    <AppImage
+                      source={displayedImageSource}
+                      style={[styles.photo, { backgroundColor: Colors.surfaceBright }]}
+                      contentFit="contain"
                     />
-                    <Text
+                  ) : (
+                    <View
                       style={[
-                        styles.photoPlaceholderText,
-                        { color: Colors.onSurfaceVariant },
+                        styles.photoPlaceholder,
+                        { borderColor: Colors.outline, backgroundColor: Colors.surfaceBright },
                       ]}
                     >
-                      {t("cocktailDetails.noPhoto")}
-                    </Text>
-                  </View>
-                )}
-              </View>
-
-              <View style={styles.ratingRow}>
-                <View style={styles.ratingStarsRow}>
-                  {Array.from({ length: MAX_RATING }).map((_, index) => {
-                    const starValue = index + 1;
-                    const isActive = displayedRating >= starValue;
-                    const icon = isActive ? "star" : "star-outline";
-
-                    return (
-                      <Pressable
-                        key={`rating-star-${starValue}`}
-                        onPress={() => handleRatingSelect(starValue)}
-                        accessibilityRole="button"
-                        accessibilityLabel={
-                          displayedRating === starValue
-                            ? t("cocktailDetails.clearRating")
-                            : t("cocktailDetails.setRatingTo", { value: starValue })
-                        }
-                        style={styles.ratingStar}
-                        hitSlop={8}
+                      <MaterialCommunityIcons
+                        name="image-off"
+                        size={36}
+                        color={Colors.onSurfaceVariant}
+                      />
+                      <Text
+                        style={[
+                          styles.photoPlaceholderText,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
                       >
-                        <MaterialCommunityIcons
-                          name={icon}
-                          size={32}
+                        {t("cocktailDetails.noPhoto")}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.ratingRow}>
+                  <View style={styles.ratingStarsRow}>
+                    {Array.from({ length: MAX_RATING }).map((_, index) => {
+                      const starValue = index + 1;
+                      const isActive = displayedRating >= starValue;
+                      const icon = isActive ? "star" : "star-outline";
+
+                      return (
+                        <Pressable
+                          key={`rating-star-${starValue}`}
+                          onPress={() => handleRatingSelect(starValue)}
+                          accessibilityRole="button"
+                          accessibilityLabel={
+                            displayedRating === starValue
+                              ? t("cocktailDetails.clearRating")
+                              : t("cocktailDetails.setRatingTo", { value: starValue })
+                          }
+                          style={styles.ratingStar}
+                          hitSlop={8}
+                        >
+                          <MaterialCommunityIcons
+                            name={icon}
+                            size={32}
+                            color={Colors.tint}
+                          />
+                        </Pressable>
+                      );
+                    })}
+                  </View>
+                </View>
+                <View style={styles.partyControlsWrapper}>
+                  <View style={styles.partyControlRow}>
+                    <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('common.tabParty')}</Text>
+                    <View style={styles.partyControlActionSlot}>
+                      <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
+                    </View>
+                  </View>
+                  <View style={styles.partyControlRow}>
+                    <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('cocktailDetails.buyAllIngredients')}</Text>
+                    <View style={styles.partyControlActionSlot}>
+                      <Pressable
+                        onPress={handleAddCocktailIngredientsToShopping}
+                        accessibilityRole="button"
+                        accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
+                        style={styles.partyShoppingButton}
+                        hitSlop={8}>
+                        <MaterialIcons
+                          name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
+                          size={24}
                           color={Colors.tint}
                         />
                       </Pressable>
-                    );
-                  })}
-                </View>
-              </View>
-              <View style={styles.partyControlsWrapper}>
-                <View style={styles.partyControlRow}>
-                  <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('common.tabParty')}</Text>
-                  <View style={styles.partyControlActionSlot}>
-                    <PresenceCheck checked={isPartySelected} onToggle={handlePartySelectionToggle} />
-                  </View>
-                </View>
-                <View style={styles.partyControlRow}>
-                  <Text style={[styles.partyControlLabel, { color: Colors.onSurfaceVariant }]}>{t('cocktailDetails.buyAllIngredients')}</Text>
-                  <View style={styles.partyControlActionSlot}>
-                    <Pressable
-                      onPress={handleAddCocktailIngredientsToShopping}
-                      accessibilityRole="button"
-                      accessibilityLabel={t('cocktailDetails.addCocktailIngredientsToShopping')}
-                      style={styles.partyShoppingButton}
-                      hitSlop={8}>
-                      <MaterialIcons
-                        name={areAllCocktailIngredientsOnShoppingList ? 'shopping-cart' : 'add-shopping-cart'}
-                        size={24}
-                        color={Colors.tint}
-                      />
-                    </Pressable>
-                  </View>
-                </View>
-              </View>
-
-              {photoSource && glassSource && glassLabel ? (
-                <View style={styles.glassInfo}>
-                  <View style={styles.glassInfoLeft}>
-                    <View style={styles.glassImageWrapper}>
-                      <AppImage
-                        source={glassSource}
-                        style={styles.glassImage}
-                        contentFit="contain"
-                      />
                     </View>
-                    <Text
-                      style={[styles.glassLabel, { color: Colors.onSurface }]}
-                    >
-                      {glassLabel}
-                    </Text>
                   </View>
-
-                  {videoService ? (
-                    <Pressable
-                      onPress={handleOpenVideos}
-                      accessibilityRole="button"
-                      accessibilityLabel={t("cocktailDetails.openVideos")}
-                      style={styles.videoButton}
-                      hitSlop={8}
-                    >
-                      <MaterialCommunityIcons
-                        name={resolveVideoServiceIcon(videoService)}
-                        size={28}
-                        color={Colors.tint}
-                      />
-                    </Pressable>
-                  ) : null}
                 </View>
+
+                {photoSource && glassSource && glassLabel ? (
+                  <View style={styles.glassInfo}>
+                    <View style={styles.glassInfoLeft}>
+                      <View style={styles.glassImageWrapper}>
+                        <AppImage
+                          source={glassSource}
+                          style={styles.glassImage}
+                          contentFit="contain"
+                        />
+                      </View>
+                      <Text
+                        style={[styles.glassLabel, { color: Colors.onSurface }]}
+                      >
+                        {glassLabel}
+                      </Text>
+                    </View>
+
+                    {videoService ? (
+                      <Pressable
+                        onPress={handleOpenVideos}
+                        accessibilityRole="button"
+                        accessibilityLabel={t("cocktailDetails.openVideos")}
+                        style={styles.videoButton}
+                        hitSlop={8}
+                      >
+                        <MaterialCommunityIcons
+                          name={resolveVideoServiceIcon(videoService)}
+                          size={28}
+                          color={Colors.tint}
+                        />
+                      </Pressable>
+                    ) : null}
+                  </View>
+                ) : null}
+
+              </View>
+
+              <View style={styles.methodsAndCommentRow}>
+                {methodDetails.length ? (
+                  <View style={styles.methodList}>
+                    {methodDetails.map((method) => {
+                      const icon = METHOD_ICON_MAP[method.id];
+                      const isExpanded = expandedMethodIds.includes(method.id);
+                      return (
+                        <View key={method.id} style={styles.methodEntry}>
+                          <View style={styles.methodHeader}>
+                            <View style={styles.methodIconWrapper}>
+                              {icon?.type === "asset" ? (
+                                <Image
+                                  source={icon.source}
+                                  style={[
+                                    styles.methodIcon,
+                                    { tintColor: Colors.onSurfaceVariant },
+                                  ]}
+                                  contentFit="contain"
+                                />
+                              ) : (
+                                <MaterialCommunityIcons
+                                  name={
+                                    icon?.type === "icon"
+                                      ? icon.name
+                                      : "information-outline"
+                                  }
+                                  size={18}
+                                  color={Colors.onSurfaceVariant}
+                                  style={method.id === "muddle" ? styles.muddleIcon : undefined}
+                                />
+                              )}
+                            </View>
+                            <Text
+                              style={[
+                                styles.methodLabel,
+                                { color: Colors.onSurface },
+                              ]}
+                            >
+                              {t(`cocktailMethod.${method.id}.label`)}
+                            </Text>
+                            <Pressable
+                              onPress={() => toggleMethodDescription(method.id)}
+                              accessibilityRole="button"
+                              accessibilityLabel={
+                                isExpanded
+                                  ? t("cocktailDetails.hideMethodDescription", {
+                                    method: t(`cocktailMethod.${method.id}.label`),
+                                  })
+                                  : t("cocktailDetails.showMethodDescription", {
+                                    method: t(`cocktailMethod.${method.id}.label`),
+                                  })
+                              }
+                              hitSlop={8}
+                            >
+                              <MaterialCommunityIcons
+                                name="information-outline"
+                                size={16}
+                                color={Colors.primary}
+                              />
+                            </Pressable>
+                          </View>
+                          {isExpanded ? (
+                            <Text
+                              style={[
+                                styles.methodDescription,
+                                { color: Colors.onSurfaceVariant },
+                              ]}
+                            >
+                              {t(`cocktailMethod.${method.id}.description`)}
+                            </Text>
+                          ) : null}
+                        </View>
+                      );
+                    })}
+                  </View>
+                ) : (
+                  <View style={styles.methodListFiller} />
+                )}
+
+                <Pressable
+                  onPress={handleToggleCommentField}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("cocktailDetails.toggleComment")}
+                  style={styles.commentToggleButton}
+                  hitSlop={8}
+                >
+                  <MaterialCommunityIcons
+                    name={isCommentFieldVisible ? "comment-edit" : hasComment ? "comment" : "comment-plus-outline"}
+                    size={28}
+                    color={Colors.tint}
+                  />
+                </Pressable>
+              </View>
+
+              {isCommentFieldVisible ? (
+                <TextInput
+                  value={commentDraft}
+                  onChangeText={setCommentDraft}
+                  onBlur={persistFeedbackDraft}
+                  onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
+                  placeholder={t("cocktailDetails.commentPlaceholder")}
+                  placeholderTextColor={Colors.onSurfaceVariant}
+                  multiline
+                  textAlignVertical="top"
+                  style={[
+                    styles.commentInput,
+                    {
+                      color: Colors.text,
+                      borderColor: Colors.outlineVariant,
+                      backgroundColor: Colors.background,
+                    },
+                  ]}
+                />
               ) : null}
 
-            </View>
-
-            <View style={styles.methodsAndCommentRow}>
-              {methodDetails.length ? (
-                <View style={styles.methodList}>
-                  {methodDetails.map((method) => {
-                    const icon = METHOD_ICON_MAP[method.id];
-                    const isExpanded = expandedMethodIds.includes(method.id);
-                    return (
-                      <View key={method.id} style={styles.methodEntry}>
-                        <View style={styles.methodHeader}>
-                          <View style={styles.methodIconWrapper}>
-                            {icon?.type === "asset" ? (
-                              <Image
-                                source={icon.source}
-                                style={[
-                                  styles.methodIcon,
-                                  { tintColor: Colors.onSurfaceVariant },
-                                ]}
-                                contentFit="contain"
-                              />
-                            ) : (
-                              <MaterialCommunityIcons
-                                name={
-                                  icon?.type === "icon"
-                                    ? icon.name
-                                    : "information-outline"
-                                }
-                                size={18}
-                                color={Colors.onSurfaceVariant}
-                                style={method.id === "muddle" ? styles.muddleIcon : undefined}
-                              />
-                            )}
-                          </View>
-                          <Text
-                            style={[
-                              styles.methodLabel,
-                              { color: Colors.onSurface },
-                            ]}
-                          >
-                            {t(`cocktailMethod.${method.id}.label`)}
-                          </Text>
-                          <Pressable
-                            onPress={() => toggleMethodDescription(method.id)}
-                            accessibilityRole="button"
-                            accessibilityLabel={
-                              isExpanded
-                                ? t("cocktailDetails.hideMethodDescription", {
-                                  method: t(`cocktailMethod.${method.id}.label`),
-                                })
-                                : t("cocktailDetails.showMethodDescription", {
-                                  method: t(`cocktailMethod.${method.id}.label`),
-                                })
-                            }
-                            hitSlop={8}
-                          >
-                            <MaterialCommunityIcons
-                              name="information-outline"
-                              size={16}
-                              color={Colors.primary}
-                            />
-                          </Pressable>
-                        </View>
-                        {isExpanded ? (
-                          <Text
-                            style={[
-                              styles.methodDescription,
-                              { color: Colors.onSurfaceVariant },
-                            ]}
-                          >
-                            {t(`cocktailMethod.${method.id}.description`)}
-                          </Text>
-                        ) : null}
-                      </View>
-                    );
-                  })}
-                </View>
-              ) : (
-                <View style={styles.methodListFiller} />
-              )}
-
-              <Pressable
-                onPress={handleToggleCommentField}
-                accessibilityRole="button"
-                accessibilityLabel={t("cocktailDetails.toggleComment")}
-                style={styles.commentToggleButton}
-                hitSlop={8}
-              >
-                <MaterialCommunityIcons
-                  name={isCommentFieldVisible ? "comment-edit" : hasComment ? "comment" : "comment-plus-outline"}
-                  size={28}
-                  color={Colors.tint}
-                />
-              </Pressable>
-            </View>
-
-            {isCommentFieldVisible ? (
-              <TextInput
-                value={commentDraft}
-                onChangeText={setCommentDraft}
-                onBlur={persistFeedbackDraft}
-                onFocus={(event) => scrollFieldIntoView(event.nativeEvent.target)}
-                placeholder={t("cocktailDetails.commentPlaceholder")}
-                placeholderTextColor={Colors.onSurfaceVariant}
-                multiline
-                textAlignVertical="top"
-                style={[
-                  styles.commentInput,
-                  {
-                    color: Colors.text,
-                    borderColor: Colors.outlineVariant,
-                    backgroundColor: Colors.background,
-                  },
-                ]}
-              />
-            ) : null}
-
-            <View style={styles.tagList}>
-              {selectedTags.map((tag) => {
-                const translated = t(`cocktailTag.${tag.id}`);
-                const finalName =
-                  translated !== `cocktailTag.${tag.id}` ? translated : tag.name;
-                return (
-                  <TagPill
-                    key={`selected-tag-${tag.id}`}
-                    label={finalName ?? t("cocktailDetails.tag")}
-                    color={tag.color ?? Colors.tint}
-                    selected
-                    onPress={() => handleToggleTag(tag.id)}
-                    accessibilityRole="button"
-                    accessibilityLabel={finalName ?? t("cocktailDetails.tag")}
-                  />
-                );
-              })}
-              <TagPill
-                label="+Add"
-                color={Colors.primary}
-                selected={false}
-                onPress={() => setIsAddTagsVisible((current) => !current)}
-                style={{ backgroundColor: Colors.onPrimary }}
-                accessibilityRole="button"
-                accessibilityLabel="+Add"
-              />
-            </View>
-
-            {isAddTagsVisible && unselectedTags.length > 0 ? (
               <View style={styles.tagList}>
-                {unselectedTags.map((tag) => {
+                {selectedTags.map((tag) => {
                   const translated = t(`cocktailTag.${tag.id}`);
                   const finalName =
                     translated !== `cocktailTag.${tag.id}` ? translated : tag.name;
                   return (
                     <TagPill
-                      key={`available-tag-${tag.id}`}
+                      key={`selected-tag-${tag.id}`}
                       label={finalName ?? t("cocktailDetails.tag")}
                       color={tag.color ?? Colors.tint}
+                      selected
                       onPress={() => handleToggleTag(tag.id)}
                       accessibilityRole="button"
                       accessibilityLabel={finalName ?? t("cocktailDetails.tag")}
                     />
                   );
                 })}
-              </View>
-            ) : null}
-
-            {descriptionParagraphs.length ? (
-              <View style={styles.textBlock}>
-                <Pressable
-                  onPress={toggleDescription}
+                <TagPill
+                  label="+Add"
+                  color={Colors.primary}
+                  selected={false}
+                  onPress={() => setIsAddTagsVisible((current) => !current)}
+                  style={{ backgroundColor: Colors.onPrimary }}
                   accessibilityRole="button"
-                  accessibilityLabel={
-                    isDescriptionExpanded
-                      ? t("cocktailDetails.showLessDescription")
-                      : t("cocktailDetails.showFullDescription")
-                  }
-                  hitSlop={8}
-                >
-                  <View style={styles.instructionsList}>
-                    {isDescriptionExpanded
-                      ? descriptionParagraphs.map((paragraph, index) => (
-                        <FormattedText
-                          key={`description-${index}`}
-                          style={[
-                            styles.instructionsText,
-                            { color: Colors.onSurface },
-                          ]}
-                        >
-                          {paragraph}
-                        </FormattedText>
-                      ))
-                      : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
-                        <FormattedText
-                          key={`description-${index}`}
-                          style={[
-                            styles.instructionsText,
-                            { color: Colors.onSurfaceVariant },
-                          ]}
-                          numberOfLines={
-                            shouldTruncateDescription
-                              ? DESCRIPTION_PREVIEW_LINES
-                              : undefined
-                          }
-                          onTextLayout={handleDescriptionLayout}
-                        >
-                          {paragraph}
-                        </FormattedText>
-                      ))}
-                  </View>
-                </Pressable>
-                {shouldTruncateDescription ? (
+                  accessibilityLabel="+Add"
+                />
+              </View>
+
+              {isAddTagsVisible && unselectedTags.length > 0 ? (
+                <View style={styles.tagList}>
+                  {unselectedTags.map((tag) => {
+                    const translated = t(`cocktailTag.${tag.id}`);
+                    const finalName =
+                      translated !== `cocktailTag.${tag.id}` ? translated : tag.name;
+                    return (
+                      <TagPill
+                        key={`available-tag-${tag.id}`}
+                        label={finalName ?? t("cocktailDetails.tag")}
+                        color={tag.color ?? Colors.tint}
+                        onPress={() => handleToggleTag(tag.id)}
+                        accessibilityRole="button"
+                        accessibilityLabel={finalName ?? t("cocktailDetails.tag")}
+                      />
+                    );
+                  })}
+                </View>
+              ) : null}
+
+              {descriptionParagraphs.length ? (
+                <View style={styles.textBlock}>
                   <Pressable
                     onPress={toggleDescription}
                     accessibilityRole="button"
@@ -1638,453 +1664,497 @@ export default function CocktailDetailsScreen() {
                     }
                     hitSlop={8}
                   >
-                    <Text
-                      style={[styles.descriptionToggleText, { color: Colors.tint }]}
-                    >
+                    <View style={styles.instructionsList}>
                       {isDescriptionExpanded
-                        ? t("cocktailDetails.showLess")
-                        : t("cocktailDetails.showMore")}
-                    </Text>
-                  </Pressable>
-                ) : null}
-              </View>
-            ) : null}
-
-            {instructionsParagraphs.length ? (
-              <View style={styles.textBlock}>
-                <Text
-                  style={[
-                    styles.instructionsTitle,
-                    { color: Colors.onSurface },
-                  ]}
-                >
-                  {t("cocktailDetails.instructions")}
-                </Text>
-                <View style={styles.instructionsList}>
-                  {instructionsParagraphs.map((paragraph, index) => (
-                    <FormattedText
-                      key={`instruction-${index}`}
-                      style={[
-                        styles.instructionsText,
-                        { color: Colors.onSurface },
-                      ]}
-                    >
-                      {paragraph}
-                    </FormattedText>
-                  ))}
-                </View>
-              </View>
-            ) : null}
-
-            {sortedIngredients.length ? (
-              <View style={styles.textBlock}>
-                <View style={styles.ingredientsHeaderRow}>
-                  <Text
-                    style={[styles.sectionTitle, { color: Colors.onSurface }]}
-                  >
-                    {t("cocktailDetails.ingredients")}
-                  </Text>
-                  <View
-                    style={[
-                      styles.displayModeSwitcher,
-                      {
-                        borderColor: Colors.primary,
-                        backgroundColor: Colors.surfaceBright,
-                      },
-                    ]}
-                  >
-                    {(["imperial", "metric", "parts"] as const).map((mode) => {
-                      const isActive = ingredientDisplayMode === mode;
-                      return (
-                        <Pressable
-                          key={mode}
-                          onPress={() => handleSelectDisplayMode(mode)}
-                          style={[
-                            styles.displayModeOption,
-                            isActive
-                              ? { backgroundColor: Colors.primary }
-                              : undefined,
-                          ]}
-                          accessibilityRole="button"
-                          accessibilityState={{ selected: isActive }}
-                          accessibilityLabel={t(`cocktailDetails.displayMode.${mode}`)}
-                        >
-                          <Text
+                        ? descriptionParagraphs.map((paragraph, index) => (
+                          <FormattedText
+                            key={`description-${index}`}
                             style={[
-                              styles.displayModeOptionLabel,
-                              { color: isActive ? Colors.onPrimary : Colors.primary },
+                              styles.instructionsText,
+                              { color: Colors.onSurface },
                             ]}
                           >
-                            {t(`cocktailDetails.displayMode.${mode}`)}
-                          </Text>
-                        </Pressable>
+                            {paragraph}
+                          </FormattedText>
+                        ))
+                        : descriptionParagraphs.slice(0, 1).map((paragraph, index) => (
+                          <FormattedText
+                            key={`description-${index}`}
+                            style={[
+                              styles.instructionsText,
+                              { color: Colors.onSurfaceVariant },
+                            ]}
+                            numberOfLines={
+                              shouldTruncateDescription
+                                ? DESCRIPTION_PREVIEW_LINES
+                                : undefined
+                            }
+                            onTextLayout={handleDescriptionLayout}
+                          >
+                            {paragraph}
+                          </FormattedText>
+                        ))}
+                    </View>
+                  </Pressable>
+                  {shouldTruncateDescription ? (
+                    <Pressable
+                      onPress={toggleDescription}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        isDescriptionExpanded
+                          ? t("cocktailDetails.showLessDescription")
+                          : t("cocktailDetails.showFullDescription")
+                      }
+                      hitSlop={8}
+                    >
+                      <Text
+                        style={[styles.descriptionToggleText, { color: Colors.tint }]}
+                      >
+                        {isDescriptionExpanded
+                          ? t("cocktailDetails.showLess")
+                          : t("cocktailDetails.showMore")}
+                      </Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+              ) : null}
+
+              {instructionsParagraphs.length ? (
+                <View style={styles.textBlock}>
+                  <Text
+                    style={[
+                      styles.instructionsTitle,
+                      { color: Colors.onSurface },
+                    ]}
+                  >
+                    {t("cocktailDetails.instructions")}
+                  </Text>
+                  <View style={styles.instructionsList}>
+                    {instructionsParagraphs.map((paragraph, index) => (
+                      <FormattedText
+                        key={`instruction-${index}`}
+                        style={[
+                          styles.instructionsText,
+                          { color: Colors.onSurface },
+                        ]}
+                      >
+                        {paragraph}
+                      </FormattedText>
+                    ))}
+                  </View>
+                </View>
+              ) : null}
+
+              {sortedIngredients.length ? (
+                <View style={styles.textBlock}>
+                  <View style={styles.ingredientsHeaderRow}>
+                    <Text
+                      style={[styles.sectionTitle, { color: Colors.onSurface }]}
+                    >
+                      {t("cocktailDetails.ingredients")}
+                    </Text>
+                    <View
+                      style={[
+                        styles.displayModeSwitcher,
+                        {
+                          borderColor: Colors.primary,
+                          backgroundColor: Colors.surfaceBright,
+                        },
+                      ]}
+                    >
+                      {(["imperial", "metric", "parts"] as const).map((mode) => {
+                        const isActive = ingredientDisplayMode === mode;
+                        return (
+                          <Pressable
+                            key={mode}
+                            onPress={() => handleSelectDisplayMode(mode)}
+                            style={[
+                              styles.displayModeOption,
+                              isActive
+                                ? { backgroundColor: Colors.primary }
+                                : undefined,
+                            ]}
+                            accessibilityRole="button"
+                            accessibilityState={{ selected: isActive }}
+                            accessibilityLabel={t(`cocktailDetails.displayMode.${mode}`)}
+                          >
+                            <Text
+                              style={[
+                                styles.displayModeOptionLabel,
+                                { color: isActive ? Colors.onPrimary : Colors.primary },
+                              ]}
+                            >
+                              {t(`cocktailDetails.displayMode.${mode}`)}
+                            </Text>
+                          </Pressable>
+                        );
+                      })}
+                    </View>
+                  </View>
+                  <View style={styles.servingsControl}>
+                    <Text
+                      style={[styles.servingsLabel, { color: Colors.onSurfaceVariant }]}
+                    >
+                      {t("cocktailDetails.servings")}
+                    </Text>
+                    <View
+                      style={[
+                        styles.servingsStepper,
+                        { borderColor: Colors.outline, backgroundColor: Colors.surfaceBright },
+                      ]}
+                    >
+                      <Pressable
+                        onPress={handleDecreaseServings}
+                        disabled={!canDecreaseServings}
+                        style={styles.servingsButton}
+                        accessibilityRole="button"
+                        accessibilityLabel={t("cocktailDetails.decreaseServings")}
+                      >
+                        <MaterialCommunityIcons
+                          name="minus"
+                          size={18}
+                          color={canDecreaseServings ? Colors.primary : Colors.onSurfaceDisabled}
+                        />
+                      </Pressable>
+                      <Text style={[styles.servingsValue, { color: Colors.onSurface }]}>
+                        {formatAmount(servings)}
+                      </Text>
+                      <Pressable
+                        onPress={handleIncreaseServings}
+                        style={styles.servingsButton}
+                        accessibilityRole="button"
+                        accessibilityLabel={t("cocktailDetails.increaseServings")}
+                      >
+                        <MaterialCommunityIcons
+                          name="plus"
+                          size={18}
+                          color={Colors.primary}
+                        />
+                      </Pressable>
+                    </View>
+                  </View>
+                  <View style={styles.ingredientsList}>
+                    {sortedIngredients.map((ingredient, index) => {
+                      const resolution = resolvedIngredients[index];
+                      const ingredientId = parseIngredientId(ingredient);
+                      const resolvedId = resolution.resolvedId ?? ingredientId;
+                      const resolvedDeclaredSubstitute =
+                        resolution.substituteFor && resolvedId != null
+                          ? (ingredient.substitutes ?? []).find(
+                            (substitute) =>
+                              typeof substitute.ingredientId === "number" &&
+                              substitute.ingredientId === resolvedId,
+                          )
+                          : undefined;
+                      const quantityIngredient =
+                        resolvedDeclaredSubstitute?.amount?.trim()
+                          ? resolveScaledIngredient(
+                            {
+                              ...ingredient,
+                              amount: resolvedDeclaredSubstitute.amount,
+                              unitId:
+                                typeof resolvedDeclaredSubstitute.unitId === "number"
+                                  ? resolvedDeclaredSubstitute.unitId
+                                  : undefined,
+                            },
+                            servings,
+                            normalizedDefaultServings,
+                          )
+                          : (scaledIngredients[index] ?? ingredient);
+                      const quantityBase = formatIngredientQuantity(
+                        quantityIngredient,
+                        ingredientDisplayMode,
+                        smallestPartAmount,
+                        t("cocktailDetails.asNeeded"),
+                        t,
+                        locale,
+                      );
+                      const substituteUnit =
+                        typeof resolvedDeclaredSubstitute?.unitId === "number"
+                          ? ""
+                          : (resolvedDeclaredSubstitute?.unit?.trim() ?? "");
+                      const quantity = substituteUnit
+                        ? `${quantityBase} ${substituteUnit}`
+                        : quantityBase;
+                      const qualifier = getIngredientQualifier(
+                        ingredient,
+                        t("cocktailDetails.garnish"),
+                        t("cocktailDetails.optional"),
+                        t("cocktailDetails.process"),
+                        t("cocktailDetails.serving"),
+                      );
+                      const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
+                      const resolvedIngredient =
+                        resolvedId != null && resolvedId >= 0
+                          ? ingredientLookup.ingredientById.get(resolvedId)
+                          : undefined;
+                      const catalogEntry =
+                        ingredientId >= 0
+                          ? ingredientLookup.ingredientById.get(ingredientId)
+                          : undefined;
+                      const photoUri =
+                        ingredient.photoUri ??
+                        resolvedIngredient?.photoUri ??
+                        catalogEntry?.photoUri;
+                      const previousIngredient = sortedIngredients[index - 1];
+                      const previousResolution = previousIngredient
+                        ? resolvedIngredients[index - 1]
+                        : undefined;
+                      const dividerColor = previousResolution?.isAvailable
+                        ? Colors.outline
+                        : Colors.outlineVariant;
+                      const ingredientTagColors = (
+                        resolvedIngredient?.tags ??
+                        ingredient.tags ??
+                        catalogEntry?.tags ??
+                        []
+                      )
+                        .map((tag) => tag?.color ?? tagColors.default)
+                        .filter(Boolean);
+                      const brandIndicatorColor =
+                        resolvedIngredient?.styleIngredientId != null ||
+                          catalogEntry?.styleIngredientId != null
+                          ? Colors.secondary
+                          : resolvedIngredient?.baseIngredientId != null ||
+                            catalogEntry?.baseIngredientId != null
+                            ? Colors.primary
+                            : undefined;
+                      const isStyleBaseIngredient =
+                        (resolvedId != null &&
+                          (ingredientLookup.stylesByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
+                        (ingredientId >= 0 &&
+                          (ingredientLookup.stylesByBaseId.get(ingredientId)?.length ?? 0) > 0);
+                      const isBrandBaseIngredient =
+                        (resolvedId != null &&
+                          (ingredientLookup.brandsByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
+                        (ingredientId >= 0 &&
+                          (ingredientLookup.brandsByBaseId.get(ingredientId)?.length ?? 0) > 0);
+                      const rightIndicatorColor = isBrandBaseIngredient
+                        ? Colors.primary
+                        : isStyleBaseIngredient
+                          ? Colors.secondary
+                          : undefined;
+                      const rightIndicatorBottomColor = isBrandBaseIngredient && isStyleBaseIngredient
+                        ? Colors.secondary
+                        : undefined;
+                      const isOnShoppingList =
+                        ingredientId >= 0 &&
+                        shoppingIngredientIds.has(ingredientId);
+                      const handlePress = () => {
+                        const routeParam =
+                          resolvedId != null && resolvedId >= 0
+                            ? resolvedId
+                            : (catalogEntry?.id ?? ingredient.name);
+                        if (routeParam == null) {
+                          return;
+                        }
+
+                        const returnToParam =
+                          cocktail?.id != null
+                            ? String(cocktail.id)
+                            : resolvedParam
+                              ? String(resolvedParam)
+                              : undefined;
+                        navigateToDetailsWithReturnTo({
+                          pathname: "/ingredients/[ingredientId]",
+                          params: {
+                            ingredientId: String(routeParam),
+                          },
+                          returnToPath: returnToParam
+                            ? "/cocktails/[cocktailId]"
+                            : undefined,
+                          returnToParams: returnToParam
+                            ? { cocktailId: returnToParam }
+                            : undefined,
+                        });
+                      };
+
+                      const subtitleLines: string[] = [];
+                      const isBaseToBrandSubstitution =
+                        Boolean(resolution.substituteFor) &&
+                        ingredientId >= 0 &&
+                        resolvedIngredient?.baseIngredientId != null &&
+                        resolvedIngredient.baseIngredientId === ingredientId;
+
+                      if (resolution.substituteFor) {
+                        subtitleLines.push(
+                          isBaseToBrandSubstitution
+                            ? t("cocktailDetails.orAny", { name: resolution.substituteFor })
+                            : t("cocktailDetails.substituteFor", {
+                              name: resolution.substituteFor,
+                            }),
+                        );
+                      }
+
+                      const missingSubstituteLines = buildMissingSubstituteLines(
+                        ingredient,
+                        resolution,
+                        ingredientLookup,
+                        t,
+                      );
+
+                      if (
+                        !resolution.isAvailable &&
+                        missingSubstituteLines.length
+                      ) {
+                        subtitleLines.push(...missingSubstituteLines);
+                      }
+
+                      const qualifierLine = qualifier
+                        ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
+                        : undefined;
+                      const subtitle = subtitleLines.length
+                        ? subtitleLines.join("\n")
+                        : undefined;
+                      const subtitleContent =
+                        subtitle || qualifierLine ? (
+                          <View>
+                            {subtitle ? (
+                              <Text
+                                style={[
+                                  styles.ingredientSubtitle,
+                                  { color: Colors.onSurfaceVariant },
+                                ]}
+                              >
+                                {subtitle}
+                              </Text>
+                            ) : null}
+                            {qualifierLine ? (
+                              <Text
+                                style={[
+                                  styles.ingredientSubtitle,
+                                  subtitle
+                                    ? styles.ingredientQualifier
+                                    : undefined,
+                                  { color: Colors.onSurfaceVariant },
+                                ]}
+                              >
+                                {qualifierLine}
+                              </Text>
+                            ) : null}
+                          </View>
+                        ) : undefined;
+
+                      return (
+                        <View key={key}>
+                          {index > 0 ? (
+                            <View
+                              style={[
+                                styles.ingredientDivider,
+                                { backgroundColor: dividerColor },
+                              ]}
+                            />
+                          ) : null}
+                          <ListRow
+                            title={
+                              resolution.resolvedName || ingredient.name || ""
+                            }
+                            subtitleContent={subtitleContent}
+                            thumbnail={
+                              <Thumb
+                                label={
+                                  resolution.resolvedName ??
+                                  ingredient.name ??
+                                  undefined
+                                }
+                                uri={photoUri}
+                                fallbackUri={catalogEntry?.photoUri}
+                              />
+                            }
+                            control={
+                              <View style={styles.quantityContainer}>
+                                <Text
+                                  style={[
+                                    styles.quantityLabel,
+                                    { color: Colors.onSurfaceVariant },
+                                  ]}
+                                  numberOfLines={1}
+                                >
+                                  {quantity}
+                                </Text>
+                              </View>
+                            }
+                            metaFooter={
+                              isOnShoppingList ? (
+                                <MaterialIcons
+                                  name="shopping-cart"
+                                  size={16}
+                                  color={Colors.tint}
+                                  style={styles.shoppingIcon}
+                                  accessibilityRole="image"
+                                  accessibilityLabel={t("cocktailDetails.onShoppingList")}
+                                />
+                              ) : (
+                                <View style={styles.shoppingIconPlaceholder} />
+                              )
+                            }
+                            onPress={handlePress}
+                            selected={resolution.isAvailable}
+                            highlightColor={ingredientHighlightColor}
+                            tagColors={ingredientTagColors}
+                            brandIndicatorColor={brandIndicatorColor}
+                            rightIndicatorColor={rightIndicatorColor}
+                            rightIndicatorBottomColor={rightIndicatorBottomColor}
+                            accessibilityRole="button"
+                            accessibilityState={
+                              resolution.isAvailable
+                                ? { selected: true }
+                                : undefined
+                            }
+                            metaAlignment="center"
+                          />
+                        </View>
                       );
                     })}
                   </View>
-                </View>
-                <View style={styles.servingsControl}>
-                  <Text
-                    style={[styles.servingsLabel, { color: Colors.onSurfaceVariant }]}
-                  >
-                    {t("cocktailDetails.servings")}
-                  </Text>
-                  <View
-                    style={[
-                      styles.servingsStepper,
-                      { borderColor: Colors.outline, backgroundColor: Colors.surfaceBright },
-                    ]}
-                  >
+
+                  <View style={styles.itemActions}>
                     <Pressable
-                      onPress={handleDecreaseServings}
-                      disabled={!canDecreaseServings}
-                      style={styles.servingsButton}
+                      onPress={handleCopyPress}
                       accessibilityRole="button"
-                      accessibilityLabel={t("cocktailDetails.decreaseServings")}
+                      accessibilityLabel={t("cocktailDetails.copyCocktail")}
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
                     >
                       <MaterialCommunityIcons
-                        name="minus"
-                        size={18}
-                        color={canDecreaseServings ? Colors.primary : Colors.onSurfaceDisabled}
-                      />
-                    </Pressable>
-                    <Text style={[styles.servingsValue, { color: Colors.onSurface }]}>
-                      {formatAmount(servings)}
-                    </Text>
-                    <Pressable
-                      onPress={handleIncreaseServings}
-                      style={styles.servingsButton}
-                      accessibilityRole="button"
-                      accessibilityLabel={t("cocktailDetails.increaseServings")}
-                    >
-                      <MaterialCommunityIcons
-                        name="plus"
+                        name="content-copy"
                         size={18}
                         color={Colors.primary}
                       />
+                      <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleEditPress}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.editCocktail")}
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
+                    >
+                      <MaterialCommunityIcons
+                        name="pencil-outline"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                      <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                     </Pressable>
                   </View>
                 </View>
-                <View style={styles.ingredientsList}>
-                  {sortedIngredients.map((ingredient, index) => {
-                    const resolution = resolvedIngredients[index];
-                    const ingredientId = parseIngredientId(ingredient);
-                    const resolvedId = resolution.resolvedId ?? ingredientId;
-                    const resolvedDeclaredSubstitute =
-                      resolution.substituteFor && resolvedId != null
-                        ? (ingredient.substitutes ?? []).find(
-                          (substitute) =>
-                            typeof substitute.ingredientId === "number" &&
-                            substitute.ingredientId === resolvedId,
-                        )
-                        : undefined;
-                    const quantityIngredient =
-                      resolvedDeclaredSubstitute?.amount?.trim()
-                        ? resolveScaledIngredient(
-                          {
-                            ...ingredient,
-                            amount: resolvedDeclaredSubstitute.amount,
-                            unitId:
-                              typeof resolvedDeclaredSubstitute.unitId === "number"
-                                ? resolvedDeclaredSubstitute.unitId
-                                : undefined,
-                          },
-                          servings,
-                          normalizedDefaultServings,
-                        )
-                        : (scaledIngredients[index] ?? ingredient);
-                    const quantityBase = formatIngredientQuantity(
-                      quantityIngredient,
-                      ingredientDisplayMode,
-                      smallestPartAmount,
-                      t("cocktailDetails.asNeeded"),
-                      t,
-                      locale,
-                    );
-                    const substituteUnit =
-                      typeof resolvedDeclaredSubstitute?.unitId === "number"
-                        ? ""
-                        : (resolvedDeclaredSubstitute?.unit?.trim() ?? "");
-                    const quantity = substituteUnit
-                      ? `${quantityBase} ${substituteUnit}`
-                      : quantityBase;
-                    const qualifier = getIngredientQualifier(
-                      ingredient,
-                      t("cocktailDetails.garnish"),
-                      t("cocktailDetails.optional"),
-                      t("cocktailDetails.process"),
-                      t("cocktailDetails.serving"),
-                    );
-                    const key = `${ingredient.ingredientId ?? ingredient.name}-${ingredient.order}`;
-                    const resolvedIngredient =
-                      resolvedId != null && resolvedId >= 0
-                        ? ingredientLookup.ingredientById.get(resolvedId)
-                        : undefined;
-                    const catalogEntry =
-                      ingredientId >= 0
-                        ? ingredientLookup.ingredientById.get(ingredientId)
-                        : undefined;
-                    const photoUri =
-                      ingredient.photoUri ??
-                      resolvedIngredient?.photoUri ??
-                      catalogEntry?.photoUri;
-                    const previousIngredient = sortedIngredients[index - 1];
-                    const previousResolution = previousIngredient
-                      ? resolvedIngredients[index - 1]
-                      : undefined;
-                    const dividerColor = previousResolution?.isAvailable
-                      ? Colors.outline
-                      : Colors.outlineVariant;
-                    const ingredientTagColors = (
-                      resolvedIngredient?.tags ??
-                      ingredient.tags ??
-                      catalogEntry?.tags ??
-                      []
-                    )
-                      .map((tag) => tag?.color ?? tagColors.default)
-                      .filter(Boolean);
-                    const brandIndicatorColor =
-                      resolvedIngredient?.styleIngredientId != null ||
-                        catalogEntry?.styleIngredientId != null
-                        ? Colors.secondary
-                        : resolvedIngredient?.baseIngredientId != null ||
-                          catalogEntry?.baseIngredientId != null
-                          ? Colors.primary
-                          : undefined;
-                    const isStyleBaseIngredient =
-                      (resolvedId != null &&
-                        (ingredientLookup.stylesByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
-                      (ingredientId >= 0 &&
-                        (ingredientLookup.stylesByBaseId.get(ingredientId)?.length ?? 0) > 0);
-                    const isBrandBaseIngredient =
-                      (resolvedId != null &&
-                        (ingredientLookup.brandsByBaseId.get(resolvedId)?.length ?? 0) > 0) ||
-                      (ingredientId >= 0 &&
-                        (ingredientLookup.brandsByBaseId.get(ingredientId)?.length ?? 0) > 0);
-                    const rightIndicatorColor = isBrandBaseIngredient
-                      ? Colors.primary
-                      : isStyleBaseIngredient
-                        ? Colors.secondary
-                        : undefined;
-                    const rightIndicatorBottomColor = isBrandBaseIngredient && isStyleBaseIngredient
-                      ? Colors.secondary
-                      : undefined;
-                    const isOnShoppingList =
-                      ingredientId >= 0 &&
-                      shoppingIngredientIds.has(ingredientId);
-                    const handlePress = () => {
-                      const routeParam =
-                        resolvedId != null && resolvedId >= 0
-                          ? resolvedId
-                          : (catalogEntry?.id ?? ingredient.name);
-                      if (routeParam == null) {
-                        return;
-                      }
-
-                      const returnToParam =
-                        cocktail?.id != null
-                          ? String(cocktail.id)
-                          : resolvedParam
-                            ? String(resolvedParam)
-                            : undefined;
-                      navigateToDetailsWithReturnTo({
-                        pathname: "/ingredients/[ingredientId]",
-                        params: {
-                          ingredientId: String(routeParam),
-                        },
-                        returnToPath: returnToParam
-                          ? "/cocktails/[cocktailId]"
-                          : undefined,
-                        returnToParams: returnToParam
-                          ? { cocktailId: returnToParam }
-                          : undefined,
-                      });
-                    };
-
-                    const subtitleLines: string[] = [];
-                    const isBaseToBrandSubstitution =
-                      Boolean(resolution.substituteFor) &&
-                      ingredientId >= 0 &&
-                      resolvedIngredient?.baseIngredientId != null &&
-                      resolvedIngredient.baseIngredientId === ingredientId;
-
-                    if (resolution.substituteFor) {
-                      subtitleLines.push(
-                        isBaseToBrandSubstitution
-                          ? t("cocktailDetails.orAny", { name: resolution.substituteFor })
-                          : t("cocktailDetails.substituteFor", {
-                            name: resolution.substituteFor,
-                          }),
-                      );
-                    }
-
-                    const missingSubstituteLines = buildMissingSubstituteLines(
-                      ingredient,
-                      resolution,
-                      ingredientLookup,
-                      t,
-                    );
-
-                    if (
-                      !resolution.isAvailable &&
-                      missingSubstituteLines.length
-                    ) {
-                      subtitleLines.push(...missingSubstituteLines);
-                    }
-
-                    const qualifierLine = qualifier
-                      ? qualifier.charAt(0).toUpperCase() + qualifier.slice(1)
-                      : undefined;
-                    const subtitle = subtitleLines.length
-                      ? subtitleLines.join("\n")
-                      : undefined;
-                    const subtitleContent =
-                      subtitle || qualifierLine ? (
-                        <View>
-                          {subtitle ? (
-                            <Text
-                              style={[
-                                styles.ingredientSubtitle,
-                                { color: Colors.onSurfaceVariant },
-                              ]}
-                            >
-                              {subtitle}
-                            </Text>
-                          ) : null}
-                          {qualifierLine ? (
-                            <Text
-                              style={[
-                                styles.ingredientSubtitle,
-                                subtitle
-                                  ? styles.ingredientQualifier
-                                  : undefined,
-                                { color: Colors.onSurfaceVariant },
-                              ]}
-                            >
-                              {qualifierLine}
-                            </Text>
-                          ) : null}
-                        </View>
-                      ) : undefined;
-
-                    return (
-                      <View key={key}>
-                        {index > 0 ? (
-                          <View
-                            style={[
-                              styles.ingredientDivider,
-                              { backgroundColor: dividerColor },
-                            ]}
-                          />
-                        ) : null}
-                        <ListRow
-                          title={
-                            resolution.resolvedName || ingredient.name || ""
-                          }
-                          subtitleContent={subtitleContent}
-                          thumbnail={
-                            <Thumb
-                              label={
-                                resolution.resolvedName ??
-                                ingredient.name ??
-                                undefined
-                              }
-                              uri={photoUri}
-                              fallbackUri={catalogEntry?.photoUri}
-                            />
-                          }
-                          control={
-                            <View style={styles.quantityContainer}>
-                              <Text
-                                style={[
-                                  styles.quantityLabel,
-                                  { color: Colors.onSurfaceVariant },
-                                ]}
-                                numberOfLines={1}
-                              >
-                                {quantity}
-                              </Text>
-                            </View>
-                          }
-                          metaFooter={
-                            isOnShoppingList ? (
-                              <MaterialIcons
-                                name="shopping-cart"
-                                size={16}
-                                color={Colors.tint}
-                                style={styles.shoppingIcon}
-                                accessibilityRole="image"
-                                accessibilityLabel={t("cocktailDetails.onShoppingList")}
-                              />
-                            ) : (
-                              <View style={styles.shoppingIconPlaceholder} />
-                            )
-                          }
-                          onPress={handlePress}
-                          selected={resolution.isAvailable}
-                          highlightColor={ingredientHighlightColor}
-                          tagColors={ingredientTagColors}
-                          brandIndicatorColor={brandIndicatorColor}
-                          rightIndicatorColor={rightIndicatorColor}
-                          rightIndicatorBottomColor={rightIndicatorBottomColor}
-                          accessibilityRole="button"
-                          accessibilityState={
-                            resolution.isAvailable
-                              ? { selected: true }
-                              : undefined
-                          }
-                          metaAlignment="center"
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-
-                <View style={styles.itemActions}>
-                  <Pressable
-                    onPress={handleCopyPress}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.copyCocktail")}
-                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="content-copy"
-                      size={18}
-                      color={Colors.primary}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.copyCocktail")}</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleEditPress}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.editCocktail")}
-                    style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.surfaceBright }]}
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={18}
-                      color={Colors.primary}
-                    />
-                    <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
-                  </Pressable>
-                </View>
-              </View>
-            ) : null}
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <MaterialCommunityIcons
-              name="glass-cocktail"
-              size={42}
-              color={Colors.onSurfaceVariant}
-            />
-            <Text
-              style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
-            >
-              {t("cocktailDetails.notFound")}
-            </Text>
-          </View>
-        )}
-      </ScrollView>
+              ) : null}
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <MaterialCommunityIcons
+                name="glass-cocktail"
+                size={42}
+                color={Colors.onSurfaceVariant}
+              />
+              <Text
+                style={[styles.emptyText, { color: Colors.onSurfaceVariant }]}
+              >
+                {t("cocktailDetails.notFound")}
+              </Text>
+            </View>
+          )}
+        </ScrollView>
+      </View>
 
       <AppDialog
         visible={isHelpVisible}
@@ -2100,6 +2170,14 @@ export default function CocktailDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  contentCapture: {
+    flex: 1,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
   },
   content: {
     paddingHorizontal: 24,
