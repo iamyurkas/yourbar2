@@ -2964,5 +2964,8 @@
   "ingredient.371.description": "Modern aromatic gin style emphasizing expressive botanicals such as floral, herbal, and citrus notes over strict juniper dominance.",
   "cocktail.623.name": "Star",
   "cocktail.623.description": "An old-school apple-brandy Manhattan variation where Calvados and rosso vermouth meet a touch of gomme syrup and Creole bitters. Stirred and served up, it drinks rich, aromatic, and gently spiced with a cherry finish.",
-  "cocktail.623.instructions": "1. Select and pre-chill a coupe glass.\n2. Add 45 ml of **calvados**, 45 ml of **red vermouth**, 2.5 ml of **gomme syrup**, and 3 dashes of **Peychaud's bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Garnish with a skewered **maraschino cherry**."
+  "cocktail.623.instructions": "1. Select and pre-chill a coupe glass.\n2. Add 45 ml of **calvados**, 45 ml of **red vermouth**, 2.5 ml of **gomme syrup**, and 3 dashes of **Peychaud's bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Garnish with a skewered **maraschino cherry**.",
+  "cocktail.624.name": "Winter",
+  "cocktail.624.description": "A festive Jamaican rum Daiquiri variation lifted with ginger liqueur, allspice dram, and aromatic bitters. Bright lime keeps it crisp while the warming spice profile makes it ideal for cold-season sipping.",
+  "cocktail.624.instructions": "1. Add 60 ml of **Jamaican Rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, 5 ml of **ginger liqueur**, 5 ml of **allspice dram**, and 2 dashes of **angostura bitters** into a shaker.\\n2. Fill the shaker with **ice**.\\n3. Shake hard for about 10–12 seconds until well chilled.\\n4. Fine strain into a chilled coupe glass.\\n5. Garnish with skewered **ginger candy**."
 }
