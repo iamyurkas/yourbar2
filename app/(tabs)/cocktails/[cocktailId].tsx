@@ -46,6 +46,7 @@ import { useAppColors } from "@/constants/theme";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
+import { findSimilarCocktails } from "@/libs/cocktail-similarity";
 import {
   createIngredientLookup,
   resolveIngredientAvailability,
@@ -819,6 +820,7 @@ export default function CocktailDetailsScreen() {
   }, [cocktail, getCocktailComment]);
 
   const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
+  const [isSimilarVisible, setIsSimilarVisible] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
   const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
   const [isAddTagsVisible, setIsAddTagsVisible] = useState(false);
@@ -864,6 +866,10 @@ export default function CocktailDetailsScreen() {
 
   useEffect(() => {
     setIsAddTagsVisible(false);
+  }, [cocktailSelectionKey]);
+
+  useEffect(() => {
+    setIsSimilarVisible(false);
   }, [cocktailSelectionKey]);
 
   const hasPendingTagChanges = useMemo(() => {
@@ -983,6 +989,33 @@ export default function CocktailDetailsScreen() {
     },
     [cocktail, displayedRating, setCocktailRating, startRatingTransition],
   );
+
+  const similarCocktails = useMemo(() => {
+    if (!cocktail) {
+      return [];
+    }
+
+    return findSimilarCocktails(cocktail, cocktails, ingredients, { maxResults: 10 });
+  }, [cocktail, cocktails, ingredients]);
+
+  const handleOpenSimilarCocktails = useCallback(() => {
+    setIsSimilarVisible(true);
+  }, []);
+
+  const handleOpenSimilarCocktail = useCallback((nextCocktailId: number | string | undefined) => {
+    if (nextCocktailId == null) {
+      return;
+    }
+
+    navigateToDetailsWithReturnTo({
+      pathname: "/cocktails/[cocktailId]",
+      params: { cocktailId: String(nextCocktailId) },
+      returnToPath: "/cocktails/[cocktailId]",
+      returnToParams: {
+        cocktailId: cocktail?.id != null ? String(cocktail.id) : resolvedParam ? String(resolvedParam) : undefined,
+      },
+    });
+  }, [cocktail?.id, resolvedParam]);
 
   const instructionsParagraphs = useMemo(() => {
     const instructions = cocktail?.instructions?.trim();
@@ -2067,6 +2100,41 @@ export default function CocktailDetailsScreen() {
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
                 </View>
+                {!isSimilarVisible ? (
+                  <Pressable
+                    onPress={handleOpenSimilarCocktails}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailDetails.similarCocktails")}
+                    style={[styles.similarActionButton, { backgroundColor: Colors.primary }]}
+                  >
+                    <Text style={[styles.similarActionLabel, { color: Colors.onPrimary }]}>
+                      {t("cocktailDetails.similarCocktails")}
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <View style={styles.similarSection}>
+                    <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
+                      {t("cocktailDetails.similarCocktailsSection")}
+                    </Text>
+                    {similarCocktails.length ? (
+                      <View style={styles.similarList}>
+                        {similarCocktails.map(({ cocktail: similarCocktail }) => (
+                          <ListRow
+                            key={`similar-${similarCocktail.id ?? similarCocktail.name}`}
+                            title={similarCocktail.name ?? ""}
+                            onPress={() => handleOpenSimilarCocktail(similarCocktail.id)}
+                            accessibilityRole="button"
+                            metaAlignment="center"
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <Text style={[styles.similarEmptyText, { color: Colors.onSurfaceVariant }]}>
+                        {t("cocktailDetails.noSimilarCocktails")}
+                      </Text>
+                    )}
+                  </View>
+                )}
               </View>
             ) : null}
           </View>
@@ -2139,6 +2207,28 @@ const styles = StyleSheet.create({
   itemActionLabel: {
     fontSize: 14,
     fontWeight: "600",
+  },
+  similarActionButton: {
+    marginTop: 4,
+    minHeight: 56,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  similarActionLabel: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  similarSection: {
+    marginTop: 8,
+    gap: 8,
+  },
+  similarList: {
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  similarEmptyText: {
+    fontSize: 14,
   },
   photoWrapper: {
     alignItems: "center",

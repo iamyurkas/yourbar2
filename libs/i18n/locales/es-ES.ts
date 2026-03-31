@@ -269,6 +269,9 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Comprar todos los ingredientes",
   "cocktailDetails.copyCocktail": "Copiar cóctel",
   "cocktailDetails.editCocktail": "Editar cóctel",
+  "cocktailDetails.similarCocktails": "Cócteles similares",
+  "cocktailDetails.similarCocktailsSection": "Cócteles similares",
+  "cocktailDetails.noSimilarCocktails": "No se encontraron cócteles similares.",
   "cocktailDetails.notFound": "Cóctel no encontrado",
   "cocktailDetails.helpMessage":
     "Esta pantalla muestra los detalles del cóctel, ingredientes e instrucciones.\n\nUsa los botones bajo el cóctel para copiarlo o editarlo.\n\n**Cintas de ingredientes**\nLa cinta izquierda indica el tipo de ingrediente:\nazul = ingrediente de marca,\namarillo = ingrediente de estilo.\n\nLa cinta derecha indica variantes de base:\nazul = tiene variantes de marca,\namarillo = tiene variantes de estilo.",
