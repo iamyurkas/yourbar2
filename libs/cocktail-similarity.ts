@@ -1,6 +1,9 @@
-import { compareGlobalAlphabet } from '@/libs/global-sort';
-import { createIngredientLookup, type IngredientLookup } from '@/libs/ingredient-availability';
-import type { Cocktail, Ingredient } from '@/providers/inventory-provider';
+import { compareGlobalAlphabet } from "@/libs/global-sort";
+import {
+  createIngredientLookup,
+  type IngredientLookup,
+} from "@/libs/ingredient-availability";
+import type { Cocktail, Ingredient } from "@/providers/inventory-provider";
 
 type SimilarityOptions = {
   threshold?: number;
@@ -14,28 +17,28 @@ type ScoredCocktail = {
   score: number;
 };
 
-const DEFAULT_THRESHOLD = 0.33;
+const DEFAULT_THRESHOLD = 0.41;
 const DEFAULT_MAX_RESULTS = 10;
 const MIN_TOKEN_LENGTH = 3;
 const GENERIC_SYNONYM_TOKENS = new Set([
-  'cocktail',
-  'drink',
-  'special',
-  'sour',
+  "cocktail",
+  "drink",
+  "special",
+  "sour",
 ]);
 
 function normalizeComparablePhrase(value?: string | null): string {
-  return (value ?? '')
-    .normalize('NFKC')
+  return (value ?? "")
+    .normalize("NFKC")
     .toLowerCase()
-    .replace(/[\u2012-\u2015]/g, '-')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/[\u2012-\u2015]/g, "-")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim()
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, " ");
 }
 
 function extractComparablePhrases(cocktail: Cocktail): Set<string> {
-  const phrases = [cocktail.name ?? '', ...(cocktail.synonyms ?? [])]
+  const phrases = [cocktail.name ?? "", ...(cocktail.synonyms ?? [])]
     .map((value) => normalizeComparablePhrase(value))
     .filter(Boolean);
 
@@ -45,8 +48,11 @@ function extractComparablePhrases(cocktail: Cocktail): Set<string> {
 function extractComparableTokens(phrases: Set<string>): Set<string> {
   const tokens = new Set<string>();
   phrases.forEach((phrase) => {
-    phrase.split(' ').forEach((token) => {
-      if (token.length < MIN_TOKEN_LENGTH || GENERIC_SYNONYM_TOKENS.has(token)) {
+    phrase.split(" ").forEach((token) => {
+      if (
+        token.length < MIN_TOKEN_LENGTH ||
+        GENERIC_SYNONYM_TOKENS.has(token)
+      ) {
         return;
       }
       tokens.add(token);
@@ -67,7 +73,10 @@ function resolveIngredientIds(cocktail: Cocktail): Set<number> {
   return ids;
 }
 
-function resolveIngredientFamilies(ids: Set<number>, lookup: IngredientLookup): Set<number> {
+function resolveIngredientFamilies(
+  ids: Set<number>,
+  lookup: IngredientLookup,
+): Set<number> {
   const families = new Set<number>();
 
   ids.forEach((ingredientId) => {
@@ -91,7 +100,10 @@ function resolveIngredientFamilies(ids: Set<number>, lookup: IngredientLookup): 
   return families;
 }
 
-function setOverlapScore<T extends string | number>(left: Set<T>, right: Set<T>): number {
+function setOverlapScore<T extends string | number>(
+  left: Set<T>,
+  right: Set<T>,
+): number {
   if (left.size === 0 || right.size === 0) {
     return 0;
   }
@@ -207,22 +219,34 @@ export function scoreCocktailSimilarity(
 
   const currentIngredientIds = resolveIngredientIds(current);
   const otherIngredientIds = resolveIngredientIds(other);
-  const exactIngredientScore = setOverlapScore(currentIngredientIds, otherIngredientIds);
+  const exactIngredientScore = setOverlapScore(
+    currentIngredientIds,
+    otherIngredientIds,
+  );
 
-  const currentFamilies = resolveIngredientFamilies(currentIngredientIds, ingredientLookup);
-  const otherFamilies = resolveIngredientFamilies(otherIngredientIds, ingredientLookup);
+  const currentFamilies = resolveIngredientFamilies(
+    currentIngredientIds,
+    ingredientLookup,
+  );
+  const otherFamilies = resolveIngredientFamilies(
+    otherIngredientIds,
+    ingredientLookup,
+  );
   const familyScore = setOverlapScore(currentFamilies, otherFamilies);
 
   const ratioScore = scoreRatioSimilarity(current, other);
 
-  const methodScore = setOverlapScore(resolveMethodIds(current), resolveMethodIds(other));
+  const methodScore = setOverlapScore(
+    resolveMethodIds(current),
+    resolveMethodIds(other),
+  );
 
   const weightedScore =
-    synonymScore * 0.55 +
-    exactIngredientScore * 0.23 +
-    familyScore * 0.1 +
-    ratioScore * 0.07 +
-    methodScore * 0.05;
+    synonymScore * 0.75 +
+    exactIngredientScore * 0.3 +
+    familyScore * 0.25 +
+    ratioScore * 0.15 +
+    methodScore * 0.1;
 
   return Math.max(0, Math.min(1, weightedScore));
 }
@@ -233,9 +257,13 @@ export function getSimilarCocktails(
   options?: SimilarityOptions,
 ): ScoredCocktail[] {
   const threshold = options?.threshold ?? DEFAULT_THRESHOLD;
-  const maxResults = Math.max(1, Math.min(DEFAULT_MAX_RESULTS, options?.maxResults ?? DEFAULT_MAX_RESULTS));
+  const maxResults = Math.max(
+    1,
+    Math.min(DEFAULT_MAX_RESULTS, options?.maxResults ?? DEFAULT_MAX_RESULTS),
+  );
   const ingredientLookup =
-    options?.ingredientLookup ?? createIngredientLookup(options?.ingredients ?? []);
+    options?.ingredientLookup ??
+    createIngredientLookup(options?.ingredients ?? []);
 
   const currentId = Number(current.id);
   const currentName = normalizeComparablePhrase(current.name);
@@ -259,7 +287,10 @@ export function getSimilarCocktails(
         return right.score - left.score;
       }
 
-      return compareGlobalAlphabet(left.cocktail.name ?? '', right.cocktail.name ?? '');
+      return compareGlobalAlphabet(
+        left.cocktail.name ?? "",
+        right.cocktail.name ?? "",
+      );
     })
     .slice(0, maxResults);
 }
