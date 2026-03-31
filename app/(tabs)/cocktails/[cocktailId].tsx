@@ -31,6 +31,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
@@ -43,6 +44,11 @@ import {
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
+import {
+  COCKTAIL_SIMILARITY_THRESHOLD,
+  getSimilarCocktails,
+} from "@/libs/cocktail-similarity";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
@@ -822,10 +828,54 @@ export default function CocktailDetailsScreen() {
   const [commentDraft, setCommentDraft] = useState("");
   const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
   const [isAddTagsVisible, setIsAddTagsVisible] = useState(false);
+  const [isSimilarVisible, setIsSimilarVisible] = useState(false);
   const persistedTagIds = useMemo(() => resolveCocktailTagIds(cocktail), [cocktail]);
   const persistedTagSignature = useMemo(() => persistedTagIds.join(","), [persistedTagIds]);
   const [tagDraftIds, setTagDraftIds] = useState<number[]>(persistedTagIds);
   const tagDraftIdsRef = useRef<number[]>(persistedTagIds);
+
+  const similarCocktailEntries = useMemo(() => {
+    if (!cocktail) {
+      return [];
+    }
+
+    return getSimilarCocktails(cocktail, cocktails, {
+      threshold: COCKTAIL_SIMILARITY_THRESHOLD,
+      maxResults: 10,
+      ingredientLookup,
+    }).map(({ cocktail: candidate }) => {
+      const availability = summariseCocktailAvailability(
+        candidate,
+        availableIngredientIds,
+        ingredientLookup,
+        undefined,
+        { ignoreGarnish, allowAllSubstitutes },
+        t,
+        locale,
+      );
+
+      return {
+        cocktail: candidate,
+        isReady: availability.isReady,
+        missingCount: availability.missingCount,
+        recipeNamesCount: availability.recipeNames.length,
+        ingredientLine: availability.ingredientLine,
+        hasBrandFallback: availability.hasBrandFallback,
+        hasStyleFallback: availability.hasStyleFallback,
+        ratingValue: getCocktailRating(candidate),
+      };
+    });
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    cocktail,
+    cocktails,
+    getCocktailRating,
+    ignoreGarnish,
+    ingredientLookup,
+    locale,
+    t,
+  ]);
 
   useEffect(() => {
     setOptimisticRating((previous) => {
@@ -2067,6 +2117,96 @@ export default function CocktailDetailsScreen() {
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
                 </View>
+                {!isSimilarVisible ? (
+                  <Pressable
+                    onPress={() => setIsSimilarVisible(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("cocktailDetails.similarCocktails")}
+                    style={[styles.similarButton, { backgroundColor: Colors.primary }]}
+                  >
+                    <Text style={[styles.similarButtonLabel, { color: Colors.onPrimary }]}>
+                      {t("cocktailDetails.similarCocktails")}
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <View style={[styles.textBlock, styles.similarCocktailsBlock]}>
+                    <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
+                      {t("cocktailDetails.similarCocktailsTitle")}
+                    </Text>
+                    {similarCocktailEntries.length > 0 ? (
+                      <View style={styles.similarCocktailsList}>
+                        {similarCocktailEntries.map(
+                          (
+                            {
+                              cocktail: similarCocktail,
+                              isReady,
+                              missingCount,
+                              recipeNamesCount,
+                              ingredientLine,
+                              hasBrandFallback,
+                              hasStyleFallback,
+                              ratingValue,
+                            },
+                            index,
+                          ) => (
+                            <View key={similarCocktail.id ?? similarCocktail.name}>
+                              {index > 0 ? (
+                                <View
+                                  style={[
+                                    styles.similarCocktailDivider,
+                                    { backgroundColor: Colors.outlineVariant },
+                                  ]}
+                                />
+                              ) : null}
+                              <CocktailListRow
+                                cocktail={similarCocktail}
+                                ingredients={ingredients}
+                                onPress={() => {
+                                  const routeParam = similarCocktail.id ?? similarCocktail.name;
+                                  if (routeParam == null) {
+                                    return;
+                                  }
+
+                                  const returnToParam =
+                                    cocktail?.id != null
+                                      ? String(cocktail.id)
+                                      : resolvedParam
+                                        ? String(resolvedParam)
+                                        : undefined;
+                                  navigateToDetailsWithReturnTo({
+                                    pathname: "/cocktails/[cocktailId]",
+                                    params: {
+                                      cocktailId: String(routeParam),
+                                    },
+                                    returnToPath: returnToParam
+                                      ? "/cocktails/[cocktailId]"
+                                      : undefined,
+                                    returnToParams: returnToParam
+                                      ? { cocktailId: returnToParam }
+                                      : undefined,
+                                  });
+                                }}
+                                highlightColor={isReady ? undefined : Colors.highlightFaint}
+                                showMethodIcons
+                                isReady={isReady}
+                                missingCount={missingCount}
+                                recipeNamesCount={recipeNamesCount}
+                                ingredientLine={ingredientLine}
+                                ratingValue={ratingValue}
+                                hasComment={Boolean(getCocktailComment(similarCocktail).trim())}
+                                hasBrandFallback={hasBrandFallback}
+                                hasStyleFallback={hasStyleFallback}
+                                isPartySelected={partySelectedCocktailKeys.has(
+                                  String(similarCocktail.id ?? similarCocktail.name),
+                                )}
+                              />
+                            </View>
+                          ),
+                        )}
+                      </View>
+                    ) : null}
+                  </View>
+                )}
               </View>
             ) : null}
           </View>
@@ -2139,6 +2279,29 @@ const styles = StyleSheet.create({
   itemActionLabel: {
     fontSize: 14,
     fontWeight: "600",
+  },
+  similarButton: {
+    alignSelf: "center",
+    minWidth: 250,
+    height: 56,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    marginTop: 4,
+  },
+  similarButtonLabel: {
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  similarCocktailsBlock: {
+    marginTop: 8,
+  },
+  similarCocktailsList: {
+    marginHorizontal: -24,
+  },
+  similarCocktailDivider: {
+    height: StyleSheet.hairlineWidth,
   },
   photoWrapper: {
     alignItems: "center",
