@@ -2117,23 +2117,23 @@ export default function CocktailDetailsScreen() {
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
                 </View>
-                {!isSimilarVisible ? (
-                  <Pressable
-                    onPress={() => setIsSimilarVisible(true)}
-                    accessibilityRole="button"
-                    accessibilityLabel={t("cocktailDetails.similarCocktails")}
-                    style={[styles.similarButton, { backgroundColor: Colors.primary }]}
-                  >
-                    <Text style={[styles.similarButtonLabel, { color: Colors.onPrimary }]}>
-                      {t("cocktailDetails.similarCocktails")}
-                    </Text>
-                  </Pressable>
-                ) : (
-                  <View style={[styles.textBlock, styles.similarCocktailsBlock]}>
-                    <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
-                      {t("cocktailDetails.similarCocktailsTitle")}
-                    </Text>
-                    {similarCocktailEntries.length > 0 ? (
+                {similarCocktailEntries.length > 0
+                  ? !isSimilarVisible ? (
+                    <Pressable
+                      onPress={() => setIsSimilarVisible(true)}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("cocktailDetails.similarCocktails")}
+                      style={[styles.similarButton, { backgroundColor: Colors.primary }]}
+                    >
+                      <Text style={[styles.similarButtonLabel, { color: Colors.onPrimary }]}>
+                        {t("cocktailDetails.similarCocktails")}
+                      </Text>
+                    </Pressable>
+                  ) : (
+                    <View style={[styles.textBlock, styles.similarCocktailsBlock]}>
+                      <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
+                        {t("cocktailDetails.similarCocktailsTitle")}
+                      </Text>
                       <View style={styles.similarCocktailsList}>
                         {similarCocktailEntries.map(
                           (
@@ -2204,9 +2204,9 @@ export default function CocktailDetailsScreen() {
                           ),
                         )}
                       </View>
-                    ) : null}
-                  </View>
-                )}
+                    </View>
+                  )
+                  : null}
               </View>
             ) : null}
           </View>
@@ -2288,7 +2288,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 16,
-    marginTop: 4,
+    marginTop: 24,
   },
   similarButtonLabel: {
     fontSize: 14,
