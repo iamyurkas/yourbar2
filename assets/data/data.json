@@ -40813,6 +40813,62 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 621,
+      "name": "Epiphany No. 2",
+      "description": "A bittersweet, after-dinner sipper where herbal amaro meets Punt e Mes and warm allspice dram, rounded by a touch of gomme syrup and finished with an orange twist.",
+      "instructions": "1. Select and pre-chill a Nick & Nora glass.\n2. Add 45 ml of **amaro**, 15 ml of **Punt e Mes**, 5 ml of **allspice dram**, and 5 ml of **gomme syrup** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Express the oils from an **orange** twist over the drink and use it as a garnish.",
+      "glassId": "nick_and_nora",
+      "methodIds": ["stir"],
+      "tags": [5],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 13,
+          "name": "Amaro",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 289,
+          "name": "Punt e Mes",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 10,
+          "name": "Allspice Dram",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 172,
+          "name": "Gomme Syrup",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
