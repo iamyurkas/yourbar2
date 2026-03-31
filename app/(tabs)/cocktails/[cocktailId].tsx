@@ -31,6 +31,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
@@ -43,6 +44,8 @@ import {
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
+import { findSimilarCocktails } from "@/libs/cocktail-similarity";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
@@ -583,6 +586,10 @@ export default function CocktailDetailsScreen() {
     return partySelectedCocktailKeys.has(cocktailSelectionKey);
   }, [cocktailSelectionKey, partySelectedCocktailKeys]);
 
+  useEffect(() => {
+    setShowSimilarCocktails(false);
+  }, [cocktailSelectionKey]);
+
   const cocktailIngredientIds = useMemo(() => {
     if (!cocktail) {
       return [] as number[];
@@ -651,6 +658,7 @@ export default function CocktailDetailsScreen() {
 
   const [ingredientDisplayMode, setIngredientDisplayMode] =
     useState<IngredientDisplayMode>(useImperialUnits ? "imperial" : "metric");
+  const [showSimilarCocktails, setShowSimilarCocktails] = useState(false);
   const scrollRef = useRef<ScrollView | null>(null);
   const isHandlingBackRef = useRef(false);
   const persistFeedbackDraftRef = useRef<() => void>(() => { });
@@ -730,6 +738,47 @@ export default function CocktailDetailsScreen() {
     () => createIngredientLookup(ingredients),
     [ingredients],
   );
+
+  const similarCocktails = useMemo(() => {
+    if (!showSimilarCocktails || !cocktail) {
+      return [];
+    }
+
+    return findSimilarCocktails(cocktail, cocktails, ingredients, { limit: 10 });
+  }, [cocktail, cocktails, ingredients, showSimilarCocktails]);
+
+  const similarAvailabilityByKey = useMemo(() => {
+    const byKey = new Map<
+      string,
+      ReturnType<typeof summariseCocktailAvailability>
+    >();
+
+    similarCocktails.forEach(({ cocktail: similarCocktail }) => {
+      byKey.set(
+        String(similarCocktail.id ?? similarCocktail.name),
+        summariseCocktailAvailability(
+          similarCocktail,
+          availableIngredientIds,
+          ingredientLookup,
+          ingredients,
+          { ignoreGarnish, allowAllSubstitutes },
+          t,
+          locale,
+        ),
+      );
+    });
+
+    return byKey;
+  }, [
+    allowAllSubstitutes,
+    availableIngredientIds,
+    ignoreGarnish,
+    ingredientLookup,
+    ingredients,
+    locale,
+    similarCocktails,
+    t,
+  ]);
 
   const sortedIngredients = useMemo(() => {
     const recipe = cocktail?.ingredients ?? [];
@@ -1183,6 +1232,27 @@ export default function CocktailDetailsScreen() {
       },
     });
   }, [cocktail, returnToParams, returnToPath]);
+
+  const handleShowSimilarCocktails = useCallback(() => {
+    setShowSimilarCocktails(true);
+  }, []);
+
+  const handleSelectSimilarCocktail = useCallback(
+    (nextCocktail: Cocktail) => {
+      const targetId = nextCocktail.id ?? nextCocktail.name;
+      if (!targetId) {
+        return;
+      }
+
+      navigateToDetailsWithReturnTo({
+        pathname: "/cocktails/[cocktailId]",
+        params: { cocktailId: String(targetId) },
+        returnToPath: returnToPath === "/cocktails" ? "/cocktails" : undefined,
+        returnToParams: returnToPath === "/cocktails" ? returnToParams : undefined,
+      });
+    },
+    [returnToParams, returnToPath],
+  );
 
   const handleNameLayout = useCallback((event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout;
@@ -2067,6 +2137,99 @@ export default function CocktailDetailsScreen() {
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
                 </View>
+                {showSimilarCocktails ? (
+                  <View style={styles.similarBlock}>
+                    <Text style={[styles.similarTitle, { color: Colors.onSurface }]}>
+                      {t("cocktailDetails.similarCocktailsTitle")}
+                    </Text>
+                    {similarCocktails.length === 0 ? (
+                      <Text
+                        style={[
+                          styles.similarEmptyState,
+                          { color: Colors.onSurfaceVariant },
+                        ]}
+                      >
+                        {t("cocktailDetails.noSimilarCocktails")}
+                      </Text>
+                    ) : (
+                      <View style={styles.similarList}>
+                        {similarCocktails.map(
+                          ({ cocktail: similarCocktail }, index) => {
+                            const availability = similarAvailabilityByKey.get(
+                              String(similarCocktail.id ?? similarCocktail.name),
+                            );
+                            if (!availability) {
+                              return null;
+                            }
+
+                            return (
+                              <View
+                                key={String(
+                                  similarCocktail.id ?? similarCocktail.name,
+                                )}
+                              >
+                                {index > 0 ? (
+                                  <View
+                                    style={[
+                                      styles.similarItemDivider,
+                                      { backgroundColor: Colors.outlineVariant },
+                                    ]}
+                                  />
+                                ) : null}
+                                <CocktailListRow
+                                  cocktail={similarCocktail}
+                                  ingredients={ingredients}
+                                  showMethodIcons
+                                  onPress={() =>
+                                    handleSelectSimilarCocktail(similarCocktail)
+                                  }
+                                  isReady={availability.isReady}
+                                  missingCount={availability.missingCount}
+                                  recipeNamesCount={
+                                    availability.recipeNames.length
+                                  }
+                                  ingredientLine={availability.ingredientLine}
+                                  ratingValue={getCocktailRating(similarCocktail)}
+                                  hasComment={Boolean(
+                                    getCocktailComment(similarCocktail).trim(),
+                                  )}
+                                  hasBrandFallback={availability.hasBrandFallback}
+                                  hasStyleFallback={availability.hasStyleFallback}
+                                />
+                              </View>
+                            );
+                          },
+                        )}
+                      </View>
+                    )}
+                  </View>
+                ) : (
+                  <Pressable
+                    onPress={handleShowSimilarCocktails}
+                    accessibilityRole="button"
+                    style={[
+                      styles.similarActionButton,
+                      {
+                        borderColor: Colors.primary,
+                        backgroundColor: Colors.primary,
+                      },
+                    ]}
+                  >
+                    <MaterialCommunityIcons
+                      name="glass-cocktail"
+                      size={18}
+                      color={Colors.onPrimary}
+                    />
+                    <Text
+                      style={[
+                        styles.similarActionLabel,
+                        { color: Colors.onPrimary },
+                      ]}
+                    >
+                      {t("cocktailDetails.similarCocktails")}
+                    </Text>
+                  </Pressable>
+                )}
               </View>
             ) : null}
           </View>
@@ -2139,6 +2302,44 @@ const styles = StyleSheet.create({
   itemActionLabel: {
     fontSize: 14,
     fontWeight: "600",
+  },
+  similarActionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    alignSelf: "center",
+    paddingHorizontal: 14,
+    marginTop: 4,
+    height: 48,
+    minWidth: 250,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  similarActionLabel: {
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  similarBlock: {
+    width: "100%",
+    marginTop: 8,
+    gap: 8,
+  },
+  similarTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  similarEmptyState: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  similarList: {
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  similarItemDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: 12,
   },
   photoWrapper: {
     alignItems: "center",

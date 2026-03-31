@@ -273,6 +273,9 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Купити всі інгредієнти",
   "cocktailDetails.copyCocktail": "Копіювати коктейль",
   "cocktailDetails.editCocktail": "Редагувати коктейль",
+  "cocktailDetails.similarCocktails": "Similar Cocktails",
+  "cocktailDetails.similarCocktailsTitle": "Similar cocktails",
+  "cocktailDetails.noSimilarCocktails": "No similar cocktails found.",
   "cocktailDetails.notFound": "Коктейль не знайдено",
   "cocktailDetails.helpMessage":
     "Цей екран показує деталі коктейлю, інгредієнти та інструкцію.\n\nВикористовуйте кнопки під коктейлем, щоб скопіювати або редагувати його.\n\n**Стрічки інгредієнтів**\nЛіва стрічка показує тип інгредієнта:\nсиня = брендовий інгредієнт,\nжовта = стильовий інгредієнт.\n\nПрава стрічка показує варіанти бази:\nсиня = є брендові варіанти,\nжовта = є стильові варіанти.",
