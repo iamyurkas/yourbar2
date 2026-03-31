@@ -3537,5 +3537,9 @@
   "cocktail.635.name": "Terreno Neutral",
   "cocktail.635.synonyms": "The Neutral Ground",
   "cocktail.635.description": "Un cóctel intenso, estilo Manhattan, donde el potente **whiskey de centeno** se une al **amontillado** con notas de frutos secos, al licor herbal **Benedictine** y a los aromáticos **amargos Angostura**.",
-  "cocktail.635.instructions": "1. Añade 50 ml de **whiskey de centeno**, 15 ml de **amontillado**, 15 ml de **Benedictine** y 3 golpes de **amargos Angostura** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo** y remueve hasta que esté bien frío.\n3. Cuela finamente en una copa coupé fría, luego exprime una piel de **naranja** sobre la bebida y úsala como adorno."
+  "cocktail.635.instructions": "1. Añade 50 ml de **whiskey de centeno**, 15 ml de **amontillado**, 15 ml de **Benedictine** y 3 golpes de **amargos Angostura** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo** y remueve hasta que esté bien frío.\n3. Cuela finamente en una copa coupé fría, luego exprime una piel de **naranja** sobre la bebida y úsala como adorno.",
+  "cocktail.636.name": "Jeroni",
+  "cocktail.636.synonyms": "Sheroni, Sherry Negroni",
+  "cocktail.636.description": "Un aperitivo amargo, dulce y con notas de frutos secos al estilo Negroni, donde **oude genever**, **Campari**, **jerez amontillado** y **vermut rojo** se combinan a partes iguales.",
+  "cocktail.636.instructions": "1. Añade 22,5 ml de **oude genever**, 22,5 ml de **Campari**, 22,5 ml de **jerez amontillado** y 22,5 ml de **vermut rojo** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo** y remueve hasta que esté bien frío.\n3. Cuela en un vaso rocks con **hielo** fresco.\n4. Decora con una rodaja de **naranja**."
 }
