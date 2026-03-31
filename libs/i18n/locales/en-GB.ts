@@ -272,6 +272,8 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Buy all ingredients",
   "cocktailDetails.copyCocktail": "Copy cocktail",
   "cocktailDetails.editCocktail": "Edit cocktail",
+  "cocktailDetails.similarCocktails": "Similar cocktails",
+  "cocktailDetails.noSimilarCocktails": "No similar cocktails found yet.",
   "cocktailDetails.notFound": "Cocktail not found",
   "cocktailDetails.helpMessage":
     "This screen shows cocktail details, ingredients, and instructions.\n\nUse the buttons under the cocktail to copy or edit it.\n\n**Ingredient ribbons**\nLeft ribbon marks ingredient type:\nblue = brand ingredient,\nyellow = style ingredient.\n\nRight ribbon marks base variants:\nblue = has branded variants,\nyellow = has style variants.",
