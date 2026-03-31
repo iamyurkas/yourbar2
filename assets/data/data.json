@@ -40993,6 +40993,7 @@
     {
       "id": 624,
       "name": "Winter",
+      "synonyms": "Winter Daiquiri",
       "description": "A festive Jamaican rum Daiquiri variation lifted with ginger liqueur, allspice dram, and aromatic bitters. Bright lime keeps it crisp while the warming spice profile makes it ideal for cold-season sipping.",
       "instructions": "1. Add 60 ml of **Jamaican Rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, 5 ml of **ginger liqueur**, 5 ml of **allspice dram**, and 2 dashes of **angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake hard for about 10–12 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with skewered **ginger candy**.",
       "glassId": "coupe",
