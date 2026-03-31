@@ -31,6 +31,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
@@ -43,6 +44,7 @@ import {
 } from "@/constants/cocktail-methods";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
+import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
@@ -60,6 +62,7 @@ import {
   skipDuplicateBack,
 } from "@/libs/navigation";
 import { normalizeSearchText } from "@/libs/search-normalization";
+import { getSimilarCocktails } from "@/libs/similar-cocktails";
 import { useInventory, type Cocktail } from "@/providers/inventory-provider";
 import { tagColors } from "@/theme/theme";
 
@@ -819,6 +822,7 @@ export default function CocktailDetailsScreen() {
   }, [cocktail, getCocktailComment]);
 
   const [isCommentFieldVisible, setIsCommentFieldVisible] = useState(false);
+  const [isSimilarCocktailsVisible, setIsSimilarCocktailsVisible] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
   const hasComment = commentDraft.trim().length > 0 || userComment.trim().length > 0;
   const [isAddTagsVisible, setIsAddTagsVisible] = useState(false);
@@ -864,6 +868,10 @@ export default function CocktailDetailsScreen() {
 
   useEffect(() => {
     setIsAddTagsVisible(false);
+  }, [cocktailSelectionKey]);
+
+  useEffect(() => {
+    setIsSimilarCocktailsVisible(false);
   }, [cocktailSelectionKey]);
 
   const hasPendingTagChanges = useMemo(() => {
@@ -1183,6 +1191,28 @@ export default function CocktailDetailsScreen() {
       },
     });
   }, [cocktail, returnToParams, returnToPath]);
+
+  const similarCocktails = useMemo(() => {
+    if (!cocktail || !isSimilarCocktailsVisible) {
+      return [];
+    }
+
+    return getSimilarCocktails(cocktail, cocktails, ingredients);
+  }, [cocktail, cocktails, ingredients, isSimilarCocktailsVisible]);
+
+  const handleSelectSimilarCocktail = useCallback((nextCocktail: Cocktail) => {
+    const routeParam = nextCocktail.id ?? nextCocktail.name;
+    if (routeParam == null) {
+      return;
+    }
+
+    navigateToDetailsWithReturnTo({
+      pathname: "/cocktails/[cocktailId]",
+      params: { cocktailId: String(routeParam) },
+      returnToPath,
+      returnToParams,
+    });
+  }, [returnToParams, returnToPath]);
 
   const handleNameLayout = useCallback((event: LayoutChangeEvent) => {
     const { y, height } = event.nativeEvent.layout;
@@ -2066,7 +2096,70 @@ export default function CocktailDetailsScreen() {
                     />
                     <Text style={[styles.itemActionLabel, { color: Colors.primary }]}>{t("cocktailDetails.editCocktail")}</Text>
                   </Pressable>
+                  {!isSimilarCocktailsVisible ? (
+                    <Pressable
+                      onPress={() => setIsSimilarCocktailsVisible(true)}
+                      accessibilityRole="button"
+                      accessibilityLabel="Similar Cocktails"
+                      style={[styles.itemActionButton, { borderColor: Colors.primary, backgroundColor: Colors.primary }]}
+                    >
+                      <MaterialCommunityIcons
+                        name="glass-cocktail"
+                        size={18}
+                        color={Colors.surface}
+                      />
+                      <Text style={[styles.itemActionLabel, { color: Colors.surface }]}>Similar Cocktails</Text>
+                    </Pressable>
+                  ) : null}
                 </View>
+                {isSimilarCocktailsVisible ? (
+                  <View style={styles.similarCocktailsSection}>
+                    <Text style={[styles.similarCocktailsTitle, { color: Colors.onSurface }]}>
+                      Similar cocktails
+                    </Text>
+                    <View style={styles.similarCocktailsList}>
+                      {similarCocktails.map(({ cocktail: similarCocktail }, index) => {
+                        const availability = summariseCocktailAvailability(
+                          similarCocktail,
+                          availableIngredientIds,
+                          ingredientLookup,
+                          ingredients,
+                          {
+                            ignoreGarnish,
+                            allowAllSubstitutes,
+                          },
+                          t,
+                          locale,
+                        );
+
+                        return (
+                          <View key={String(similarCocktail.id ?? `${similarCocktail.name}-${index}`)}>
+                            <CocktailListRow
+                              cocktail={similarCocktail}
+                              ingredients={ingredients}
+                              showMethodIcons
+                              onPress={() => handleSelectSimilarCocktail(similarCocktail)}
+                              isReady={availability.isReady}
+                              missingCount={availability.missingCount}
+                              recipeNamesCount={availability.recipeNames.length}
+                              ingredientLine={availability.ingredientLine}
+                              ratingValue={getCocktailRating(similarCocktail)}
+                              hasComment={Boolean(getCocktailComment(similarCocktail).trim())}
+                              hasBrandFallback={availability.hasBrandFallback}
+                              hasStyleFallback={availability.hasStyleFallback}
+                              isPartySelected={partySelectedCocktailKeys.has(
+                                String(similarCocktail.id ?? similarCocktail.name ?? ""),
+                              )}
+                            />
+                            {index < similarCocktails.length - 1 ? (
+                              <View style={[styles.similarCocktailDivider, { backgroundColor: Colors.outlineVariant }]} />
+                            ) : null}
+                          </View>
+                        );
+                      })}
+                    </View>
+                  </View>
+                ) : null}
               </View>
             ) : null}
           </View>
@@ -2118,12 +2211,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "stretch",
+    justifyContent: "flex-start",
     marginVertical: 12,
-    gap: 24,
-    flexWrap: "wrap",
+    gap: 12,
   },
   itemActionButton: {
     flexDirection: "row",
@@ -2135,6 +2227,22 @@ const styles = StyleSheet.create({
     minWidth: 250,
     borderRadius: 10,
     borderWidth: 1,
+  },
+  similarCocktailsSection: {
+    marginTop: 4,
+    gap: 12,
+  },
+  similarCocktailsTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  similarCocktailsList: {
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  similarCocktailDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginLeft: 72,
   },
   itemActionLabel: {
     fontSize: 14,
