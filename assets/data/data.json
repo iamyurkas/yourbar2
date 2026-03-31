@@ -41060,6 +41060,84 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 625,
+      "name": "Firecracker",
+      "description": "A vibrant pisco sour variation with tropical pineapple, fresh lime, and warm allspice complexity. Mezcal adds a smoky agave edge while the cinnamon-sugar rim delivers a festive spicy-sweet finish.",
+      "instructions": "1. Rim a chilled coupe glass with cinnamon and sugar (moisten the outside edge with sugar syrup and dip into cinnamon powder).\n2. Add 45 ml of **pisco**, 15 ml of **mezcal**, 15 ml of **lime juice**, 30 ml of **pineapple juice**, 10 ml of **allspice dram**, and 10 ml of **agave syrup** into a shaker.\n3. Fill the shaker with **ice**.\n4. Shake vigorously until well chilled.\n5. Fine strain into the chilled glass.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [5],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 285,
+          "name": "Pisco",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 10,
+          "name": "Allspice Dram",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 6,
+          "name": "Agave Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 96,
+          "name": "Cinnamon",
+          "amount": "2",
+          "unitId": 15,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 329,
+          "name": "Sugar",
+          "amount": "4",
+          "unitId": 8,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
