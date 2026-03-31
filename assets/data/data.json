@@ -41408,6 +41408,77 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 630,
+      "name": "Dragon Punch",
+      "description": "A smoky, spicy sour where **mezcal** and mellow **yellow chartreuse** meet fresh **lime juice** and creamy **almond (orgeat) syrup**, lifted by a couple dashes of **Tabasco** and finished with a skewered **cucumber** roll.",
+      "instructions": "1. Add 45 ml of **mezcal**, 15 ml of **yellow chartreuse**, 30 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, and 2 dashes of **Tabasco** into a shaker with **ice**.\n2. Shake hard until well chilled, then fine strain into a chilled coupe glass.\n3. Garnish with a skewered **cucumber** roll.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "tags": [5, 6],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 361,
+          "name": "Yellow Chartreuse",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "30",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 227,
+              "name": "Lime",
+              "amount": "1.5",
+              "unitId": 16
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 11,
+          "name": "Almond (Orgeat) Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 331,
+          "name": "Tabasco",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 133,
+          "name": "Cucumber",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
