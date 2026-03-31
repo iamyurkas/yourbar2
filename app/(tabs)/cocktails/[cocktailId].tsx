@@ -676,8 +676,25 @@ export default function CocktailDetailsScreen() {
       return;
     }
 
+    const returnToCocktailId = returnToParams?.cocktailId;
+    const currentCocktailId =
+      cocktail?.id != null
+        ? String(cocktail.id)
+        : resolvedParam
+          ? String(resolvedParam)
+          : undefined;
+    if (
+      returnToPath === "/cocktails/[cocktailId]" &&
+      returnToCocktailId &&
+      currentCocktailId &&
+      returnToCocktailId === currentCocktailId
+    ) {
+      skipDuplicateBack(navigation);
+      return;
+    }
+
     returnToSourceOrBack(navigation, { returnToPath, returnToParams });
-  }, [navigation, returnToParams, returnToPath]);
+  }, [cocktail?.id, navigation, resolvedParam, returnToParams, returnToPath]);
 
   useEffect(() => {
     if (!shouldNavigateAway || isHandlingBackRef.current) {
