@@ -36,12 +36,12 @@ import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
-import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import {
   getCocktailMethodById,
   METHOD_ICON_MAP,
   type CocktailMethodId,
 } from "@/constants/cocktail-methods";
+import { BUILTIN_COCKTAIL_TAGS } from "@/constants/cocktail-tags";
 import { GLASSWARE_NAME_BY_ID, resolveGlasswareId } from "@/constants/glassware";
 import { useAppColors } from "@/constants/theme";
 import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
@@ -1433,7 +1433,7 @@ export default function CocktailDetailsScreen() {
                 </View>
               </View>
 
-              {photoSource && glassSource && glassLabel ? (
+              {glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
                   <View style={styles.glassInfoLeft}>
                     <View style={styles.glassImageWrapper}>
