@@ -91,7 +91,7 @@ function resolveIngredientFamilies(ids: Set<number>, lookup: IngredientLookup): 
   return families;
 }
 
-function setOverlapScore(left: Set<number> | Set<string>, right: Set<number> | Set<string>): number {
+function setOverlapScore<T extends string | number>(left: Set<T>, right: Set<T>): number {
   if (left.size === 0 || right.size === 0) {
     return 0;
   }
