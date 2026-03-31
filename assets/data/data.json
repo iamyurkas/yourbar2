@@ -41163,7 +41163,7 @@
       "instructions": "1. Prepare a lime zest twist for garnish.\n2. Add 60 ml of **bourbon**, 10 ml of **allspice dram**, 15 ml of **lime juice**, 5 ml of **rich simple syrup**, and 1 dash of **Angostura bitters** into a shaker.\n3. Fill the shaker with **ice**.\n4. Shake hard until well chilled.\n5. Fine strain into a chilled coupe glass.\n6. Express oils from the lime zest twist over the drink and use it as garnish.",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [1, 6],
+      "tags": [6],
       "defaultServings": 1,
       "ingredients": [
         {
