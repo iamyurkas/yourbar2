@@ -2994,5 +2994,8 @@
   "cocktail.632.name": "Tia Mia",
   "cocktail.632.synonyms": "Mezcal Mai Tai",
   "cocktail.632.description": "A smoky modern Mai Tai riff where **mezcal** and **aged rum** meet bright **lime juice**, **orgeat**, and dry orange liqueur.",
-  "cocktail.632.instructions": "1. Add 30 ml of **mezcal**, 30 ml of **aged rum**, 22.5 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, 10 ml of **rich simple syrup**, and 7.5 ml of **orange curaçao** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with crushed **ice**.\n5. Garnish with a spent **lime** shell and a bouquet of **mint**."
+  "cocktail.632.instructions": "1. Add 30 ml of **mezcal**, 30 ml of **aged rum**, 22.5 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, 10 ml of **rich simple syrup**, and 7.5 ml of **orange curaçao** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with crushed **ice**.\n5. Garnish with a spent **lime** shell and a bouquet of **mint**.",
+  "cocktail.633.name": "Pinky Pincher",
+  "cocktail.633.description": "A citrus-forward bourbon sour style cocktail with fresh **orange juice** and **lemon juice**, lightly rounded by **rich simple syrup** and **almond (orgeat) syrup**.",
+  "cocktail.633.instructions": "1. Add 45 ml of **bourbon**, 15 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **rich simple syrup**, and 5 ml of **almond (orgeat) syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with fresh **ice**.\n5. Garnish with an **orange** slice, a **lemon** slice, and a **mint** sprig."
 }

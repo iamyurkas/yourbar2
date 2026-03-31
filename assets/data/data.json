@@ -41763,6 +41763,112 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 633,
+      "name": "Pinky Pincher",
+      "description": "A citrus-forward bourbon sour style cocktail with fresh **orange juice** and **lemon juice**, lightly rounded by **rich simple syrup** and **almond (orgeat) syrup**.",
+      "instructions": "1. Add 45 ml of **bourbon**, 15 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **rich simple syrup**, and 5 ml of **almond (orgeat) syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with fresh **ice**.\n5. Garnish with an **orange** slice, a **lemon** slice, and a **mint** sprig.",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "tags": [6, 8],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 251,
+          "name": "Orange Juice",
+          "amount": "15",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 247,
+              "name": "Orange",
+              "amount": "1",
+              "unitId": 19
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "15",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 219,
+              "name": "Lemon",
+              "amount": "1",
+              "unitId": 19
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 11,
+          "name": "Almond (Orgeat) Syrup",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 19,
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "optional": true,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
