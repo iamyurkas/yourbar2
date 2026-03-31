@@ -3509,8 +3509,7 @@
   "cocktail.628.name": "Línea rosa fina",
   "cocktail.628.synonyms": "Thin Pink Line",
   "cocktail.628.description": "Un sour sedoso de **cognac** con **zumo de limón** brillante, un matiz de almendra gracias al **orgeat** y una cinta flotante de **amargo de Peychaud** bajo la espuma.",
-  "cocktail.628.instructions": "1. Añade 50 ml de **cognac**, 20 ml de **zumo de limón**, 10 ml de **jarabe simple rico**, 5 ml de **jarabe de almendra (orgeat)** y 1 **clara de huevo** en una coctelera con **hielo**.\n2. Agita con fuerza, cuela de nuevo en la coctelera y desecha el hielo.\n3. Agita en seco (sin hielo) hasta formar una espuma densa.\n4. Cuela finamente en una copa coupé previamente enfriada.\n5. Vierte lentamente 10 ml de **amargo de Peychaud** en el centro para que se forme una fina línea rosa bajo la espuma."
-,
+  "cocktail.628.instructions": "1. Añade 50 ml de **cognac**, 20 ml de **zumo de limón**, 10 ml de **jarabe simple rico**, 5 ml de **jarabe de almendra (orgeat)** y 1 **clara de huevo** en una coctelera con **hielo**.\n2. Agita con fuerza, cuela de nuevo en la coctelera y desecha el hielo.\n3. Agita en seco (sin hielo) hasta formar una espuma densa.\n4. Cuela finamente en una copa coupé previamente enfriada.\n5. Vierte lentamente 10 ml de **amargo de Peychaud** en el centro para que se forme una fina línea rosa bajo la espuma.",
   "cocktail.629.name": "Elixir Tropical",
   "cocktail.629.synonyms": "Elixir Tropical",
   "cocktail.629.description": "Una variación de Daiquiri con perfil tropical, donde el intenso **sirope de almendra (orgeat)** y un toque de **Luxardo Maraschino** se integran con **ron blanco** y **zumo de lima** fresco, rematado con aromáticos **Angostura bitters** y **nuez moscada** rallada.",
@@ -3522,5 +3521,9 @@
   "cocktail.631.name": "Sour londinense",
   "cocktail.631.synonyms": "London Sour, Trader Vic London Sour",
   "cocktail.631.description": "Un sour de **scotch** refrescante y cítrico, alargado con **zumo de naranja** y equilibrado con un toque de **orgeat**.",
-  "cocktail.631.instructions": "1. Añade en una coctelera con **hielo** 60 ml de **whisky escocés**, 75 ml de **zumo de naranja**, 15 ml de **zumo de limón**, 5 ml de **sirope de almendra (orgeat)** y 5 ml de **jarabe de azúcar rico**.\n2. Agita enérgicamente hasta que esté bien frío.\n3. Cuela en un vaso Collins lleno de **hielo** fresco.\n4. Decora con una rodaja de **naranja** y ramitas de **menta**."
+  "cocktail.631.instructions": "1. Añade en una coctelera con **hielo** 60 ml de **whisky escocés**, 75 ml de **zumo de naranja**, 15 ml de **zumo de limón**, 5 ml de **sirope de almendra (orgeat)** y 5 ml de **jarabe de azúcar rico**.\n2. Agita enérgicamente hasta que esté bien frío.\n3. Cuela en un vaso Collins lleno de **hielo** fresco.\n4. Decora con una rodaja de **naranja** y ramitas de **menta**.",
+  "cocktail.632.name": "Tía Mía",
+  "cocktail.632.synonyms": "Tia Mia, Mezcal Mai Tai",
+  "cocktail.632.description": "Una versión moderna y ahumada del Mai Tai, donde **mezcal** y **ron añejo** se unen con **zumo de lima** fresco, **orgeat** y licor seco de naranja.",
+  "cocktail.632.instructions": "1. Añade 30 ml de **mezcal**, 30 ml de **ron añejo**, 22,5 ml de **zumo de lima**, 15 ml de **sirope de almendra (orgeat)**, 10 ml de **sirope simple rico** y 7,5 ml de **curaçao de naranja** en una coctelera.\n2. Llena la coctelera con **hielo**.\n3. Agita enérgicamente hasta que esté bien frío.\n4. Cuela en un vaso rocks con **hielo** picado.\n5. Decora con media **lima** exprimida y un bouquet de **menta**."
 }

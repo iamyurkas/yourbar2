@@ -3227,8 +3227,7 @@
   "cocktail.628.name": "Dünne rosa Linie",
   "cocktail.628.synonyms": "Thin Pink Line",
   "cocktail.628.description": "Ein seidiger **Cognac**-Sour mit frischem **Zitronensaft**, feiner Mandelnote durch **Orgeat** und einem schwebenden Band aus **Peychaud's Bitters** unter dem Schaum.",
-  "cocktail.628.instructions": "1. 50 ml **Cognac**, 20 ml **Zitronensaft**, 10 ml **Rich Simple Syrup**, 5 ml **Mandel-(Orgeat)-Sirup** und 1 **Eiweiß** zusammen mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, dann zurück in den Shaker abseihen und das Eis entsorgen.\n3. Ohne Eis erneut kräftig shaken, bis dichter Schaum entsteht.\n4. Fein in eine gekühlte Coupette abseihen.\n5. 10 ml **Peychaud's Bitters** langsam in die Mitte gießen, sodass sich unter dem Schaum eine dünne rosa Linie bildet."
-,
+  "cocktail.628.instructions": "1. 50 ml **Cognac**, 20 ml **Zitronensaft**, 10 ml **Rich Simple Syrup**, 5 ml **Mandel-(Orgeat)-Sirup** und 1 **Eiweiß** zusammen mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, dann zurück in den Shaker abseihen und das Eis entsorgen.\n3. Ohne Eis erneut kräftig shaken, bis dichter Schaum entsteht.\n4. Fein in eine gekühlte Coupette abseihen.\n5. 10 ml **Peychaud's Bitters** langsam in die Mitte gießen, sodass sich unter dem Schaum eine dünne rosa Linie bildet.",
   "cocktail.629.name": "Tropisches Elixier",
   "cocktail.629.synonyms": "Elixir Tropical",
   "cocktail.629.description": "Eine tropisch geprägte Daiquiri-Variante, bei der reichhaltiger **Mandel-(Orgeat)-Sirup** und ein Hauch **Luxardo Maraschino** auf **weißem Rum** und frischem **Limettensaft** aufbauen, abgerundet mit aromatischen **Angostura Bitters** und geriebener **Muskatnuss**.",
@@ -3240,5 +3239,9 @@
   "cocktail.631.name": "Londoner Sour",
   "cocktail.631.synonyms": "London Sour, Trader Vic London Sour",
   "cocktail.631.description": "Ein erfrischender, zitrusbetonter **Scotch** Sour, verlängert mit **Orangensaft** und ausbalanciert durch einen Hauch **Orgeat**.",
-  "cocktail.631.instructions": "1. 60 ml **Scotch Whisky**, 75 ml **Orangensaft**, 15 ml **Zitronensaft**, 5 ml **Mandel-(Orgeat)-Sirup** und 5 ml **reichhaltigen Zuckersirup** mit **Eis** in einen Shaker geben.\n2. Kräftig schütteln, bis alles gut gekühlt ist.\n3. In ein Collins-Glas über frisches **Eis** abseihen.\n4. Mit einer **Orangenscheibe** und **Minzzweigen** garnieren."
+  "cocktail.631.instructions": "1. 60 ml **Scotch Whisky**, 75 ml **Orangensaft**, 15 ml **Zitronensaft**, 5 ml **Mandel-(Orgeat)-Sirup** und 5 ml **reichhaltigen Zuckersirup** mit **Eis** in einen Shaker geben.\n2. Kräftig schütteln, bis alles gut gekühlt ist.\n3. In ein Collins-Glas über frisches **Eis** abseihen.\n4. Mit einer **Orangenscheibe** und **Minzzweigen** garnieren.",
+  "cocktail.632.name": "Tia Mía",
+  "cocktail.632.synonyms": "Tia Mia, Mezcal Mai Tai",
+  "cocktail.632.description": "Ein rauchiger moderner Mai-Tai-Twist, bei dem **Mezcal** und **gereifter Rum** auf frischen **Limettensaft**, **Orgeat** und trockenen Orangenlikör treffen.",
+  "cocktail.632.instructions": "1. 30 ml **Mezcal**, 30 ml **Aged Rum**, 22,5 ml **Limettensaft**, 15 ml **Mandel-(Orgeat)-Sirup**, 10 ml **Rich Simple Syrup** und 7,5 ml **Orange Curaçao** in einen Shaker geben.\n2. Den Shaker mit **Eis** füllen.\n3. Kräftig shaken, bis der Drink gut gekühlt ist.\n4. In ein Rocks-Glas auf Crushed **Eis** abseihen.\n5. Mit einer ausgepressten **Limette** und einem Bouquet aus **Minze** garnieren."
 }
