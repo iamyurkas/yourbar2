@@ -2961,5 +2961,8 @@
   "ingredient.370.name": "Plymouth Gin",
   "ingredient.370.description": "Protected gin style from Plymouth, England, softer and earthier than London Dry with balanced juniper and rooty botanicals.",
   "ingredient.371.name": "Botanical Gin",
-  "ingredient.371.description": "Modern aromatic gin style emphasizing expressive botanicals such as floral, herbal, and citrus notes over strict juniper dominance."
+  "ingredient.371.description": "Modern aromatic gin style emphasizing expressive botanicals such as floral, herbal, and citrus notes over strict juniper dominance.",
+  "cocktail.623.name": "Star",
+  "cocktail.623.description": "An old-school apple-brandy Manhattan variation where Calvados and rosso vermouth meet a touch of gomme syrup and Creole bitters. Stirred and served up, it drinks rich, aromatic, and gently spiced with a cherry finish.",
+  "cocktail.623.instructions": "1. Select and pre-chill a coupe glass.\n2. Add 45 ml of **calvados**, 45 ml of **red vermouth**, 2.5 ml of **gomme syrup**, and 3 dashes of **Peychaud's bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Garnish with a skewered **maraschino cherry**."
 }

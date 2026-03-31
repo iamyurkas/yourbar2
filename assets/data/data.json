@@ -40933,6 +40933,62 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 623,
+      "name": "Star",
+      "description": "An old-school apple-brandy Manhattan variation where Calvados and rosso vermouth meet a touch of gomme syrup and Creole bitters. Stirred and served up, it drinks rich, aromatic, and gently spiced with a cherry finish.",
+      "instructions": "1. Select and pre-chill a coupe glass.\n2. Add 45 ml of **calvados**, 45 ml of **red vermouth**, 2.5 ml of **gomme syrup**, and 3 dashes of **Peychaud's bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Garnish with a skewered **maraschino cherry**.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "tags": [5],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 73,
+          "name": "Calvados",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 172,
+          "name": "Gomme Syrup",
+          "amount": "2.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 276,
+          "name": "Peychaud's Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 236,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
