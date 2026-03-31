@@ -2980,8 +2980,7 @@
   "cocktail.627.instructions": "1. Add 45 ml of **mezcal**, 20 ml of **almond (orgeat) syrup**, 20 ml of **lime juice**, and 15 ml of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with a (preferably dehydrated) **lime** wheel floated on the surface.",
   "cocktail.628.name": "Thin Pink Line",
   "cocktail.628.description": "A silky **cognac** sour with bright **lemon juice**, subtle almond richness from **orgeat**, and a floating ribbon of **Peychaud's bitters** beneath the foam.",
-  "cocktail.628.instructions": "1. Add 50 ml of **cognac**, 20 ml of **lemon juice**, 10 ml of **rich simple syrup**, 5 ml of **almond (orgeat) syrup**, and 1 **egg white** into a shaker with **ice**.\n2. Shake hard, then strain back into the shaker and discard the ice.\n3. Dry shake (without ice) until a dense foam forms.\n4. Fine strain into a chilled coupe glass.\n5. Slowly pour 10 ml of **Peychaud's bitters** into the center so a thin pink line forms under the foam."
-,
+  "cocktail.628.instructions": "1. Add 50 ml of **cognac**, 20 ml of **lemon juice**, 10 ml of **rich simple syrup**, 5 ml of **almond (orgeat) syrup**, and 1 **egg white** into a shaker with **ice**.\n2. Shake hard, then strain back into the shaker and discard the ice.\n3. Dry shake (without ice) until a dense foam forms.\n4. Fine strain into a chilled coupe glass.\n5. Slowly pour 10 ml of **Peychaud's bitters** into the center so a thin pink line forms under the foam.",
   "cocktail.629.name": "Elixir Tropical",
   "cocktail.629.description": "A tropical-leaning Daiquiri variation where rich **almond (orgeat) syrup** and a touch of **Luxardo Maraschino** layer over **white rum** and fresh **lime juice**, finished with aromatic **Angostura bitters** and grated **nutmeg**.",
   "cocktail.629.instructions": "1. Add 60 ml of **white rum**, 20 ml of **lime juice**, 20 ml of **almond (orgeat) syrup**, 7.5 ml of **Luxardo Maraschino**, 3 dashes of **Angostura bitters**, and 3 **mint leaves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Dust with freshly grated **nutmeg**.",
@@ -2991,5 +2990,9 @@
   "cocktail.631.name": "London Sour",
   "cocktail.631.synonyms": "Trader Vic London Sour",
   "cocktail.631.description": "A refreshing **Scotch** sour lengthened with **orange juice** and balanced by a whisper of **orgeat**.",
-  "cocktail.631.instructions": "1. Add 60 ml of **scotch whisky**, 75 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **almond (orgeat) syrup**, and 5 ml of **rich simple syrup** into a shaker with **ice**.\n2. Shake vigorously until well chilled.\n3. Strain into a Collins glass filled with fresh **ice**.\n4. Garnish with an **orange** slice and **mint** sprigs."
+  "cocktail.631.instructions": "1. Add 60 ml of **scotch whisky**, 75 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **almond (orgeat) syrup**, and 5 ml of **rich simple syrup** into a shaker with **ice**.\n2. Shake vigorously until well chilled.\n3. Strain into a Collins glass filled with fresh **ice**.\n4. Garnish with an **orange** slice and **mint** sprigs.",
+  "cocktail.632.name": "Tia Mia",
+  "cocktail.632.synonyms": "Mezcal Mai Tai",
+  "cocktail.632.description": "A smoky modern Mai Tai riff where **mezcal** and **aged rum** meet bright **lime juice**, **orgeat**, and dry orange liqueur.",
+  "cocktail.632.instructions": "1. Add 30 ml of **mezcal**, 30 ml of **aged rum**, 22.5 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, 10 ml of **rich simple syrup**, and 7.5 ml of **orange curaçao** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with crushed **ice**.\n5. Garnish with a spent **lime** shell and a bouquet of **mint**."
 }
