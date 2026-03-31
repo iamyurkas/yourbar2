@@ -41869,6 +41869,71 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 634,
+      "name": "Old Barrel",
+      "description": "A spirit-forward Old Fashioned riff where spicy **rye whiskey**, herbal **Benedictine**, and nutty **Amontillado sherry** come together with aromatic **Angostura bitters** and bright lemon oils.",
+      "instructions": "1. Add 60 ml of **rye whiskey**, 15 ml of **Benedictine**, 15 ml of **Amontillado sherry**, and 3 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir gently until well chilled.\n3. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n4. Express oils from a **lemon** twist over the drink and use it as a garnish.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "tags": [5],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 305,
+          "name": "Rye Whiskey",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 43,
+          "name": "Benedictine",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 17,
+          "name": "Amontillado Sherry",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "optional": true,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
