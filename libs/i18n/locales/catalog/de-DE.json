@@ -3236,5 +3236,9 @@
   "cocktail.630.name": "Drachenpunsch",
   "cocktail.630.synonyms": "Dragon Punch",
   "cocktail.630.description": "Ein rauchiger, würziger Sour, bei dem **Mezcal** und milder **gelber Chartreuse** auf frischen **Limettensaft** und cremigen **Mandel-(Orgeat)-Sirup** treffen, akzentuiert mit ein paar Dashes **Tabasco** und vollendet mit einer aufgespießten **Gurken**-Rolle.",
-  "cocktail.630.instructions": "1. 45 ml **Mezcal**, 15 ml **gelben Chartreuse**, 30 ml **Limettensaft**, 15 ml **Mandel-(Orgeat)-Sirup** und 2 Dashes **Tabasco** zusammen mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, bis der Drink gut gekühlt ist, dann fein in eine gekühlte Coupette abseihen.\n3. Mit einer aufgespießten **Gurken**-Rolle garnieren."
+  "cocktail.630.instructions": "1. 45 ml **Mezcal**, 15 ml **gelben Chartreuse**, 30 ml **Limettensaft**, 15 ml **Mandel-(Orgeat)-Sirup** und 2 Dashes **Tabasco** zusammen mit **Eis** in einen Shaker geben.\n2. Kräftig shaken, bis der Drink gut gekühlt ist, dann fein in eine gekühlte Coupette abseihen.\n3. Mit einer aufgespießten **Gurken**-Rolle garnieren.",
+  "cocktail.631.name": "Londoner Sour",
+  "cocktail.631.synonyms": "London Sour, Trader Vic London Sour",
+  "cocktail.631.description": "Ein erfrischender, zitrusbetonter **Scotch** Sour, verlängert mit **Orangensaft** und ausbalanciert durch einen Hauch **Orgeat**.",
+  "cocktail.631.instructions": "1. 60 ml **Scotch Whisky**, 75 ml **Orangensaft**, 15 ml **Zitronensaft**, 5 ml **Mandel-(Orgeat)-Sirup** und 5 ml **reichhaltigen Zuckersirup** mit **Eis** in einen Shaker geben.\n2. Kräftig schütteln, bis alles gut gekühlt ist.\n3. In ein Collins-Glas über frisches **Eis** abseihen.\n4. Mit einer **Orangenscheibe** und **Minzzweigen** garnieren."
 }

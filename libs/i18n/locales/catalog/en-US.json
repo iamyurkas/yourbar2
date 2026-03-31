@@ -2987,5 +2987,9 @@
   "cocktail.629.instructions": "1. Add 60 ml of **white rum**, 20 ml of **lime juice**, 20 ml of **almond (orgeat) syrup**, 7.5 ml of **Luxardo Maraschino**, 3 dashes of **Angostura bitters**, and 3 **mint leaves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Dust with freshly grated **nutmeg**.",
   "cocktail.630.name": "Dragon Punch",
   "cocktail.630.description": "A smoky, spicy sour where **mezcal** and mellow **yellow chartreuse** meet fresh **lime juice** and creamy **almond (orgeat) syrup**, lifted by a couple dashes of **Tabasco** and finished with a skewered **cucumber** roll.",
-  "cocktail.630.instructions": "1. Add 45 ml of **mezcal**, 15 ml of **yellow chartreuse**, 30 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, and 2 dashes of **Tabasco** into a shaker with **ice**.\n2. Shake hard until well chilled, then fine strain into a chilled coupe glass.\n3. Garnish with a skewered **cucumber** roll."
+  "cocktail.630.instructions": "1. Add 45 ml of **mezcal**, 15 ml of **yellow chartreuse**, 30 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, and 2 dashes of **Tabasco** into a shaker with **ice**.\n2. Shake hard until well chilled, then fine strain into a chilled coupe glass.\n3. Garnish with a skewered **cucumber** roll.",
+  "cocktail.631.name": "London Sour",
+  "cocktail.631.synonyms": "Trader Vic London Sour",
+  "cocktail.631.description": "A refreshing **Scotch** sour lengthened with **orange juice** and balanced by a whisper of **orgeat**.",
+  "cocktail.631.instructions": "1. Add 60 ml of **scotch whisky**, 75 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **almond (orgeat) syrup**, and 5 ml of **rich simple syrup** into a shaker with **ice**.\n2. Shake vigorously until well chilled.\n3. Strain into a Collins glass filled with fresh **ice**.\n4. Garnish with an **orange** slice and **mint** sprigs."
 }
