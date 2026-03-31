@@ -8,6 +8,7 @@ type RouterObjectHref = Extract<Parameters<typeof router.push>[0], { pathname: u
 type RouterPathname = RouterObjectHref['pathname'];
 
 type NavigationLike = Pick<NavigationProp<ParamListBase>, 'goBack' | 'dispatch'> & {
+  canGoBack?: () => boolean;
   getState: () =>
     | {
         index: number;
@@ -143,7 +144,7 @@ export const returnToSourceOrBack = (
     returnToParams?: ReturnToParams;
   },
 ) => {
-  if (returnToPath) {
+  if (returnToPath && navigation.canGoBack?.() === false) {
     router.navigate({ pathname: returnToPath as RouterPathname, params: returnToParams } as RouterObjectHref);
     return;
   }

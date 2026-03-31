@@ -91,9 +91,10 @@ test('navigateToDetailsWithReturnTo pushes route params with serialized returnTo
   });
 });
 
-test('returnToSourceOrBack navigates to explicit source when returnToPath exists', () => {
+test('returnToSourceOrBack navigates to explicit source when returnToPath exists and cannot go back', () => {
   const { exports, routerCalls } = loadNavigationModule();
   const navigation = {
+    canGoBack: () => false,
     goBack: () => {
       throw new Error('goBack should not be called when returnToPath is provided');
     },
