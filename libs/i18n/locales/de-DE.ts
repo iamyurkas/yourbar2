@@ -276,6 +276,8 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.buyAllIngredients": "Alle Zutaten kaufen",
   "cocktailDetails.copyCocktail": "Cocktail kopieren",
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
+  "cocktailDetails.similarCocktails": "Ähnliche Cocktails",
+  "cocktailDetails.similarCocktailsTitle": "Ähnliche Cocktails",
   "cocktailDetails.notFound": "Cocktail nicht gefunden",
   "cocktailDetails.helpMessage":
     "Dieser Bildschirm zeigt Cocktail-Details, Zutaten und Anleitung.\n\nVerwenden Sie die Schaltflächen unter dem Cocktail, um ihn zu kopieren oder zu bearbeiten.\n\n**Zutaten-Bänder**\nDas linke Band markiert die Zutatenart:\nblau = Markenzutat,\ngelb = Stil-Zutat.\n\nDas rechte Band markiert Basisvarianten:\nblau = hat markengebundene Varianten,\ngelb = hat Stil-Varianten.",
