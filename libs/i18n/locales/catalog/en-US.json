@@ -2984,5 +2984,8 @@
 ,
   "cocktail.629.name": "Elixir Tropical",
   "cocktail.629.description": "A tropical-leaning Daiquiri variation where rich **almond (orgeat) syrup** and a touch of **Luxardo Maraschino** layer over **white rum** and fresh **lime juice**, finished with aromatic **Angostura bitters** and grated **nutmeg**.",
-  "cocktail.629.instructions": "1. Add 60 ml of **white rum**, 20 ml of **lime juice**, 20 ml of **almond (orgeat) syrup**, 7.5 ml of **Luxardo Maraschino**, 3 dashes of **Angostura bitters**, and 3 **mint leaves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Dust with freshly grated **nutmeg**."
+  "cocktail.629.instructions": "1. Add 60 ml of **white rum**, 20 ml of **lime juice**, 20 ml of **almond (orgeat) syrup**, 7.5 ml of **Luxardo Maraschino**, 3 dashes of **Angostura bitters**, and 3 **mint leaves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Dust with freshly grated **nutmeg**.",
+  "cocktail.630.name": "Dragon Punch",
+  "cocktail.630.description": "A smoky, spicy sour where **mezcal** and mellow **yellow chartreuse** meet fresh **lime juice** and creamy **almond (orgeat) syrup**, lifted by a couple dashes of **Tabasco** and finished with a skewered **cucumber** roll.",
+  "cocktail.630.instructions": "1. Add 45 ml of **mezcal**, 15 ml of **yellow chartreuse**, 30 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, and 2 dashes of **Tabasco** into a shaker with **ice**.\n2. Shake hard until well chilled, then fine strain into a chilled coupe glass.\n3. Garnish with a skewered **cucumber** roll."
 }
