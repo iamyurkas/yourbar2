@@ -1433,7 +1433,7 @@ export default function CocktailDetailsScreen() {
                 </View>
               </View>
 
-              {photoSource && glassSource && glassLabel ? (
+              {glassSource && glassLabel ? (
                 <View style={styles.glassInfo}>
                   <View style={styles.glassInfoLeft}>
                     <View style={styles.glassImageWrapper}>
