@@ -3007,5 +3007,9 @@
   "cocktail.636.name": "Sheroni",
   "cocktail.636.synonyms": "Sherry Negroni",
   "cocktail.636.description": "A bittersweet and nutty Negroni-style aperitif where **oude genever**, **Campari**, **Amontillado sherry**, and **red vermouth** meet in equal parts.",
-  "cocktail.636.instructions": "1. Add 22.5 ml of **oude genever**, 22.5 ml of **Campari**, 22.5 ml of **Amontillado sherry**, and 22.5 ml of **red vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Strain into a rocks glass filled with fresh **ice**.\n4. Garnish with an **orange** slice wheel."
+  "cocktail.636.instructions": "1. Add 22.5 ml of **oude genever**, 22.5 ml of **Campari**, 22.5 ml of **Amontillado sherry**, and 22.5 ml of **red vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Strain into a rocks glass filled with fresh **ice**.\n4. Garnish with an **orange** slice wheel.",
+  "cocktail.637.name": "Piper Plane",
+  "cocktail.637.synonyms": "",
+  "cocktail.637.description": "A smoky Scotch riff on the **Paper Plane**, balancing **Scotch whisky**, **Aperol**, **Amaro Nonino**, and fresh **lemon juice** with a touch of **saline solution** for extra definition.",
+  "cocktail.637.instructions": "1. Add 22.5 ml of **Scotch whisky**, 22.5 ml of **Amaro Nonino**, 22.5 ml of **Aperol**, 22.5 ml of **lemon juice**, and 3 drops of **saline solution (4:1)** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the drink and use it as a garnish."
 }
