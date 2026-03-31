@@ -3003,5 +3003,9 @@
   "cocktail.634.instructions": "1. Add 60 ml of **rye whiskey**, 15 ml of **Benedictine**, 15 ml of **Amontillado sherry**, and 3 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir gently until well chilled.\n3. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n4. Express oils from a **lemon** twist over the drink and use it as a garnish.",
   "cocktail.635.name": "The Neutral Ground",
   "cocktail.635.description": "A spirit-forward Manhattan-style sipper where bold **rye whiskey** meets nutty **Amontillado sherry**, herbal **Benedictine**, and aromatic **Angostura bitters**.",
-  "cocktail.635.instructions": "1. Add 50 ml of **rye whiskey**, 15 ml of **Amontillado sherry**, 15 ml of **Benedictine**, and 3 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Fine strain into a chilled coupe glass, then express an **orange** zest twist over the drink and use it as garnish."
+  "cocktail.635.instructions": "1. Add 50 ml of **rye whiskey**, 15 ml of **Amontillado sherry**, 15 ml of **Benedictine**, and 3 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Fine strain into a chilled coupe glass, then express an **orange** zest twist over the drink and use it as garnish.",
+  "cocktail.636.name": "Sheroni",
+  "cocktail.636.synonyms": "Sherry Negroni",
+  "cocktail.636.description": "A bittersweet and nutty Negroni-style aperitif where **oude genever**, **Campari**, **Amontillado sherry**, and **red vermouth** meet in equal parts.",
+  "cocktail.636.instructions": "1. Add 22.5 ml of **oude genever**, 22.5 ml of **Campari**, 22.5 ml of **Amontillado sherry**, and 22.5 ml of **red vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Strain into a rocks glass filled with fresh **ice**.\n4. Garnish with an **orange** slice wheel."
 }
