@@ -10,6 +10,7 @@ export type InventorySettingsContextValue = {
   keepScreenAwake: boolean;
   shakerSmartFilteringEnabled: boolean;
   showTabCounters: boolean;
+  cardViewEnabled: boolean;
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;

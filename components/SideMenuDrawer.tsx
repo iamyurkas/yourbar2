@@ -145,6 +145,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setShakerSmartFilteringEnabled,
     showTabCounters,
     setShowTabCounters,
+    cardViewEnabled,
+    setCardViewEnabled,
     startScreen,
     setStartScreen,
     appTheme,
@@ -443,6 +445,9 @@ useEffect(() => {
 
   const toggleShowTabCounters = () => {
     setShowTabCounters(!showTabCounters);
+  };
+  const toggleCardViewEnabled = () => {
+    setCardViewEnabled(!cardViewEnabled);
   };
 
   const handleSmartShakerFilteringInfoPress = () => {
@@ -1630,6 +1635,49 @@ useEffect(() => {
                   ]}
                 >
                   {t("sideMenu.showTabCountersCaption")}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: cardViewEnabled }}
+              onPress={toggleCardViewEnabled}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: cardViewEnabled
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: cardViewEnabled
+                      ? Colors.tint
+                      : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={
+                    cardViewEnabled ? Colors.background : Colors.outlineVariant
+                  }
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("sideMenu.cardView")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("sideMenu.cardViewCaption")}
                 </Text>
               </View>
             </Pressable>

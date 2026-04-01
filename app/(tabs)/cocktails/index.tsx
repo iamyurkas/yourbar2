@@ -56,11 +56,12 @@ type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailabili
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, partySelectedCocktailKeys, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, cardViewEnabled } = useInventorySettings();
   const { toggleIngredientShopping, togglePartyCocktailSelection } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
+  const isCardLayout = cardViewEnabled && activeTab !== 'my';
   const { registerControl } = useOnboarding();
 
   const [query, setQuery] = useState('');
@@ -963,7 +964,8 @@ export default function CocktailsScreen() {
       const isPartyCocktail = isPartySelected(String(item.id ?? item.name));
 
       return (
-        <CocktailListRow
+        <View style={isCardLayout ? styles.cardItem : undefined}>
+          <CocktailListRow
           cocktail={item}
           ingredients={ingredients}
           showMethodIcons
@@ -980,6 +982,7 @@ export default function CocktailsScreen() {
           showPartySelectionControl={isPartyView}
           onPartySelectionToggle={isPartyView ? () => handlePartySelectionToggle(item) : undefined}
         />
+        </View>
       );
     },
     [
@@ -990,6 +993,7 @@ export default function CocktailsScreen() {
       handlePartySelectionToggle,
       handleSelectCocktail,
       ingredients,
+      isCardLayout,
       isPartySelected,
     ],
   );
@@ -1324,12 +1328,15 @@ export default function CocktailsScreen() {
           />
         ) : (
           <FlatList<Cocktail>
+            key={isCardLayout ? 'cocktail-grid' : 'cocktail-list'}
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
             data={sortedCocktails}
             keyExtractor={keyExtractor}
-            getItemLayout={getCocktailItemLayout}
+            getItemLayout={isCardLayout ? undefined : getCocktailItemLayout}
             renderItem={renderItem}
-            ItemSeparatorComponent={renderSeparator}
+            ItemSeparatorComponent={isCardLayout ? undefined : renderSeparator}
+            numColumns={isCardLayout ? 2 : 1}
+            columnWrapperStyle={isCardLayout ? styles.cardColumn : undefined}
             contentContainerStyle={styles.listContent}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
@@ -1402,6 +1409,13 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
+  },
+  cardColumn: {
+    gap: 8,
+    paddingHorizontal: 8,
+  },
+  cardItem: {
+    flex: 1,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

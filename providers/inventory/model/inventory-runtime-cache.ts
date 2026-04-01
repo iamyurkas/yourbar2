@@ -22,6 +22,7 @@ export type InventoryRuntimeCache = {
   keepScreenAwake: boolean | undefined;
   shakerSmartFilteringEnabled: boolean | undefined;
   showTabCounters: boolean | undefined;
+  cardViewEnabled: boolean | undefined;
   ratingFilterThreshold: number | undefined;
   startScreen: StartScreen | undefined;
   appTheme: AppTheme | undefined;
@@ -62,6 +63,8 @@ declare global {
   // eslint-disable-next-line no-var
   var __yourbarInventoryShowTabCounters: boolean | undefined;
   // eslint-disable-next-line no-var
+  var __yourbarInventoryCardViewEnabled: boolean | undefined;
+  // eslint-disable-next-line no-var
   var __yourbarInventoryRatingFilterThreshold: number | undefined;
   // eslint-disable-next-line no-var
   var __yourbarInventoryStartScreen: StartScreen | undefined;
@@ -101,6 +104,7 @@ export function readInventoryRuntimeCache(): InventoryRuntimeCache {
     keepScreenAwake: globalThis.__yourbarInventoryKeepScreenAwake,
     shakerSmartFilteringEnabled: globalThis.__yourbarInventoryShakerSmartFilteringEnabled,
     showTabCounters: globalThis.__yourbarInventoryShowTabCounters,
+    cardViewEnabled: globalThis.__yourbarInventoryCardViewEnabled,
     ratingFilterThreshold: globalThis.__yourbarInventoryRatingFilterThreshold,
     startScreen: globalThis.__yourbarInventoryStartScreen,
     appTheme: globalThis.__yourbarInventoryAppTheme,
@@ -129,6 +133,7 @@ export function writeInventoryRuntimeCache(cache: InventoryRuntimeCache): void {
   globalThis.__yourbarInventoryKeepScreenAwake = cache.keepScreenAwake;
   globalThis.__yourbarInventoryShakerSmartFilteringEnabled = cache.shakerSmartFilteringEnabled;
   globalThis.__yourbarInventoryShowTabCounters = cache.showTabCounters;
+  globalThis.__yourbarInventoryCardViewEnabled = cache.cardViewEnabled;
   globalThis.__yourbarInventoryRatingFilterThreshold = cache.ratingFilterThreshold;
   globalThis.__yourbarInventoryStartScreen = cache.startScreen;
   globalThis.__yourbarInventoryAppTheme = cache.appTheme;
