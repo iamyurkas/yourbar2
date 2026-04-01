@@ -1156,6 +1156,7 @@ export default function IngredientsScreen() {
           <CollectionListSkeleton />
         ) : (
           <FlatList
+            key={showCardsInCollections ? `ingredients-cards-${cardColumns}` : 'ingredients-list'}
             ref={listRef}
             data={sortedIngredients}
             keyExtractor={keyExtractor}

@@ -1373,6 +1373,7 @@ export default function CocktailsScreen() {
           <CollectionListSkeleton />
         ) : isMyTab ? (
           <FlatList<MyTabListItem>
+            key={showCardsInCollections ? `cocktails-my-cards-${cardColumns}` : 'cocktails-my-list'}
             ref={listRef as React.RefObject<FlatList<MyTabListItem>>}
             data={visibleMyTabItems}
             keyExtractor={myTabKeyExtractor}
@@ -1399,6 +1400,7 @@ export default function CocktailsScreen() {
           />
         ) : (
           <FlatList<Cocktail>
+            key={showCardsInCollections ? `cocktails-all-cards-${cardColumns}` : 'cocktails-all-list'}
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
             data={sortedCocktails}
             keyExtractor={keyExtractor}
