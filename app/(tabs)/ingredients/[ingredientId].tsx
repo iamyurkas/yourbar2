@@ -1990,6 +1990,7 @@ export default function IngredientDetailsScreen() {
         panelProps={{
           sortSectionLabel: t("cocktails.sortBy"),
           sortSectionSuffix: sortViewModeToggle,
+          filterSectionLabel: t("common.filterBy"),
           sortOptions: buildCocktailSortOptions({
             selectedSortOption,
             isSortDescending,
