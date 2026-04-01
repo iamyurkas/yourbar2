@@ -42139,6 +42139,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": 638,
+      "name": "Toffee Negroni",
+      "description": "A rich, bittersweet Negroni-style sipper where **aged rum**, **Amontillado sherry**, and **Aperol** meet in equal parts, delivering orange zest brightness and a subtle toffee-like finish.",
+      "instructions": "1. Add 30 ml of **aged rum**, 30 ml of **Amontillado sherry**, and 30 ml of **Aperol** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "tags": [3],
+      "defaultServings": 1,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 7,
+          "name": "Aged Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 17,
+          "name": "Amontillado Sherry",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 23,
+          "name": "Aperol",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
