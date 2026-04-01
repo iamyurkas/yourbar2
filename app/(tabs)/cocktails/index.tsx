@@ -56,7 +56,7 @@ type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailabili
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, partySelectedCocktailKeys, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, useCardView } = useInventorySettings();
   const { toggleIngredientShopping, togglePartyCocktailSelection } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
@@ -979,6 +979,7 @@ export default function CocktailsScreen() {
           isPartySelected={isPartyCocktail}
           showPartySelectionControl={isPartyView}
           onPartySelectionToggle={isPartyView ? () => handlePartySelectionToggle(item) : undefined}
+          cardView={useCardView}
         />
       );
     },
@@ -991,6 +992,7 @@ export default function CocktailsScreen() {
       handleSelectCocktail,
       ingredients,
       isPartySelected,
+      useCardView,
     ],
   );
 
@@ -1046,6 +1048,7 @@ export default function CocktailsScreen() {
             onPress={() => handleSelectIngredient(item.ingredientId)}
             accessibilityRole="button"
             metaAlignment="center"
+            cardView={useCardView}
             control={
               <View style={styles.shoppingSlot}>
                 <Pressable
@@ -1098,6 +1101,7 @@ export default function CocktailsScreen() {
           hasBrandFallback={availability.hasBrandFallback}
           hasStyleFallback={availability.hasStyleFallback}
           isPartySelected={isPartyCocktail}
+          cardView={useCardView}
         />
       );
     },
@@ -1117,22 +1121,29 @@ export default function CocktailsScreen() {
       locale,
       t,
       isPartySelected,
+      useCardView,
     ],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
+      if (useCardView) {
+        return null;
+      }
       const isReady = leadingItem ? getAvailabilitySummary(leadingItem).isReady : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [getAvailabilitySummary, Colors],
+    [getAvailabilitySummary, Colors, useCardView],
   );
 
   const renderMySeparator = useCallback(
     ({ leadingItem }: { leadingItem?: MyTabListItem | null }) => {
       if (!leadingItem || leadingItem.type !== 'cocktail') {
+        return null;
+      }
+      if (useCardView) {
         return null;
       }
 
@@ -1142,7 +1153,7 @@ export default function CocktailsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [myTabListData, Colors],
+    [myTabListData, Colors, useCardView],
   );
 
   const isFilterActive =

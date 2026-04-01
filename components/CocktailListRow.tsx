@@ -29,6 +29,7 @@ type CocktailListRowProps = {
   isPartySelected?: boolean;
   showPartySelectionControl?: boolean;
   onPartySelectionToggle?: () => void;
+  cardView?: boolean;
 };
 
 const areCocktailRowPropsEqual = (
@@ -62,6 +63,7 @@ const areCocktailRowPropsEqual = (
     prev.hasStyleFallback === next.hasStyleFallback &&
     prev.isPartySelected === next.isPartySelected &&
     prev.showPartySelectionControl === next.showPartySelectionControl &&
+    prev.cardView === next.cardView &&
     onPressEqual &&
     partyToggleEqual
   );
@@ -129,6 +131,7 @@ const CocktailListRowComponent = ({
   isPartySelected = false,
   showPartySelectionControl = false,
   onPartySelectionToggle,
+  cardView = false,
 }: CocktailListRowProps) => {
   const Colors = useAppColors();
   const { t } = useI18n();
@@ -373,6 +376,7 @@ const CocktailListRowComponent = ({
       metaFooter={methodIconContent}
       accessibilityRole={onPress ? 'button' : undefined}
       metaAlignment="center"
+      cardView={cardView}
     />
   );
 };

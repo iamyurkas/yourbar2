@@ -517,6 +517,8 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.showTabCounters": "Кількість елементів",
   "sideMenu.showTabCountersCaption":
     "Показувати кількість елементів біля вкладок",
+  "sideMenu.useCardView": "Вигляд карток",
+  "sideMenu.useCardViewCaption": "Показувати коктейлі та інгредієнти як картки",
   "sideMenu.startingScreen": "Початковий екран",
   "sideMenu.startingScreenOpen": "Відкривати {{screen}}",
   "sideMenu.manageTags": "Керування тегами",

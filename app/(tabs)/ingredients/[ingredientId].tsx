@@ -121,6 +121,7 @@ export default function IngredientDetailsScreen() {
     getCocktailComment,
     partySelectedCocktailKeys,
     effectiveAmazonStore,
+    useCardView,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -1719,7 +1720,7 @@ export default function IngredientDetailsScreen() {
 
                       return (
                         <React.Fragment key={cocktail.id ?? cocktail.name}>
-                          {index > 0 ? (
+                          {index > 0 && !useCardView ? (
                             <View
                               style={[
                                 styles.cocktailDivider,
@@ -1752,6 +1753,7 @@ export default function IngredientDetailsScreen() {
                             hasBrandFallback={hasBrandFallback}
                             hasStyleFallback={hasStyleFallback}
                             isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
+                            cardView={useCardView}
                           />
                         </React.Fragment>
                       );
