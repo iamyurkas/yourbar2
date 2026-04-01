@@ -3023,5 +3023,9 @@
   "cocktail.640.name": "Part-time Lover",
   "cocktail.640.synonyms": "",
   "cocktail.640.description": "A tequila-forward modern sour where **tequila reposado** meets **Aperol**, **St-Germain**, fresh **lemon juice**, and **Angostura Bitters** for a delicately bittersweet, floral profile.",
-  "cocktail.640.instructions": "1. Add 45 ml of **tequila reposado**, 15 ml of **Aperol**, 15 ml of **St-Germain**, 22.5 ml of **lemon juice**, and 2 dashes of **Angostura Bitters** into a shaker with **ice**.\n2. Shake hard until well chilled, then strain into a rocks glass filled with fresh **ice**.\n3. Express oils from a **grapefruit** zest twist over the drink and use it as a garnish."
+  "cocktail.640.instructions": "1. Add 45 ml of **tequila reposado**, 15 ml of **Aperol**, 15 ml of **St-Germain**, 22.5 ml of **lemon juice**, and 2 dashes of **Angostura Bitters** into a shaker with **ice**.\n2. Shake hard until well chilled, then strain into a rocks glass filled with fresh **ice**.\n3. Express oils from a **grapefruit** zest twist over the drink and use it as a garnish.",
+  "cocktail.641.name": "Dead Man's Handle",
+  "cocktail.641.synonyms": "",
+  "cocktail.641.description": "A tequila-driven, bittersweet sour where **tequila blanco**, **Aperol**, fresh **lime juice**, and **almond (orgeat) syrup** are shaken and served over crushed **ice** with a spicy **chili powder** finish.",
+  "cocktail.641.instructions": "1. Add 45 ml of **tequila blanco**, 15 ml of **Aperol**, 15 ml of **lime juice**, and 15 ml of **almond (orgeat) syrup** into a shaker with **ice**.\n2. Shake hard until well chilled, then strain into a hurricane glass filled with crushed **ice**.\n3. Lightly dust the surface with **chili powder**."
 }
