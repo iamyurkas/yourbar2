@@ -931,6 +931,11 @@ export default function CocktailDetailsScreen() {
     return Array.from(ratings).sort((left, right) => right - left);
   }, [similarCocktailEntries]);
 
+  const availablePositiveSimilarStarRatings = useMemo<number[]>(
+    () => availableSimilarStarRatings.filter((rating) => rating > 0),
+    [availableSimilarStarRatings],
+  );
+
   const filteredSimilarCocktailEntries = useMemo(() => {
     return similarCocktailEntries.filter((entry) => {
       const { cocktail, ratingValue } = entry;
@@ -2475,10 +2480,10 @@ export default function CocktailDetailsScreen() {
         closeAccessibilityLabel={t("common.closeTagFilters")}
         title={t("cocktailDetails.similarCocktails")}
         panelProps={{
-          availableStarRatings: availableSimilarStarRatings,
+          availableStarRatings: availablePositiveSimilarStarRatings,
           selectedStarRatings: selectedSimilarStarRatings,
           onToggleStarRating: handleSimilarStarRatingFilterToggle,
-          showRatingFilters: availableSimilarStarRatings.length > 0,
+          showRatingFilters: availablePositiveSimilarStarRatings.length > 0,
           availableMethodOptions: availableSimilarMethodOptions,
           selectedMethodIds: selectedSimilarMethodIds,
           onToggleMethod: handleSimilarMethodFilterToggle,
