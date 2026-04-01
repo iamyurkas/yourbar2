@@ -1214,6 +1214,7 @@ const styles = StyleSheet.create({
     gap: CARD_GAP,
   },
   cardItem: {
+    width: CARD_WIDTH,
     marginBottom: CARD_GAP,
   },
   divider: {

@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAppColors } from '@/constants/theme';
 import { useI18n } from '@/libs/i18n/use-i18n';
+import { resolveImageSource } from '@/libs/image-source';
 import type { Cocktail } from '@/providers/inventory-provider';
 import { AppImage } from './AppImage';
 import { CARD_WIDTH } from './CardLayout';
@@ -28,8 +29,13 @@ function CocktailCardComponent({
   const Colors = useAppColors();
   const { t } = useI18n();
   const stars = Math.max(0, Math.min(5, Math.round(ratingValue)));
-  const tagNames = useMemo(
-    () => (cocktail.tags ?? []).map((tag) => tag?.name).filter(Boolean).slice(0, 2),
+  const imageSource = useMemo(() => resolveImageSource(cocktail.photoUri), [cocktail.photoUri]);
+  const tags = useMemo(
+    () =>
+      (cocktail.tags ?? [])
+        .map((tag) => ({ name: tag?.name ?? '', color: tag?.color }))
+        .filter((tag) => tag.name.length > 0)
+        .slice(0, 3),
     [cocktail.tags],
   );
 
@@ -38,7 +44,13 @@ function CocktailCardComponent({
       style={[styles.card, { backgroundColor: Colors.surface, borderColor: Colors.outlineVariant }]}
       onPress={onPress}
       accessibilityRole={onPress ? 'button' : undefined}>
-      <AppImage source={{ uri: cocktail.photoUri ?? undefined }} style={styles.image} contentFit="cover" />
+      <View style={[styles.image, { backgroundColor: Colors.surfaceBright }]}>
+        {imageSource ? (
+          <AppImage source={imageSource} style={styles.image} contentFit="cover" />
+        ) : (
+          <MaterialCommunityIcons name="image-off-outline" size={28} color={Colors.onSurfaceVariant} />
+        )}
+      </View>
       <View style={styles.content}>
         <Text style={[styles.title, { color: Colors.onSurface }]} numberOfLines={2}>
           {cocktail.name}
@@ -48,9 +60,23 @@ function CocktailCardComponent({
             {subtitle}
           </Text>
         ) : null}
-        <Text style={[styles.meta, { color: Colors.onSurfaceVariant }]} numberOfLines={1}>
-          {tagNames.join(' • ')}
-        </Text>
+        <View style={styles.tagRow}>
+          {tags.map((tag, index) => (
+            <View
+              key={`${tag.name}-${index}`}
+              style={[
+                styles.tagChip,
+                {
+                  backgroundColor: `${tag.color ?? Colors.primary}22`,
+                  borderColor: tag.color ?? Colors.primary,
+                },
+              ]}>
+              <Text style={[styles.tagText, { color: tag.color ?? Colors.primary }]} numberOfLines={1}>
+                {tag.name}
+              </Text>
+            </View>
+          ))}
+        </View>
         <View style={styles.footer}>
           <View style={styles.stateRow}>
             <MaterialCommunityIcons
@@ -88,6 +114,7 @@ export const CocktailCard = memo(CocktailCardComponent);
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
+    maxWidth: CARD_WIDTH,
     minHeight: 300,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
@@ -96,6 +123,8 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 140,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     padding: 12,
@@ -109,9 +138,22 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
   },
-  meta: {
-    fontSize: 12,
-    minHeight: 16,
+  tagRow: {
+    minHeight: 22,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  tagChip: {
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    maxWidth: '100%',
+  },
+  tagText: {
+    fontSize: 11,
+    fontWeight: '600',
   },
   footer: {
     marginTop: 'auto',
