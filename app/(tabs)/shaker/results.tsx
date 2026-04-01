@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
   type LayoutRectangle,
   type NativeScrollEvent,
@@ -15,10 +16,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CARD_GAP, CARD_WIDTH } from '@/components/CardLayout';
+import { CocktailCard } from '@/components/CocktailCard';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
+import { TagPill } from '@/components/TagPill';
 import { getCocktailMethods, METHOD_ICON_MAP, type CocktailMethod } from '@/constants/cocktail-methods';
 import { BUILTIN_COCKTAIL_TAGS } from '@/constants/cocktail-tags';
 import { useAppColors } from '@/constants/theme';
@@ -84,6 +88,8 @@ export default function ShakerResultsScreen() {
     ingredients,
     ignoreGarnish,
     allowAllSubstitutes,
+    showCardsInCollections,
+    setShowCardsInCollections,
     partySelectedCocktailKeys,
     getCocktailRating,
     getCocktailComment,
@@ -104,6 +110,7 @@ export default function ShakerResultsScreen() {
   const [headerLayout, setHeaderLayout] = useState<LayoutRectangle | null>(null);
   const [filterAnchorLayout, setFilterAnchorLayout] = useState<LayoutRectangle | null>(null);
   const listRef = useRef<FlatList<Cocktail>>(null);
+  const { width: viewportWidth } = useWindowDimensions();
   const lastScrollOffset = useRef(0);
   const searchStartOffset = useRef<number | null>(null);
   const previousQuery = useRef(query);
@@ -725,6 +732,21 @@ export default function ShakerResultsScreen() {
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => {
       const availability = getAvailabilitySummary(item);
+      if (showCardsInCollections) {
+        return (
+          <View style={styles.cardItem}>
+            <CocktailCard
+              cocktail={item}
+              subtitle={availability.ingredientLine}
+              isReady={availability.isReady}
+              ratingValue={getCocktailRating(item)}
+              isPartySelected={partySelectedCocktailKeys.has(String(item.id ?? item.name))}
+              onPress={() => handlePressCocktail(item)}
+            />
+          </View>
+        );
+      }
+
       return (
         <CocktailListRow
           cocktail={item}
@@ -750,18 +772,22 @@ export default function ShakerResultsScreen() {
       handlePressCocktail,
       ingredients,
       partySelectedCocktailKeys,
+      showCardsInCollections,
     ],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
+      if (showCardsInCollections) {
+        return null;
+      }
       const cocktailKey = leadingItem ? String(leadingItem.id ?? leadingItem.name) : '';
       const isReady = cocktailKey ? availabilitySummaryByKey.get(cocktailKey)?.isReady ?? false : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [Colors, availabilitySummaryByKey],
+    [Colors, availabilitySummaryByKey, showCardsInCollections],
   );
   const keyExtractor = useCallback((item: Cocktail) => String(item.id ?? item.name), []);
   const getItemLayout = useCallback((_: ArrayLike<Cocktail> | null | undefined, index: number) => ({
@@ -769,6 +795,35 @@ export default function ShakerResultsScreen() {
     offset: LIST_ITEM_LAYOUT_HEIGHT * index,
     index,
   }), []);
+  const cardColumns = Math.max(1, Math.floor((viewportWidth - 32 + CARD_GAP) / (CARD_WIDTH + CARD_GAP)));
+  const sortViewModeToggle = useMemo(() => (
+    <View style={styles.sortViewToggle}>
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-grid" size={16} color={showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(true)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: showCardsInCollections }}
+        accessibilityLabel={t('sideMenu.showCardsInCollections')}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={!showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-list" size={16} color={!showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(false)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: !showCardsInCollections }}
+        accessibilityLabel={t('shakerResults.sortBy')}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+    </View>
+  ), [Colors.background, Colors.surfaceVariant, Colors.tint, setShowCardsInCollections, showCardsInCollections, t]);
 
   return (
     <SafeAreaView
@@ -815,6 +870,7 @@ export default function ShakerResultsScreen() {
               ]}>
               <CocktailFiltersPanel
                 sortSectionLabel={t('shakerResults.sortBy')}
+                sortSectionSuffix={sortViewModeToggle}
                 filterSectionLabel={t('common.filterBy')}
                 sortOptions={buildCocktailSortOptions({
                   selectedSortOption,
@@ -870,13 +926,16 @@ export default function ShakerResultsScreen() {
           </>
         ) : null}
         <FlatList
+          key={showCardsInCollections ? `shaker-cards-${cardColumns}` : 'shaker-list'}
           ref={listRef}
           data={sortedCocktails}
           keyExtractor={keyExtractor}
-          getItemLayout={getItemLayout}
+          getItemLayout={showCardsInCollections ? undefined : getItemLayout}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
+          numColumns={showCardsInCollections ? cardColumns : 1}
+          columnWrapperStyle={showCardsInCollections && cardColumns > 1 ? styles.cardRow : undefined}
           initialNumToRender={12}
           maxToRenderPerBatch={12}
           windowSize={5}
@@ -913,6 +972,21 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 80,
   },
+  cardListContent: {
+    paddingTop: 8,
+    paddingBottom: 80,
+    paddingHorizontal: 16,
+    gap: CARD_GAP,
+  },
+  cardRow: {
+    justifyContent: 'space-evenly',
+    gap: CARD_GAP,
+    width: '100%',
+  },
+  cardItem: {
+    width: CARD_WIDTH,
+    marginBottom: CARD_GAP,
+  },
   divider: {
     height: StyleSheet.hairlineWidth,
   },
@@ -940,6 +1014,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 8,
+  },
+  sortViewToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  iconOnlyPill: {
+    minWidth: 53,
+    minHeight: 36,
+    paddingHorizontal: 10,
   },
   methodIcon: {
     width: METHOD_ICON_SIZE,
