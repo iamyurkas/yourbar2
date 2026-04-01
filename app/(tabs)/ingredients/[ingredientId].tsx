@@ -27,6 +27,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { CocktailCard } from "@/components/CocktailCard";
 import { CocktailFiltersPanel } from "@/components/CocktailFiltersPanel";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
@@ -121,6 +122,7 @@ export default function IngredientDetailsScreen() {
     getCocktailComment,
     partySelectedCocktailKeys,
     effectiveAmazonStore,
+    showCardsInCollections,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -1705,7 +1707,7 @@ export default function IngredientDetailsScreen() {
                 ) : null}
               </View>
               {cocktailEntries.length ? (
-                <View style={styles.cocktailList}>
+                <View style={showCardsInCollections ? styles.cocktailCardList : styles.cocktailList}>
                   {visibleCocktailEntries.map(
                     ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, hasBrandFallback, hasStyleFallback, canMakeWithIngredient }, index) => {
                       const shouldHighlightRow = isReady || canMakeWithIngredient;
@@ -1719,7 +1721,7 @@ export default function IngredientDetailsScreen() {
 
                       return (
                         <React.Fragment key={cocktail.id ?? cocktail.name}>
-                          {index > 0 ? (
+                          {!showCardsInCollections && index > 0 ? (
                             <View
                               style={[
                                 styles.cocktailDivider,
@@ -1727,32 +1729,43 @@ export default function IngredientDetailsScreen() {
                               ]}
                             />
                           ) : null}
-                          <CocktailListRow
-                            cocktail={cocktail}
-                            ingredients={ingredients}
-                            onPress={() =>
-                              handleNavigateToCocktail(
-                                cocktail.id ?? cocktail.name,
-                              )
-                            }
-                            highlightColor={
-                              canMakeWithIngredient
-                                ? Colors.highlightSubtle
-                                : isReady
-                                  ? undefined
-                                  : Colors.highlightFaint
-                            }
-                            showMethodIcons
-                            isReady={shouldHighlightRow}
-                            missingCount={missingCount}
-                            recipeNamesCount={recipeNamesCount}
-                            ingredientLine={ingredientLine}
-                            ratingValue={ratingValue}
-                            hasComment={Boolean(getCocktailComment(cocktail).trim())}
-                            hasBrandFallback={hasBrandFallback}
-                            hasStyleFallback={hasStyleFallback}
-                            isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
-                          />
+                          {showCardsInCollections ? (
+                            <CocktailCard
+                              cocktail={cocktail}
+                              subtitle={ingredientLine}
+                              isReady={shouldHighlightRow}
+                              ratingValue={ratingValue}
+                              isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
+                              onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
+                            />
+                          ) : (
+                            <CocktailListRow
+                              cocktail={cocktail}
+                              ingredients={ingredients}
+                              onPress={() =>
+                                handleNavigateToCocktail(
+                                  cocktail.id ?? cocktail.name,
+                                )
+                              }
+                              highlightColor={
+                                canMakeWithIngredient
+                                  ? Colors.highlightSubtle
+                                  : isReady
+                                    ? undefined
+                                    : Colors.highlightFaint
+                              }
+                              showMethodIcons
+                              isReady={shouldHighlightRow}
+                              missingCount={missingCount}
+                              recipeNamesCount={recipeNamesCount}
+                              ingredientLine={ingredientLine}
+                              ratingValue={ratingValue}
+                              hasComment={Boolean(getCocktailComment(cocktail).trim())}
+                              hasBrandFallback={hasBrandFallback}
+                              hasStyleFallback={hasStyleFallback}
+                              isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
+                            />
+                          )}
                         </React.Fragment>
                       );
                     },
@@ -2080,6 +2093,13 @@ const styles = StyleSheet.create({
   },
   cocktailList: {
     marginHorizontal: -24,
+  },
+  cocktailCardList: {
+    marginTop: 12,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 12,
   },
   cocktailDivider: {
     height: StyleSheet.hairlineWidth,

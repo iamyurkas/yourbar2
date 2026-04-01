@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
   type LayoutRectangle,
   type NativeScrollEvent,
@@ -16,9 +17,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CARD_GAP, CARD_WIDTH } from '@/components/CardLayout';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
+import { IngredientCard } from '@/components/IngredientCard';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -258,10 +261,11 @@ export default function IngredientsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, showCardsInCollections } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const initialListState = useMemo(() => getLastIngredientListState(), []);
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => initialListState.tab ?? getLastIngredientTab());
+  const { width: viewportWidth } = useWindowDimensions();
 
   const [query, setQuery] = useState(initialListState.query);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -882,6 +886,29 @@ export default function IngredientsScreen() {
       const isAvailable = isValidId && getEffectiveAvailability(ingredientId);
       const hasStyledVariants = meta?.hasStyledVariants ?? (isValidId && styleBaseIngredientIds.has(ingredientId));
       const hasBrandedVariants = meta?.hasBrandedVariants ?? (isValidId && brandedBaseIngredientIds.has(ingredientId));
+      if (showCardsInCollections) {
+        return (
+          <View style={styles.cardItem}>
+            <IngredientCard
+              ingredient={item}
+              isAvailable={isAvailable}
+              isOnShoppingList={isOnShoppingList}
+              onPress={() => {
+                const routeParam = item.id ?? item.name;
+                if (routeParam == null) {
+                  return;
+                }
+                navigateToDetailsWithReturnTo({
+                  pathname: '/ingredients/[ingredientId]',
+                  params: { ingredientId: String(routeParam) },
+                  returnToPath: '/ingredients',
+                  returnToParams: listReturnToParams,
+                });
+              }}
+            />
+          </View>
+        );
+      }
 
       return (
         <IngredientListItem
@@ -912,19 +939,24 @@ export default function IngredientsScreen() {
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
       listReturnToParams,
+      showCardsInCollections,
     ],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
+      if (showCardsInCollections) {
+        return null;
+      }
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = getEffectiveAvailability(ingredientId);
       const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [Colors, getEffectiveAvailability],
+    [Colors, getEffectiveAvailability, showCardsInCollections],
   );
+  const cardColumns = Math.max(1, Math.floor((viewportWidth - 32 + CARD_GAP) / (CARD_WIDTH + CARD_GAP)));
 
   const handleTabChange = useCallback((key: string) => {
     if (key === 'all' || key === 'my' || key === 'shopping') {
@@ -1095,10 +1127,12 @@ export default function IngredientsScreen() {
             ref={listRef}
             data={sortedIngredients}
             keyExtractor={keyExtractor}
-            getItemLayout={getItemLayout}
+            getItemLayout={showCardsInCollections ? undefined : getItemLayout}
             renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
+            numColumns={showCardsInCollections ? cardColumns : 1}
+            columnWrapperStyle={showCardsInCollections ? styles.cardRow : undefined}
             initialNumToRender={16}
             maxToRenderPerBatch={16}
             windowSize={7}
@@ -1168,6 +1202,19 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
+  },
+  cardListContent: {
+    paddingTop: 8,
+    paddingBottom: 80,
+    paddingHorizontal: 16,
+    gap: CARD_GAP,
+  },
+  cardRow: {
+    justifyContent: 'center',
+    gap: CARD_GAP,
+  },
+  cardItem: {
+    marginBottom: CARD_GAP,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
   type LayoutRectangle,
   type NativeScrollEvent,
@@ -16,6 +17,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CARD_GAP, CARD_WIDTH } from '@/components/CardLayout';
+import { CocktailCard } from '@/components/CocktailCard';
 import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
@@ -56,11 +59,12 @@ type CocktailAvailabilitySummary = ReturnType<typeof summariseCocktailAvailabili
 export default function CocktailsScreen() {
   const { cocktails, availableIngredientIds, ingredients, shoppingIngredientIds, partySelectedCocktailKeys, getCocktailRating, getCocktailComment, loading } =
     useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, showCardsInCollections } = useInventorySettings();
   const { toggleIngredientShopping, togglePartyCocktailSelection } = useInventoryActions();
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<CocktailTabKey>(() => getLastCocktailTab());
+  const { width: viewportWidth } = useWindowDimensions();
   const { registerControl } = useOnboarding();
 
   const [query, setQuery] = useState('');
@@ -961,6 +965,20 @@ export default function CocktailsScreen() {
       const availability = getAvailabilitySummary(item);
 
       const isPartyCocktail = isPartySelected(String(item.id ?? item.name));
+      if (showCardsInCollections) {
+        return (
+          <View style={styles.cardItem}>
+            <CocktailCard
+              cocktail={item}
+              subtitle={availability.ingredientLine}
+              isReady={availability.isReady}
+              ratingValue={getCocktailRating(item)}
+              isPartySelected={isPartyCocktail}
+              onPress={() => handleSelectCocktail(item)}
+            />
+          </View>
+        );
+      }
 
       return (
         <CocktailListRow
@@ -991,6 +1009,7 @@ export default function CocktailsScreen() {
       handleSelectCocktail,
       ingredients,
       isPartySelected,
+      showCardsInCollections,
     ],
   );
 
@@ -1082,6 +1101,20 @@ export default function CocktailsScreen() {
 
       const availability = getAvailabilitySummary(item.cocktail, myTabAvailabilitySummaryByKey);
       const isPartyCocktail = isPartySelected(String(item.cocktail.id ?? item.cocktail.name));
+      if (showCardsInCollections) {
+        return (
+          <View style={styles.cardItem}>
+            <CocktailCard
+              cocktail={item.cocktail}
+              subtitle={availability.ingredientLine}
+              isReady={availability.isReady}
+              ratingValue={getCocktailRating(item.cocktail)}
+              isPartySelected={isPartyCocktail}
+              onPress={() => handleSelectCocktail(item.cocktail)}
+            />
+          </View>
+        );
+      }
 
       return (
         <CocktailListRow
@@ -1117,21 +1150,28 @@ export default function CocktailsScreen() {
       locale,
       t,
       isPartySelected,
+      showCardsInCollections,
     ],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Cocktail | null }) => {
+      if (showCardsInCollections) {
+        return null;
+      }
       const isReady = leadingItem ? getAvailabilitySummary(leadingItem).isReady : false;
       const backgroundColor = isReady ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [getAvailabilitySummary, Colors],
+    [getAvailabilitySummary, Colors, showCardsInCollections],
   );
 
   const renderMySeparator = useCallback(
     ({ leadingItem }: { leadingItem?: MyTabListItem | null }) => {
+      if (showCardsInCollections) {
+        return null;
+      }
       if (!leadingItem || leadingItem.type !== 'cocktail') {
         return null;
       }
@@ -1142,8 +1182,9 @@ export default function CocktailsScreen() {
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [myTabListData, Colors],
+    [myTabListData, Colors, showCardsInCollections],
   );
+  const cardColumns = Math.max(1, Math.floor((viewportWidth - 32 + CARD_GAP) / (CARD_WIDTH + CARD_GAP)));
 
   const isFilterActive =
     selectedTagKeys.size > 0 ||
@@ -1303,10 +1344,12 @@ export default function CocktailsScreen() {
             ref={listRef as React.RefObject<FlatList<MyTabListItem>>}
             data={visibleMyTabItems}
             keyExtractor={myTabKeyExtractor}
-            getItemLayout={getMyTabItemLayout}
+            getItemLayout={showCardsInCollections ? undefined : getMyTabItemLayout}
             renderItem={renderMyItem}
             ItemSeparatorComponent={renderMySeparator}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
+            numColumns={showCardsInCollections ? cardColumns : 1}
+            columnWrapperStyle={showCardsInCollections ? styles.cardRow : undefined}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
             windowSize={5}
@@ -1327,10 +1370,12 @@ export default function CocktailsScreen() {
             ref={listRef as React.RefObject<FlatList<Cocktail>>}
             data={sortedCocktails}
             keyExtractor={keyExtractor}
-            getItemLayout={getCocktailItemLayout}
+            getItemLayout={showCardsInCollections ? undefined : getCocktailItemLayout}
             renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
+            numColumns={showCardsInCollections ? cardColumns : 1}
+            columnWrapperStyle={showCardsInCollections ? styles.cardRow : undefined}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
             windowSize={5}
@@ -1402,6 +1447,19 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
+  },
+  cardListContent: {
+    paddingTop: 8,
+    paddingBottom: 80,
+    paddingHorizontal: 16,
+    gap: CARD_GAP,
+  },
+  cardRow: {
+    justifyContent: 'center',
+    gap: CARD_GAP,
+  },
+  cardItem: {
+    marginBottom: CARD_GAP,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

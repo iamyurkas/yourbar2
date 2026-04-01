@@ -521,6 +521,8 @@ export const deDETranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringCaption": "Nicht passende Zutaten ausblenden",
   "sideMenu.showTabCounters": "Anzahl anzeigen",
   "sideMenu.showTabCountersCaption": "Anzahl neben Tabs anzeigen",
+  "sideMenu.showCardsInCollections": "Cocktails und Zutaten als Karten anzeigen",
+  "sideMenu.showCardsInCollectionsCaption": "Kartenlayout in Cocktail- und Zutatenlisten verwenden",
   "sideMenu.startingScreen": "Startbildschirm",
   "sideMenu.startingScreenOpen": "{{screen}} öffnen",
   "sideMenu.manageTags": "Tags verwalten",

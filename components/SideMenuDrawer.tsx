@@ -145,6 +145,8 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
     setShakerSmartFilteringEnabled,
     showTabCounters,
     setShowTabCounters,
+    showCardsInCollections,
+    setShowCardsInCollections,
     startScreen,
     setStartScreen,
     appTheme,
@@ -443,6 +445,10 @@ useEffect(() => {
 
   const toggleShowTabCounters = () => {
     setShowTabCounters(!showTabCounters);
+  };
+
+  const toggleShowCardsInCollections = () => {
+    setShowCardsInCollections(!showCardsInCollections);
   };
 
   const handleSmartShakerFilteringInfoPress = () => {
@@ -1630,6 +1636,49 @@ useEffect(() => {
                   ]}
                 >
                   {t("sideMenu.showTabCountersCaption")}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: showCardsInCollections }}
+              onPress={toggleShowCardsInCollections}
+              style={[styles.settingRow, SURFACE_ROW_STYLE]}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: showCardsInCollections
+                      ? Colors.tint
+                      : Colors.outlineVariant,
+                    backgroundColor: showCardsInCollections
+                      ? Colors.tint
+                      : "transparent",
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="check"
+                  size={16}
+                  color={
+                    showCardsInCollections ? Colors.background : Colors.outlineVariant
+                  }
+                />
+              </View>
+              <View style={styles.settingTextContainer}>
+                <Text
+                  style={[styles.settingLabel, { color: Colors.onSurface }]}
+                >
+                  {t("sideMenu.showCardsInCollections")}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingCaption,
+                    { color: Colors.onSurfaceVariant },
+                  ]}
+                >
+                  {t("sideMenu.showCardsInCollectionsCaption")}
                 </Text>
               </View>
             </Pressable>

@@ -31,6 +31,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { resolveGlasswareUriFromId } from "@/assets/image-manifest";
 import { AppDialog } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
+import { CocktailCard } from "@/components/CocktailCard";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
@@ -565,6 +566,7 @@ export default function CocktailDetailsScreen() {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    showCardsInCollections,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -2134,7 +2136,7 @@ export default function CocktailDetailsScreen() {
                       <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
                         {t("cocktailDetails.similarCocktailsTitle")}
                       </Text>
-                      <View style={styles.similarCocktailsList}>
+                      <View style={showCardsInCollections ? styles.similarCocktailsCards : styles.similarCocktailsList}>
                         {similarCocktailEntries.map(
                           (
                             {
@@ -2150,7 +2152,7 @@ export default function CocktailDetailsScreen() {
                             index,
                           ) => (
                             <View key={similarCocktail.id ?? similarCocktail.name}>
-                              {index > 0 ? (
+                              {!showCardsInCollections && index > 0 ? (
                                 <View
                                   style={[
                                     styles.similarCocktailDivider,
@@ -2158,48 +2160,78 @@ export default function CocktailDetailsScreen() {
                                   ]}
                                 />
                               ) : null}
-                              <CocktailListRow
-                                cocktail={similarCocktail}
-                                ingredients={ingredients}
-                                onPress={() => {
-                                  const routeParam = similarCocktail.id ?? similarCocktail.name;
-                                  if (routeParam == null) {
-                                    return;
-                                  }
+                              {showCardsInCollections ? (
+                                <CocktailCard
+                                  cocktail={similarCocktail}
+                                  subtitle={ingredientLine}
+                                  isReady={isReady}
+                                  ratingValue={ratingValue}
+                                  isPartySelected={partySelectedCocktailKeys.has(
+                                    String(similarCocktail.id ?? similarCocktail.name),
+                                  )}
+                                  onPress={() => {
+                                    const routeParam = similarCocktail.id ?? similarCocktail.name;
+                                    if (routeParam == null) {
+                                      return;
+                                    }
+                                    const returnToParam =
+                                      cocktail?.id != null
+                                        ? String(cocktail.id)
+                                        : resolvedParam
+                                          ? String(resolvedParam)
+                                          : undefined;
+                                    navigateToDetailsWithReturnTo({
+                                      pathname: "/cocktails/[cocktailId]",
+                                      params: { cocktailId: String(routeParam) },
+                                      returnToPath: returnToParam ? "/cocktails/[cocktailId]" : undefined,
+                                      returnToParams: returnToParam ? { cocktailId: returnToParam } : undefined,
+                                    });
+                                  }}
+                                />
+                              ) : (
+                                <CocktailListRow
+                                  cocktail={similarCocktail}
+                                  ingredients={ingredients}
+                                  onPress={() => {
+                                    const routeParam = similarCocktail.id ?? similarCocktail.name;
+                                    if (routeParam == null) {
+                                      return;
+                                    }
 
-                                  const returnToParam =
-                                    cocktail?.id != null
-                                      ? String(cocktail.id)
-                                      : resolvedParam
-                                        ? String(resolvedParam)
-                                        : undefined;
-                                  navigateToDetailsWithReturnTo({
-                                    pathname: "/cocktails/[cocktailId]",
-                                    params: {
-                                      cocktailId: String(routeParam),
-                                    },
-                                    returnToPath: returnToParam
-                                      ? "/cocktails/[cocktailId]"
-                                      : undefined,
-                                    returnToParams: returnToParam
-                                      ? { cocktailId: returnToParam }
-                                      : undefined,
-                                  });
-                                }}
-                                highlightColor={isReady ? undefined : Colors.highlightFaint}
-                                showMethodIcons
-                                isReady={isReady}
-                                missingCount={missingCount}
-                                recipeNamesCount={recipeNamesCount}
-                                ingredientLine={ingredientLine}
-                                ratingValue={ratingValue}
-                                hasComment={Boolean(getCocktailComment(similarCocktail).trim())}
-                                hasBrandFallback={hasBrandFallback}
-                                hasStyleFallback={hasStyleFallback}
-                                isPartySelected={partySelectedCocktailKeys.has(
-                                  String(similarCocktail.id ?? similarCocktail.name),
-                                )}
-                              />
+                                    const returnToParam =
+                                      cocktail?.id != null
+                                        ? String(cocktail.id)
+                                        : resolvedParam
+                                          ? String(resolvedParam)
+                                          : undefined;
+                                    navigateToDetailsWithReturnTo({
+                                      pathname: "/cocktails/[cocktailId]",
+                                      params: {
+                                        cocktailId: String(routeParam),
+                                      },
+                                      returnToPath: returnToParam
+                                        ? "/cocktails/[cocktailId]"
+                                        : undefined,
+                                      returnToParams: returnToParam
+                                        ? { cocktailId: returnToParam }
+                                        : undefined,
+                                    });
+                                  }}
+                                  highlightColor={isReady ? undefined : Colors.highlightFaint}
+                                  showMethodIcons
+                                  isReady={isReady}
+                                  missingCount={missingCount}
+                                  recipeNamesCount={recipeNamesCount}
+                                  ingredientLine={ingredientLine}
+                                  ratingValue={ratingValue}
+                                  hasComment={Boolean(getCocktailComment(similarCocktail).trim())}
+                                  hasBrandFallback={hasBrandFallback}
+                                  hasStyleFallback={hasStyleFallback}
+                                  isPartySelected={partySelectedCocktailKeys.has(
+                                    String(similarCocktail.id ?? similarCocktail.name),
+                                  )}
+                                />
+                              )}
                             </View>
                           ),
                         )}
@@ -2299,6 +2331,13 @@ const styles = StyleSheet.create({
   },
   similarCocktailsList: {
     marginHorizontal: -24,
+  },
+  similarCocktailsCards: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 12,
+    marginTop: 8,
   },
   similarCocktailDivider: {
     height: StyleSheet.hairlineWidth,
