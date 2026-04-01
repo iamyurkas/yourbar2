@@ -34,7 +34,7 @@ function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, on
       accessibilityRole={onPress ? 'button' : undefined}>
       <View style={[styles.image, { backgroundColor: Colors.surfaceBright }]}>
         {imageSource ? (
-          <AppImage source={imageSource} style={styles.image} contentFit="cover" />
+          <AppImage source={imageSource} style={styles.image} contentFit="contain" />
         ) : (
           <MaterialCommunityIcons name="image-off-outline" size={24} color={Colors.onSurfaceVariant} />
         )}

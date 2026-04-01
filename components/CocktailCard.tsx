@@ -46,12 +46,18 @@ function CocktailCardComponent({
       accessibilityRole={onPress ? 'button' : undefined}>
       <View style={[styles.image, { backgroundColor: Colors.surfaceBright }]}>
         {imageSource ? (
-          <AppImage source={imageSource} style={styles.image} contentFit="cover" />
+          <AppImage source={imageSource} style={styles.image} contentFit="contain" />
         ) : (
           <MaterialCommunityIcons name="image-off-outline" size={28} color={Colors.onSurfaceVariant} />
         )}
       </View>
-      <View style={styles.content}>
+      <View
+        style={[
+          styles.content,
+          {
+            backgroundColor: isReady ? Colors.highlightSubtle : Colors.surface,
+          },
+        ]}>
         <Text style={[styles.title, { color: Colors.onSurface }]} numberOfLines={2}>
           {cocktail.name}
         </Text>
@@ -84,9 +90,11 @@ function CocktailCardComponent({
               size={14}
               color={isReady ? Colors.tint : Colors.error}
             />
-            <Text style={[styles.stateText, { color: Colors.onSurfaceVariant }]}>
-              {isReady ? t('cocktailListRow.allIngredientsReady') : t('common.missing')}
-            </Text>
+            {isReady ? (
+              <Text style={[styles.stateText, { color: Colors.onSurfaceVariant }]}>
+                {t('cocktailListRow.allIngredientsReady')}
+              </Text>
+            ) : null}
           </View>
           <View style={styles.stateRow}>
             {stars > 0 ? (
