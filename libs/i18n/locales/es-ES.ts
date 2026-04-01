@@ -18,9 +18,7 @@ export const esESTranslations: TranslationDictionary = {
   "common.create": "Crear",
   "common.close": "Cerrar",
   "common.closeTagFilters": "Cerrar filtros de etiquetas",
-  "common.noMethodsAvailable": "No hay métodos disponibles",
   "common.noTagsAvailable": "No hay etiquetas disponibles",
-  "common.noRatingsAvailable": "No hay valoraciones disponibles",
   "common.clearFilters": "Borrar filtros",
   "common.and": "Y",
   "common.or": "O",
@@ -45,13 +43,10 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.helpPartyText":
     "Selecciona cócteles y toca el botón del carrito para añadir todos sus ingredientes a la lista de compras.",
   "ingredients.emptyMy": "Marca los ingredientes que tienes para verlos aquí.",
-  "ingredients.emptyAll": "Aún no hay ingredientes",
   "ingredients.helpMyTitle": "Mis ingredientes",
   "ingredients.helpMyText":
     "Esta pantalla muestra los ingredientes que tienes.\n\nBusca por nombre y usa filtros de etiquetas para organizar rápidamente tu colección personal.",
   "ingredients.helpAllTitle": "Todos los ingredientes",
-  "ingredients.helpAllText":
-    "Esta pantalla muestra la lista completa de ingredientes.\n\nUsa la búsqueda y las etiquetas para encontrar rápidamente lo que necesitas.",
   "ingredients.helpShoppingTitle": "Lista de la compra",
   "ingredients.helpShoppingText":
     "Esta pantalla muestra los ingredientes que quieres comprar.\n\nMarca los ingredientes como disponibles después de comprarlos para moverlos a Mis ingredientes.",
@@ -185,7 +180,6 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailForm.addIngredient": "Añadir ingrediente",
   "cocktailForm.saveCocktail": "Guardar cóctel",
   "cocktailForm.editCocktail": "Editar cóctel",
-  "cocktailForm.close": "Cerrar",
   "cocktailForm.selectGlass": "Seleccionar vaso",
   "cocktailForm.selectUnit": "Seleccionar unidad",
   "cocktailForm.selectNamed": "Seleccionar {{name}}",
@@ -237,11 +231,6 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.openVideos": "Abrir instrucciones en video",
   "cocktailDetails.commentPlaceholder":
     "Añade tu comentario. Se guardará automáticamente al salir de esta pantalla.",
-  "cocktailDetails.showInMetric": "Mostrar en sistema métrico",
-  "cocktailDetails.showInImperial": "Mostrar en sistema imperial",
-  "cocktailDetails.displayMode.imperial": "Imperial",
-  "cocktailDetails.displayMode.metric": "Métrico",
-  "cocktailDetails.displayMode.parts": "Partes",
   "cocktailDetails.hideMethodDescription": "Ocultar descripción de {{method}}",
   "cocktailDetails.showMethodDescription": "Mostrar descripción de {{method}}",
   "cocktailDetails.tag": "Etiqueta",
@@ -437,16 +426,11 @@ export const esESTranslations: TranslationDictionary = {
   "cocktails.toMakeMore.other": "para preparar {{count}} cócteles más",
   "cocktails.collapseIngredientGroup": "Contraer cócteles de {{name}}",
   "cocktails.expandIngredientGroup": "Expandir cócteles de {{name}}",
-  "cocktails.clearSelectedFilters": "Borrar filtros seleccionados",
 
   "cocktails.sortBy": "Ordenar por",
   "cocktails.sortOptionAlphabeticalAccessibility": "Ordenar por A-z",
   "cocktails.sortOptionPartySelectedAccessibility":
     "Ordenar por selección de fiesta",
-  "cocktails.sortOptionRequiredCountAccessibility":
-    "Ordenar por cantidad de ingredientes obligatorios",
-  "cocktails.sortOptionMissingRequiredCountAccessibility":
-    "Ordenar por cantidad de ingredientes obligatorios faltantes",
   "cocktails.sortOptionRatingAccessibility": "Ordenar por valoración",
   "cocktails.sortOptionRecentlyAddedAccessibility":
     "Ordenar por fecha de adición",
@@ -457,17 +441,8 @@ export const esESTranslations: TranslationDictionary = {
   "shakerResults.helpTitle": "Resultados de la coctelera",
   "shakerResults.helpText":
     "Esta pantalla muestra los cócteles que puedes preparar con los ingredientes seleccionados.\n\nUsa la búsqueda y los filtros para acotar resultados; luego abre cualquier cóctel para ver detalles de la receta y pasos de preparación.",
-  "shakerResults.clearSelectedFilters": "Borrar filtros seleccionados",
 
   "shakerResults.sortBy": "Ordenar por",
-  "shakerResults.sortOptionAlphabetical": "Alfabético (A–Z)",
-  "shakerResults.sortOptionRequiredCount":
-    "Cantidad de ingredientes obligatorios",
-  "shakerResults.sortOptionMissingRequiredCount":
-    "Cantidad de ingredientes obligatorios faltantes",
-  "shakerResults.sortOptionRating": "Valoración",
-  "shakerResults.sortOptionRecentlyAdded": "Añadidos recientemente",
-  "shakerResults.sortOptionRandom": "Aleatorio",
   "shakerResults.emptyMatchingRecipes": "No hay recetas coincidentes",
   "cocktailListRow.allIngredientsReady": "Todos los ingredientes están listos",
   "tabBar.leaveWithoutSavingTitle": "¿Salir sin guardar?",
@@ -588,8 +563,6 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.importArchiveEmpty": "El archivo seleccionado está vacío.",
   "sideMenu.importMissingInventory":
     "Al archivo de copia de seguridad le faltan datos de inventario.",
-  "sideMenu.importInvalidInventory":
-    "El archivo de copia de seguridad contiene datos de inventario no válidos.",
   "sideMenu.importRetryWithValidArchive":
     "Vuelve a intentarlo con un archivo de copia de seguridad válido.",
 
@@ -780,8 +753,6 @@ export const esESTranslations: TranslationDictionary = {
   "barcode.helpTitle": "Ayuda del escaneo de código de barras",
   "barcode.helpMessage":
     "Apunta la cámara al código de barras de un producto. Comprobaremos si ya existe, sugeriremos ingredientes similares y te permitiremos crearlo o vincularlo de forma segura.",
-  "barcode.scannerUnavailable":
-    "El escáner de códigos de barras no está disponible en esta compilación",
   "common.back": "Atrás",
   "common.somethingWentWrong": "Algo salió mal",
   "common.tryAgain": "Inténtalo de nuevo",
@@ -794,8 +765,4 @@ export const esESTranslations: TranslationDictionary = {
   "sideMenu.googleDriveStatusIdle": "Listo para sincronizar",
   "sideMenu.googleDriveStatusSyncing": "Sincronizando con Google Drive…",
   "sideMenu.googleDriveLastSynced": "Última sincronización:\n{{value}}",
-  "sideMenu.googleDriveDebugTitle":
-    "Detalles de sincronización de Google Drive",
-  "sideMenu.googleDriveDebugEmpty":
-    "Todavía no hay detalles de diagnóstico disponibles.",
 };

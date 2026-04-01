@@ -18,9 +18,7 @@ export const enGBTranslations: TranslationDictionary = {
   "common.create": "Create",
   "common.close": "Close",
   "common.closeTagFilters": "Close tag filters",
-  "common.noMethodsAvailable": "No methods available",
   "common.noTagsAvailable": "No tags available",
-  "common.noRatingsAvailable": "No ratings available",
   "common.clearFilters": "Clear filters",
   "common.and": "AND",
   "common.or": "OR",
@@ -46,13 +44,10 @@ export const enGBTranslations: TranslationDictionary = {
     "Select cocktails, then tap the cart button to add all their ingredients to the shopping list.",
 
   "ingredients.emptyMy": "Mark ingredients you have to see them here.",
-  "ingredients.emptyAll": "No ingredients yet",
   "ingredients.helpMyTitle": "My ingredients",
   "ingredients.helpMyText":
     "This screen shows ingredients you have.\n\nSearch by name, and use tag filters to quickly organise your personal collection.",
   "ingredients.helpAllTitle": "All ingredients",
-  "ingredients.helpAllText":
-    "This screen shows the full ingredients list.\n\nUse search and tags to quickly find what you need.",
   "ingredients.helpShoppingTitle": "Shopping list",
   "ingredients.helpShoppingText":
     "This screen shows ingredients you want to buy.\n\nMark ingredients as available after purchase to move them into My ingredients.",
@@ -188,7 +183,6 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailForm.addIngredient": "Add ingredient",
   "cocktailForm.saveCocktail": "Save cocktail",
   "cocktailForm.editCocktail": "Edit cocktail",
-  "cocktailForm.close": "Close",
   "cocktailForm.selectGlass": "Select glass",
   "cocktailForm.selectUnit": "Select unit",
   "cocktailForm.selectNamed": "Select {{name}}",
@@ -240,11 +234,6 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktailDetails.openVideos": "Open video instructions",
   "cocktailDetails.commentPlaceholder":
     "Add your comment. It saves automatically when you leave this screen.",
-  "cocktailDetails.showInMetric": "Show in metric",
-  "cocktailDetails.showInImperial": "Show in imperial",
-  "cocktailDetails.displayMode.imperial": "Imperial",
-  "cocktailDetails.displayMode.metric": "Metric",
-  "cocktailDetails.displayMode.parts": "Parts",
   "cocktailDetails.hideMethodDescription": "Hide {{method}} description",
   "cocktailDetails.showMethodDescription": "Show {{method}} description",
   "cocktailDetails.tag": "Tag",
@@ -442,15 +431,10 @@ export const enGBTranslations: TranslationDictionary = {
   "cocktails.toMakeMore.other": "to make {{count}} more cocktails",
   "cocktails.collapseIngredientGroup": "Collapse {{name}} cocktails",
   "cocktails.expandIngredientGroup": "Expand {{name}} cocktails",
-  "cocktails.clearSelectedFilters": "Clear selected filters",
 
   "cocktails.sortBy": "Sort by",
   "cocktails.sortOptionAlphabeticalAccessibility": "Sort by A-z",
   "cocktails.sortOptionPartySelectedAccessibility": "Sort by party selection",
-  "cocktails.sortOptionRequiredCountAccessibility":
-    "Sort by required ingredients count",
-  "cocktails.sortOptionMissingRequiredCountAccessibility":
-    "Sort by missing required ingredients count",
   "cocktails.sortOptionRatingAccessibility": "Sort by rating",
   "cocktails.sortOptionRecentlyAddedAccessibility": "Sort by recently added",
   "cocktails.sortOptionRandomAccessibility": "Sort randomly",
@@ -461,16 +445,8 @@ export const enGBTranslations: TranslationDictionary = {
   "shakerResults.helpTitle": "Shaker results",
   "shakerResults.helpText":
     "This screen shows cocktails you can make with selected ingredients.\n\nUse search and filters to narrow results, then open any cocktail to view recipe details and preparation steps.",
-  "shakerResults.clearSelectedFilters": "Clear selected filters",
 
   "shakerResults.sortBy": "Sort by",
-  "shakerResults.sortOptionAlphabetical": "Alphabetical (A–Z)",
-  "shakerResults.sortOptionRequiredCount": "Required ingredients count",
-  "shakerResults.sortOptionMissingRequiredCount":
-    "Missing required ingredients count",
-  "shakerResults.sortOptionRating": "Rating",
-  "shakerResults.sortOptionRecentlyAdded": "Recently added",
-  "shakerResults.sortOptionRandom": "Random",
   "shakerResults.emptyMatchingRecipes": "No matching recipes",
 
   "cocktailListRow.allIngredientsReady": "All ingredients ready",
@@ -588,8 +564,6 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.importArchiveEmpty": "The selected archive is empty.",
   "sideMenu.importMissingInventory":
     "The backup archive is missing inventory data.",
-  "sideMenu.importInvalidInventory":
-    "The backup archive contains invalid inventory data.",
   "sideMenu.importRetryWithValidArchive":
     "Please try again with a valid backup archive.",
 
@@ -784,7 +758,6 @@ export const enGBTranslations: TranslationDictionary = {
   "barcode.helpTitle": "Barcode scan help",
   "barcode.helpMessage":
     "Point your camera at a product barcode. We will check if it already exists, suggest similar ingredients, and let you create or attach safely.",
-  "barcode.scannerUnavailable": "Barcode scanner is unavailable in this build",
   "common.back": "Back",
   "common.somethingWentWrong": "Something went wrong",
   "common.tryAgain": "Try again",
@@ -796,6 +769,4 @@ export const enGBTranslations: TranslationDictionary = {
   "sideMenu.googleDriveStatusIdle": "Ready to sync",
   "sideMenu.googleDriveStatusSyncing": "Syncing with Google Drive…",
   "sideMenu.googleDriveLastSynced": "Last synced:\n{{value}}",
-  "sideMenu.googleDriveDebugTitle": "Google Drive sync details",
-  "sideMenu.googleDriveDebugEmpty": "No diagnostic details are available yet.",
 };

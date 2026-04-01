@@ -18,9 +18,7 @@ export const ukUATranslations: TranslationDictionary = {
   "common.create": "Створити",
   "common.close": "Закрити",
   "common.closeTagFilters": "Закрити фільтри тегів",
-  "common.noMethodsAvailable": "Немає доступних методів",
   "common.noTagsAvailable": "Немає доступних тегів",
-  "common.noRatingsAvailable": "Немає доступних оцінок",
   "common.clearFilters": "Очистити фільтри",
   "common.and": "ТА",
   "common.or": "АБО",
@@ -47,13 +45,10 @@ export const ukUATranslations: TranslationDictionary = {
     "Оберіть коктейлі й натисніть кнопку візка, щоб додати всі їхні інгредієнти до списку покупок.",
 
   "ingredients.emptyMy": "Позначте наявні інгредієнти, щоби бачити їх тут.",
-  "ingredients.emptyAll": "Ще немає інгредієнтів",
   "ingredients.helpMyTitle": "Мої інгредієнти",
   "ingredients.helpMyText":
     "Цей екран показує інгредієнти, які ви маєте.\n\nШукайте за назвою і використовуйте фільтри за тегами.",
   "ingredients.helpAllTitle": "Усі інгредієнти",
-  "ingredients.helpAllText":
-    "Цей екран показує повний список інгредієнтів.\n\nВикористовуйте пошук і теги, щоб швидко знайти потрібне.",
   "ingredients.helpShoppingTitle": "Список покупок",
   "ingredients.helpShoppingText":
     "Цей екран показує інгредієнти, які ви хочете купити.\n\nПісля покупки позначте їх як наявні.",
@@ -189,7 +184,6 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailForm.addIngredient": "Додати інгредієнт",
   "cocktailForm.saveCocktail": "Зберегти коктейль",
   "cocktailForm.editCocktail": "Редагувати коктейль",
-  "cocktailForm.close": "Закрити",
   "cocktailForm.selectGlass": "Обрати келих",
   "cocktailForm.selectUnit": "Обрати одиницю",
   "cocktailForm.selectNamed": "Обрати {{name}}",
@@ -241,11 +235,6 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.openVideos": "Відкрити відеоінструкцію",
   "cocktailDetails.commentPlaceholder":
     "Додайте коментар. Він збережеться автоматично, коли ви вийдете з цього екрана.",
-  "cocktailDetails.showInMetric": "Метрична система",
-  "cocktailDetails.showInImperial": "Імперська система",
-  "cocktailDetails.displayMode.imperial": "Імперська",
-  "cocktailDetails.displayMode.metric": "Метрична",
-  "cocktailDetails.displayMode.parts": "Частини",
   "cocktailDetails.hideMethodDescription": "Сховати опис {{method}}",
   "cocktailDetails.showMethodDescription": "Показати опис {{method}}",
   "cocktailDetails.tag": "Тег",
@@ -444,16 +433,11 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktails.toMakeMore.other": "для ще {{count}} коктейлів",
   "cocktails.collapseIngredientGroup": "Згорнути коктейлі для {{name}}",
   "cocktails.expandIngredientGroup": "Розгорнути коктейлі для {{name}}",
-  "cocktails.clearSelectedFilters": "Очистити вибрані фільтри",
 
   "cocktails.sortBy": "Сортувати за",
   "cocktails.sortOptionAlphabeticalAccessibility": "Сортувати за A–z",
   "cocktails.sortOptionPartySelectedAccessibility":
     "Сортувати за відібраністю для вечірки",
-  "cocktails.sortOptionRequiredCountAccessibility":
-    "Сортувати за кількістю обов’язкових інгредієнтів",
-  "cocktails.sortOptionMissingRequiredCountAccessibility":
-    "Сортувати за кількістю відсутніх обов’язкових інгредієнтів",
   "cocktails.sortOptionRatingAccessibility": "Сортувати за рейтингом",
   "cocktails.sortOptionRecentlyAddedAccessibility":
     "Сортувати за часом додавання",
@@ -465,17 +449,8 @@ export const ukUATranslations: TranslationDictionary = {
   "shakerResults.helpTitle": "Результати шейкера",
   "shakerResults.helpText":
     "Цей екран показує коктейлі, які можна зробити з вибраних інгредієнтів.\n\nВикористовуйте пошук і фільтри, щоб звузити результати, а потім відкрийте будь-який коктейль, щоб переглянути деталі рецепта та кроки приготування.",
-  "shakerResults.clearSelectedFilters": "Очистити вибрані фільтри",
 
   "shakerResults.sortBy": "Сортувати за",
-  "shakerResults.sortOptionAlphabetical": "За алфавітом (A–Z)",
-  "shakerResults.sortOptionRequiredCount":
-    "Кількістю обов’язкових інгредієнтів",
-  "shakerResults.sortOptionMissingRequiredCount":
-    "Кількістю відсутніх обов’язкових інгредієнтів",
-  "shakerResults.sortOptionRating": "Рейтингом",
-  "shakerResults.sortOptionRecentlyAdded": "За часом додавання",
-  "shakerResults.sortOptionRandom": "Випадково",
   "shakerResults.emptyMatchingRecipes": "Немає відповідних рецептів",
 
   "cocktailListRow.allIngredientsReady": "Усі інгредієнти готові",
@@ -597,8 +572,6 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.importArchiveEmpty": "Вибраний архів порожній.",
   "sideMenu.importMissingInventory":
     "В архіві резервної копії відсутні дані інвентарю.",
-  "sideMenu.importInvalidInventory":
-    "Архів резервної копії містить некоректні дані інвентарю.",
   "sideMenu.importRetryWithValidArchive":
     "Спробуйте ще раз із коректним архівом резервної копії.",
 
@@ -845,7 +818,6 @@ export const ukUATranslations: TranslationDictionary = {
   "barcode.helpTitle": "Довідка зі сканування штрихкоду",
   "barcode.helpMessage":
     "Наведіть камеру на штрихкод товару. Ми перевіримо, чи він уже існує, запропонуємо схожі інгредієнти та безпечно дамо змогу створити або прив’язати запис.",
-  "barcode.scannerUnavailable": "Сканер штрихкодів недоступний у цій збірці",
   "common.back": "Назад",
   "common.somethingWentWrong": "Щось пішло не так",
   "common.tryAgain": "Спробуйте ще раз",
@@ -857,6 +829,4 @@ export const ukUATranslations: TranslationDictionary = {
   "sideMenu.googleDriveStatusIdle": "Готово до синхронізації",
   "sideMenu.googleDriveStatusSyncing": "Синхронізація з Google Drive…",
   "sideMenu.googleDriveLastSynced": "Остання синхронізація:\n{{value}}",
-  "sideMenu.googleDriveDebugTitle": "Деталі синхронізації Google Drive",
-  "sideMenu.googleDriveDebugEmpty": "Діагностичні відомості поки недоступні.",
 };
