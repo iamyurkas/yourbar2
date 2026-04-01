@@ -42410,6 +42410,125 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 642,
+      "name": "Last Flight",
+      "description": "A boozy modern sour that sits between a **Last Word** and a **Paper Plane**, combining **bourbon**, **green Chartreuse**, **Aperol**, and fresh **lemon juice**.",
+      "instructions": "1. Add 15 ml of **bourbon**, 15 ml of **green Chartreuse**, 15 ml of **Aperol**, and 15 ml of **lemon juice** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled Nick & Nora glass.\n5. Garnish with a miniature paper plane and/or a **lemon** twist.",
+      "glassId": "nick_and_nora",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [3, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 182,
+          "name": "Green Chartreuse",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 23,
+          "name": "Aperol",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 643,
+      "name": "Devil's Soul",
+      "description": "A short, spirit-forward stirred cocktail where **rye whiskey**, **mezcal**, **amaro**, **Aperol**, and **elderflower liqueur** create a smoky, bittersweet, floral profile.",
+      "instructions": "1. Add 45 ml of **rye whiskey**, 15 ml of **mezcal**, 15 ml of **amaro**, 7.5 ml of **Aperol**, and 7.5 ml of **elderflower liqueur** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express oils from an **orange** zest twist over the cocktail and use it as a garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 8],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 305,
+          "name": "Rye Whiskey",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 13,
+          "name": "Amaro",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 23,
+          "name": "Aperol",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 365,
+          "name": "Elderflower Liquor",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
