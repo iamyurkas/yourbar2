@@ -42677,6 +42677,231 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 646,
+      "name": "Ice in the Hat",
+      "description": "A crisp, spirit-forward digestif where **London dry gin**, **Becherovka**, **bianco vermouth**, and **crème de menthe white** create a cool herbal profile.",
+      "instructions": "1. Add 45 ml of **London dry gin**, 15 ml of **Becherovka**, 15 ml of **bianco vermouth**, and 7.5 ml of **crème de menthe white** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 369,
+          "name": "London Dry Gin",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 40,
+          "name": "Becherovka",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 129,
+          "name": "Crème de Menthe White",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        }
+      ]
+    },
+    {
+      "id": 647,
+      "name": "Mad March Days",
+      "description": "A rich, bittersweet whiskey sipper where **bourbon**, **Speyside single malt Scotch whisky**, **amaro**, and **Becherovka** land somewhere between an Old Fashioned and a Manhattan.",
+      "instructions": "1. Add 30 ml of **bourbon**, 30 ml of **Speyside single malt Scotch whisky**, 22.5 ml of **amaro**, and 7.5 ml of **Becherovka** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until chilled.\n4. Strain into a rocks glass over fresh **ice** (preferably one large cube).\n5. Express oils from a **lemon** zest twist over the drink and use as garnish.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5, 3],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 311,
+          "name": "Scotch Whisky",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 13,
+          "name": "Amaro",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 40,
+          "name": "Becherovka",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 648,
+      "name": "Be-ton",
+      "description": "A Czech highball combining **Becherovka** and chilled **tonic** for a bright bittersweet long drink.",
+      "instructions": "1. Pour 50 ml of **Becherovka** and 105 ml of chilled **tonic** into a collins glass.\n2. Fill the glass with **ice**.\n3. Garnish with a **lemon** wedge.",
+      "glassId": "collins_glass",
+      "methodIds": ["build"],
+      "defaultServings": 1,
+      "tags": [8],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 40,
+          "name": "Becherovka",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 339,
+          "name": "Tonic",
+          "amount": "105",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 4,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 649,
+      "name": "Czechmate",
+      "description": "A refreshing Czech-inspired sour highball where **vodka**, **lemon juice**, **Becherovka**, and rich **simple syrup** are topped with **pilsner lager**.",
+      "instructions": "1. Add 45 ml of **vodka**, 22.5 ml of **lemon juice**, 15 ml of **Becherovka**, and 10 ml of rich **simple syrup** into a shaker.\n2. Fill the shaker with **ice** and shake until chilled.\n3. Strain into a sling/highball glass filled with fresh **ice**.\n4. Top with 60 ml of **pilsner lager**.\n5. Garnish with a **lemon** wedge.",
+      "glassId": "highball_glass",
+      "methodIds": ["shake", "build"],
+      "defaultServings": 1,
+      "tags": [8],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 40,
+          "name": "Becherovka",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 316,
+          "name": "Simple Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 278,
+          "name": "Pilsner Lager",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
