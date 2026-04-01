@@ -107,6 +107,7 @@ type ListRowProps = {
   rightIndicatorColor?: string;
   brandIndicatorBottomColor?: string;
   rightIndicatorBottomColor?: string;
+  cardView?: boolean;
 };
 
 export function ListRow({
@@ -131,6 +132,7 @@ export function ListRow({
   rightIndicatorColor,
   brandIndicatorBottomColor,
   rightIndicatorBottomColor,
+  cardView = false,
 }: ListRowProps) {
   const Colors = useAppColors();
   const backgroundColor = selected ? highlightColor ?? `${Colors.tint}1F` : Colors.background;
@@ -153,7 +155,11 @@ export function ListRow({
       onPress={onPress}
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
-      style={[styles.row, { backgroundColor }]}
+      style={[
+        styles.row,
+        { backgroundColor },
+        cardView ? [styles.cardRow, { borderColor: Colors.outlineVariant }] : null,
+      ]}
     >
       {showBrandIndicator ? (
         <View pointerEvents="none" style={styles.brandIndicator}>
@@ -246,6 +252,12 @@ const styles = StyleSheet.create({
     minHeight: 76,
     width: '100%',
     position: 'relative',
+  },
+  cardRow: {
+    borderRadius: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    marginHorizontal: 12,
+    marginVertical: 6,
   },
   brandIndicator: {
     position: 'absolute',

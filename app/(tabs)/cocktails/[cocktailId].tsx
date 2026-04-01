@@ -565,6 +565,7 @@ export default function CocktailDetailsScreen() {
     allowAllSubstitutes,
     useImperialUnits,
     keepScreenAwake,
+    useCardView,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -2150,7 +2151,7 @@ export default function CocktailDetailsScreen() {
                             index,
                           ) => (
                             <View key={similarCocktail.id ?? similarCocktail.name}>
-                              {index > 0 ? (
+                              {index > 0 && !useCardView ? (
                                 <View
                                   style={[
                                     styles.similarCocktailDivider,
@@ -2199,6 +2200,7 @@ export default function CocktailDetailsScreen() {
                                 isPartySelected={partySelectedCocktailKeys.has(
                                   String(similarCocktail.id ?? similarCocktail.name),
                                 )}
+                                cardView={useCardView}
                               />
                             </View>
                           ),

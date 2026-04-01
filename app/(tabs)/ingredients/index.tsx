@@ -67,6 +67,7 @@ type IngredientListItemProps = {
   showAvailabilityToggle?: boolean;
   onShoppingToggle?: (id: number) => void;
   returnToParams?: Record<string, string | undefined>;
+  cardView?: boolean;
 };
 
 type IngredientRowMeta = {
@@ -95,7 +96,8 @@ const areIngredientPropsEqual = (
   prev.isOnShoppingList === next.isOnShoppingList &&
   prev.showAvailabilityToggle === next.showAvailabilityToggle &&
   prev.onShoppingToggle === next.onShoppingToggle &&
-  prev.returnToParams === next.returnToParams;
+  prev.returnToParams === next.returnToParams &&
+  prev.cardView === next.cardView;
 
 const IngredientListItem = memo(function IngredientListItemComponent({
   ingredient,
@@ -110,6 +112,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
   showAvailabilityToggle = true,
   onShoppingToggle,
   returnToParams,
+  cardView = false,
 }: IngredientListItemProps) {
   const Colors = useAppColors();
   const ingredientId = Number(ingredient.id ?? -1);
@@ -240,6 +243,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
       rightIndicatorColor={rightIndicatorColor}
       rightIndicatorBottomColor={rightIndicatorBottomColor}
       metaAlignment="center"
+      cardView={cardView}
     />
   );
 
@@ -258,7 +262,7 @@ export default function IngredientsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, useCardView } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const initialListState = useMemo(() => getLastIngredientListState(), []);
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => initialListState.tab ?? getLastIngredientTab());
@@ -897,6 +901,7 @@ export default function IngredientsScreen() {
           showAvailabilityToggle={activeTab !== 'shopping'}
           onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
           returnToParams={listReturnToParams}
+          cardView={useCardView}
         />
       );
     },
@@ -912,18 +917,22 @@ export default function IngredientsScreen() {
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
       listReturnToParams,
+      useCardView,
     ],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
+      if (useCardView) {
+        return null;
+      }
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = getEffectiveAvailability(ingredientId);
       const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [Colors, getEffectiveAvailability],
+    [Colors, getEffectiveAvailability, useCardView],
   );
 
   const handleTabChange = useCallback((key: string) => {
