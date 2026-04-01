@@ -136,15 +136,14 @@ const styles = StyleSheet.create({
     zIndex: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 0,
   },
   modalBackdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.22)',
   },
   modal: {
-    minWidth: 280,
-    maxWidth: '92%',
+    width: '92%',
     maxHeight: '92%',
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
