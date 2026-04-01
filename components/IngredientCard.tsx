@@ -30,7 +30,13 @@ function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, on
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.card, { backgroundColor: Colors.surface, borderColor: Colors.outlineVariant }]}
+      style={[
+        styles.card,
+        {
+          backgroundColor: Colors.surface,
+          borderColor: isAvailable ? Colors.tint : Colors.outlineVariant,
+        },
+      ]}
       accessibilityRole={onPress ? 'button' : undefined}>
       <View style={[styles.image, { backgroundColor: Colors.surfaceBright }]}>
         {imageSource ? (

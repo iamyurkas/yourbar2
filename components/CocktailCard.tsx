@@ -41,7 +41,13 @@ function CocktailCardComponent({
 
   return (
     <Pressable
-      style={[styles.card, { backgroundColor: Colors.surface, borderColor: Colors.outlineVariant }]}
+      style={[
+        styles.card,
+        {
+          backgroundColor: Colors.surface,
+          borderColor: isReady ? Colors.tint : Colors.outlineVariant,
+        },
+      ]}
       onPress={onPress}
       accessibilityRole={onPress ? 'button' : undefined}>
       <View style={[styles.image, { backgroundColor: Colors.surfaceBright }]}>
@@ -55,7 +61,7 @@ function CocktailCardComponent({
         style={[
           styles.content,
           {
-            backgroundColor: isReady ? Colors.highlightSubtle : Colors.surface,
+            backgroundColor: isReady ? 'rgba(70, 170, 255, 0.16)' : Colors.surface,
           },
         ]}>
         <Text style={[styles.title, { color: Colors.onSurface }]} numberOfLines={2}>
@@ -84,18 +90,6 @@ function CocktailCardComponent({
           ))}
         </View>
         <View style={styles.footer}>
-          <View style={styles.stateRow}>
-            <MaterialCommunityIcons
-              name={isReady ? 'check-circle' : 'alert-circle-outline'}
-              size={14}
-              color={isReady ? Colors.tint : Colors.error}
-            />
-            {isReady ? (
-              <Text style={[styles.stateText, { color: Colors.onSurfaceVariant }]}>
-                {t('cocktailListRow.allIngredientsReady')}
-              </Text>
-            ) : null}
-          </View>
           <View style={styles.stateRow}>
             {stars > 0 ? (
               Array.from({ length: stars }).map((_, index) => (
@@ -173,8 +167,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  stateText: {
-    fontSize: 11,
   },
 });
