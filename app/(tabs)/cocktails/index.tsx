@@ -19,7 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CARD_GAP, CARD_WIDTH } from '@/components/CardLayout';
 import { CocktailCard } from '@/components/CocktailCard';
-import { CocktailFiltersPanel } from '@/components/CocktailFiltersPanel';
+import { CocktailFilterMenu } from '@/components/CocktailFilterMenu';
 import { CocktailListRow } from '@/components/CocktailListRow';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
@@ -1294,81 +1294,70 @@ export default function CocktailsScreen() {
             helpText={helpContent.text}
           />
         </View>
-        {isFilterMenuVisible ? (
-          <>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('common.closeTagFilters')}
-              onPress={handleCloseFilterMenu}
-              style={styles.filterMenuBackdrop}
-            />
-            <View
-              style={[
-                styles.filterMenu,
-                {
-                  top: filterMenuTop,
-                  backgroundColor: Colors.surface,
-                  borderColor: Colors.outline,
-                  shadowColor: Colors.shadow,
-                },
-              ]}>
-              <CocktailFiltersPanel
-                sortSectionLabel={t('cocktails.sortBy')}
-                sortSectionSuffix={sortViewModeToggle}
-                filterSectionLabel={t('common.filterBy')}
-                sortOptions={buildCocktailSortOptions({
-                  selectedSortOption,
-                  isSortDescending,
-                  onSortOptionChange: handleSortOptionChange,
-                  tintColor: Colors.tint,
-                  surfaceColor: Colors.surface,
-                  showRequiredCountOption: false,
-                  showPartySelectedOption: true,
-                  getAccessibilityLabel: (option) => {
-                    switch (option) {
-                      case 'alphabetical':
-                        return t('cocktails.sortOptionAlphabeticalAccessibility');
-                      case 'partySelected':
-                        return t('cocktails.sortOptionPartySelectedAccessibility');
-                      case 'rating':
-                        return t('cocktails.sortOptionRatingAccessibility');
-                      case 'recentlyAdded':
-                        return t('cocktails.sortOptionRecentlyAddedAccessibility');
-                      default:
-                        return t('cocktails.sortOptionRandomAccessibility');
-                    }
-                  },
-                })}
-                availableStarRatings={availableStarRatings}
-                selectedStarRatings={selectedStarRatings}
-                onToggleStarRating={handleStarRatingFilterToggle}
-                showRatingFilters={showRatingFilters}
-                availableMethodOptions={availableMethodOptions}
-                selectedMethodIds={selectedMethodIds}
-                onToggleMethod={handleMethodFilterToggle}
-                renderMethodIcon={renderMethodIcon}
-                availableTagOptions={availableTagOptions}
-                selectedTagKeys={selectedTagKeys}
-                onToggleTag={handleTagFilterToggle}
-                onClearFilters={handleClearFilters}
-                showClearButton={isFilterActive}
-                tintColor={Colors.tint}
-                outlineColor={Colors.primary}
-                onSurfaceVariantColor={Colors.onSurfaceVariant}
-                surfaceVariantColor={Colors.surfaceVariant}
-                andLabel={t('common.and')}
-                noTagsAvailableLabel={t('common.noTagsAvailable')}
-                clearFiltersLabel={t('common.clearFilters')}
-                getMethodLabel={(methodId) => t(`cocktailMethod.${methodId}.label`)}
-                getTagLabel={(tag) => {
-                  const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
-                  const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
-                  return (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
-                }}
-              />
-            </View>
-          </>
-        ) : null}
+        <CocktailFilterMenu
+          visible={isFilterMenuVisible}
+          mode="popover"
+          onClose={handleCloseFilterMenu}
+          closeAccessibilityLabel={t('common.closeTagFilters')}
+          panelProps={{
+            sortSectionLabel: t('cocktails.sortBy'),
+            sortSectionSuffix: sortViewModeToggle,
+            filterSectionLabel: t('common.filterBy'),
+            sortOptions: buildCocktailSortOptions({
+              selectedSortOption,
+              isSortDescending,
+              onSortOptionChange: handleSortOptionChange,
+              tintColor: Colors.tint,
+              surfaceColor: Colors.surface,
+              showRequiredCountOption: false,
+              showPartySelectedOption: true,
+              getAccessibilityLabel: (option) => {
+                switch (option) {
+                  case 'alphabetical':
+                    return t('cocktails.sortOptionAlphabeticalAccessibility');
+                  case 'partySelected':
+                    return t('cocktails.sortOptionPartySelectedAccessibility');
+                  case 'rating':
+                    return t('cocktails.sortOptionRatingAccessibility');
+                  case 'recentlyAdded':
+                    return t('cocktails.sortOptionRecentlyAddedAccessibility');
+                  default:
+                    return t('cocktails.sortOptionRandomAccessibility');
+                }
+              },
+            }),
+            availableStarRatings,
+            selectedStarRatings,
+            onToggleStarRating: handleStarRatingFilterToggle,
+            showRatingFilters,
+            availableMethodOptions,
+            selectedMethodIds,
+            onToggleMethod: handleMethodFilterToggle,
+            renderMethodIcon,
+            availableTagOptions,
+            selectedTagKeys,
+            onToggleTag: handleTagFilterToggle,
+            onClearFilters: handleClearFilters,
+            showClearButton: isFilterActive,
+            tintColor: Colors.tint,
+            outlineColor: Colors.primary,
+            onSurfaceVariantColor: Colors.onSurfaceVariant,
+            surfaceVariantColor: Colors.surfaceVariant,
+            andLabel: t('common.and'),
+            noTagsAvailableLabel: t('common.noTagsAvailable'),
+            clearFiltersLabel: t('common.clearFilters'),
+            getMethodLabel: (methodId) => t(`cocktailMethod.${methodId}.label`),
+            getTagLabel: (tag) => {
+              const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
+              const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
+              return (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
+            },
+          }}
+          top={filterMenuTop}
+          surfaceColor={Colors.surface}
+          outlineColor={Colors.outline}
+          shadowColor={Colors.shadow}
+        />
         {loading ? (
           <CollectionListSkeleton />
         ) : isMyTab ? (
@@ -1546,31 +1535,6 @@ const styles = StyleSheet.create({
     marginTop: 80,
     fontSize: 14,
     paddingHorizontal: 20,
-  },
-  filterMenuBackdrop: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: 'transparent',
-    zIndex: 3,
-  },
-  filterMenu: {
-    position: 'absolute',
-    right: 16,
-    minWidth: 280,
-    maxWidth: '92%',
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'stretch',
-    zIndex: 4,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 8,
   },
   sortViewToggle: {
     flexDirection: 'row',
