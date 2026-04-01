@@ -42529,6 +42529,154 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 644,
+      "name": "Christmas Negroni",
+      "description": "A festive bittersweet Negroni variation where **gin**, **red vermouth**, **Becherovka**, **Campari**, **sloe gin**, and **falernum** layer spice and winter fruit.",
+      "instructions": "1. Add 30 ml of **gin**, 30 ml of **Carpano Antica Formula Vermouth**, 15 ml of **Becherovka**, 10 ml of **Campari**, 5 ml of **sloe gin**, and 2.5 ml of **falernum** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** zest twist over the cocktail and use it as a garnish.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 77,
+          "name": "Carpano Antica Formula Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 40,
+          "name": "Becherovka",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 317,
+          "name": "Sloe Gin",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 154,
+          "name": "Falernum",
+          "amount": "2.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 645,
+      "name": "Mellow Yellow",
+      "description": "A boozy stirred nightcap where **bourbon**, **Becherovka**, **yellow Chartreuse**, **apricot brandy**, and a dash of **orange bitters** create a rich herbal-spice profile.",
+      "instructions": "1. Add 45 ml of **bourbon**, 15 ml of **Becherovka**, 15 ml of **yellow Chartreuse**, 7.5 ml of **apricot brandy**, 1 dash of **orange bitters**, and 10 ml of **water** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express oils from an **orange** zest twist over the cocktail and discard.\n6. Garnish with a small **mint** leaf floated on top.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 8],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 40,
+          "name": "Becherovka",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 361,
+          "name": "Yellow Chartreuse",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 31,
+          "name": "Apricot Brandy",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 349,
+          "name": "Water",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
