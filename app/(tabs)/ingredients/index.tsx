@@ -258,7 +258,7 @@ export default function IngredientsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, cardViewEnabled } = useInventorySettings();
   const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
   const initialListState = useMemo(() => getLastIngredientListState(), []);
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => initialListState.tab ?? getLastIngredientTab());
@@ -884,20 +884,22 @@ export default function IngredientsScreen() {
       const hasBrandedVariants = meta?.hasBrandedVariants ?? (isValidId && brandedBaseIngredientIds.has(ingredientId));
 
       return (
-        <IngredientListItem
-          ingredient={item}
-          highlightColor={highlightColor}
-          isAvailable={isAvailable}
-          hasStyledVariants={hasStyledVariants}
-          hasBrandedVariants={hasBrandedVariants}
-          onToggleAvailability={handleToggle}
-          subtitle={meta?.subtitleText}
-          surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
-          isOnShoppingList={isOnShoppingList}
-          showAvailabilityToggle={activeTab !== 'shopping'}
-          onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
-          returnToParams={listReturnToParams}
-        />
+        <View style={cardViewEnabled ? styles.cardItem : undefined}>
+          <IngredientListItem
+            ingredient={item}
+            highlightColor={highlightColor}
+            isAvailable={isAvailable}
+            hasStyledVariants={hasStyledVariants}
+            hasBrandedVariants={hasBrandedVariants}
+            onToggleAvailability={handleToggle}
+            subtitle={meta?.subtitleText}
+            surfaceVariantColor={Colors.onSurfaceVariant ?? Colors.icon}
+            isOnShoppingList={isOnShoppingList}
+            showAvailabilityToggle={activeTab !== 'shopping'}
+            onShoppingToggle={activeTab === 'shopping' ? handleShoppingToggle : undefined}
+            returnToParams={listReturnToParams}
+          />
+        </View>
       );
     },
     [
@@ -908,6 +910,7 @@ export default function IngredientsScreen() {
       highlightColor,
       ingredientRowMetaByKey,
       Colors,
+      cardViewEnabled,
       shoppingIngredientIds,
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
@@ -1092,12 +1095,15 @@ export default function IngredientsScreen() {
           <CollectionListSkeleton />
         ) : (
           <FlatList
+            key={cardViewEnabled ? 'ingredient-grid' : 'ingredient-list'}
             ref={listRef}
             data={sortedIngredients}
             keyExtractor={keyExtractor}
-            getItemLayout={getItemLayout}
+            getItemLayout={cardViewEnabled ? undefined : getItemLayout}
             renderItem={renderItem}
-            ItemSeparatorComponent={renderSeparator}
+            ItemSeparatorComponent={cardViewEnabled ? undefined : renderSeparator}
+            numColumns={cardViewEnabled ? 2 : 1}
+            columnWrapperStyle={cardViewEnabled ? styles.cardColumn : undefined}
             contentContainerStyle={styles.listContent}
             initialNumToRender={16}
             maxToRenderPerBatch={16}
@@ -1168,6 +1174,13 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 0,
     paddingBottom: 80,
+  },
+  cardColumn: {
+    gap: 8,
+    paddingHorizontal: 8,
+  },
+  cardItem: {
+    flex: 1,
   },
   divider: {
     height: StyleSheet.hairlineWidth,
