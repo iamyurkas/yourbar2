@@ -46078,6 +46078,83 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 641,
+      "name": "Dead Man's Handle",
+      "description": "A tequila-driven, bittersweet sour where **tequila blanco**, **Aperol**, fresh **lime juice**, and **almond (orgeat) syrup** are shaken and served over crushed **ice** with a spicy **chili powder** finish.",
+      "instructions": "1. Add 45 ml of **tequila blanco**, 15 ml of **Aperol**, 15 ml of **lime juice**, and 15 ml of **almond (orgeat) syrup** into a shaker with **ice**.\n2. Shake hard until well chilled, then strain into a hurricane glass filled with crushed **ice**.\n3. Lightly dust the surface with **chili powder**.",
+      "glassId": "hurricane_glass",
+      "methodIds": [
+        "shake"
+      ],
+      "defaultServings": 1,
+      "tags": [
+        6,
+        8
+      ],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 334,
+          "name": "Tequila Blanco",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 23,
+          "name": "Aperol",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11,
+          "substitutes": [
+            {
+              "ingredientId": 227,
+              "name": "Lime",
+              "amount": "1",
+              "unitId": 9
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "ingredientId": 11,
+          "name": "Almond (Orgeat) Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 91,
+          "name": "Chili Powder",
+          "amount": "1",
+          "unitId": 15,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
