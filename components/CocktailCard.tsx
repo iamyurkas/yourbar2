@@ -138,7 +138,7 @@ function CocktailCardComponent({
             <MaterialCommunityIcons
               name={resolveVideoServiceIcon(videoService)}
               size={14}
-              color={Colors.primary}
+              color={Colors.tertiary}
             />
           </View>
         ) : null}

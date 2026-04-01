@@ -58,7 +58,7 @@ function IngredientCardComponent({
           <MaterialCommunityIcons name="image-off-outline" size={24} color={Colors.onSurfaceVariant} />
         )}
       </View>
-      <View style={styles.content}>
+      <View style={[styles.content, { backgroundColor: isAvailable ? Colors.highlightFaint : Colors.surface }]}>
         <Text numberOfLines={2} style={[styles.title, { color: Colors.onSurface }]}>
           {ingredient.name}
         </Text>
