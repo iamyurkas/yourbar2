@@ -567,6 +567,7 @@ export default function CocktailDetailsScreen() {
     useImperialUnits,
     keepScreenAwake,
     showCardsInCollections,
+    setShowCardsInCollections,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -2133,9 +2134,57 @@ export default function CocktailDetailsScreen() {
                     </Pressable>
                   ) : (
                     <View style={[styles.textBlock, styles.similarCocktailsBlock]}>
-                      <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
-                        {t("cocktailDetails.similarCocktailsTitle")}
-                      </Text>
+                      <View style={styles.similarHeaderRow}>
+                        <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
+                          {t("cocktailDetails.similarCocktailsTitle")}
+                        </Text>
+                        <View
+                          style={[
+                            styles.similarLayoutSwitcher,
+                            {
+                              borderColor: Colors.primary,
+                              backgroundColor: Colors.surfaceBright,
+                            },
+                          ]}
+                        >
+                          <Pressable
+                            onPress={() => setShowCardsInCollections(true)}
+                            style={[
+                              styles.similarLayoutOption,
+                              showCardsInCollections
+                                ? { backgroundColor: Colors.primary }
+                                : undefined,
+                            ]}
+                            accessibilityRole="button"
+                            accessibilityState={{ selected: showCardsInCollections }}
+                            accessibilityLabel={t("sideMenu.showCardsInCollections")}
+                          >
+                            <MaterialCommunityIcons
+                              name="view-grid"
+                              size={16}
+                              color={showCardsInCollections ? Colors.onPrimary : Colors.primary}
+                            />
+                          </Pressable>
+                          <Pressable
+                            onPress={() => setShowCardsInCollections(false)}
+                            style={[
+                              styles.similarLayoutOption,
+                              !showCardsInCollections
+                                ? { backgroundColor: Colors.primary }
+                                : undefined,
+                            ]}
+                            accessibilityRole="button"
+                            accessibilityState={{ selected: !showCardsInCollections }}
+                            accessibilityLabel={t("cocktails.sortBy")}
+                          >
+                            <MaterialCommunityIcons
+                              name="view-list"
+                              size={16}
+                              color={!showCardsInCollections ? Colors.onPrimary : Colors.primary}
+                            />
+                          </Pressable>
+                        </View>
+                      </View>
                       <View style={showCardsInCollections ? styles.similarCocktailsCards : styles.similarCocktailsList}>
                         {similarCocktailEntries.map(
                           (
@@ -2328,6 +2377,26 @@ const styles = StyleSheet.create({
   },
   similarCocktailsBlock: {
     marginTop: 8,
+  },
+  similarHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  similarLayoutSwitcher: {
+    flexDirection: "row",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 2,
+    gap: 4,
+  },
+  similarLayoutOption: {
+    width: 34,
+    height: 28,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
   },
   similarCocktailsList: {
     marginHorizontal: -24,
