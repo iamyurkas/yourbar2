@@ -89,14 +89,14 @@ function IngredientCardComponent({
             style={[
               styles.checkbox,
               {
-                borderColor: isAvailable ? Colors.tint : Colors.outlineVariant,
+                borderColor: Colors.tint,
                 backgroundColor: isAvailable ? Colors.tint : 'transparent',
               },
             ]}>
             <MaterialCommunityIcons
               name="check"
               size={12}
-              color={isAvailable ? Colors.background : Colors.outlineVariant}
+              color={isAvailable ? Colors.background : Colors.tint}
             />
           </Pressable>
         </View>

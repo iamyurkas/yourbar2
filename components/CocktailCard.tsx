@@ -3,6 +3,7 @@ import { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Image } from 'expo-image';
+import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
@@ -62,7 +63,11 @@ function CocktailCardComponent({
 }: CocktailCardProps) {
   const Colors = useAppColors();
   const stars = Math.max(0, Math.min(5, Math.round(ratingValue)));
-  const imageSource = useMemo(() => resolveImageSource(cocktail.photoUri), [cocktail.photoUri]);
+  const glasswareUri = useMemo(() => resolveGlasswareUriFromId(cocktail.glassId), [cocktail.glassId]);
+  const imageSource = useMemo(
+    () => resolveImageSource(cocktail.photoUri) ?? resolveImageSource(glasswareUri),
+    [cocktail.photoUri, glasswareUri],
+  );
   const videoService = useMemo(() => resolveVideoService(cocktail.video), [cocktail.video]);
   const methodIds = useMemo<CocktailMethodId[]>(() => {
     const legacyMethodId = (cocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
@@ -148,7 +153,7 @@ function CocktailCardComponent({
           {cocktail.name}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: Colors.onSurfaceVariant }]} numberOfLines={1}>
+          <Text style={[styles.subtitle, { color: Colors.onSurfaceVariant }]} numberOfLines={2}>
             {subtitle}
           </Text>
         ) : null}
@@ -171,9 +176,11 @@ function CocktailCardComponent({
         <View style={styles.footer}>
           <View style={styles.stateRow}>
             {stars > 0 ? (
-              Array.from({ length: stars }).map((_, index) => (
-                <MaterialCommunityIcons key={index} name="star" size={12} color={Colors.tint} />
-              ))
+              <View style={[styles.ratingPill, { backgroundColor: Colors.background, borderColor: Colors.outline }]}>
+                {Array.from({ length: stars }).map((_, index) => (
+                  <MaterialCommunityIcons key={index} name="star" size={10} color={Colors.tint} />
+                ))}
+              </View>
             ) : null}
           </View>
           <View style={styles.methodRow}>
@@ -269,6 +276,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  ratingPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   methodRow: {
     flexDirection: 'row',
