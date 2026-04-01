@@ -99,9 +99,32 @@ function CocktailCardComponent({
         ) : (
           <MaterialCommunityIcons name="image-off-outline" size={28} color={Colors.onSurfaceVariant} />
         )}
-        {isPartySelected ? (
-          <View style={[styles.overlayBadge, styles.overlayLeft, { backgroundColor: Colors.surfaceBright }]}>
-            <MaterialCommunityIcons name="party-popper" size={14} color={Colors.secondary} />
+        {methodIds.length > 0 ? (
+          <View style={[styles.overlayMethodRow, { backgroundColor: Colors.surfaceBright }]}>
+            {methodIds.map((id, index) => {
+              const icon = METHOD_ICON_MAP[id];
+              if (!icon) {
+                return null;
+              }
+              if (icon.type === 'asset') {
+                return (
+                  <Image
+                    key={`overlay-method-asset-${index}`}
+                    source={icon.source}
+                    style={[styles.methodAsset, { tintColor: Colors.onSurfaceVariant }]}
+                    contentFit="contain"
+                  />
+                );
+              }
+              return (
+                <MaterialCommunityIcons
+                  key={`overlay-method-icon-${index}`}
+                  name={icon.name}
+                  size={14}
+                  color={Colors.onSurfaceVariant}
+                />
+              );
+            })}
           </View>
         ) : null}
         {videoService ? (
@@ -125,7 +148,7 @@ function CocktailCardComponent({
           {cocktail.name}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: Colors.onSurfaceVariant }]} numberOfLines={2}>
+          <Text style={[styles.subtitle, { color: Colors.onSurfaceVariant }]} numberOfLines={1}>
             {subtitle}
           </Text>
         ) : null}
@@ -154,30 +177,13 @@ function CocktailCardComponent({
             ) : null}
           </View>
           <View style={styles.methodRow}>
-            {methodIds.map((id, index) => {
-              const icon = METHOD_ICON_MAP[id];
-              if (!icon) {
-                return null;
-              }
-              if (icon.type === 'asset') {
-                return (
-                  <Image
-                    key={`method-asset-${index}`}
-                    source={icon.source}
-                    style={[styles.methodAsset, { tintColor: Colors.onSurfaceVariant }]}
-                    contentFit="contain"
-                  />
-                );
-              }
-              return (
-                <MaterialCommunityIcons
-                  key={`method-icon-${index}`}
-                  name={icon.name}
-                  size={14}
-                  color={Colors.onSurfaceVariant}
-                />
-              );
-            })}
+            {isPartySelected ? (
+              <MaterialCommunityIcons
+                name="party-popper"
+                size={14}
+                color={Colors.secondary}
+              />
+            ) : null}
           </View>
         </View>
       </View>
@@ -211,11 +217,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  overlayLeft: {
-    left: 6,
-  },
   overlayRight: {
     right: 6,
+  },
+  overlayMethodRow: {
+    position: 'absolute',
+    left: 6,
+    top: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    borderRadius: 999,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
   },
   content: {
     padding: 12,

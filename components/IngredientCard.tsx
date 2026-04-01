@@ -7,17 +7,24 @@ import { resolveImageSource } from '@/libs/image-source';
 import type { Ingredient } from '@/providers/inventory-provider';
 import { AppImage } from './AppImage';
 import { CARD_WIDTH } from './CardLayout';
-import { PresenceCheck } from './RowParts';
 
 type IngredientCardProps = {
   ingredient: Ingredient;
   isAvailable: boolean;
   isOnShoppingList: boolean;
   subtitle?: string;
+  onAvailabilityToggle?: () => void;
   onPress?: () => void;
 };
 
-function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, subtitle, onPress }: IngredientCardProps) {
+function IngredientCardComponent({
+  ingredient,
+  isAvailable,
+  isOnShoppingList,
+  subtitle,
+  onAvailabilityToggle,
+  onPress,
+}: IngredientCardProps) {
   const Colors = useAppColors();
   const imageSource = useMemo(() => resolveImageSource(ingredient.photoUri), [ingredient.photoUri]);
   const tags = useMemo(
@@ -74,7 +81,24 @@ function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, su
         </View>
         <View style={styles.footer}>
           {isOnShoppingList ? <MaterialIcons name="shopping-cart" size={16} color={Colors.tint} /> : <View />}
-          <PresenceCheck checked={isAvailable} />
+          <Pressable
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: isAvailable }}
+            onPress={onAvailabilityToggle}
+            hitSlop={10}
+            style={[
+              styles.checkbox,
+              {
+                borderColor: isAvailable ? Colors.tint : Colors.outlineVariant,
+                backgroundColor: isAvailable ? Colors.tint : 'transparent',
+              },
+            ]}>
+            <MaterialCommunityIcons
+              name="check"
+              size={12}
+              color={isAvailable ? Colors.background : Colors.outlineVariant}
+            />
+          </Pressable>
         </View>
       </View>
     </Pressable>
@@ -131,5 +155,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  checkbox: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

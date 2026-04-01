@@ -894,6 +894,7 @@ export default function IngredientsScreen() {
               isAvailable={isAvailable}
               isOnShoppingList={isOnShoppingList}
               subtitle={meta?.subtitleText}
+              onAvailabilityToggle={isValidId ? () => handleToggle(ingredientId) : undefined}
               onPress={() => {
                 const routeParam = item.id ?? item.name;
                 if (routeParam == null) {
