@@ -27,7 +27,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppDialog, type DialogOptions } from "@/components/AppDialog";
 import { AppImage } from "@/components/AppImage";
-import { CocktailFiltersPanel } from "@/components/CocktailFiltersPanel";
+import { CocktailCard } from "@/components/CocktailCard";
+import { CocktailFilterMenu } from "@/components/CocktailFilterMenu";
 import { CocktailListRow } from "@/components/CocktailListRow";
 import { FormattedText } from "@/components/FormattedText";
 import { HeaderIconButton } from "@/components/HeaderIconButton";
@@ -39,9 +40,11 @@ import { useAppColors } from "@/constants/theme";
 import { buildAmazonIngredientUrl } from "@/libs/amazon-links";
 import { AMAZON_STORES } from "@/libs/amazon-stores";
 import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
+import { compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
+import { buildCocktailSortOptions, type CocktailSortOption } from "@/libs/cocktail-sort-options";
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
@@ -121,6 +124,8 @@ export default function IngredientDetailsScreen() {
     getCocktailComment,
     partySelectedCocktailKeys,
     effectiveAmazonStore,
+    showCardsInCollections,
+    setShowCardsInCollections,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -366,6 +371,8 @@ export default function IngredientDetailsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod["id"]>>(() => new Set());
   const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(() => new Set());
+  const [selectedSortOption, setSelectedSortOption] = useState<CocktailSortOption>("alphabetical");
+  const [isSortDescending, setSortDescending] = useState(false);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () => buildTagOptions(cocktailsWithIngredient, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
@@ -434,9 +441,58 @@ export default function IngredientDetailsScreen() {
     });
   }, [cocktailsWithIngredient, getCocktailRating, selectedMethodIds, selectedStarRatings, selectedTagKeys]);
 
+  const sortedCocktails = useMemo(() => {
+    const filtered = [...filteredCocktails];
+    if (selectedSortOption === "random") {
+      const ranked = filtered.map((cocktail) => ({ cocktail, rank: Math.random() }));
+      ranked.sort((left, right) => {
+        const delta = left.rank - right.rank;
+        if (delta !== 0) {
+          return isSortDescending ? -delta : delta;
+        }
+
+        const fallback = compareOptionalGlobalAlphabet(left.cocktail.name ?? "", right.cocktail.name ?? "");
+        return isSortDescending ? -fallback : fallback;
+      });
+      return ranked.map((item) => item.cocktail);
+    }
+
+    filtered.sort((left, right) => {
+      const leftName = left.name ?? "";
+      const rightName = right.name ?? "";
+
+      let result = 0;
+      if (selectedSortOption === "alphabetical") {
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
+      } else if (selectedSortOption === "partySelected") {
+        const leftParty = partySelectedCocktailKeys.has(String(left.id ?? left.name)) ? 1 : 0;
+        const rightParty = partySelectedCocktailKeys.has(String(right.id ?? right.name)) ? 1 : 0;
+        result = leftParty !== rightParty
+          ? rightParty - leftParty
+          : compareOptionalGlobalAlphabet(leftName, rightName);
+      } else if (selectedSortOption === "rating") {
+        const leftRating = getCocktailRating(left);
+        const rightRating = getCocktailRating(right);
+        result = leftRating !== rightRating
+          ? rightRating - leftRating
+          : compareOptionalGlobalAlphabet(leftName, rightName);
+      } else {
+        const leftId = Number(left.id ?? -1);
+        const rightId = Number(right.id ?? -1);
+        result = leftId !== rightId
+          ? rightId - leftId
+          : compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      return isSortDescending ? -result : result;
+    });
+
+    return filtered;
+  }, [filteredCocktails, getCocktailRating, isSortDescending, partySelectedCocktailKeys, selectedSortOption]);
+
   const cocktailEntries = useMemo(
     () =>
-      filteredCocktails.map((cocktail) => {
+      sortedCocktails.map((cocktail) => {
         const availability = summariseCocktailAvailability(
           cocktail,
           effectiveAvailableIngredientIds,
@@ -477,7 +533,7 @@ export default function IngredientDetailsScreen() {
     [
       allowAllSubstitutes,
       effectiveAvailableIngredientIds,
-      filteredCocktails,
+      sortedCocktails,
       getCocktailRating,
       ignoreGarnish,
       ingredientLookup,
@@ -495,13 +551,15 @@ export default function IngredientDetailsScreen() {
 
   useEffect(() => {
     setVisibleCocktailCount(COCKTAIL_PAGE_SIZE);
-  }, [numericIngredientId, selectedMethodIds, selectedStarRatings, selectedTagKeys]);
+  }, [isSortDescending, numericIngredientId, selectedMethodIds, selectedSortOption, selectedStarRatings, selectedTagKeys]);
 
   useEffect(() => {
     setFilterMenuVisible(false);
     setSelectedTagKeys(new Set());
     setSelectedMethodIds(new Set());
     setSelectedStarRatings(new Set());
+    setSelectedSortOption("alphabetical");
+    setSortDescending(false);
   }, [numericIngredientId]);
 
   const visibleCocktailEntries = useMemo(
@@ -512,6 +570,35 @@ export default function IngredientDetailsScreen() {
   const hasMoreCocktails = visibleCocktailCount < cocktailEntries.length;
   const shouldShowCocktailFilterButton = cocktailsWithIngredient.length > COCKTAIL_FILTER_MIN_COUNT;
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0;
+
+  const sortViewModeToggle = useMemo(() => (
+    <View style={styles.sortViewToggle}>
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-grid" size={16} color={showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(true)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: showCardsInCollections }}
+        accessibilityLabel={t("sideMenu.showCardsInCollections")}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={!showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-list" size={16} color={!showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(false)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: !showCardsInCollections }}
+        accessibilityLabel={t("ingredientDetails.filterCocktails")}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+    </View>
+  ), [Colors.background, Colors.surfaceVariant, Colors.tint, setShowCardsInCollections, showCardsInCollections, t]);
 
 
 
@@ -919,6 +1006,20 @@ export default function IngredientDetailsScreen() {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod["id"]>()));
     setSelectedStarRatings((previous) => (previous.size === 0 ? previous : new Set<number>()));
+    setSelectedSortOption("alphabetical");
+    setSortDescending(false);
+  }, []);
+
+  const handleSortOptionChange = useCallback((option: CocktailSortOption) => {
+    setSelectedSortOption((previous) => {
+      if (previous === option) {
+        setSortDescending((current) => !current);
+        return previous;
+      }
+
+      setSortDescending(false);
+      return option;
+    });
   }, []);
 
   const renderMethodIcon = useCallback(
@@ -1705,7 +1806,7 @@ export default function IngredientDetailsScreen() {
                 ) : null}
               </View>
               {cocktailEntries.length ? (
-                <View style={styles.cocktailList}>
+                <View style={showCardsInCollections ? styles.cocktailCardList : styles.cocktailList}>
                   {visibleCocktailEntries.map(
                     ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, hasBrandFallback, hasStyleFallback, canMakeWithIngredient }, index) => {
                       const shouldHighlightRow = isReady || canMakeWithIngredient;
@@ -1719,7 +1820,7 @@ export default function IngredientDetailsScreen() {
 
                       return (
                         <React.Fragment key={cocktail.id ?? cocktail.name}>
-                          {index > 0 ? (
+                          {!showCardsInCollections && index > 0 ? (
                             <View
                               style={[
                                 styles.cocktailDivider,
@@ -1727,32 +1828,43 @@ export default function IngredientDetailsScreen() {
                               ]}
                             />
                           ) : null}
-                          <CocktailListRow
-                            cocktail={cocktail}
-                            ingredients={ingredients}
-                            onPress={() =>
-                              handleNavigateToCocktail(
-                                cocktail.id ?? cocktail.name,
-                              )
-                            }
-                            highlightColor={
-                              canMakeWithIngredient
-                                ? Colors.highlightSubtle
-                                : isReady
-                                  ? undefined
-                                  : Colors.highlightFaint
-                            }
-                            showMethodIcons
-                            isReady={shouldHighlightRow}
-                            missingCount={missingCount}
-                            recipeNamesCount={recipeNamesCount}
-                            ingredientLine={ingredientLine}
-                            ratingValue={ratingValue}
-                            hasComment={Boolean(getCocktailComment(cocktail).trim())}
-                            hasBrandFallback={hasBrandFallback}
-                            hasStyleFallback={hasStyleFallback}
-                            isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
-                          />
+                          {showCardsInCollections ? (
+                            <CocktailCard
+                              cocktail={cocktail}
+                              subtitle={ingredientLine}
+                              isReady={shouldHighlightRow}
+                              ratingValue={ratingValue}
+                              isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
+                              onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
+                            />
+                          ) : (
+                            <CocktailListRow
+                              cocktail={cocktail}
+                              ingredients={ingredients}
+                              onPress={() =>
+                                handleNavigateToCocktail(
+                                  cocktail.id ?? cocktail.name,
+                                )
+                              }
+                              highlightColor={
+                                canMakeWithIngredient
+                                  ? Colors.highlightSubtle
+                                  : isReady
+                                    ? undefined
+                                    : Colors.highlightFaint
+                              }
+                              showMethodIcons
+                              isReady={shouldHighlightRow}
+                              missingCount={missingCount}
+                              recipeNamesCount={recipeNamesCount}
+                              ingredientLine={ingredientLine}
+                              ratingValue={ratingValue}
+                              hasComment={Boolean(getCocktailComment(cocktail).trim())}
+                              hasBrandFallback={hasBrandFallback}
+                              hasStyleFallback={hasStyleFallback}
+                              isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
+                            />
+                          )}
                         </React.Fragment>
                       );
                     },
@@ -1869,72 +1981,72 @@ export default function IngredientDetailsScreen() {
         )}
       </ScrollView>
 
-      {isFilterMenuVisible ? (
-        <View style={styles.filterOverlay} pointerEvents="box-none">
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t("common.closeTagFilters")}
-            onPress={handleCloseFilterMenu}
-            style={styles.filterOverlayBackdrop}
-          />
-          <View
-            style={[
-              styles.filterModal,
-              {
-                backgroundColor: Colors.surface,
-                borderColor: Colors.outline,
-                shadowColor: Colors.shadow,
-              },
-            ]}
-          >
-            <View style={styles.filterModalHeader}>
-              <Text style={[styles.filterModalTitle, { color: Colors.onSurface }]}>
-                {t("ingredientDetails.filterCocktails")}
-              </Text>
-              <Pressable
-                onPress={handleCloseFilterMenu}
-                accessibilityRole="button"
-                accessibilityLabel={t("common.closeTagFilters")}
-                style={styles.filterModalCloseButton}
-              >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={20}
-                  color={Colors.onSurfaceVariant}
-                />
-              </Pressable>
-            </View>
-            <CocktailFiltersPanel
-              availableStarRatings={availableStarRatings}
-              selectedStarRatings={selectedStarRatings}
-              onToggleStarRating={handleStarRatingFilterToggle}
-              showRatingFilters={availableStarRatings.length > 0}
-              availableMethodOptions={availableMethodOptions}
-              selectedMethodIds={selectedMethodIds}
-              onToggleMethod={handleMethodFilterToggle}
-              renderMethodIcon={renderMethodIcon}
-              availableTagOptions={availableTagOptions}
-              selectedTagKeys={selectedTagKeys}
-              onToggleTag={handleTagFilterToggle}
-              onClearFilters={handleClearFilters}
-              showClearButton={isFilterActive}
-              tintColor={Colors.tint}
-              outlineColor={Colors.outline}
-              onSurfaceVariantColor={Colors.onSurfaceVariant}
-              surfaceVariantColor={Colors.surfaceVariant}
-              andLabel={t("common.and")}
-              noTagsAvailableLabel={t("common.noTagsAvailable")}
-              clearFiltersLabel={t("common.clearFilters")}
-              getMethodLabel={(methodId) => t(`cocktailMethod.${methodId}.label`)}
-              getTagLabel={(tag) => {
-                const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
-                const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
-                return (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
-              }}
-            />
-          </View>
-        </View>
-      ) : null}
+      <CocktailFilterMenu
+        visible={isFilterMenuVisible}
+        mode="modal"
+        onClose={handleCloseFilterMenu}
+        closeAccessibilityLabel={t("common.closeTagFilters")}
+        title={t("ingredientDetails.filterCocktails")}
+        panelProps={{
+          sortSectionLabel: t("cocktails.sortBy"),
+          sortSectionSuffix: sortViewModeToggle,
+          filterSectionLabel: t("common.filterBy"),
+          sortOptions: buildCocktailSortOptions({
+            selectedSortOption,
+            isSortDescending,
+            onSortOptionChange: handleSortOptionChange,
+            tintColor: Colors.tint,
+            surfaceColor: Colors.surface,
+            showRequiredCountOption: false,
+            showPartySelectedOption: true,
+            getAccessibilityLabel: (option) => {
+              switch (option) {
+                case "alphabetical":
+                  return t("cocktails.sortOptionAlphabeticalAccessibility");
+                case "partySelected":
+                  return t("cocktails.sortOptionPartySelectedAccessibility");
+                case "rating":
+                  return t("cocktails.sortOptionRatingAccessibility");
+                case "recentlyAdded":
+                  return t("cocktails.sortOptionRecentlyAddedAccessibility");
+                default:
+                  return t("cocktails.sortOptionRandomAccessibility");
+              }
+            },
+          }),
+          availableStarRatings,
+          selectedStarRatings,
+          onToggleStarRating: handleStarRatingFilterToggle,
+          showRatingFilters: availableStarRatings.length > 0,
+          availableMethodOptions,
+          selectedMethodIds,
+          onToggleMethod: handleMethodFilterToggle,
+          renderMethodIcon,
+          availableTagOptions,
+          selectedTagKeys,
+          onToggleTag: handleTagFilterToggle,
+          onClearFilters: handleClearFilters,
+          showClearButton: isFilterActive,
+          tintColor: Colors.tint,
+          outlineColor: Colors.outline,
+          onSurfaceVariantColor: Colors.onSurfaceVariant,
+          surfaceVariantColor: Colors.surfaceVariant,
+          andLabel: t("common.and"),
+          noTagsAvailableLabel: t("common.noTagsAvailable"),
+          clearFiltersLabel: t("common.clearFilters"),
+          getMethodLabel: (methodId) => t(`cocktailMethod.${methodId}.label`),
+          getTagLabel: (tag) => {
+            const isBuiltin = !isNaN(Number(tag.key)) && Number(tag.key) >= 1 && Number(tag.key) <= 11;
+            const translatedName = isBuiltin ? t(`cocktailTag.${tag.key}`) : tag.name;
+            return (isBuiltin && translatedName !== `cocktailTag.${tag.key}`) ? translatedName : tag.name;
+          },
+        }}
+        surfaceColor={Colors.surface}
+        outlineColor={Colors.outline}
+        shadowColor={Colors.shadow}
+        onSurfaceColor={Colors.onSurface}
+        onSurfaceVariantColor={Colors.onSurfaceVariant}
+      />
 
       <AppDialog
         visible={isHelpVisible}
@@ -2081,6 +2193,13 @@ const styles = StyleSheet.create({
   cocktailList: {
     marginHorizontal: -24,
   },
+  cocktailCardList: {
+    marginTop: 12,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 12,
+  },
   cocktailDivider: {
     height: StyleSheet.hairlineWidth,
   },
@@ -2215,6 +2334,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  sortViewToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  iconOnlyPill: {
+    minWidth: 53,
+    minHeight: 36,
+    paddingHorizontal: 10,
+  },
   methodIcon: {
     width: METHOD_ICON_SIZE,
     height: METHOD_ICON_SIZE,
@@ -2275,47 +2404,5 @@ const styles = StyleSheet.create({
   emptyStateActionLabel: {
     fontSize: 16,
     fontWeight: "600",
-  },
-  filterOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 24,
-  },
-  filterOverlayBackdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.22)",
-  },
-  filterModal: {
-    width: "100%",
-    maxHeight: "92%",
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    paddingTop: 12,
-    paddingRight: 16,
-    paddingBottom: 20,
-    paddingLeft: 16,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 10,
-  },
-  filterModalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  filterModalTitle: {
-    fontSize: 17,
-    fontWeight: "700",
-  },
-  filterModalCloseButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

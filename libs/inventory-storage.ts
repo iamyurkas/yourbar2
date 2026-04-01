@@ -23,6 +23,7 @@ export type InventorySnapshotV1<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   shakerSmartFilteringEnabled?: boolean;
   showTabCounters?: boolean;
+  showCardsInCollections?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
@@ -61,6 +62,7 @@ export type InventoryDeltaSnapshot<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   shakerSmartFilteringEnabled?: boolean;
   showTabCounters?: boolean;
+  showCardsInCollections?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;
@@ -100,6 +102,7 @@ export type InventoryDeltaSnapshotV3<TCocktail, TIngredient> = {
   keepScreenAwake?: boolean;
   shakerSmartFilteringEnabled?: boolean;
   showTabCounters?: boolean;
+  showCardsInCollections?: boolean;
   ratingFilterThreshold?: number;
   startScreen?: string;
   appTheme?: string;

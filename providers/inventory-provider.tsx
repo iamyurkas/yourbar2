@@ -237,6 +237,9 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
   const [showTabCounters, setShowTabCounters] = useState<boolean>(
     () => runtimeCache.showTabCounters ?? false,
   );
+  const [showCardsInCollections, setShowCardsInCollections] = useState<boolean>(
+    () => runtimeCache.showCardsInCollections ?? false,
+  );
   const [partySelectedCocktailKeys, setPartySelectedCocktailKeys] = useState<Set<string>>(() =>
     runtimeCache.partySelectedCocktailKeys
       ? new Set(runtimeCache.partySelectedCocktailKeys)
@@ -306,6 +309,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake: boolean;
       shakerSmartFilteringEnabled: boolean;
       showTabCounters: boolean;
+      showCardsInCollections: boolean;
       ratingFilterThreshold: number;
       startScreen: StartScreen;
       appTheme: AppTheme;
@@ -332,6 +336,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake(bootstrap.keepScreenAwake);
       setShakerSmartFilteringEnabled(bootstrap.shakerSmartFilteringEnabled);
       setShowTabCounters(bootstrap.showTabCounters);
+      setShowCardsInCollections(bootstrap.showCardsInCollections);
       setRatingFilterThreshold(bootstrap.ratingFilterThreshold);
       setStartScreen(bootstrap.startScreen);
       setAppTheme(bootstrap.appTheme);
@@ -369,6 +374,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     const nextKeepScreenAwake = snapshot.keepScreenAwake ?? true;
     const nextShakerSmartFilteringEnabled = snapshot.shakerSmartFilteringEnabled ?? false;
     const nextShowTabCounters = snapshot.showTabCounters ?? false;
+    const nextShowCardsInCollections = snapshot.showCardsInCollections ?? false;
     const nextRatingFilterThreshold = Math.min(
       5,
       Math.max(1, Math.round(snapshot.ratingFilterThreshold ?? 1)),
@@ -421,6 +427,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake: nextKeepScreenAwake,
       shakerSmartFilteringEnabled: nextShakerSmartFilteringEnabled,
       showTabCounters: nextShowTabCounters,
+      showCardsInCollections: nextShowCardsInCollections,
       ratingFilterThreshold: nextRatingFilterThreshold,
       startScreen: nextStartScreen,
       appTheme: nextAppTheme,
@@ -484,6 +491,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
             keepScreenAwake: true,
             shakerSmartFilteringEnabled: false,
             showTabCounters: false,
+            showCardsInCollections: false,
             ratingFilterThreshold: 1,
             startScreen: DEFAULT_START_SCREEN,
             appTheme: DEFAULT_APP_THEME,
@@ -566,6 +574,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       shakerSmartFilteringEnabled,
       showTabCounters,
+      showCardsInCollections,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -593,6 +602,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
         keepScreenAwake,
         shakerSmartFilteringEnabled,
         showTabCounters,
+        showCardsInCollections,
         ratingFilterThreshold,
         startScreen,
         appTheme,
@@ -655,6 +665,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     keepScreenAwake,
     shakerSmartFilteringEnabled,
     showTabCounters,
+    showCardsInCollections,
     ratingFilterThreshold,
     startScreen,
     appTheme,
@@ -1442,6 +1453,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       shakerSmartFilteringEnabled,
       showTabCounters,
+      showCardsInCollections,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -2389,6 +2401,10 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
     setShowTabCounters(Boolean(value));
   }, []);
 
+  const handleSetShowCardsInCollections = useCallback((value: boolean) => {
+    setShowCardsInCollections(Boolean(value));
+  }, []);
+
   const handleSetRatingFilterThreshold = useCallback((value: number) => {
     const normalized = Math.min(5, Math.max(1, Math.round(value)));
     setRatingFilterThreshold(normalized);
@@ -2802,6 +2818,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       shakerSmartFilteringEnabled,
       showTabCounters,
+      showCardsInCollections,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -2823,6 +2840,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       keepScreenAwake,
       shakerSmartFilteringEnabled,
       showTabCounters,
+      showCardsInCollections,
       ratingFilterThreshold,
       startScreen,
       appTheme,
@@ -2874,6 +2892,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       setKeepScreenAwake: handleSetKeepScreenAwake,
       setShakerSmartFilteringEnabled: handleSetShakerSmartFilteringEnabled,
       setShowTabCounters: handleSetShowTabCounters,
+      setShowCardsInCollections: handleSetShowCardsInCollections,
       setRatingFilterThreshold: handleSetRatingFilterThreshold,
       setStartScreen: handleSetStartScreen,
       setAppTheme: handleSetAppTheme,
@@ -2921,6 +2940,7 @@ export function InventoryProvider({ children }: InventoryProviderProps) {
       handleSetKeepScreenAwake,
       handleSetShakerSmartFilteringEnabled,
       handleSetShowTabCounters,
+      handleSetShowCardsInCollections,
       handleSetRatingFilterThreshold,
       handleSetStartScreen,
       handleSetAppTheme,

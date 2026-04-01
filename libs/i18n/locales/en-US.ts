@@ -510,6 +510,8 @@ export const enUSTranslations: TranslationDictionary = {
   "sideMenu.smartShakerFilteringCaption": "Hide non-matching ingredients",
   "sideMenu.showTabCounters": "Show counts",
   "sideMenu.showTabCountersCaption": "Show item counts next to tabs",
+  "sideMenu.showCardsInCollections": "Show cocktails and ingredients as cards",
+  "sideMenu.showCardsInCollectionsCaption": "Use card layout in cocktails and ingredients lists",
   "sideMenu.startingScreen": "Starting screen",
   "sideMenu.startingScreenOpen": "Open {{screen}}",
   "sideMenu.manageTags": "Manage tags",

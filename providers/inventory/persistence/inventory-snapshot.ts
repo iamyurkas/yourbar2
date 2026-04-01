@@ -167,6 +167,7 @@ export type InventorySnapshotOptions = {
   keepScreenAwake: boolean;
   shakerSmartFilteringEnabled: boolean;
   showTabCounters: boolean;
+  showCardsInCollections: boolean;
   ratingFilterThreshold: number;
   startScreen: StartScreen;
   appTheme: AppTheme;
@@ -270,6 +271,7 @@ export function buildInventorySnapshot(
     keepScreenAwake: options.keepScreenAwake,
     shakerSmartFilteringEnabled: options.shakerSmartFilteringEnabled,
     showTabCounters: options.showTabCounters,
+    showCardsInCollections: options.showCardsInCollections,
     ratingFilterThreshold: options.ratingFilterThreshold,
     startScreen: options.startScreen,
     appTheme: options.appTheme,

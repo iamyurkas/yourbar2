@@ -504,6 +504,8 @@ export const esESTranslations: TranslationDictionary = {
     "Ocultar ingredientes no coincidentes en la Coctelera",
   "sideMenu.showTabCounters": "Mostrar cantidades",
   "sideMenu.showTabCountersCaption": "Mostrar cantidades junto a las pestañas",
+  "sideMenu.showCardsInCollections": "Mostrar cócteles e ingredientes como tarjetas",
+  "sideMenu.showCardsInCollectionsCaption": "Usar diseño de tarjetas en listas de cócteles e ingredientes",
   "sideMenu.startingScreen": "Pantalla inicial",
   "sideMenu.startingScreenOpen": "Abrir {{screen}}",
   "sideMenu.manageTags": "Gestionar etiquetas",

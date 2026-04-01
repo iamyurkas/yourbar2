@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
   type LayoutRectangle,
   type NativeScrollEvent,
@@ -16,9 +17,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CARD_GAP, CARD_WIDTH } from '@/components/CardLayout';
 import { CollectionHeader } from '@/components/CollectionHeader';
 import { CollectionListSkeleton } from '@/components/CollectionListSkeleton';
 import { FabAdd } from '@/components/FabAdd';
+import { IngredientCard } from '@/components/IngredientCard';
 import { ListRow, PresenceCheck, Thumb } from '@/components/RowParts';
 import { SideMenuDrawer } from '@/components/SideMenuDrawer';
 import { TagPill } from '@/components/TagPill';
@@ -258,10 +261,11 @@ export default function IngredientsScreen() {
   const Colors = useAppColors();
   const { t, locale } = useI18n();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
-  const { ignoreGarnish, allowAllSubstitutes, showTabCounters } = useInventorySettings();
-  const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
+  const { ignoreGarnish, allowAllSubstitutes, showTabCounters, showCardsInCollections } = useInventorySettings();
+  const { toggleIngredientShopping, toggleIngredientAvailability, setShowCardsInCollections } = useInventoryActions();
   const initialListState = useMemo(() => getLastIngredientListState(), []);
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => initialListState.tab ?? getLastIngredientTab());
+  const { width: viewportWidth } = useWindowDimensions();
 
   const [query, setQuery] = useState(initialListState.query);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -882,6 +886,33 @@ export default function IngredientsScreen() {
       const isAvailable = isValidId && getEffectiveAvailability(ingredientId);
       const hasStyledVariants = meta?.hasStyledVariants ?? (isValidId && styleBaseIngredientIds.has(ingredientId));
       const hasBrandedVariants = meta?.hasBrandedVariants ?? (isValidId && brandedBaseIngredientIds.has(ingredientId));
+      if (showCardsInCollections) {
+        return (
+          <View style={styles.cardItem}>
+            <IngredientCard
+              ingredient={item}
+              isAvailable={isAvailable}
+              isOnShoppingList={isOnShoppingList}
+              showRemoveShoppingIcon={activeTab === 'shopping'}
+              subtitle={meta?.subtitleText}
+              onAvailabilityToggle={isValidId ? () => handleToggle(ingredientId) : undefined}
+              onShoppingToggle={isValidId ? () => handleShoppingToggle(ingredientId) : undefined}
+              onPress={() => {
+                const routeParam = item.id ?? item.name;
+                if (routeParam == null) {
+                  return;
+                }
+                navigateToDetailsWithReturnTo({
+                  pathname: '/ingredients/[ingredientId]',
+                  params: { ingredientId: String(routeParam) },
+                  returnToPath: '/ingredients',
+                  returnToParams: listReturnToParams,
+                });
+              }}
+            />
+          </View>
+        );
+      }
 
       return (
         <IngredientListItem
@@ -912,19 +943,24 @@ export default function IngredientsScreen() {
       styleBaseIngredientIds,
       brandedBaseIngredientIds,
       listReturnToParams,
+      showCardsInCollections,
     ],
   );
 
   const renderSeparator = useCallback(
     ({ leadingItem }: { leadingItem?: Ingredient | null }) => {
+      if (showCardsInCollections) {
+        return null;
+      }
       const ingredientId = Number(leadingItem?.id ?? -1);
       const isAvailable = getEffectiveAvailability(ingredientId);
       const backgroundColor = isAvailable ? Colors.outline : Colors.outlineVariant;
 
       return <View style={[styles.divider, { backgroundColor }]} />;
     },
-    [Colors, getEffectiveAvailability],
+    [Colors, getEffectiveAvailability, showCardsInCollections],
   );
+  const cardColumns = Math.max(1, Math.floor((viewportWidth - 32 + CARD_GAP) / (CARD_WIDTH + CARD_GAP)));
 
   const handleTabChange = useCallback((key: string) => {
     if (key === 'all' || key === 'my' || key === 'shopping') {
@@ -1001,9 +1037,37 @@ export default function IngredientsScreen() {
                 keyboardShouldPersistTaps="handled">
 
                 <View style={styles.filterSortSection}>
-                  <Text style={[styles.filterSortLabel, { color: Colors.onSurfaceVariant }]}>
-                    {t('ingredients.sortBy')}
-                  </Text>
+                  <View style={styles.filterSortHeaderRow}>
+                    <Text style={[styles.filterSortLabel, { color: Colors.onSurfaceVariant }]}>
+                      {t('ingredients.sortBy')}
+                    </Text>
+                    <View style={styles.sortViewToggle}>
+                      <TagPill
+                        label=""
+                        color={Colors.tint}
+                        selected={showCardsInCollections}
+                        icon={<MaterialCommunityIcons name="view-grid" size={16} color={showCardsInCollections ? Colors.background : Colors.tint} />}
+                        onPress={() => setShowCardsInCollections(true)}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: showCardsInCollections }}
+                        accessibilityLabel={t('sideMenu.showCardsInCollections')}
+                        androidRippleColor={`${Colors.surfaceVariant}33`}
+                        style={styles.iconOnlyPill}
+                      />
+                      <TagPill
+                        label=""
+                        color={Colors.tint}
+                        selected={!showCardsInCollections}
+                        icon={<MaterialCommunityIcons name="view-list" size={16} color={!showCardsInCollections ? Colors.background : Colors.tint} />}
+                        onPress={() => setShowCardsInCollections(false)}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: !showCardsInCollections }}
+                        accessibilityLabel={t('ingredients.sortBy')}
+                        androidRippleColor={`${Colors.surfaceVariant}33`}
+                        style={styles.iconOnlyPill}
+                      />
+                    </View>
+                  </View>
                   <ScrollView
                     horizontal
                     style={styles.filterSortScroll}
@@ -1092,13 +1156,16 @@ export default function IngredientsScreen() {
           <CollectionListSkeleton />
         ) : (
           <FlatList
+            key={showCardsInCollections ? `ingredients-cards-${cardColumns}` : 'ingredients-list'}
             ref={listRef}
             data={sortedIngredients}
             keyExtractor={keyExtractor}
-            getItemLayout={getItemLayout}
+            getItemLayout={showCardsInCollections ? undefined : getItemLayout}
             renderItem={renderItem}
             ItemSeparatorComponent={renderSeparator}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
+            numColumns={showCardsInCollections ? cardColumns : 1}
+            columnWrapperStyle={showCardsInCollections && cardColumns > 1 ? styles.cardRow : undefined}
             initialNumToRender={16}
             maxToRenderPerBatch={16}
             windowSize={7}
@@ -1169,6 +1236,21 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 80,
   },
+  cardListContent: {
+    paddingTop: 8,
+    paddingBottom: 80,
+    paddingHorizontal: 16,
+    gap: CARD_GAP,
+  },
+  cardRow: {
+    justifyContent: 'space-evenly',
+    gap: CARD_GAP,
+    width: '100%',
+  },
+  cardItem: {
+    width: CARD_WIDTH,
+    marginBottom: CARD_GAP,
+  },
   divider: {
     height: StyleSheet.hairlineWidth,
   },
@@ -1216,6 +1298,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
     alignSelf: 'flex-start',
+  },
+  filterSortHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  sortViewToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   filterSortScroll: {
     alignSelf: 'stretch',
