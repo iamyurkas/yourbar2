@@ -896,6 +896,7 @@ export default function IngredientsScreen() {
               showRemoveShoppingIcon={activeTab === 'shopping'}
               subtitle={meta?.subtitleText}
               onAvailabilityToggle={isValidId ? () => handleToggle(ingredientId) : undefined}
+              onShoppingToggle={isValidId ? () => handleShoppingToggle(ingredientId) : undefined}
               onPress={() => {
                 const routeParam = item.id ?? item.name;
                 if (routeParam == null) {

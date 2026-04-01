@@ -86,6 +86,7 @@ function CocktailCardComponent({
         .slice(0, 3),
     [cocktail.tags],
   );
+  const hasManyTags = (cocktail.tags?.length ?? 0) >= 4;
 
   return (
     <Pressable
@@ -105,7 +106,7 @@ function CocktailCardComponent({
           <MaterialCommunityIcons name="image-off-outline" size={28} color={Colors.onSurfaceVariant} />
         )}
         {methodIds.length > 0 ? (
-          <View style={[styles.overlayMethodRow, { backgroundColor: Colors.surfaceBright }]}>
+          <View style={styles.overlayMethodRow}>
             {methodIds.map((id, index) => {
               const icon = METHOD_ICON_MAP[id];
               if (!icon) {
@@ -116,7 +117,7 @@ function CocktailCardComponent({
                   <Image
                     key={`overlay-method-asset-${index}`}
                     source={icon.source}
-                    style={[styles.methodAsset, { tintColor: Colors.onSurfaceVariant }]}
+                    style={[styles.methodAsset, { tintColor: Colors.primary }]}
                     contentFit="contain"
                   />
                 );
@@ -126,18 +127,18 @@ function CocktailCardComponent({
                   key={`overlay-method-icon-${index}`}
                   name={icon.name}
                   size={14}
-                  color={Colors.onSurfaceVariant}
+                  color={Colors.primary}
                 />
               );
             })}
           </View>
         ) : null}
         {videoService ? (
-          <View style={[styles.overlayBadge, styles.overlayRight, { backgroundColor: Colors.surfaceBright }]}>
+          <View style={[styles.overlayBadge, styles.overlayRight]}>
             <MaterialCommunityIcons
               name={resolveVideoServiceIcon(videoService)}
               size={14}
-              color={Colors.tertiary}
+              color={Colors.primary}
             />
           </View>
         ) : null}
@@ -168,7 +169,7 @@ function CocktailCardComponent({
                 },
               ]}>
               <Text style={[styles.tagText, { color: Colors.onPrimary }]} numberOfLines={1}>
-                {tag.name}
+                {hasManyTags ? tag.name.slice(0, 1).toUpperCase() : tag.name}
               </Text>
             </View>
           ))}
@@ -185,13 +186,11 @@ function CocktailCardComponent({
           </View>
           <View style={styles.methodRow}>
             {isPartySelected ? (
-              <View style={[styles.ratingPill, { backgroundColor: Colors.background, borderColor: Colors.outline }]}>
-                <MaterialCommunityIcons
-                  name="party-popper"
-                  size={12}
-                  color={Colors.secondary}
-                />
-              </View>
+              <MaterialCommunityIcons
+                name="party-popper"
+                size={14}
+                color={Colors.secondary}
+              />
             ) : null}
           </View>
         </View>
@@ -236,9 +235,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    borderRadius: 999,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
   },
   content: {
     padding: 12,

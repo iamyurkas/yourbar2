@@ -15,6 +15,7 @@ type IngredientCardProps = {
   showRemoveShoppingIcon?: boolean;
   subtitle?: string;
   onAvailabilityToggle?: () => void;
+  onShoppingToggle?: () => void;
   onPress?: () => void;
 };
 
@@ -25,6 +26,7 @@ function IngredientCardComponent({
   showRemoveShoppingIcon = false,
   subtitle,
   onAvailabilityToggle,
+  onShoppingToggle,
   onPress,
 }: IngredientCardProps) {
   const Colors = useAppColors();
@@ -83,11 +85,13 @@ function IngredientCardComponent({
         </View>
         <View style={styles.footer}>
           {isOnShoppingList ? (
-            <MaterialIcons
-              name={showRemoveShoppingIcon ? 'remove-shopping-cart' : 'shopping-cart'}
-              size={16}
-              color={showRemoveShoppingIcon ? Colors.error : Colors.tint}
-            />
+            <Pressable onPress={onShoppingToggle} hitSlop={10}>
+              <MaterialIcons
+                name={showRemoveShoppingIcon ? 'remove-shopping-cart' : 'shopping-cart'}
+                size={16}
+                color={showRemoveShoppingIcon ? Colors.error : Colors.tint}
+              />
+            </Pressable>
           ) : <View />}
           <Pressable
             accessibilityRole="checkbox"
