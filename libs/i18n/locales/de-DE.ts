@@ -278,6 +278,12 @@ export const deDETranslations: TranslationDictionary = {
   "cocktailDetails.editCocktail": "Cocktail bearbeiten",
   "cocktailDetails.similarCocktails": "Ähnliche Cocktails",
   "cocktailDetails.similarCocktailsTitle": "Ähnliche Cocktails",
+  "cocktailDetails.similarFilter.all": "Alle",
+  "cocktailDetails.similarFilter.ready": "Verfügbar",
+  "cocktailDetails.similarFilter.missing": "Fehlt",
+  "cocktailDetails.similarFilter.empty": "Keine Cocktails für diesen Filter",
+  "cocktailDetails.similarViewMode.cards": "Karten",
+  "cocktailDetails.similarViewMode.list": "Liste",
   "cocktailDetails.notFound": "Cocktail nicht gefunden",
   "cocktailDetails.helpMessage":
     "Dieser Bildschirm zeigt Cocktail-Details, Zutaten und Anleitung.\n\nVerwenden Sie die Schaltflächen unter dem Cocktail, um ihn zu kopieren oder zu bearbeiten.\n\n**Zutaten-Bänder**\nDas linke Band markiert die Zutatenart:\nblau = Markenzutat,\ngelb = Stil-Zutat.\n\nDas rechte Band markiert Basisvarianten:\nblau = hat markengebundene Varianten,\ngelb = hat Stil-Varianten.",

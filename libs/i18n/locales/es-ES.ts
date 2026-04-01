@@ -271,6 +271,12 @@ export const esESTranslations: TranslationDictionary = {
   "cocktailDetails.editCocktail": "Editar cóctel",
   "cocktailDetails.similarCocktails": "Cócteles similares",
   "cocktailDetails.similarCocktailsTitle": "Cócteles similares",
+  "cocktailDetails.similarFilter.all": "Todos",
+  "cocktailDetails.similarFilter.ready": "Listos",
+  "cocktailDetails.similarFilter.missing": "Faltan",
+  "cocktailDetails.similarFilter.empty": "Ningún cóctel coincide con este filtro",
+  "cocktailDetails.similarViewMode.cards": "Tarjetas",
+  "cocktailDetails.similarViewMode.list": "Lista",
   "cocktailDetails.notFound": "Cóctel no encontrado",
   "cocktailDetails.helpMessage":
     "Esta pantalla muestra los detalles del cóctel, ingredientes e instrucciones.\n\nUsa los botones bajo el cóctel para copiarlo o editarlo.\n\n**Cintas de ingredientes**\nLa cinta izquierda indica el tipo de ingrediente:\nazul = ingrediente de marca,\namarillo = ingrediente de estilo.\n\nLa cinta derecha indica variantes de base:\nazul = tiene variantes de marca,\namarillo = tiene variantes de estilo.",

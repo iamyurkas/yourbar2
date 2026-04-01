@@ -275,6 +275,12 @@ export const ukUATranslations: TranslationDictionary = {
   "cocktailDetails.editCocktail": "Редагувати коктейль",
   "cocktailDetails.similarCocktails": "Схожі коктейлі",
   "cocktailDetails.similarCocktailsTitle": "Схожі коктейлі",
+  "cocktailDetails.similarFilter.all": "Усі",
+  "cocktailDetails.similarFilter.ready": "Готові",
+  "cocktailDetails.similarFilter.missing": "Немає інгредієнтів",
+  "cocktailDetails.similarFilter.empty": "Немає коктейлів для цього фільтра",
+  "cocktailDetails.similarViewMode.cards": "Картки",
+  "cocktailDetails.similarViewMode.list": "Рядки",
   "cocktailDetails.notFound": "Коктейль не знайдено",
   "cocktailDetails.helpMessage":
     "Цей екран показує деталі коктейлю, інгредієнти та інструкцію.\n\nВикористовуйте кнопки під коктейлем, щоб скопіювати або редагувати його.\n\n**Стрічки інгредієнтів**\nЛіва стрічка показує тип інгредієнта:\nсиня = брендовий інгредієнт,\nжовта = стильовий інгредієнт.\n\nПрава стрічка показує варіанти бази:\nсиня = є брендові варіанти,\nжовта = є стильові варіанти.",
