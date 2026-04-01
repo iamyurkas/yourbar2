@@ -893,6 +893,7 @@ export default function IngredientsScreen() {
               ingredient={item}
               isAvailable={isAvailable}
               isOnShoppingList={isOnShoppingList}
+              showRemoveShoppingIcon={activeTab === 'shopping'}
               subtitle={meta?.subtitleText}
               onAvailabilityToggle={isValidId ? () => handleToggle(ingredientId) : undefined}
               onPress={() => {

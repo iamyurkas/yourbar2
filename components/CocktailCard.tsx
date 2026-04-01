@@ -185,11 +185,13 @@ function CocktailCardComponent({
           </View>
           <View style={styles.methodRow}>
             {isPartySelected ? (
-              <MaterialCommunityIcons
-                name="party-popper"
-                size={14}
-                color={Colors.secondary}
-              />
+              <View style={[styles.ratingPill, { backgroundColor: Colors.background, borderColor: Colors.outline }]}>
+                <MaterialCommunityIcons
+                  name="party-popper"
+                  size={12}
+                  color={Colors.secondary}
+                />
+              </View>
             ) : null}
           </View>
         </View>

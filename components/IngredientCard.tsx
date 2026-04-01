@@ -12,6 +12,7 @@ type IngredientCardProps = {
   ingredient: Ingredient;
   isAvailable: boolean;
   isOnShoppingList: boolean;
+  showRemoveShoppingIcon?: boolean;
   subtitle?: string;
   onAvailabilityToggle?: () => void;
   onPress?: () => void;
@@ -21,6 +22,7 @@ function IngredientCardComponent({
   ingredient,
   isAvailable,
   isOnShoppingList,
+  showRemoveShoppingIcon = false,
   subtitle,
   onAvailabilityToggle,
   onPress,
@@ -80,7 +82,13 @@ function IngredientCardComponent({
           ))}
         </View>
         <View style={styles.footer}>
-          {isOnShoppingList ? <MaterialIcons name="shopping-cart" size={16} color={Colors.tint} /> : <View />}
+          {isOnShoppingList ? (
+            <MaterialIcons
+              name={showRemoveShoppingIcon ? 'remove-shopping-cart' : 'shopping-cart'}
+              size={16}
+              color={showRemoveShoppingIcon ? Colors.error : Colors.tint}
+            />
+          ) : <View />}
           <Pressable
             accessibilityRole="checkbox"
             accessibilityState={{ checked: isAvailable }}
