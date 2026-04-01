@@ -61,7 +61,7 @@ function CocktailCardComponent({
         style={[
           styles.content,
           {
-            backgroundColor: isReady ? 'rgba(70, 170, 255, 0.16)' : Colors.surface,
+            backgroundColor: isReady ? Colors.highlightSubtle : Colors.surface,
           },
         ]}>
         <Text style={[styles.title, { color: Colors.onSurface }]} numberOfLines={2}>
