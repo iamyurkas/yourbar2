@@ -143,7 +143,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.22)',
   },
   modal: {
-    width: '100%',
+    minWidth: 280,
+    maxWidth: '92%',
     maxHeight: '92%',
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
