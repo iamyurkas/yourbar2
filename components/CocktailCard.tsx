@@ -82,8 +82,7 @@ function CocktailCardComponent({
     () =>
       (cocktail.tags ?? [])
         .map((tag) => ({ name: tag?.name ?? '', color: tag?.color }))
-        .filter((tag) => tag.name.length > 0)
-        .slice(0, 3),
+        .filter((tag) => tag.name.length > 0),
     [cocktail.tags],
   );
   const hasManyTags = (cocktail.tags?.length ?? 0) >= 4;
