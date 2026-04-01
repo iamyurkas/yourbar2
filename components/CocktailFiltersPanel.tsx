@@ -74,7 +74,8 @@ export function CocktailFiltersPanel({
   getMethodLabel,
 }: CocktailFiltersPanelProps) {
   const showMethodFilters = availableMethodOptions.length > 0;
-  const showSortOptions = Boolean(sortSectionLabel && sortOptions && sortOptions.length > 0);
+  const hasSortOptions = Boolean(sortOptions && sortOptions.length > 0);
+  const showSortSection = Boolean(sortSectionLabel || sortSectionSuffix);
 
   return (
     <ScrollView
@@ -82,7 +83,7 @@ export function CocktailFiltersPanel({
       showsVerticalScrollIndicator
       keyboardShouldPersistTaps="handled">
       <View style={styles.filterMenuBody}>
-        {showSortOptions ? (
+        {showSortSection ? (
           <View style={styles.filterSortSection}>
             <View style={styles.filterSortHeaderRow}>
               <Text style={[styles.filterSortLabel, { color: onSurfaceVariantColor }]}>
@@ -90,31 +91,33 @@ export function CocktailFiltersPanel({
               </Text>
               {sortSectionSuffix}
             </View>
-            <ScrollView
-              horizontal
-              style={styles.filterSortScroll}
-              contentContainerStyle={styles.filterSortRow}
-              showsHorizontalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled">
-              {(sortOptions ?? []).map((option) => (
-                <TagPill
-                  key={option.key}
-                  label={option.label}
-                  color={tintColor}
-                  selected={option.selected}
-                  icon={option.icon}
-                  onPress={option.onPress}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: option.selected }}
-                  accessibilityLabel={option.accessibilityLabel}
-                  androidRippleColor={`${surfaceVariantColor}33`}
-                  style={option.label ? undefined : styles.iconOnlyPill}
-                />
-              ))}
-            </ScrollView>
+            {hasSortOptions ? (
+              <ScrollView
+                horizontal
+                style={styles.filterSortScroll}
+                contentContainerStyle={styles.filterSortRow}
+                showsHorizontalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled">
+                {(sortOptions ?? []).map((option) => (
+                  <TagPill
+                    key={option.key}
+                    label={option.label}
+                    color={tintColor}
+                    selected={option.selected}
+                    icon={option.icon}
+                    onPress={option.onPress}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: option.selected }}
+                    accessibilityLabel={option.accessibilityLabel}
+                    androidRippleColor={`${surfaceVariantColor}33`}
+                    style={option.label ? undefined : styles.iconOnlyPill}
+                  />
+                ))}
+              </ScrollView>
+            ) : null}
           </View>
         ) : null}
-        {showSortOptions && filterSectionLabel ? (
+        {showSortSection && filterSectionLabel ? (
           <Text style={[styles.filterSortLabel, styles.filterByLabel, { color: onSurfaceVariantColor }]}>
             {filterSectionLabel}
           </Text>
