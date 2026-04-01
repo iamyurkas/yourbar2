@@ -3015,5 +3015,9 @@
   "cocktail.638.name": "Toffee Negroni",
   "cocktail.638.synonyms": "",
   "cocktail.638.description": "A rich, bittersweet Negroni-style sipper where **aged rum**, **Amontillado sherry**, and **Aperol** meet in equal parts, delivering orange zest brightness and a subtle toffee-like finish.",
-  "cocktail.638.instructions": "1. Add 30 ml of **aged rum**, 30 ml of **Amontillado sherry**, and 30 ml of **Aperol** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** peel over the drink and use it as a garnish."
+  "cocktail.638.instructions": "1. Add 30 ml of **aged rum**, 30 ml of **Amontillado sherry**, and 30 ml of **Aperol** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+  "cocktail.639.name": "When the Smoke Cleared",
+  "cocktail.639.synonyms": "When The Smoke Cleared",
+  "cocktail.639.description": "A smoky, tangy mezcal sour where **mezcal** leads while **Aperol**, **ginger syrup**, **lime juice**, **pineapple juice**, and a touch of **saline solution** add balance and depth.",
+  "cocktail.639.instructions": "1. Add 45 ml of **mezcal**, 15 ml of **Aperol**, 7.5 ml of **ginger syrup**, 22.5 ml of **lime juice**, 22.5 ml of **pineapple juice**, and 2 drops of **saline solution (4:1)** into a shaker.\n2. Fill the shaker with **ice** and shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.\n4. Garnish with skewered **ginger candy**."
 }
