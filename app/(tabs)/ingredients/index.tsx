@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useScrollToTop } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
@@ -262,7 +262,7 @@ export default function IngredientsScreen() {
   const { t, locale } = useI18n();
   const { cocktails, ingredients, availableIngredientIds, shoppingIngredientIds, loading } = useInventoryData();
   const { ignoreGarnish, allowAllSubstitutes, showTabCounters, showCardsInCollections } = useInventorySettings();
-  const { toggleIngredientShopping, toggleIngredientAvailability } = useInventoryActions();
+  const { toggleIngredientShopping, toggleIngredientAvailability, setShowCardsInCollections } = useInventoryActions();
   const initialListState = useMemo(() => getLastIngredientListState(), []);
   const [activeTab, setActiveTab] = useState<IngredientTabKey>(() => initialListState.tab ?? getLastIngredientTab());
   const { width: viewportWidth } = useWindowDimensions();
@@ -1037,9 +1037,37 @@ export default function IngredientsScreen() {
                 keyboardShouldPersistTaps="handled">
 
                 <View style={styles.filterSortSection}>
-                  <Text style={[styles.filterSortLabel, { color: Colors.onSurfaceVariant }]}>
-                    {t('ingredients.sortBy')}
-                  </Text>
+                  <View style={styles.filterSortHeaderRow}>
+                    <Text style={[styles.filterSortLabel, { color: Colors.onSurfaceVariant }]}>
+                      {t('ingredients.sortBy')}
+                    </Text>
+                    <View style={styles.sortViewToggle}>
+                      <TagPill
+                        label=""
+                        color={Colors.tint}
+                        selected={showCardsInCollections}
+                        icon={<MaterialCommunityIcons name="view-grid" size={16} color={showCardsInCollections ? Colors.background : Colors.tint} />}
+                        onPress={() => setShowCardsInCollections(true)}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: showCardsInCollections }}
+                        accessibilityLabel={t('sideMenu.showCardsInCollections')}
+                        androidRippleColor={`${Colors.surfaceVariant}33`}
+                        style={styles.iconOnlyPill}
+                      />
+                      <TagPill
+                        label=""
+                        color={Colors.tint}
+                        selected={!showCardsInCollections}
+                        icon={<MaterialCommunityIcons name="view-list" size={16} color={!showCardsInCollections ? Colors.background : Colors.tint} />}
+                        onPress={() => setShowCardsInCollections(false)}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: !showCardsInCollections }}
+                        accessibilityLabel={t('ingredients.sortBy')}
+                        androidRippleColor={`${Colors.surfaceVariant}33`}
+                        style={styles.iconOnlyPill}
+                      />
+                    </View>
+                  </View>
                   <ScrollView
                     horizontal
                     style={styles.filterSortScroll}
@@ -1128,6 +1156,7 @@ export default function IngredientsScreen() {
           <CollectionListSkeleton />
         ) : (
           <FlatList
+            key={showCardsInCollections ? `ingredients-cards-${cardColumns}` : 'ingredients-list'}
             ref={listRef}
             data={sortedIngredients}
             keyExtractor={keyExtractor}
@@ -1269,6 +1298,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
     alignSelf: 'flex-start',
+  },
+  filterSortHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  sortViewToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   filterSortScroll: {
     alignSelf: 'stretch',

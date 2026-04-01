@@ -40,9 +40,11 @@ import { useAppColors } from "@/constants/theme";
 import { buildAmazonIngredientUrl } from "@/libs/amazon-links";
 import { AMAZON_STORES } from "@/libs/amazon-stores";
 import { summariseCocktailAvailability } from "@/libs/cocktail-availability";
+import { compareOptionalGlobalAlphabet } from "@/libs/global-sort";
 import { getPluralCategory } from "@/libs/i18n/plural";
 import { useI18n } from "@/libs/i18n/use-i18n";
 import { resolveImageSource } from "@/libs/image-source";
+import { buildCocktailSortOptions, type CocktailSortOption } from "@/libs/cocktail-sort-options";
 import {
   createIngredientLookup,
   getVisibleIngredientIdsForCocktail,
@@ -123,6 +125,7 @@ export default function IngredientDetailsScreen() {
     partySelectedCocktailKeys,
     effectiveAmazonStore,
     showCardsInCollections,
+    setShowCardsInCollections,
   } = useInventory();
 
   const ingredient = useResolvedIngredient(
@@ -368,6 +371,8 @@ export default function IngredientDetailsScreen() {
   const [selectedTagKeys, setSelectedTagKeys] = useState<Set<string>>(() => new Set());
   const [selectedMethodIds, setSelectedMethodIds] = useState<Set<CocktailMethod["id"]>>(() => new Set());
   const [selectedStarRatings, setSelectedStarRatings] = useState<Set<number>>(() => new Set());
+  const [selectedSortOption, setSelectedSortOption] = useState<CocktailSortOption>("alphabetical");
+  const [isSortDescending, setSortDescending] = useState(false);
 
   const availableTagOptions = useMemo<TagOption[]>(
     () => buildTagOptions(cocktailsWithIngredient, (cocktail) => cocktail.tags ?? [], BUILTIN_COCKTAIL_TAGS, defaultTagColor),
@@ -436,9 +441,58 @@ export default function IngredientDetailsScreen() {
     });
   }, [cocktailsWithIngredient, getCocktailRating, selectedMethodIds, selectedStarRatings, selectedTagKeys]);
 
+  const sortedCocktails = useMemo(() => {
+    const filtered = [...filteredCocktails];
+    if (selectedSortOption === "random") {
+      const ranked = filtered.map((cocktail) => ({ cocktail, rank: Math.random() }));
+      ranked.sort((left, right) => {
+        const delta = left.rank - right.rank;
+        if (delta !== 0) {
+          return isSortDescending ? -delta : delta;
+        }
+
+        const fallback = compareOptionalGlobalAlphabet(left.cocktail.name ?? "", right.cocktail.name ?? "");
+        return isSortDescending ? -fallback : fallback;
+      });
+      return ranked.map((item) => item.cocktail);
+    }
+
+    filtered.sort((left, right) => {
+      const leftName = left.name ?? "";
+      const rightName = right.name ?? "";
+
+      let result = 0;
+      if (selectedSortOption === "alphabetical") {
+        result = compareOptionalGlobalAlphabet(leftName, rightName);
+      } else if (selectedSortOption === "partySelected") {
+        const leftParty = partySelectedCocktailKeys.has(String(left.id ?? left.name)) ? 1 : 0;
+        const rightParty = partySelectedCocktailKeys.has(String(right.id ?? right.name)) ? 1 : 0;
+        result = leftParty !== rightParty
+          ? rightParty - leftParty
+          : compareOptionalGlobalAlphabet(leftName, rightName);
+      } else if (selectedSortOption === "rating") {
+        const leftRating = getCocktailRating(left);
+        const rightRating = getCocktailRating(right);
+        result = leftRating !== rightRating
+          ? rightRating - leftRating
+          : compareOptionalGlobalAlphabet(leftName, rightName);
+      } else {
+        const leftId = Number(left.id ?? -1);
+        const rightId = Number(right.id ?? -1);
+        result = leftId !== rightId
+          ? rightId - leftId
+          : compareOptionalGlobalAlphabet(leftName, rightName);
+      }
+
+      return isSortDescending ? -result : result;
+    });
+
+    return filtered;
+  }, [filteredCocktails, getCocktailRating, isSortDescending, partySelectedCocktailKeys, selectedSortOption]);
+
   const cocktailEntries = useMemo(
     () =>
-      filteredCocktails.map((cocktail) => {
+      sortedCocktails.map((cocktail) => {
         const availability = summariseCocktailAvailability(
           cocktail,
           effectiveAvailableIngredientIds,
@@ -479,7 +533,7 @@ export default function IngredientDetailsScreen() {
     [
       allowAllSubstitutes,
       effectiveAvailableIngredientIds,
-      filteredCocktails,
+      sortedCocktails,
       getCocktailRating,
       ignoreGarnish,
       ingredientLookup,
@@ -497,13 +551,15 @@ export default function IngredientDetailsScreen() {
 
   useEffect(() => {
     setVisibleCocktailCount(COCKTAIL_PAGE_SIZE);
-  }, [numericIngredientId, selectedMethodIds, selectedStarRatings, selectedTagKeys]);
+  }, [isSortDescending, numericIngredientId, selectedMethodIds, selectedSortOption, selectedStarRatings, selectedTagKeys]);
 
   useEffect(() => {
     setFilterMenuVisible(false);
     setSelectedTagKeys(new Set());
     setSelectedMethodIds(new Set());
     setSelectedStarRatings(new Set());
+    setSelectedSortOption("alphabetical");
+    setSortDescending(false);
   }, [numericIngredientId]);
 
   const visibleCocktailEntries = useMemo(
@@ -514,6 +570,35 @@ export default function IngredientDetailsScreen() {
   const hasMoreCocktails = visibleCocktailCount < cocktailEntries.length;
   const shouldShowCocktailFilterButton = cocktailsWithIngredient.length > COCKTAIL_FILTER_MIN_COUNT;
   const isFilterActive = selectedTagKeys.size > 0 || selectedMethodIds.size > 0 || selectedStarRatings.size > 0;
+
+  const sortViewModeToggle = useMemo(() => (
+    <View style={styles.sortViewToggle}>
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-grid" size={16} color={showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(true)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: showCardsInCollections }}
+        accessibilityLabel={t("sideMenu.showCardsInCollections")}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={!showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-list" size={16} color={!showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(false)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: !showCardsInCollections }}
+        accessibilityLabel={t("ingredientDetails.filterCocktails")}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+    </View>
+  ), [Colors.background, Colors.surfaceVariant, Colors.tint, setShowCardsInCollections, showCardsInCollections, t]);
 
 
 
@@ -921,7 +1006,17 @@ export default function IngredientDetailsScreen() {
     setSelectedTagKeys((previous) => (previous.size === 0 ? previous : new Set<string>()));
     setSelectedMethodIds((previous) => (previous.size === 0 ? previous : new Set<CocktailMethod["id"]>()));
     setSelectedStarRatings((previous) => (previous.size === 0 ? previous : new Set<number>()));
+    setSelectedSortOption("alphabetical");
+    setSortDescending(false);
   }, []);
+
+  const handleSortOptionChange = useCallback(
+    (option: CocktailSortOption, descending: boolean) => {
+      setSelectedSortOption(option);
+      setSortDescending(descending);
+    },
+    [],
+  );
 
   const renderMethodIcon = useCallback(
     (methodId: CocktailMethod["id"], selected: boolean) => {
@@ -1918,6 +2013,31 @@ export default function IngredientDetailsScreen() {
               </Pressable>
             </View>
             <CocktailFiltersPanel
+              sortSectionLabel={t("cocktails.sortBy")}
+              sortSectionSuffix={sortViewModeToggle}
+              sortOptions={buildCocktailSortOptions({
+                selectedSortOption,
+                isSortDescending,
+                onSortOptionChange: handleSortOptionChange,
+                tintColor: Colors.tint,
+                surfaceColor: Colors.surface,
+                showRequiredCountOption: false,
+                showPartySelectedOption: true,
+                getAccessibilityLabel: (option) => {
+                  switch (option) {
+                    case "alphabetical":
+                      return t("cocktails.sortOptionAlphabeticalAccessibility");
+                    case "partySelected":
+                      return t("cocktails.sortOptionPartySelectedAccessibility");
+                    case "rating":
+                      return t("cocktails.sortOptionRatingAccessibility");
+                    case "recentlyAdded":
+                      return t("cocktails.sortOptionRecentlyAddedAccessibility");
+                    default:
+                      return t("cocktails.sortOptionRandomAccessibility");
+                  }
+                },
+              })}
               availableStarRatings={availableStarRatings}
               selectedStarRatings={selectedStarRatings}
               onToggleStarRating={handleStarRatingFilterToggle}
@@ -2234,6 +2354,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+  },
+  sortViewToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  iconOnlyPill: {
+    minWidth: 53,
+    minHeight: 36,
+    paddingHorizontal: 10,
   },
   methodIcon: {
     width: METHOD_ICON_SIZE,
