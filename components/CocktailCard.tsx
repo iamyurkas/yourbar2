@@ -10,6 +10,7 @@ import { resolveImageSource } from '@/libs/image-source';
 import type { Cocktail } from '@/providers/inventory-provider';
 import { AppImage } from './AppImage';
 import { CARD_WIDTH } from './CardLayout';
+import { PresenceCheck } from './RowParts';
 
 type CocktailCardProps = {
   cocktail: Cocktail;
@@ -17,6 +18,8 @@ type CocktailCardProps = {
   isReady: boolean;
   ratingValue?: number;
   isPartySelected?: boolean;
+  showPartySelectionControl?: boolean;
+  onPartySelectionToggle?: () => void;
   onPress?: () => void;
 };
 
@@ -59,6 +62,8 @@ function CocktailCardComponent({
   isReady,
   ratingValue = 0,
   isPartySelected = false,
+  showPartySelectionControl = false,
+  onPartySelectionToggle,
   onPress,
 }: CocktailCardProps) {
   const Colors = useAppColors();
@@ -184,7 +189,9 @@ function CocktailCardComponent({
             ) : null}
           </View>
           <View style={styles.methodRow}>
-            {isPartySelected ? (
+            {showPartySelectionControl && onPartySelectionToggle ? (
+              <PresenceCheck checked={isPartySelected} onToggle={onPartySelectionToggle} />
+            ) : isPartySelected ? (
               <MaterialCommunityIcons
                 name="party-popper"
                 size={14}

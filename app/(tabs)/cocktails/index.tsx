@@ -974,6 +974,8 @@ export default function CocktailsScreen() {
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
               isPartySelected={isPartyCocktail}
+              showPartySelectionControl={isPartyView}
+              onPartySelectionToggle={isPartyView ? () => handlePartySelectionToggle(item) : undefined}
               onPress={() => handleSelectCocktail(item)}
             />
           </View>
