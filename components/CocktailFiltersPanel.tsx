@@ -11,6 +11,7 @@ type CocktailFilterMethodOption = {
 
 type CocktailFiltersPanelProps = {
   sortSectionLabel?: string;
+  sortSectionSuffix?: React.ReactNode;
   filterSectionLabel?: string;
   sortOptions?: {
     key: string;
@@ -46,6 +47,7 @@ type CocktailFiltersPanelProps = {
 
 export function CocktailFiltersPanel({
   sortSectionLabel,
+  sortSectionSuffix,
   filterSectionLabel,
   sortOptions,
   availableStarRatings,
@@ -82,9 +84,12 @@ export function CocktailFiltersPanel({
       <View style={styles.filterMenuBody}>
         {showSortOptions ? (
           <View style={styles.filterSortSection}>
-            <Text style={[styles.filterSortLabel, { color: onSurfaceVariantColor }]}>
-              {sortSectionLabel}
-            </Text>
+            <View style={styles.filterSortHeaderRow}>
+              <Text style={[styles.filterSortLabel, { color: onSurfaceVariantColor }]}>
+                {sortSectionLabel}
+              </Text>
+              {sortSectionSuffix}
+            </View>
             <ScrollView
               horizontal
               style={styles.filterSortScroll}
@@ -230,6 +235,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.6,
     textTransform: 'uppercase',
+  },
+  filterSortHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
   },
   filterSortScroll: {
     alignSelf: 'stretch',
