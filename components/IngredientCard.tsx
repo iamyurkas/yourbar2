@@ -56,11 +56,10 @@ function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, on
               style={[
                 styles.tagChip,
                 {
-                  backgroundColor: `${tag.color ?? Colors.secondary}22`,
-                  borderColor: tag.color ?? Colors.secondary,
+                  backgroundColor: tag.color ?? Colors.secondary,
                 },
               ]}>
-              <Text style={[styles.tagText, { color: tag.color ?? Colors.secondary }]} numberOfLines={1}>
+              <Text style={[styles.tagText, { color: Colors.onPrimary }]} numberOfLines={1}>
                 {tag.name}
               </Text>
             </View>
@@ -113,7 +112,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tagChip: {
-    borderWidth: 1,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 2,

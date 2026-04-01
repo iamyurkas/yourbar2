@@ -61,7 +61,7 @@ function CocktailCardComponent({
         style={[
           styles.content,
           {
-            backgroundColor: isReady ? Colors.highlightSubtle : Colors.surface,
+            backgroundColor: isReady ? Colors.highlightFaint : Colors.surface,
           },
         ]}>
         <Text style={[styles.title, { color: Colors.onSurface }]} numberOfLines={2}>
@@ -79,11 +79,10 @@ function CocktailCardComponent({
               style={[
                 styles.tagChip,
                 {
-                  backgroundColor: `${tag.color ?? Colors.primary}22`,
-                  borderColor: tag.color ?? Colors.primary,
+                  backgroundColor: tag.color ?? Colors.primary,
                 },
               ]}>
-              <Text style={[styles.tagText, { color: tag.color ?? Colors.primary }]} numberOfLines={1}>
+              <Text style={[styles.tagText, { color: Colors.onPrimary }]} numberOfLines={1}>
                 {tag.name}
               </Text>
             </View>
@@ -147,7 +146,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tagChip: {
-    borderWidth: 1,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 2,
