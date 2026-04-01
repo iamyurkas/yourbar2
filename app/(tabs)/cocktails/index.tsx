@@ -1349,7 +1349,7 @@ export default function CocktailsScreen() {
             ItemSeparatorComponent={renderMySeparator}
             contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
             numColumns={showCardsInCollections ? cardColumns : 1}
-            columnWrapperStyle={showCardsInCollections ? styles.cardRow : undefined}
+            columnWrapperStyle={showCardsInCollections && cardColumns > 1 ? styles.cardRow : undefined}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
             windowSize={5}
@@ -1375,7 +1375,7 @@ export default function CocktailsScreen() {
             ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={showCardsInCollections ? styles.cardListContent : styles.listContent}
             numColumns={showCardsInCollections ? cardColumns : 1}
-            columnWrapperStyle={showCardsInCollections ? styles.cardRow : undefined}
+            columnWrapperStyle={showCardsInCollections && cardColumns > 1 ? styles.cardRow : undefined}
             initialNumToRender={12}
             maxToRenderPerBatch={12}
             windowSize={5}
