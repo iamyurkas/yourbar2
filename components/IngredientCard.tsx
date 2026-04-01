@@ -7,15 +7,17 @@ import { resolveImageSource } from '@/libs/image-source';
 import type { Ingredient } from '@/providers/inventory-provider';
 import { AppImage } from './AppImage';
 import { CARD_WIDTH } from './CardLayout';
+import { PresenceCheck } from './RowParts';
 
 type IngredientCardProps = {
   ingredient: Ingredient;
   isAvailable: boolean;
   isOnShoppingList: boolean;
+  subtitle?: string;
   onPress?: () => void;
 };
 
-function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, onPress }: IngredientCardProps) {
+function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, subtitle, onPress }: IngredientCardProps) {
   const Colors = useAppColors();
   const imageSource = useMemo(() => resolveImageSource(ingredient.photoUri), [ingredient.photoUri]);
   const tags = useMemo(
@@ -49,6 +51,11 @@ function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, on
         <Text numberOfLines={2} style={[styles.title, { color: Colors.onSurface }]}>
           {ingredient.name}
         </Text>
+        {subtitle ? (
+          <Text numberOfLines={2} style={[styles.subtitle, { color: Colors.onSurfaceVariant }]}>
+            {subtitle}
+          </Text>
+        ) : null}
         <View style={styles.tagRow}>
           {tags.map((tag, index) => (
             <View
@@ -66,13 +73,8 @@ function IngredientCardComponent({ ingredient, isAvailable, isOnShoppingList, on
           ))}
         </View>
         <View style={styles.footer}>
-          {isOnShoppingList ? (
-            <MaterialIcons name="shopping-cart" size={16} color={Colors.tint} />
-          ) : isAvailable ? (
-            <MaterialCommunityIcons name="check-circle" size={16} color={Colors.tint} />
-          ) : (
-            <MaterialCommunityIcons name="close-circle-outline" size={16} color={Colors.error} />
-          )}
+          {isOnShoppingList ? <MaterialIcons name="shopping-cart" size={16} color={Colors.tint} /> : <View />}
+          <PresenceCheck checked={isAvailable} />
         </View>
       </View>
     </Pressable>
@@ -111,6 +113,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 6,
   },
+  subtitle: {
+    fontSize: 12,
+  },
   tagChip: {
     borderRadius: 999,
     paddingHorizontal: 8,
@@ -124,5 +129,7 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 'auto',
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

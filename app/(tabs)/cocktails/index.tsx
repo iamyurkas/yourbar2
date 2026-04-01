@@ -1455,8 +1455,9 @@ const styles = StyleSheet.create({
     gap: CARD_GAP,
   },
   cardRow: {
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     gap: CARD_GAP,
+    width: '100%',
   },
   cardItem: {
     width: CARD_WIDTH,

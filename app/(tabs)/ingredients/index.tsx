@@ -893,6 +893,7 @@ export default function IngredientsScreen() {
               ingredient={item}
               isAvailable={isAvailable}
               isOnShoppingList={isOnShoppingList}
+              subtitle={meta?.subtitleText}
               onPress={() => {
                 const routeParam = item.id ?? item.name;
                 if (routeParam == null) {
@@ -1210,8 +1211,9 @@ const styles = StyleSheet.create({
     gap: CARD_GAP,
   },
   cardRow: {
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     gap: CARD_GAP,
+    width: '100%',
   },
   cardItem: {
     width: CARD_WIDTH,
