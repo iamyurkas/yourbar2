@@ -6,8 +6,8 @@ import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { AppImage } from './AppImage';
 
-export const CARD_WIDTH = 160;
-export const CARD_GAP = 12;
+export const CARD_WIDTH = 170;
+export const CARD_GAP = 8;
 
 export type CardTag = {
   name: string;
@@ -25,16 +25,19 @@ function CardFrameComponent({ isActive, onPress, children }: CardFrameProps) {
 
   return (
     <Pressable
-      style={[
-        styles.card,
-        {
-          backgroundColor: Colors.surface,
-          borderColor: isActive ? Colors.tint : Colors.outlineVariant,
-        },
-      ]}
+      style={styles.cardShell}
       onPress={onPress}
       accessibilityRole={onPress ? 'button' : undefined}>
-      {children}
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: Colors.surface,
+            borderColor: isActive ? Colors.tint : Colors.outlineVariant,
+          },
+        ]}>
+        {children}
+      </View>
     </Pressable>
   );
 }
@@ -140,10 +143,22 @@ function CardCheckComponent({ checked, onPress }: CardCheckProps) {
 export const CardCheck = memo(CardCheckComponent);
 
 export const styles = StyleSheet.create({
-  card: {
+  cardShell: {
     width: CARD_WIDTH,
     maxWidth: CARD_WIDTH,
     minHeight: 250,
+    borderRadius: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  card: {
+    flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
     overflow: 'hidden',
