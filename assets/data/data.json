@@ -22275,6 +22275,7 @@
       "synonyms": ["Becherovka Last Word", "Czech Last Word"],
       "description": "The larkwood is a herbal \"sour\" cocktail created by bartender Jason Clapham of Clapham Cocktails. It is a modern riff on the classic Last Word, substituting **green Chartreuse** with the czech spiced herbal liqueur **Becherovka**.",
       "instructions": "1. Add 30 ml of **gin**, 22.5 ml of **Becherovka**, 22.5 ml of **Luxardo maraschino**, and 22.5 ml of **lime juice** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Strain into a chilled glass.\n5. Garnish with **lime** wheel.",
+      "video": "https://www.youtube.com/shorts/Anam5ZqDYWM",
       "photoUri": "assets/cocktails/341-larkwood.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["shake"],
