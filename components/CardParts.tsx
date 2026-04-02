@@ -6,8 +6,8 @@ import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import { AppImage } from './AppImage';
 
-export const CARD_WIDTH = 160;
-export const CARD_GAP = 12;
+export const CARD_WIDTH = 170;
+export const CARD_GAP = 8;
 
 export type CardTag = {
   name: string;
