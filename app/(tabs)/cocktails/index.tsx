@@ -972,6 +972,7 @@ export default function CocktailsScreen() {
             <CocktailCard
               cocktail={item}
               subtitle={availability.ingredientLine}
+              subtitleNumberOfLines={availability.ingredientLineMode === 'missing-count' ? 1 : 2}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
               isPartySelected={isPartyCocktail}
@@ -1110,6 +1111,7 @@ export default function CocktailsScreen() {
             <CocktailCard
               cocktail={item.cocktail}
               subtitle={availability.ingredientLine}
+              subtitleNumberOfLines={availability.ingredientLineMode === 'missing-count' ? 1 : 2}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item.cocktail)}
               isPartySelected={isPartyCocktail}

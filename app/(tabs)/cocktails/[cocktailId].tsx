@@ -877,6 +877,7 @@ export default function CocktailDetailsScreen() {
         missingCount: availability.missingCount,
         recipeNamesCount: availability.recipeNames.length,
         ingredientLine: availability.ingredientLine,
+        ingredientLineMode: availability.ingredientLineMode,
         hasBrandFallback: availability.hasBrandFallback,
         hasStyleFallback: availability.hasStyleFallback,
         ratingValue: getCocktailRating(candidate),
@@ -2389,6 +2390,7 @@ export default function CocktailDetailsScreen() {
                               missingCount,
                               recipeNamesCount,
                               ingredientLine,
+                              ingredientLineMode,
                               hasBrandFallback,
                               hasStyleFallback,
                               ratingValue,
@@ -2408,6 +2410,7 @@ export default function CocktailDetailsScreen() {
                                 <CocktailCard
                                   cocktail={similarCocktail}
                                   subtitle={ingredientLine}
+                                  subtitleNumberOfLines={ingredientLineMode === 'missing-count' ? 1 : 2}
                                   isReady={isReady}
                                   ratingValue={ratingValue}
                                   isPartySelected={partySelectedCocktailKeys.has(

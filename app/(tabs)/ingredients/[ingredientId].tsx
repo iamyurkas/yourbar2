@@ -523,6 +523,7 @@ export default function IngredientDetailsScreen() {
           missingCount: availability.missingCount,
           recipeNamesCount: availability.recipeNames.length,
           ingredientLine: availability.ingredientLine,
+          ingredientLineMode: availability.ingredientLineMode,
           hasBrandFallback: availability.hasBrandFallback,
           hasStyleFallback: availability.hasStyleFallback,
           canMakeWithIngredient:
@@ -1808,7 +1809,7 @@ export default function IngredientDetailsScreen() {
               {cocktailEntries.length ? (
                 <View style={showCardsInCollections ? styles.cocktailCardList : styles.cocktailList}>
                   {visibleCocktailEntries.map(
-                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ratingValue, hasBrandFallback, hasStyleFallback, canMakeWithIngredient }, index) => {
+                    ({ cocktail, isReady, missingCount, recipeNamesCount, ingredientLine, ingredientLineMode, ratingValue, hasBrandFallback, hasStyleFallback, canMakeWithIngredient }, index) => {
                       const shouldHighlightRow = isReady || canMakeWithIngredient;
                       const previousReady =
                         index > 0
@@ -1832,6 +1833,7 @@ export default function IngredientDetailsScreen() {
                             <CocktailCard
                               cocktail={cocktail}
                               subtitle={ingredientLine}
+                              subtitleNumberOfLines={ingredientLineMode === 'missing-count' ? 1 : 2}
                               isReady={shouldHighlightRow}
                               ratingValue={ratingValue}
                               isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
