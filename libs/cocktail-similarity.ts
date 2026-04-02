@@ -18,7 +18,7 @@ type ScoredCocktail = {
 };
 
 const DEFAULT_THRESHOLD = 0.41;
-const DEFAULT_MAX_RESULTS = 10;
+const DEFAULT_MAX_RESULTS = 20;
 const MIN_TOKEN_LENGTH = 3;
 const GENERIC_SYNONYM_TOKENS = new Set([
   "cocktail",
