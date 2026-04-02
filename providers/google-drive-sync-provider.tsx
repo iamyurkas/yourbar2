@@ -151,8 +151,8 @@ async function getDeviceId(): Promise<string> {
     }
   }
 
-  if (Application.androidId) {
-    generated = Application.androidId;
+  if (Application.getAndroidId) {
+    generated = await Application.getAndroidId();
   } else {
     try {
       generated = await Application.getIosIdForVendorAsync();

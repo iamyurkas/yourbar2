@@ -171,7 +171,7 @@ function applyCocktailTagDeltaToInventoryState(
       return cocktail;
     }
 
-    const normalizedTags = sanitizeCocktailTagInput(deltaValue ?? undefined);
+    const normalizedTags = sanitizeCocktailTagInput(deltaValue as CocktailTag[] | null | undefined);
     const existingTags = sanitizeCocktailTagInput(cocktail.tags as CocktailTag[] | undefined);
     if (JSON.stringify(existingTags ?? []) === JSON.stringify(normalizedTags ?? [])) {
       return cocktail;
