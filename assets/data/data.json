@@ -40488,10 +40488,11 @@
       "name": "Jäger Negroni",
       "description": "A lightly spicy **Negroni** perfectly suited as an after-dinner digestif. **Jägermeister** adds an interesting blend of herbal flavours which combine with the **gin**'s herbals to create a burst of tastes.",
       "instructions": "1. Add 22.5 ml **gin**, 22.5 ml **red vermouth**, 22.5 ml **Jägermeister**, and 7.5 ml **Campari** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Briefly stir until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/615-j-ger-negroni.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [3, 5],
       "defaultServings": 1,
+      "tags": [3, 5],
       "ingredients": [
         {
           "order": 1,
@@ -40552,10 +40553,11 @@
       "name": "Jäger Old Fashioned",
       "description": "Rewarding, chocolatey, and boozy with complex herbal and fruity notes. The spice of **Jägermeister** perfectly complements the **chocolate bitters** and **bourbon**.",
       "instructions": "1. Add 40 ml **Jägermeister**, 20 ml **bourbon**, 5 ml **maple syrup**, and 3 dashes **chocolate bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a chilled rocks glass filled with fresh **ice**.\n5. Express oils from an **orange** peel over the cocktail and use it as a garnish, along with a **maraschino cherry**.",
+      "photoUri": "assets/cocktails/616-j-ger-old-fashioned.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -40624,10 +40626,11 @@
       "name": "Élysée Treaty",
       "description": "Cognac-laced, zesty, and bittersweet. A sophisticated after-dinner cocktail where **cognac** is enhanced by herbal **Jägermeister** and **orange bitters**.",
       "instructions": "1. Add 40 ml **cognac**, 20 ml **Jägermeister**, 10 ml **rich simple syrup**, and 3 dashes **orange bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake all ingredients vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/617-lys-e-treaty.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -40681,10 +40684,11 @@
       "name": "Maid in Cuba",
       "description": "A refreshing and sophisticated twist on the Daiquiri, combining white rum with cool cucumber and fresh mint, finished with a subtle herbal absinthe rinse and a splash of soda. Zesty, crisp, and exceptionally balanced.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around to coat the inside and discard the excess).\n3. In a shaker, muddle 2 slices of **cucumber** and gently bruise 7 fresh **mint leaves**.\n4. Add 60 ml of **white rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, and about 150 g of **ice**.\n5. Shake vigorously until well chilled.\n6. Fine strain into the absinthe-rinsed glass.\n7. Top with 10 ml of **soda water**.\n8. Garnish with a **cucumber** slice floated on the surface.",
+      "photoUri": "assets/cocktails/618-maid-in-cuba.jpg",
       "glassId": "coupe",
       "methodIds": ["muddle", "shake"],
-      "tags": [6, 8],
       "defaultServings": 1,
+      "tags": [6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -40767,10 +40771,11 @@
       "name": "McKinley's Delight",
       "description": "A bold and aromatic classic from the late 19th century, this cocktail is a spirit-forward Manhattan riff. Spicy rye whiskey is balanced by sweet vermouth and rich cherry liqueur, with a dash of absinthe adding an intriguing layer of herbal complexity.",
       "instructions": "1. Add 50 ml of **rye whiskey**, 25 ml of **red vermouth**, 5 ml of **cherry heering**, and 1 dash of **absinthe** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express the oils from a **lemon** peel over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/619-mckinley-s-delight.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -40823,10 +40828,12 @@
       "name": "Redwood Heights",
       "description": "An elegant and complex gin-based cocktail that offers a refreshing herbal alternative to a Manhattan. The botanical notes of gin are layered with sweet vermouth and the bitter, earthy depth of Cynar, finished with an absinthe-rinsed glass for a lingering aromatic finish.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Rinse the chilled glass with **absinthe** (swirl around and discard the excess).\n3. Add 60 ml of **gin**, 30 ml of **red vermouth**, 15 ml of **Cynar**, and 1 dash of **orange bitters** into a mixing glass.\n4. Fill the mixing glass with **ice**.\n5. Stir gently for about 30 seconds until well chilled.\n6. Strain into the absinthe-rinsed glass.\n7. Express the oils from an **orange** peel over the drink and use it as a garnish.",
+
+      "photoUri": "assets/cocktails/620-redwood-heights.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -40887,10 +40894,11 @@
       "name": "Epiphany No. 2",
       "description": "A bittersweet, after-dinner sipper where herbal amaro meets Punt e Mes and warm allspice dram, rounded by a touch of gomme syrup and finished with an orange twist.",
       "instructions": "1. Select and pre-chill a Nick & Nora glass.\n2. Add 45 ml of **amaro**, 15 ml of **Punt e Mes**, 5 ml of **allspice dram**, and 5 ml of **gomme syrup** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Express the oils from an **orange** twist over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/621-epiphany-no-2.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -40941,12 +40949,14 @@
     {
       "id": 622,
       "name": "Metropole",
+      "synonyms": "Metropole Manhattan",
       "description": "A refined Cognac Manhattan variation where dry vermouth and a touch of gomme syrup soften the spirit-forward core. Creole and orange bitters bring aromatic depth, while a maraschino cherry garnish adds a classic finish.",
-      "instructions": "1. Select and pre-chill a Nick & Nora glass.\n2. Add 40 ml of **cognac**, 30 ml of **dry vermouth**, 2.5 ml of **gomme syrup**, 2 dashes of **Peychaud's bitters**, and 1 dash of **orange bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Express the oils from an **orange** twist over the drink and discard the peel.\n7. Garnish with a skewered **maraschino cherry**.",
-      "glassId": "nick_and_nora",
+      "instructions": "1. Select and pre-chill a martini glass.\n2. Add 40 ml of **cognac**, 30 ml of **dry vermouth**, 2.5 ml of **gomme syrup**, 2 dashes of **Peychaud's bitters**, and 1 dash of **orange bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Express the oils from an **orange** twist over the drink and discard the peel.\n7. Garnish with a skewered **maraschino cherry**.",
+      "photoUri": "assets/cocktails/622-metropole.jpg",
+      "glassId": "martini",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -41007,10 +41017,12 @@
       "name": "Star",
       "description": "An old-school apple-brandy Manhattan variation where Calvados and rosso vermouth meet a touch of gomme syrup and Creole bitters. Stirred and served up, it drinks rich, aromatic, and gently spiced with a cherry finish.",
       "instructions": "1. Select and pre-chill a coupe glass.\n2. Add 45 ml of **calvados**, 45 ml of **red vermouth**, 2.5 ml of **gomme syrup**, and 3 dashes of **Peychaud's bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir gently for about 30 seconds until well chilled.\n5. Fine strain into the chilled glass.\n6. Garnish with a skewered **maraschino cherry**.",
+
+      "photoUri": "assets/cocktails/623-star.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -41064,10 +41076,12 @@
       "synonyms": "Winter Daiquiri",
       "description": "A festive Jamaican rum Daiquiri variation lifted with ginger liqueur, allspice dram, and aromatic bitters. Bright lime keeps it crisp while the warming spice profile makes it ideal for cold-season sipping.",
       "instructions": "1. Add 60 ml of **Jamaican Rum**, 22.5 ml of **lime juice**, 15 ml of **rich simple syrup**, 5 ml of **ginger liqueur**, 5 ml of **allspice dram**, and 2 dashes of **angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake hard for about 10–12 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with skewered **ginger candy**.",
+
+      "photoUri": "assets/cocktails/624-winter.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -41142,10 +41156,11 @@
       "name": "Firecracker",
       "description": "A vibrant pisco sour variation with tropical pineapple, fresh lime, and warm allspice complexity. Mezcal adds a smoky agave edge while the cinnamon-sugar rim delivers a festive spicy-sweet finish.",
       "instructions": "1. Rim a chilled coupe glass with cinnamon and sugar (moisten the outside edge with sugar syrup and dip into cinnamon powder).\n2. Add 45 ml of **pisco**, 15 ml of **mezcal**, 15 ml of **lime juice**, 30 ml of **pineapple juice**, 10 ml of **allspice dram**, and 10 ml of **agave syrup** into a shaker.\n3. Fill the shaker with **ice**.\n4. Shake vigorously until well chilled.\n5. Fine strain into the chilled glass.",
+      "photoUri": "assets/cocktails/625-firecracker.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -41229,10 +41244,11 @@
       "synonyms": ["Lions Tail"],
       "description": "A bourbon sour with warming allspice depth, bright **lime juice**, and a dash of aromatic bitters. Spiced, dry-leaning, and balanced.",
       "instructions": "1. Prepare a lime zest twist for garnish.\n2. Add 60 ml of **bourbon**, 10 ml of **allspice dram**, 15 ml of **lime juice**, 5 ml of **rich simple syrup**, and 1 dash of **Angostura bitters** into a shaker.\n3. Fill the shaker with **ice**.\n4. Shake hard until well chilled.\n5. Fine strain into a chilled coupe glass.\n6. Express oils from the lime zest twist over the drink and use it as garnish.",
+      "photoUri": "assets/cocktails/626-lion-s-tail.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [6],
       "defaultServings": 1,
+      "tags": [6],
       "ingredients": [
         {
           "order": 1,
@@ -41300,10 +41316,11 @@
       "name": "Port of Spain",
       "description": "A bold, bitters-forward sour where smoky **mezcal** meets nutty **orgeat** and fresh **lime juice**, anchored by a generous pour of **Angostura bitters**. Intense yet balanced, with a long, aromatic finish.",
       "instructions": "1. Add 45 ml of **mezcal**, 20 ml of **almond (orgeat) syrup**, 20 ml of **lime juice**, and 15 ml of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with a (preferably dehydrated) **lime** wheel floated on the surface.",
+      "photoUri": "assets/cocktails/627-port-of-spain.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [3, 6],
       "defaultServings": 1,
+      "tags": [3, 6],
       "ingredients": [
         {
           "order": 1,
@@ -41364,10 +41381,12 @@
       "name": "Thin Pink Line",
       "description": "A silky **cognac** sour with bright **lemon juice**, subtle almond richness from **orgeat**, and a floating ribbon of **Peychaud's bitters** beneath the foam.",
       "instructions": "1. Add 50 ml of **cognac**, 20 ml of **lemon juice**, 10 ml of **rich simple syrup**, 5 ml of **almond (orgeat) syrup**, and 1 **egg white** into a shaker with **ice**.\n2. Shake hard, then strain back into the shaker and discard the ice.\n3. Dry shake (without ice) until a dense foam forms.\n4. Fine strain into a chilled coupe glass.\n5. Slowly pour 10 ml of **Peychaud's bitters** into the center so a thin pink line forms under the foam.",
+
+      "photoUri": "assets/cocktails/628-thin-pink-line.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [5, 6],
       "defaultServings": 1,
+      "tags": [5, 6],
       "ingredients": [
         {
           "order": 1,
@@ -41435,10 +41454,11 @@
       "name": "Elixir Tropical",
       "description": "A tropical-leaning Daiquiri variation where rich **almond (orgeat) syrup** and a touch of **Luxardo Maraschino** layer over **white rum** and fresh **lime juice**, finished with aromatic **Angostura bitters** and grated **nutmeg**.",
       "instructions": "1. Add 60 ml of **white rum**, 20 ml of **lime juice**, 20 ml of **almond (orgeat) syrup**, 7.5 ml of **Luxardo Maraschino**, 3 dashes of **Angostura bitters**, and 3 **mint leaves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Dust with freshly grated **nutmeg**.",
+      "photoUri": "assets/cocktails/629-elixir-tropical.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [5, 6],
       "defaultServings": 1,
+      "tags": [5, 6],
       "ingredients": [
         {
           "order": 1,
@@ -41514,10 +41534,11 @@
       "name": "Dragon Punch",
       "description": "A smoky, spicy sour where **mezcal** and mellow **yellow chartreuse** meet fresh **lime juice** and creamy **almond (orgeat) syrup**, lifted by a couple dashes of **Tabasco** and finished with a skewered **cucumber** roll.",
       "instructions": "1. Add 45 ml of **mezcal**, 15 ml of **yellow chartreuse**, 30 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, and 2 dashes of **Tabasco** into a shaker with **ice**.\n2. Shake hard until well chilled, then fine strain into a chilled coupe glass.\n3. Garnish with a skewered **cucumber** roll.",
+      "photoUri": "assets/cocktails/630-dragon-punch.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [5, 6],
       "defaultServings": 1,
+      "tags": [5, 6],
       "ingredients": [
         {
           "order": 1,
@@ -41586,10 +41607,11 @@
       "synonyms": ["Trader Vic London Sour"],
       "description": "Refreshing, citrus-forward **Scotch** sour lengthened with **orange juice** and balanced by a whisper of **orgeat**.",
       "instructions": "1. Add 60 ml of **scotch whisky**, 75 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **almond (orgeat) syrup**, and 5 ml of **rich simple syrup** into a shaker with **ice**.\n2. Shake vigorously until well chilled.\n3. Strain into a Collins glass filled with fresh **ice**.\n4. Garnish with an **orange** slice and **mint** sprigs.",
+      "photoUri": "assets/cocktails/631-london-sour.jpg",
       "glassId": "collins_glass",
       "methodIds": ["shake"],
-      "tags": [6, 8],
       "defaultServings": 1,
+      "tags": [6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -41676,10 +41698,11 @@
       "synonyms": ["Mezcal Mai Tai"],
       "description": "A smoky modern Mai Tai riff where **mezcal** and **aged rum** meet bright **lime juice**, **orgeat**, and dry orange liqueur.",
       "instructions": "1. Add 30 ml of **mezcal**, 30 ml of **aged rum**, 22.5 ml of **lime juice**, 15 ml of **almond (orgeat) syrup**, 10 ml of **rich simple syrup**, and 7.5 ml of **orange curaçao** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with crushed **ice**.\n5. Garnish with a spent **lime** shell and a bouquet of **mint**.",
+      "photoUri": "assets/cocktails/632-tia-mia.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [4, 6],
       "defaultServings": 1,
+      "tags": [4, 6],
       "ingredients": [
         {
           "order": 1,
@@ -41770,10 +41793,11 @@
       "name": "Pinky Pincher",
       "description": "A citrus-forward bourbon sour style cocktail with fresh **orange juice** and **lemon juice**, lightly rounded by **rich simple syrup** and **almond (orgeat) syrup**.",
       "instructions": "1. Add 45 ml of **bourbon**, 15 ml of **orange juice**, 15 ml of **lemon juice**, 5 ml of **rich simple syrup**, and 5 ml of **almond (orgeat) syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Strain into a rocks glass filled with fresh **ice**.\n5. Garnish with an **orange** slice, a **lemon** slice, and a **mint** sprig.",
+      "photoUri": "assets/cocktails/633-pinky-pincher.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
-      "tags": [6, 8],
       "defaultServings": 1,
+      "tags": [6, 8],
       "ingredients": [
         {
           "order": 1,
@@ -41876,10 +41900,11 @@
       "name": "Old Barrel",
       "description": "A spirit-forward Old Fashioned riff where spicy **rye whiskey**, herbal **Benedictine**, and nutty **Amontillado sherry** come together with aromatic **Angostura bitters** and bright lemon oils.",
       "instructions": "1. Add 60 ml of **rye whiskey**, 15 ml of **Benedictine**, 15 ml of **Amontillado sherry**, and 3 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir gently until well chilled.\n3. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n4. Express oils from a **lemon** twist over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/634-old-barrel.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [5],
       "defaultServings": 1,
+      "tags": [5],
       "ingredients": [
         {
           "order": 1,
@@ -41941,10 +41966,12 @@
       "name": "The Neutral Ground",
       "description": "A spirit-forward Manhattan-style sipper where bold **rye whiskey** meets nutty **Amontillado sherry**, herbal **Benedictine**, and aromatic **Angostura bitters**.",
       "instructions": "1. Add 50 ml of **rye whiskey**, 15 ml of **Amontillado sherry**, 15 ml of **Benedictine**, and 3 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Fine strain into a chilled coupe glass, then express an **orange** zest twist over the drink and use it as garnish.",
+
+      "photoUri": "assets/cocktails/635-the-neutral-ground.jpg",
       "glassId": "coupe",
-      "methodIds": ["stir", "strain"],
-      "tags": [2],
+      "methodIds": ["stir"],
       "defaultServings": 1,
+      "tags": [1, 2],
       "ingredients": [
         {
           "order": 1,
@@ -41998,10 +42025,12 @@
       "synonyms": ["Sherry Negroni"],
       "description": "A bittersweet and nutty Negroni-style aperitif where **oude genever**, **Campari**, **Amontillado sherry**, and **red vermouth** meet in equal parts.",
       "instructions": "1. Add 22.5 ml of **oude genever**, 22.5 ml of **Campari**, 22.5 ml of **Amontillado sherry**, and 22.5 ml of **red vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice** and stir until well chilled.\n3. Strain into a rocks glass filled with fresh **ice**.\n4. Garnish with an **orange** slice wheel.",
+
+      "photoUri": "assets/cocktails/636-sheroni.jpg",
       "glassId": "rocks_glass",
-      "methodIds": ["stir", "strain"],
-      "tags": [3, 5],
+      "methodIds": ["stir"],
       "defaultServings": 1,
+      "tags": [3, 5],
       "ingredients": [
         {
           "order": 1,
@@ -42061,11 +42090,12 @@
       "id": 637,
       "name": "Piper Plane",
       "description": "A smoky Scotch riff on the **Paper Plane**, balancing **Scotch whisky**, **Aperol**, **Amaro Nonino**, and fresh **lemon juice** with a touch of **saline solution** for extra definition.",
-      "instructions": "1. Add 22.5 ml of **Scotch whisky**, 22.5 ml of **Amaro Nonino**, 22.5 ml of **Aperol**, 22.5 ml of **lemon juice**, and 3 drops of **saline solution (4:1)** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the drink and use it as a garnish.",
+      "instructions": "1. Add 22.5 ml of **Scotch whisky**, 22.5 ml of **Amaro Nonino**, 22.5 ml of **Aperol**, 22.5 ml of **lemon juice**, and 3 drops of **saline solution (4:1)** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously for about 15 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/637-piper-plane.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
-      "tags": [2, 3],
       "defaultServings": 1,
+      "tags": [2, 3],
       "ingredients": [
         {
           "order": 1,
@@ -42115,7 +42145,15 @@
           "ingredientId": 368,
           "name": "Saline solution (4:1)",
           "amount": "3",
-          "unitId": 7
+          "unitId": 7,
+          "substitutes": [
+            {
+              "ingredientId": 307,
+              "name": "Salt",
+              "amount": "1",
+              "unitId": 15
+            }
+          ]
         },
         {
           "order": 6,
@@ -42146,10 +42184,11 @@
       "name": "Toffee Negroni",
       "description": "A rich, bittersweet Negroni-style sipper where **aged rum**, **Amontillado sherry**, and **Aperol** meet in equal parts, delivering orange zest brightness and a subtle toffee-like finish.",
       "instructions": "1. Add 30 ml of **aged rum**, 30 ml of **Amontillado sherry**, and 30 ml of **Aperol** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/638-toffee-negroni.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
-      "tags": [3],
       "defaultServings": 1,
+      "tags": [3],
       "ingredients": [
         {
           "order": 1,
@@ -42204,6 +42243,8 @@
       "synonyms": ["When The Smoke Cleared"],
       "description": "A smoky, tangy mezcal sour where **mezcal** leads while **Aperol**, **ginger syrup**, **lime juice**, **pineapple juice**, and a touch of **saline solution** add balance and depth.",
       "instructions": "1. Add 45 ml of **mezcal**, 15 ml of **Aperol**, 7.5 ml of **ginger syrup**, 22.5 ml of **lime juice**, 22.5 ml of **pineapple juice**, and 2 drops of **saline solution (4:1)** into a shaker.\n2. Fill the shaker with **ice** and shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.\n4. Garnish with skewered **ginger candy**.",
+
+      "photoUri": "assets/cocktails/639-when-the-smoke-cleared.jpg",
       "glassId": "coupe",
       "methodIds": ["shake"],
       "defaultServings": 1,
@@ -42274,6 +42315,7 @@
       "name": "Part-time Lover",
       "description": "A tequila-forward modern sour where **tequila reposado** meets **Aperol**, **St-Germain**, fresh **lemon juice**, and **Angostura Bitters** for a delicately bittersweet, floral profile.",
       "instructions": "1. Add 45 ml of **tequila reposado**, 15 ml of **Aperol**, 15 ml of **St-Germain**, 22.5 ml of **lemon juice**, and 2 dashes of **Angostura Bitters** into a shaker with **ice**.\n2. Shake hard until well chilled, then strain into a rocks glass filled with fresh **ice**.\n3. Express oils from a **grapefruit** zest twist over the drink and use it as a garnish.",
+      "photoUri": "assets/cocktails/640-part-time-lover.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["shake"],
       "defaultServings": 1,
@@ -42345,6 +42387,7 @@
       "name": "Dead Man's Handle",
       "description": "A tequila-driven, bittersweet sour where **tequila blanco**, **Aperol**, fresh **lime juice**, and **almond (orgeat) syrup** are shaken and served over crushed **ice** with a spicy **chili powder** finish.",
       "instructions": "1. Add 45 ml of **tequila blanco**, 15 ml of **Aperol**, 15 ml of **lime juice**, and 15 ml of **almond (orgeat) syrup** into a shaker with **ice**.\n2. Shake hard until well chilled, then strain into a hurricane glass filled with crushed **ice**.\n3. Lightly dust the surface with **chili powder**.",
+      "photoUri": "assets/cocktails/641-dead-man-s-handle.jpg",
       "glassId": "hurricane_glass",
       "methodIds": ["shake"],
       "defaultServings": 1,
@@ -42417,6 +42460,7 @@
       "name": "Last Flight",
       "description": "A boozy modern sour that sits between a **Last Word** and a **Paper Plane**, combining **bourbon**, **green Chartreuse**, **Aperol**, and fresh **lemon juice**.",
       "instructions": "1. Add 15 ml of **bourbon**, 15 ml of **green Chartreuse**, 15 ml of **Aperol**, and 15 ml of **lemon juice** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake vigorously until well chilled.\n4. Fine strain into a chilled Nick & Nora glass.\n5. Garnish with a miniature paper plane and/or a **lemon** twist.",
+      "photoUri": "assets/cocktails/642-last-flight.jpg",
       "glassId": "nick_and_nora",
       "methodIds": ["shake"],
       "defaultServings": 1,
@@ -42473,6 +42517,7 @@
       "name": "Devil's Soul",
       "description": "A short, spirit-forward stirred cocktail where **rye whiskey**, **mezcal**, **amaro**, **Aperol**, and **elderflower liqueur** create a smoky, bittersweet, floral profile.",
       "instructions": "1. Add 45 ml of **rye whiskey**, 15 ml of **mezcal**, 15 ml of **amaro**, 7.5 ml of **Aperol**, and 7.5 ml of **elderflower liqueur** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express oils from an **orange** zest twist over the cocktail and use it as a garnish.",
+      "photoUri": "assets/cocktails/643-devil-s-soul.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
       "defaultServings": 1,
@@ -42536,6 +42581,7 @@
       "name": "Christmas Negroni",
       "description": "A festive bittersweet Negroni variation where **gin**, **red vermouth**, **Becherovka**, **Campari**, **sloe gin**, and **falernum** layer spice and winter fruit.",
       "instructions": "1. Add 30 ml of **gin**, 30 ml of **Carpano Antica Formula Vermouth**, 15 ml of **Becherovka**, 10 ml of **Campari**, 5 ml of **sloe gin**, and 2.5 ml of **falernum** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Express oils from an **orange** zest twist over the cocktail and use it as a garnish.",
+      "photoUri": "assets/cocktails/644-christmas-negroni.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
       "defaultServings": 1,
@@ -42605,8 +42651,9 @@
       "id": 645,
       "name": "Mellow Yellow",
       "description": "A boozy stirred nightcap where **bourbon**, **Becherovka**, **yellow Chartreuse**, **apricot brandy**, and a dash of **orange bitters** create a rich herbal-spice profile.",
-      "instructions": "1. Add 45 ml of **bourbon**, 15 ml of **Becherovka**, 15 ml of **yellow Chartreuse**, 7.5 ml of **apricot brandy**, 1 dash of **orange bitters**, and 10 ml of **water** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express oils from an **orange** zest twist over the cocktail and discard.\n6. Garnish with a small **mint** leaf floated on top.",
-      "glassId": "coupe",
+      "instructions": "1. Add 45 ml of **bourbon**, 15 ml of **Becherovka**, 15 ml of **yellow Chartreuse**, 7.5 ml of **apricot brandy**, 1 dash of **orange bitters**, and 10 ml of **water** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled Nick & Nora glass.\n5. Express oils from an **orange** zest twist over the cocktail and discard.\n6. Garnish with a small **mint** leaf floated on top.",
+      "photoUri": "assets/cocktails/645-mellow-yellow.jpg",
+      "glassId": "nick_and_nora",
       "methodIds": ["stir"],
       "defaultServings": 1,
       "tags": [3, 8],
@@ -42684,6 +42731,7 @@
       "name": "Ice in the Hat",
       "description": "A crisp, spirit-forward digestif where **London dry gin**, **Becherovka**, **bianco vermouth**, and **crème de menthe white** create a cool herbal profile.",
       "instructions": "1. Add 45 ml of **London dry gin**, 15 ml of **Becherovka**, 15 ml of **bianco vermouth**, and 7.5 ml of **crème de menthe white** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.",
+      "photoUri": "assets/cocktails/646-ice-in-the-hat.jpg",
       "glassId": "coupe",
       "methodIds": ["stir"],
       "defaultServings": 1,
@@ -42732,10 +42780,11 @@
       "name": "Mad March Days",
       "description": "A rich, bittersweet whiskey sipper where **bourbon**, **Speyside single malt Scotch whisky**, **amaro**, and **Becherovka** land somewhere between an Old Fashioned and a Manhattan.",
       "instructions": "1. Add 30 ml of **bourbon**, 30 ml of **Speyside single malt Scotch whisky**, 22.5 ml of **amaro**, and 7.5 ml of **Becherovka** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until chilled.\n4. Strain into a rocks glass over fresh **ice** (preferably one large cube).\n5. Express oils from a **lemon** zest twist over the drink and use as garnish.",
+      "photoUri": "assets/cocktails/647-mad-march-days.jpg",
       "glassId": "rocks_glass",
       "methodIds": ["stir"],
       "defaultServings": 1,
-      "tags": [5, 3],
+      "tags": [3, 5],
       "ingredients": [
         {
           "order": 1,
@@ -42793,10 +42842,11 @@
     },
     {
       "id": 648,
-      "name": "Be-ton",
-      "description": "A Czech highball combining **Becherovka** and chilled **tonic** for a bright bittersweet long drink.",
-      "instructions": "1. Pour 50 ml of **Becherovka** and 105 ml of chilled **tonic** into a collins glass.\n2. Fill the glass with **ice**.\n3. Garnish with a **lemon** wedge.",
-      "glassId": "collins_glass",
+      "name": "BeTon",
+      "description": "A Czech cocktail combining **Becherovka** and chilled **tonic** for a bright bittersweet long drink.",
+      "instructions": "1. Pour 50 ml of **Becherovka** and 105 ml of chilled **tonic** into a wine glass.\n2. Fill the glass with **ice**.\n3. Garnish with a **lemon** wedge.",
+      "photoUri": "assets/cocktails/648-beton.jpg",
+      "glassId": "wine_glass",
       "methodIds": ["build"],
       "defaultServings": 1,
       "tags": [8],
@@ -42838,6 +42888,7 @@
       "name": "Czechmate",
       "description": "A refreshing Czech-inspired sour highball where **vodka**, **lemon juice**, **Becherovka**, and rich **simple syrup** are topped with **pilsner lager**.",
       "instructions": "1. Add 45 ml of **vodka**, 22.5 ml of **lemon juice**, 15 ml of **Becherovka**, and 10 ml of rich **simple syrup** into a shaker.\n2. Fill the shaker with **ice** and shake until chilled.\n3. Strain into a sling/highball glass filled with fresh **ice**.\n4. Top with 60 ml of **pilsner lager**.\n5. Garnish with a **lemon** wedge.",
+      "photoUri": "assets/cocktails/649-czechmate.jpg",
       "glassId": "highball_glass",
       "methodIds": ["shake", "build"],
       "defaultServings": 1,
