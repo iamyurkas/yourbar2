@@ -975,6 +975,7 @@ export default function CocktailsScreen() {
               subtitleNumberOfLines={availability.ingredientLineMode === 'missing-count' ? 1 : 2}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
+              hasComment={Boolean(getCocktailComment(item).trim())}
               isPartySelected={isPartyCocktail}
               showPartySelectionControl={isPartyView}
               onPartySelectionToggle={isPartyView ? () => handlePartySelectionToggle(item) : undefined}
@@ -1114,6 +1115,7 @@ export default function CocktailsScreen() {
               subtitleNumberOfLines={availability.ingredientLineMode === 'missing-count' ? 1 : 2}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item.cocktail)}
+              hasComment={Boolean(getCocktailComment(item.cocktail).trim())}
               isPartySelected={isPartyCocktail}
               onPress={() => handleSelectCocktail(item.cocktail)}
             />

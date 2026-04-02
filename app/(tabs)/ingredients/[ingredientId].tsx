@@ -1836,6 +1836,7 @@ export default function IngredientDetailsScreen() {
                               subtitleNumberOfLines={ingredientLineMode === 'missing-count' ? 1 : 2}
                               isReady={shouldHighlightRow}
                               ratingValue={ratingValue}
+                              hasComment={Boolean(getCocktailComment(cocktail).trim())}
                               isPartySelected={partySelectedCocktailKeys.has(String(cocktail.id ?? cocktail.name))}
                               onPress={() => handleNavigateToCocktail(cocktail.id ?? cocktail.name)}
                             />
