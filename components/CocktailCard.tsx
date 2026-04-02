@@ -10,7 +10,6 @@ import type { Cocktail } from '@/providers/inventory-provider';
 import { Image } from 'expo-image';
 import { AppImage } from './AppImage';
 import { CARD_WIDTH } from './CardLayout';
-import { PresenceCheck } from './RowParts';
 
 type CocktailCardProps = {
   cocktail: Cocktail;
@@ -203,7 +202,24 @@ function CocktailCardComponent({
               />
             ) : null}
             {showPartySelectionControl && onPartySelectionToggle ? (
-              <PresenceCheck checked={isPartySelected} onToggle={onPartySelectionToggle} />
+              <Pressable
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: isPartySelected }}
+                onPress={onPartySelectionToggle}
+                hitSlop={10}
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: Colors.tint,
+                    backgroundColor: isPartySelected ? Colors.tint : 'transparent',
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="check"
+                  size={12}
+                  color={isPartySelected ? Colors.background : Colors.tint}
+                />
+              </Pressable>
             ) : isPartySelected ? (
               <MaterialCommunityIcons
                 name="party-popper"
@@ -311,5 +327,13 @@ const styles = StyleSheet.create({
   methodAsset: {
     width: 14,
     height: 14,
+  },
+  checkbox: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
