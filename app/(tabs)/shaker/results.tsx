@@ -741,6 +741,7 @@ export default function ShakerResultsScreen() {
               subtitleNumberOfLines={availability.ingredientLineMode === 'missing-count' ? 1 : 2}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
+              hasComment={Boolean(getCocktailComment(item).trim())}
               isPartySelected={partySelectedCocktailKeys.has(String(item.id ?? item.name))}
               onPress={() => handlePressCocktail(item)}
             />

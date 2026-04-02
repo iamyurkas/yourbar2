@@ -18,6 +18,7 @@ type CocktailCardProps = {
   subtitleNumberOfLines?: 1 | 2;
   isReady: boolean;
   ratingValue?: number;
+  hasComment?: boolean;
   isPartySelected?: boolean;
   showPartySelectionControl?: boolean;
   onPartySelectionToggle?: () => void;
@@ -63,6 +64,7 @@ function CocktailCardComponent({
   subtitleNumberOfLines = 2,
   isReady,
   ratingValue = 0,
+  hasComment = false,
   isPartySelected = false,
   showPartySelectionControl = false,
   onPartySelectionToggle,
@@ -193,6 +195,13 @@ function CocktailCardComponent({
             ) : null}
           </View>
           <View style={styles.methodRow}>
+            {hasComment ? (
+              <MaterialCommunityIcons
+                name="comment"
+                size={14}
+                color={Colors.onSurfaceVariant}
+              />
+            ) : null}
             {showPartySelectionControl && onPartySelectionToggle ? (
               <PresenceCheck checked={isPartySelected} onToggle={onPartySelectionToggle} />
             ) : isPartySelected ? (

@@ -2413,6 +2413,7 @@ export default function CocktailDetailsScreen() {
                                   subtitleNumberOfLines={ingredientLineMode === 'missing-count' ? 1 : 2}
                                   isReady={isReady}
                                   ratingValue={ratingValue}
+                                  hasComment={Boolean(getCocktailComment(similarCocktail).trim())}
                                   isPartySelected={partySelectedCocktailKeys.has(
                                     String(similarCocktail.id ?? similarCocktail.name),
                                   )}
