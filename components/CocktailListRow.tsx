@@ -359,6 +359,7 @@ const CocktailListRowComponent = ({
     <ListRow
       title={cocktail.name}
       subtitle={subtitle}
+      subtitleNumberOfLines={2}
       onPress={onPress}
       selected={isReady}
       highlightColor={effectiveHighlightColor}
