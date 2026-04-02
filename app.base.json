@@ -3,7 +3,7 @@
     "name": "Your Bar",
     "slug": "yourbar",
     "version": "1.6.2",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "yourbar",
     "userInterfaceStyle": "automatic",

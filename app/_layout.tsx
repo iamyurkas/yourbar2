@@ -4,6 +4,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Appearance, useColorScheme, View } from "react-native";
+import * as Device from "expo-device";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -106,6 +108,15 @@ function ThemeAppWrapper({ children }: { children: React.ReactNode }) {
 
 function RootLayoutContent() {
   const { loading } = useInventory();
+
+  useEffect(() => {
+    void (async () => {
+      const deviceType = await Device.getDeviceTypeAsync();
+      if (deviceType === Device.DeviceType.TABLET) {
+        await ScreenOrientation.unlockAsync();
+      }
+    })();
+  }, []);
 
   const onRootLayout = useCallback(() => {
     if (!loading) {
