@@ -732,12 +732,15 @@ export default function ShakerResultsScreen() {
   const renderItem = useCallback(
     ({ item }: { item: Cocktail }) => {
       const availability = getAvailabilitySummary(item);
+      const subtitleNumberOfLines =
+        availability.missingCount >= 3 && availability.missingNames.length === 0 ? 1 : 2;
       if (showCardsInCollections) {
         return (
           <View style={styles.cardItem}>
             <CocktailCard
               cocktail={item}
               subtitle={availability.ingredientLine}
+              subtitleNumberOfLines={subtitleNumberOfLines}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
               isPartySelected={partySelectedCocktailKeys.has(String(item.id ?? item.name))}

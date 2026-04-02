@@ -964,6 +964,8 @@ export default function CocktailsScreen() {
     ({ item }: { item: Cocktail }) => {
       const isPartyView = activeTab === 'party';
       const availability = getAvailabilitySummary(item);
+      const subtitleNumberOfLines =
+        availability.missingCount >= 3 && availability.missingNames.length === 0 ? 1 : 2;
 
       const isPartyCocktail = isPartySelected(String(item.id ?? item.name));
       if (showCardsInCollections) {
@@ -972,6 +974,7 @@ export default function CocktailsScreen() {
             <CocktailCard
               cocktail={item}
               subtitle={availability.ingredientLine}
+              subtitleNumberOfLines={subtitleNumberOfLines}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
               isPartySelected={isPartyCocktail}
@@ -1103,6 +1106,8 @@ export default function CocktailsScreen() {
       }
 
       const availability = getAvailabilitySummary(item.cocktail, myTabAvailabilitySummaryByKey);
+      const subtitleNumberOfLines =
+        availability.missingCount >= 3 && availability.missingNames.length === 0 ? 1 : 2;
       const isPartyCocktail = isPartySelected(String(item.cocktail.id ?? item.cocktail.name));
       if (showCardsInCollections) {
         return (
@@ -1110,6 +1115,7 @@ export default function CocktailsScreen() {
             <CocktailCard
               cocktail={item.cocktail}
               subtitle={availability.ingredientLine}
+              subtitleNumberOfLines={subtitleNumberOfLines}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item.cocktail)}
               isPartySelected={isPartyCocktail}
