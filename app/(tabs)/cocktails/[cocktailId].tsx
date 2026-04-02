@@ -571,6 +571,7 @@ export default function CocktailDetailsScreen() {
     useImperialUnits,
     keepScreenAwake,
     showCardsInCollections,
+    setShowCardsInCollections,
   } = useInventory();
 
   const resolvedParam = Array.isArray(cocktailId) ? cocktailId[0] : cocktailId;
@@ -979,6 +980,34 @@ export default function CocktailDetailsScreen() {
     selectedSimilarTagKeys.size > 0 ||
     selectedSimilarMethodIds.size > 0 ||
     selectedSimilarStarRatings.size > 0;
+  const similarViewModeToggle = useMemo(() => (
+    <View style={styles.sortViewToggle}>
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-grid" size={16} color={showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(true)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: showCardsInCollections }}
+        accessibilityLabel={t("sideMenu.showCardsInCollections")}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+      <TagPill
+        label=""
+        color={Colors.tint}
+        selected={!showCardsInCollections}
+        icon={<MaterialCommunityIcons name="view-list" size={16} color={!showCardsInCollections ? Colors.background : Colors.tint} />}
+        onPress={() => setShowCardsInCollections(false)}
+        accessibilityRole="button"
+        accessibilityState={{ selected: !showCardsInCollections }}
+        accessibilityLabel={t("common.filterBy")}
+        androidRippleColor={`${Colors.surfaceVariant}33`}
+        style={styles.iconOnlyPill}
+      />
+    </View>
+  ), [Colors.background, Colors.surfaceVariant, Colors.tint, setShowCardsInCollections, showCardsInCollections, t]);
 
   const handleSimilarFilterPress = useCallback(() => {
     setSimilarFilterMenuVisible(true);
@@ -2480,6 +2509,8 @@ export default function CocktailDetailsScreen() {
         closeAccessibilityLabel={t("common.closeTagFilters")}
         title={t("cocktailDetails.similarCocktails")}
         panelProps={{
+          sortSectionLabel: t("common.filterBy"),
+          sortSectionSuffix: similarViewModeToggle,
           availableStarRatings: availablePositiveSimilarStarRatings,
           selectedStarRatings: selectedSimilarStarRatings,
           onToggleStarRating: handleSimilarStarRatingFilterToggle,
@@ -2596,6 +2627,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
+  },
+  sortViewToggle: {
+    flexDirection: "row",
+    gap: 8,
+    marginLeft: 12,
+  },
+  iconOnlyPill: {
+    minWidth: 36,
+    paddingHorizontal: 0,
   },
   similarCocktailsList: {
     marginHorizontal: -24,
