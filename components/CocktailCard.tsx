@@ -2,12 +2,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Image } from 'expo-image';
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { useAppColors } from '@/constants/theme';
 import { resolveImageSource } from '@/libs/image-source';
 import type { Cocktail } from '@/providers/inventory-provider';
+import { Image } from 'expo-image';
 import { AppImage } from './AppImage';
 import { CARD_WIDTH } from './CardLayout';
 import { PresenceCheck } from './RowParts';
@@ -211,14 +211,14 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
     maxWidth: CARD_WIDTH,
-    minHeight: 300,
+    minHeight: 250,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 16,
     overflow: 'hidden',
   },
   image: {
     width: '100%',
-    height: 140,
+    height: 120,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
   },
   subtitle: {
