@@ -175,7 +175,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
           style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
           <MaterialIcons
             name={shoppingIconName}
-            size={20}
+            size={16}
             color={shoppingIconColor}
             style={styles.shoppingIcon}
           />
@@ -186,7 +186,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <MaterialIcons
         name={shoppingIconName}
-        size={20}
+        size={16}
         color={shoppingIconColor}
         style={styles.shoppingIcon}
         accessibilityRole="image"
@@ -197,18 +197,14 @@ const IngredientListItem = memo(function IngredientListItemComponent({
 
   const control = useMemo(() => {
     if (onShoppingToggle) {
-      return <View style={styles.presenceSlot}>{shoppingControl}</View>;
+      return shoppingControl;
     }
 
-    return (
-      <View style={styles.presenceSlot}>
-        {showAvailabilityToggle ? (
-          <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />
-        ) : (
-          <View style={styles.presencePlaceholder} />
-        )}
-      </View>
-    );
+    if (showAvailabilityToggle) {
+      return <PresenceCheck checked={isAvailable} onToggle={handleToggleAvailability} />;
+    }
+
+    return <View style={styles.presencePlaceholder} />;
   }, [handleToggleAvailability, isAvailable, onShoppingToggle, showAvailabilityToggle, shoppingControl]);
 
   const handlePress = useCallback(() => {
@@ -1202,30 +1198,24 @@ const styles = StyleSheet.create({
   headerWrapper: {
     zIndex: 2,
   },
-  presenceSlot: {
-    minHeight: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 24,
-  },
   presencePlaceholder: {
-    height: 16,
-    width: 16,
+    height: 20,
+    width: 20,
   },
   shoppingIcon: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     alignSelf: 'flex-end',
   },
   shoppingIconPlaceholder: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     alignSelf: 'flex-end',
   },
   shoppingButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
