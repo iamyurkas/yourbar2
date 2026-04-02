@@ -2379,25 +2379,41 @@ export default function CocktailDetailsScreen() {
                         <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
                           {t("cocktailDetails.similarCocktailsTitle")}
                         </Text>
-                        {shouldShowSimilarFilterButton ? (
-                          <Pressable
-                            onPress={handleSimilarFilterPress}
-                            accessibilityRole="button"
-                            accessibilityLabel={t("common.filterBy")}
+                      </View>
+                      <View style={styles.similarFilterRow}>
+                        <Pressable
+                          onPress={handleSimilarFilterPress}
+                          accessibilityRole="button"
+                          accessibilityLabel={t("common.filterBy")}
+                          disabled={!shouldShowSimilarFilterButton}
+                          style={[
+                            styles.similarFilterLabelButton,
+                            shouldShowSimilarFilterButton && isSimilarFilterActive
+                              ? { backgroundColor: `${Colors.tint}1A` }
+                              : null,
+                          ]}
+                        >
+                          <Text
                             style={[
-                              styles.similarFilterButton,
-                              isSimilarFilterActive
-                                ? { backgroundColor: `${Colors.tint}1A` }
-                                : null,
+                              styles.similarFilterLabel,
+                              {
+                                color: shouldShowSimilarFilterButton
+                                  ? (isSimilarFilterActive ? Colors.tint : Colors.onSurfaceVariant)
+                                  : Colors.onSurfaceVariant,
+                              },
                             ]}
                           >
+                            {t("common.filterBy")}
+                          </Text>
+                          {shouldShowSimilarFilterButton ? (
                             <MaterialCommunityIcons
                               name="filter-variant"
-                              size={24}
+                              size={18}
                               color={isSimilarFilterActive ? Colors.tint : Colors.icon}
                             />
-                          </Pressable>
-                        ) : null}
+                          ) : null}
+                        </Pressable>
+                        {similarLayoutToggle}
                       </View>
                       <View style={showCardsInCollections ? styles.similarCocktailsCards : styles.similarCocktailsList}>
                         {filteredSimilarCocktailEntries.map(
@@ -2640,12 +2656,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  similarFilterButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  similarFilterRow: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  similarFilterLabelButton: {
+    minHeight: 36,
+    borderRadius: 18,
+    paddingHorizontal: 12,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 6,
+  },
+  similarFilterLabel: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   sortViewToggle: {
     flexDirection: "row",
