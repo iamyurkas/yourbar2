@@ -175,7 +175,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
           style={({ pressed }) => [styles.shoppingButton, pressed ? styles.shoppingButtonPressed : null]}>
           <MaterialIcons
             name={shoppingIconName}
-            size={20}
+            size={16}
             color={shoppingIconColor}
             style={styles.shoppingIcon}
           />
@@ -186,7 +186,7 @@ const IngredientListItem = memo(function IngredientListItemComponent({
     return (
       <MaterialIcons
         name={shoppingIconName}
-        size={20}
+        size={16}
         color={shoppingIconColor}
         style={styles.shoppingIcon}
         accessibilityRole="image"
@@ -1203,19 +1203,19 @@ const styles = StyleSheet.create({
     width: 20,
   },
   shoppingIcon: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     alignSelf: 'flex-end',
   },
   shoppingIconPlaceholder: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     alignSelf: 'flex-end',
   },
   shoppingButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
