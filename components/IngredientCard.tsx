@@ -85,13 +85,21 @@ function IngredientCardComponent({
         </View>
         <View style={styles.footer}>
           {isOnShoppingList ? (
-            <Pressable onPress={onShoppingToggle} hitSlop={10}>
+            onShoppingToggle ? (
+              <Pressable onPress={onShoppingToggle} hitSlop={10}>
+                <MaterialIcons
+                  name={showRemoveShoppingIcon ? 'remove-shopping-cart' : 'shopping-cart'}
+                  size={16}
+                  color={showRemoveShoppingIcon ? Colors.error : Colors.tint}
+                />
+              </Pressable>
+            ) : (
               <MaterialIcons
                 name={showRemoveShoppingIcon ? 'remove-shopping-cart' : 'shopping-cart'}
                 size={16}
                 color={showRemoveShoppingIcon ? Colors.error : Colors.tint}
               />
-            </Pressable>
+            )
           ) : <View />}
           <Pressable
             accessibilityRole="checkbox"
