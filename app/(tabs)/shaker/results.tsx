@@ -738,6 +738,7 @@ export default function ShakerResultsScreen() {
             <CocktailCard
               cocktail={item}
               subtitle={availability.ingredientLine}
+              subtitleNumberOfLines={availability.ingredientLineMode === 'missing-count' ? 1 : 2}
               isReady={availability.isReady}
               ratingValue={getCocktailRating(item)}
               isPartySelected={partySelectedCocktailKeys.has(String(item.id ?? item.name))}

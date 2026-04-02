@@ -76,6 +76,7 @@ export type CocktailAvailabilitySummary = {
   recipeNames: string[];
   isReady: boolean;
   ingredientLine: string;
+  ingredientLineMode: 'missing-count' | 'names';
   hasBrandFallback: boolean;
   hasStyleFallback: boolean;
 };
@@ -119,6 +120,7 @@ export function summariseCocktailAvailability(
       recipeNames,
       isReady: false,
       ingredientLine: '',
+      ingredientLineMode: 'names',
       hasBrandFallback: false,
       hasStyleFallback: false,
     };
@@ -202,22 +204,28 @@ export function summariseCocktailAvailability(
   });
 
   let ingredientLine = '';
+  let ingredientLineMode: CocktailAvailabilitySummary['ingredientLineMode'] = 'names';
 
   if (displayMissingCount === 0) {
     ingredientLine = resolvedNames.join(', ');
+    ingredientLineMode = 'names';
   } else if (t && locale) {
     if (displayMissingCount >= 3 || missingNames.length === 0) {
       const category = getPluralCategory(locale, displayMissingCount);
       ingredientLine = t(`cocktails.missingCount.${category}`, { count: displayMissingCount });
+      ingredientLineMode = 'missing-count';
     } else {
       ingredientLine = t(`cocktails.missingNames`, { names: missingNames.join(', ') });
+      ingredientLineMode = 'names';
     }
   } else {
     // Fallback if translation function is not provided
     if (displayMissingCount >= 3 || missingNames.length === 0) {
       ingredientLine = `Missing: ${displayMissingCount} ingredients`;
+      ingredientLineMode = 'missing-count';
     } else {
       ingredientLine = `Missing: ${missingNames.join(', ')}`;
+      ingredientLineMode = 'names';
     }
   }
 
@@ -229,6 +237,7 @@ export function summariseCocktailAvailability(
     recipeNames,
     isReady,
     ingredientLine,
+    ingredientLineMode,
     hasBrandFallback,
     hasStyleFallback,
   };
