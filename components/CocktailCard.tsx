@@ -15,6 +15,7 @@ import { PresenceCheck } from './RowParts';
 type CocktailCardProps = {
   cocktail: Cocktail;
   subtitle?: string;
+  subtitleNumberOfLines?: number;
   isReady: boolean;
   ratingValue?: number;
   isPartySelected?: boolean;
@@ -59,6 +60,7 @@ function resolveVideoServiceIcon(service: VideoService): 'youtube' | 'instagram'
 function CocktailCardComponent({
   cocktail,
   subtitle,
+  subtitleNumberOfLines = 2,
   isReady,
   ratingValue = 0,
   isPartySelected = false,
@@ -158,7 +160,9 @@ function CocktailCardComponent({
           {cocktail.name}
         </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: Colors.onSurfaceVariant }]} numberOfLines={2}>
+          <Text
+            style={[styles.subtitle, { color: Colors.onSurfaceVariant }]}
+            numberOfLines={subtitleNumberOfLines}>
             {subtitle}
           </Text>
         ) : null}
