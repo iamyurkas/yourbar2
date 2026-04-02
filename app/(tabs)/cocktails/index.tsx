@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { CARD_GAP, CARD_WIDTH } from '@/components/CardLayout';
+import { CARD_GAP, CARD_WIDTH } from '@/components/CardParts';
 import { CocktailCard } from '@/components/CocktailCard';
 import { CocktailFilterMenu } from '@/components/CocktailFilterMenu';
 import { CocktailListRow } from '@/components/CocktailListRow';

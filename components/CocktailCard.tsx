@@ -1,15 +1,13 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { memo, useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { resolveGlasswareUriFromId } from '@/assets/image-manifest';
 import { METHOD_ICON_MAP, type CocktailMethodId } from '@/constants/cocktail-methods';
 import { useAppColors } from '@/constants/theme';
-import { resolveImageSource } from '@/libs/image-source';
 import type { Cocktail } from '@/providers/inventory-provider';
 import { Image } from 'expo-image';
-import { AppImage } from './AppImage';
-import { CARD_WIDTH } from './CardLayout';
+import { CardCheck, CardContent, CardFrame, CardImageSlot, CardTagChips, styles as cardStyles } from './CardParts';
 
 type CocktailCardProps = {
   cocktail: Cocktail;
@@ -72,10 +70,6 @@ function CocktailCardComponent({
   const Colors = useAppColors();
   const stars = Math.max(0, Math.min(5, Math.round(ratingValue)));
   const glasswareUri = useMemo(() => resolveGlasswareUriFromId(cocktail.glassId), [cocktail.glassId]);
-  const imageSource = useMemo(
-    () => resolveImageSource(cocktail.photoUri) ?? resolveImageSource(glasswareUri),
-    [cocktail.photoUri, glasswareUri],
-  );
   const videoService = useMemo(() => resolveVideoService(cocktail.video), [cocktail.video]);
   const methodIds = useMemo<CocktailMethodId[]>(() => {
     const legacyMethodId = (cocktail as { methodId?: CocktailMethodId | null }).methodId ?? null;
@@ -96,22 +90,8 @@ function CocktailCardComponent({
   const hasManyTags = (cocktail.tags?.length ?? 0) >= 4;
 
   return (
-    <Pressable
-      style={[
-        styles.card,
-        {
-          backgroundColor: Colors.surface,
-          borderColor: isReady ? Colors.tint : Colors.outlineVariant,
-        },
-      ]}
-      onPress={onPress}
-      accessibilityRole={onPress ? 'button' : undefined}>
-      <View style={[styles.image, { backgroundColor: Colors.surfaceBright }]}>
-        {imageSource ? (
-          <AppImage source={imageSource} style={styles.image} contentFit="contain" />
-        ) : (
-          <MaterialCommunityIcons name="image-off-outline" size={28} color={Colors.onSurfaceVariant} />
-        )}
+    <CardFrame isActive={isReady} onPress={onPress}>
+      <CardImageSlot uri={cocktail.photoUri} fallbackUri={glasswareUri} fallbackIconSize={28}>
         {methodIds.length > 0 ? (
           <View style={styles.overlayMethodRow}>
             {methodIds.map((id, index) => {
@@ -149,41 +129,24 @@ function CocktailCardComponent({
             />
           </View>
         ) : null}
-      </View>
-      <View
-        style={[
-          styles.content,
-          {
-            backgroundColor: isReady ? Colors.highlightFaint : Colors.surface,
-          },
-        ]}>
-        <Text style={[styles.title, { color: Colors.onSurface }]} numberOfLines={2}>
+      </CardImageSlot>
+      <CardContent isActive={isReady}>
+        <Text style={[cardStyles.title, { color: Colors.onSurface }]} numberOfLines={2}>
           {cocktail.name}
         </Text>
         {subtitle ? (
           <Text
-            style={[styles.subtitle, { color: Colors.onSurfaceVariant }]}
+            style={[cardStyles.subtitle, { color: Colors.onSurfaceVariant }]}
             numberOfLines={subtitleNumberOfLines}>
             {subtitle}
           </Text>
         ) : null}
-        <View style={styles.tagRow}>
-          {tags.map((tag, index) => (
-            <View
-              key={`${tag.name}-${index}`}
-              style={[
-                styles.tagChip,
-                {
-                  backgroundColor: tag.color ?? Colors.primary,
-                },
-              ]}>
-              <Text style={[styles.tagText, { color: Colors.onPrimary }]} numberOfLines={1}>
-                {hasManyTags ? tag.name.slice(0, 1).toUpperCase() : tag.name}
-              </Text>
-            </View>
-          ))}
-        </View>
-        <View style={styles.footer}>
+        <CardTagChips
+          tags={tags}
+          defaultColor={Colors.primary}
+          transformLabel={(name) => (hasManyTags ? name.slice(0, 1).toUpperCase() : name)}
+        />
+        <View style={cardStyles.footer}>
           <View style={styles.stateRow}>
             {stars > 0 ? (
               <View style={[styles.ratingPill, { backgroundColor: Colors.background, borderColor: Colors.outline }]}>
@@ -202,24 +165,7 @@ function CocktailCardComponent({
               />
             ) : null}
             {showPartySelectionControl && onPartySelectionToggle ? (
-              <Pressable
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: isPartySelected }}
-                onPress={onPartySelectionToggle}
-                hitSlop={10}
-                style={[
-                  styles.checkbox,
-                  {
-                    borderColor: Colors.tint,
-                    backgroundColor: isPartySelected ? Colors.tint : 'transparent',
-                  },
-                ]}>
-                <MaterialCommunityIcons
-                  name="check"
-                  size={12}
-                  color={isPartySelected ? Colors.background : Colors.tint}
-                />
-              </Pressable>
+              <CardCheck checked={isPartySelected} onPress={onPartySelectionToggle} />
             ) : isPartySelected ? (
               <MaterialCommunityIcons
                 name="party-popper"
@@ -229,28 +175,14 @@ function CocktailCardComponent({
             ) : null}
           </View>
         </View>
-      </View>
-    </Pressable>
+      </CardContent>
+    </CardFrame>
   );
 }
 
 export const CocktailCard = memo(CocktailCardComponent);
 
 const styles = StyleSheet.create({
-  card: {
-    width: CARD_WIDTH,
-    maxWidth: CARD_WIDTH,
-    minHeight: 250,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
-    overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    height: 120,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   overlayBadge: {
     position: 'absolute',
     top: 6,
@@ -270,40 +202,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  content: {
-    padding: 12,
-    gap: 6,
-    flex: 1,
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  subtitle: {
-    fontSize: 12,
-  },
-  tagRow: {
-    minHeight: 22,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-  },
-  tagChip: {
-    borderRadius: 999,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    maxWidth: '100%',
-  },
-  tagText: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  footer: {
-    marginTop: 'auto',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   stateRow: {
     flexDirection: 'row',
@@ -327,13 +225,5 @@ const styles = StyleSheet.create({
   methodAsset: {
     width: 14,
     height: 14,
-  },
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
