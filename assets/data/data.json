@@ -42954,6 +42954,188 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 650,
+      "name": "Montana Club",
+      "description": "A spirit-forward pre-Prohibition sipper where **cognac** and **dry vermouth** are accented by **anisette**, aromatic bitters, and a touch of saline for extra definition.",
+      "instructions": "1. Add 45 ml of **cognac**, 45 ml of **dry vermouth**, 5 ml of **anisette**, 2 dashes of **Angostura bitters**, and 2 drops of **saline solution (4:1)** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with skewered **olives**.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 22,
+          "name": "Anisette",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 368,
+          "name": "Saline solution (4:1)",
+          "amount": "2",
+          "unitId": 7
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 244,
+          "name": "Olive",
+          "amount": "2",
+          "unitId": 4,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 651,
+      "name": "Montana (Jacques Straub, 1913)",
+      "description": "A vintage Manhattan-adjacent variation where **cognac**, **dry vermouth**, and **ruby port** meet a subtle touch of **anisette** and aromatic bitters.",
+      "instructions": "1. Add 45 ml of **cognac**, 22.5 ml of **dry vermouth**, 7.5 ml of **ruby port**, 5 ml of **anisette**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express the oils from a **lemon** twist over the drink and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 303,
+          "name": "Ruby Port",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 22,
+          "name": "Anisette",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 652,
+      "name": "Orange Spur",
+      "description": "A bittersweet stirred aperitif where **vodka** is softened by **anisette** and **Aperol**, then lifted by aromatic bitters.",
+      "instructions": "1. Add 60 ml of **vodka**, 15 ml of **anisette**, 15 ml of **Aperol**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with **anise** floated on the surface.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 22,
+          "name": "Anisette",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 23,
+          "name": "Aperol",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 20,
+          "name": "Anise",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
