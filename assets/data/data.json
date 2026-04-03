@@ -43136,6 +43136,304 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 653,
+      "name": "Elusive Dreams",
+      "description": "A tropical **rum** sour where **pineapple rum**, **white rum**, **pineapple juice**, **lime juice**, **cinnamon syrup**, and **banana liqueur** meet in a bright, fruit-forward mix.",
+      "instructions": "1. Add 30 ml of **pineapple rum**, 30 ml of **white rum**, 30 ml of **pineapple juice**, 22.5 ml of **lime juice**, 15 ml of **cinnamon syrup**, and 15 ml of **banana liqueur** into a shaker.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Fine strain into a chilled coupe glass and garnish with a wedge of **pineapple**.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [1, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 357,
+          "name": "Pineapple Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 98,
+          "name": "Cinnamon Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 37,
+          "name": "Banana Liqueur",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 280,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 654,
+      "name": "Banana Boulevardier",
+      "synonyms": ["Banana Boulevardier"],
+      "description": "A banana-kissed riff on the **Boulevardier**, balancing **bourbon**, **red vermouth**, **Campari**, and **banana liqueur**.",
+      "instructions": "1. Add 30 ml of **bourbon**, 30 ml of **red vermouth**, 15 ml of **Campari**, and 15 ml of **banana liqueur** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled, then strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n4. Express oils from an **orange** twist over the drink, discard the twist, and garnish with a dried banana chip.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [1, 3, 5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 37,
+          "name": "Banana Liqueur",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 655,
+      "name": "Bananarac",
+      "description": "A banana-accented, spirit-forward twist on a **Sazerac** with **rye whiskey**, **cognac**, a touch of **absinthe**, and aromatic bitters.",
+      "instructions": "1. Rinse a chilled rocks glass with 2.5 ml of **absinthe**, discard excess, and set the glass aside.\n2. Add 30 ml of **rye whiskey**, 30 ml of **cognac**, 15 ml of **banana liqueur**, 2.5 ml of **simple syrup**, and 1 dash of **Angostura bitters** into a mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled, then strain into the absinthe-rinsed glass (no ice in glass).\n4. Express **lemon** and **lime** twists over the drink and discard both.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "2.5",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 305,
+          "name": "Rye Whiskey",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 37,
+          "name": "Banana Liqueur",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 316,
+          "name": "Simple Syrup",
+          "amount": "2.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 656,
+      "name": "Fay Wray",
+      "description": "A tropical shaken sour combining **aged rum**, **cognac**, **banana liqueur**, **lime juice**, and a touch of **rhum agricole**.",
+      "instructions": "1. Add 22.5 ml of **aged rum**, 22.5 ml of **cognac**, 22.5 ml of **banana liqueur**, 22.5 ml of **lime juice**, 7.5 ml of **Rhum Martinique Agricole**, and 7.5 ml of **simple syrup** into a shaker, then squeeze in a wedge of **lime** and drop it in.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Strain into a rocks glass filled with crushed **ice** and garnish with a bouquet of **mint** and dried banana chips.",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [6, 9],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 7,
+          "name": "Aged Rum",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 37,
+          "name": "Banana Liqueur",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 296,
+          "name": "Rhum Martinique Agricole",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 316,
+          "name": "Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 26
+        },
+        {
+          "order": 8,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 196,
+          "name": "Crushed Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "2",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [

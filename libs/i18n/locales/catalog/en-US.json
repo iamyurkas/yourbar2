@@ -3071,5 +3071,21 @@
   "cocktail.652.name": "Orange Spur",
   "cocktail.652.synonyms": "Orange Spur",
   "cocktail.652.description": "A bittersweet stirred aperitif where **vodka** is softened by **anisette** and **Aperol**, then lifted by aromatic bitters.",
-  "cocktail.652.instructions": "1. Add 60 ml of **vodka**, 15 ml of **anisette**, 15 ml of **Aperol**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with **anise** floated on the surface."
+  "cocktail.652.instructions": "1. Add 60 ml of **vodka**, 15 ml of **anisette**, 15 ml of **Aperol**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with **anise** floated on the surface.",
+  "cocktail.653.name": "Elusive Dreams",
+  "cocktail.653.synonyms": "Elusive Dreams",
+  "cocktail.653.description": "A tropical **rum** sour where **pineapple rum**, **white rum**, **pineapple juice**, **lime juice**, **cinnamon syrup**, and **banana liqueur** meet in a bright, fruit-forward mix.",
+  "cocktail.653.instructions": "1. Add 30 ml of **pineapple rum**, 30 ml of **white rum**, 30 ml of **pineapple juice**, 22.5 ml of **lime juice**, 15 ml of **cinnamon syrup**, and 15 ml of **banana liqueur** into a shaker.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Fine strain into a chilled coupe glass and garnish with a wedge of **pineapple**.",
+  "cocktail.654.name": "Banana Boulevardier",
+  "cocktail.654.synonyms": "Banana Boulevardier",
+  "cocktail.654.description": "A banana-kissed riff on the **Boulevardier**, balancing **bourbon**, **red vermouth**, **Campari**, and **banana liqueur**.",
+  "cocktail.654.instructions": "1. Add 30 ml of **bourbon**, 30 ml of **red vermouth**, 15 ml of **Campari**, and 15 ml of **banana liqueur** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled, then strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n4. Express oils from an **orange** twist over the drink, discard the twist, and garnish with a dried banana chip.",
+  "cocktail.655.name": "Bananarac",
+  "cocktail.655.synonyms": "Bananarac",
+  "cocktail.655.description": "A banana-accented, spirit-forward twist on a **Sazerac** with **rye whiskey**, **cognac**, a touch of **absinthe**, and aromatic bitters.",
+  "cocktail.655.instructions": "1. Rinse a chilled rocks glass with 2.5 ml of **absinthe**, discard excess, and set the glass aside.\n2. Add 30 ml of **rye whiskey**, 30 ml of **cognac**, 15 ml of **banana liqueur**, 2.5 ml of **simple syrup**, and 1 dash of **Angostura bitters** into a mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled, then strain into the absinthe-rinsed glass (no ice in glass).\n4. Express **lemon** and **lime** twists over the drink and discard both.",
+  "cocktail.656.name": "Fay Wray",
+  "cocktail.656.synonyms": "Fay Wray",
+  "cocktail.656.description": "A tropical shaken sour combining **aged rum**, **cognac**, **banana liqueur**, **lime juice**, and a touch of **rhum agricole**.",
+  "cocktail.656.instructions": "1. Add 22.5 ml of **aged rum**, 22.5 ml of **cognac**, 22.5 ml of **banana liqueur**, 22.5 ml of **lime juice**, 7.5 ml of **Rhum Martinique Agricole**, and 7.5 ml of **simple syrup** into a shaker, then squeeze in a wedge of **lime** and drop it in.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Strain into a rocks glass filled with crushed **ice** and garnish with a bouquet of **mint** and dried banana chips."
 }

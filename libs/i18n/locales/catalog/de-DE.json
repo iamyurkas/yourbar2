@@ -3323,5 +3323,21 @@
   "cocktail.652.name": "Orangensporn",
   "cocktail.652.synonyms": "Orange Spur",
   "cocktail.652.description": "Ein bittersüßer, gerührter Aperitif, bei dem **Wodka** durch **Anisette** und **Aperol** abgerundet und mit aromatischen Bitters angehoben wird.",
-  "cocktail.652.instructions": "1. Gib 60 ml **Wodka**, 15 ml **Anisette**, 15 ml **Aperol** und 2 Dashes **Angostura Bitters** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre etwa 30 Sekunden, bis der Drink gut gekühlt ist.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Mit **Anis** auf der Oberfläche garnieren."
+  "cocktail.652.instructions": "1. Gib 60 ml **Wodka**, 15 ml **Anisette**, 15 ml **Aperol** und 2 Dashes **Angostura Bitters** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre etwa 30 Sekunden, bis der Drink gut gekühlt ist.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Mit **Anis** auf der Oberfläche garnieren.",
+  "cocktail.653.name": "Flüchtige Träume",
+  "cocktail.653.synonyms": "Elusive Dreams, Flüchtige Träume",
+  "cocktail.653.description": "Ein tropischer **Rum**-Sour, in dem **Ananasrum**, **weißer Rum**, **Ananassaft**, **Limettensaft**, **Zimtsirup** und **Bananenlikör** zu einem fruchtbetonten Drink zusammenfinden.",
+  "cocktail.653.instructions": "1. Gib 30 ml **Ananasrum**, 30 ml **weißen Rum**, 30 ml **Ananassaft**, 22,5 ml **Limettensaft**, 15 ml **Zimtsirup** und 15 ml **Bananenlikör** in einen Shaker.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig etwa 15 Sekunden, bis alles gut gekühlt ist.\n3. Fein in eine gekühlte Coupette abseihen und mit einer Spalte **Ananas** garnieren.",
+  "cocktail.654.name": "Bananen-Boulevardier",
+  "cocktail.654.synonyms": "Banana Boulevardier, Bananen-Boulevardier",
+  "cocktail.654.description": "Ein bananiger Twist auf den **Boulevardier** mit **Bourbon**, **rotem Wermut**, **Campari** und **Bananenlikör**.",
+  "cocktail.654.instructions": "1. Gib 30 ml **Bourbon**, 30 ml **roten Wermut**, 15 ml **Campari** und 15 ml **Bananenlikör** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre etwa 30 Sekunden, bis der Drink gut gekühlt ist, und seihe in ein Rocks-Glas mit frischem **Eis** ab (idealerweise auf einen großen Eiswürfel).\n4. Öle einer **Orangen**zeste über dem Drink ausdrücken, Zeste verwerfen und mit einem getrockneten Bananenchip garnieren.",
+  "cocktail.655.name": "Bananen-Sazerac",
+  "cocktail.655.synonyms": "Bananarac, Bananen-Sazerac",
+  "cocktail.655.description": "Eine bananige, spirit-forward Abwandlung des **Sazerac** mit **Rye Whiskey**, **Cognac**, einem Hauch **Absinth** und aromatischen Bitters.",
+  "cocktail.655.instructions": "1. Spüle ein gekühltes Rocks-Glas mit 2,5 ml **Absinth** aus, gib den Überschuss weg und stelle das Glas beiseite.\n2. Gib 30 ml **Rye Whiskey**, 30 ml **Cognac**, 15 ml **Bananenlikör**, 2,5 ml **Zuckersirup** und 1 Dash **Angostura Bitters** mit **Eis** in ein Rührglas.\n3. Rühre etwa 30 Sekunden, bis der Drink gut gekühlt ist, und seihe in das mit Absinth ausgespülte Glas ab (ohne Eis im Glas).\n4. Öle von **Zitronen**- und **Limetten**zeste über dem Drink ausdrücken und beide verwerfen.",
+  "cocktail.656.name": "Fei Wray",
+  "cocktail.656.synonyms": "Fay Wray, Fei Wray",
+  "cocktail.656.description": "Ein tropischer, geschüttelter Sour mit **gereiftem Rum**, **Cognac**, **Bananenlikör**, **Limettensaft** und einem Hauch **Rhum Agricole**.",
+  "cocktail.656.instructions": "1. Gib 22,5 ml **gereiften Rum**, 22,5 ml **Cognac**, 22,5 ml **Bananenlikör**, 22,5 ml **Limettensaft**, 7,5 ml **Rhum Martinique Agricole** und 7,5 ml **Zuckersirup** in einen Shaker, drücke dann eine Spalte **Limette** aus und gib sie dazu.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig etwa 15 Sekunden, bis alles gut gekühlt ist.\n3. In ein Rocks-Glas mit Crushed **Eis** abseihen und mit einem Bouquet aus **Minze** und getrockneten Bananenchips garnieren."
 }
