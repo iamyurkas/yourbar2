@@ -3339,5 +3339,21 @@
   "cocktail.656.name": "Fei Wray",
   "cocktail.656.synonyms": "Fay Wray, Fei Wray",
   "cocktail.656.description": "Ein tropischer, geschüttelter Sour mit **gereiftem Rum**, **Cognac**, **Bananenlikör**, **Limettensaft** und einem Hauch **Rhum Agricole**.",
-  "cocktail.656.instructions": "1. Gib 22,5 ml **gereiften Rum**, 22,5 ml **Cognac**, 22,5 ml **Bananenlikör**, 22,5 ml **Limettensaft**, 7,5 ml **Rhum Martinique Agricole** und 7,5 ml **Zuckersirup** in einen Shaker, drücke dann eine Spalte **Limette** aus und gib sie dazu.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig etwa 15 Sekunden, bis alles gut gekühlt ist.\n3. In ein Rocks-Glas mit Crushed **Eis** abseihen und mit einem Bouquet aus **Minze** und getrockneten Bananenchips garnieren."
+  "cocktail.656.instructions": "1. Gib 22,5 ml **gereiften Rum**, 22,5 ml **Cognac**, 22,5 ml **Bananenlikör**, 22,5 ml **Limettensaft**, 7,5 ml **Rhum Martinique Agricole** und 7,5 ml **Zuckersirup** in einen Shaker, drücke dann eine Spalte **Limette** aus und gib sie dazu.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig etwa 15 Sekunden, bis alles gut gekühlt ist.\n3. In ein Rocks-Glas mit Crushed **Eis** abseihen und mit einem Bouquet aus **Minze** und getrockneten Bananenchips garnieren.",
+  "cocktail.657.name": "Tequila-Martini",
+  "cocktail.657.synonyms": "Tequila Martini",
+  "cocktail.657.description": "Eine Tequila-betonte Martini-Variante, bei der **Tequila Blanco** und **Bianco Wermut** mit Bitters gerührt werden – klar, aromatisch und spirit-forward.",
+  "cocktail.657.instructions": "1. Gib 60 ml **Tequila Blanco**, 30 ml **Bianco Wermut** und 4 Tropfen **Orangenbitter** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. In eine gekühlte Coupette abseihen.\n5. Eine **Limetten**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.",
+  "cocktail.658.name": "Alte Dame",
+  "cocktail.658.synonyms": "Old Gal",
+  "cocktail.658.description": "Ein gerührter Aperitif in White-Negroni-Nähe, bei dem würziger **Rye Whiskey**, bittersüßer **Campari** und **Bianco Wermut** mit einem Hauch Salzlösung abgerundet werden.",
+  "cocktail.658.instructions": "1. Gib 30 ml **Rye Whiskey**, 30 ml **Campari**, 30 ml **Bianco Wermut** und 3 Tropfen **Salzlösung (4:1)** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. In ein Rocks-Glas auf frisches **Eis** abseihen (vorzugsweise ein großer Würfel).\n5. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.",
+  "cocktail.659.name": "Tuxedo Nr. 2 (Flora-Bar-Rezept)",
+  "cocktail.659.synonyms": "Tuxedo No. 2 (Flora Bar's recipe)",
+  "cocktail.659.description": "Eine moderne Tuxedo-Variante, bei der **London Dry Gin** durch **Bianco Wermut** und **Luxardo Maraschino** weicher wird, mit **Orangenbitter** und einer **Absinth**-Rinse.",
+  "cocktail.659.instructions": "1. Spüle eine gekühlte Coupette mit 2,5 ml **Absinth** aus und gib den Überschuss weg.\n2. Gib 67,5 ml **London Dry Gin**, 15 ml **Bianco Wermut**, 7,5 ml **Luxardo Maraschino** und 4 Dashes **Orangenbitter** in ein Rührglas.\n3. Fülle das Rührglas mit **Eis**.\n4. Rühre bis gut gekühlt.\n5. In das mit Absinth ausgespülte Glas abseihen.\n6. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.\n7. Mit einer aufgespießten **Maraschino-Kirsche** garnieren.",
+  "cocktail.660.name": "Bambus (Diffords perfektes Rezept)",
+  "cocktail.660.synonyms": "Bamboo (Difford's Perfect Recipe)",
+  "cocktail.660.description": "Ein trockener, aromatischer Aperitif, bei dem **Fino Sherry** führt, gestützt von drei Wermutsorten und einem Dash **Orangenbitter** für vielschichtige Kräuterkomplexität.",
+  "cocktail.660.instructions": "1. Gib 45 ml **Fino Sherry**, 15 ml **trockenen Wermut**, 15 ml **Bianco Wermut**, 15 ml **roten Wermut** und 1 Dash **Orangenbitter** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden."
 }
