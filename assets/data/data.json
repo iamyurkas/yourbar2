@@ -44349,6 +44349,341 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 671,
+      "name": "Sharman-Cox Daiquiri",
+      "description": "A vivid blue modern Daiquiri riff where **white rum** meets **blue curaçao**, fresh **lime** and **lemon** juices, rich syrup, and a silky **egg white** foam.",
+      "instructions": "1. Add 60 ml of **white rum**, 10 ml of **blue curaçao**, 7.5 ml of **lime juice**, 7.5 ml of **lemon juice**, 10 ml of **rich simple syrup**, and 15 ml of **egg white** into a shaker.\n2. Fill the shaker with **ice** and shake hard.\n3. Fine strain back into the shaker.\n4. Dry shake (without ice) until frothy.\n5. Fine strain into a chilled coupe glass.\n6. Express an **orange** twist over the drink and discard.\n7. Garnish with a wedge of **lime**.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 59,
+          "name": "Blue Curaçao",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 149,
+          "name": "Egg White",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 250,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 16,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 672,
+      "name": "Palm Royale Grasshopper",
+      "description": "A mint-chocolate Grasshopper variation blending **vodka**, white **crème de cacao**, white **crème de menthe**, a touch of **blue curaçao**, **Fernet Branca**, and rich **cream**.",
+      "instructions": "1. Add 22.5 ml of **vodka**, 22.5 ml of **crème de cacao white**, 15 ml of **crème de menthe white**, 5 ml of **blue curaçao**, 5 ml of **Fernet Branca**, and 22.5 ml of **heavy cream** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake hard until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with a small sprig of **mint** floated in the center.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 125,
+          "name": "Crème de Cacao White",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 129,
+          "name": "Crème de Menthe White",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 59,
+          "name": "Blue Curaçao",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 155,
+          "name": "Fernet Branca",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 187,
+          "name": "Heavy Cream",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 3,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 673,
+      "name": "Heisenberg Cocktail",
+      "description": "A bright blue agave sour combining **tequila añejo**, **mezcal**, **maraschino liqueur**, fresh **lime juice**, **lavender syrup**, **blue curaçao**, and simple syrup.",
+      "instructions": "1. Add 40 ml of **tequila añejo**, 15 ml of **mezcal**, 10 ml of **Luxardo maraschino**, 20 ml of **lime juice**, 7.5 ml of **lavender syrup**, 7.5 ml of **blue curaçao**, and 5 ml of **rich simple syrup** into a shaker.\n2. Fill the shaker with **ice** and shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 333,
+          "name": "Tequila Añejo",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 218,
+          "name": "Lavender Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 59,
+          "name": "Blue Curaçao",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        }
+      ]
+    },
+    {
+      "id": 674,
+      "name": "Black Widow's Bite",
+      "description": "A Halloween-style citrus highball where **vodka**, **blue curaçao**, and **orange juice** are sharpened by **orange bitters**.",
+      "instructions": "1. Add 45 ml of **vodka**, 22.5 ml of **blue curaçao**, 30 ml of **orange juice**, and 2 dashes of **orange bitters** into a shaker.\n2. Fill the shaker with **ice** and shake hard.\n3. Strain into a martini glass.",
+      "glassId": "martini",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 345,
+          "name": "Vodka",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 59,
+          "name": "Blue Curaçao",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 251,
+          "name": "Orange Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        }
+      ]
+    },
+    {
+      "id": 675,
+      "name": "Vacation Martini",
+      "description": "A tropical blue Martini riff layering **vanilla vodka**, **coconut rum**, **lime juice**, **pineapple juice**, and **egg white**, then finishing with a float of **blue curaçao**.",
+      "instructions": "1. Add 45 ml of **vodka vanilla**, 15 ml of **coconut rum**, 7.5 ml of **lime juice**, 22.5 ml of **pineapple juice**, and 7.5 ml of **egg white** into a shaker.\n2. Fill the shaker with **ice** and shake hard.\n3. Fine strain back into the shaker.\n4. Dry shake (without ice) to emulsify.\n5. Fine strain into a chilled martini glass.\n6. Pour 1.25 ml of **blue curaçao** into the center so it sinks.\n7. Garnish with a wedge of **pineapple**.",
+      "glassId": "martini",
+      "methodIds": ["shake", "layer"],
+      "defaultServings": 1,
+      "tags": [6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 347,
+          "name": "Vodka Vanilla",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 106,
+          "name": "Coconut Rum",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 149,
+          "name": "Egg White",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 59,
+          "name": "Blue Curaçao",
+          "amount": "1.25",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 280,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 16,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
