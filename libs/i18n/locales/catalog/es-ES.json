@@ -3737,5 +3737,21 @@
   "cocktail.685.name": "Rayo de Sol",
   "cocktail.685.synonyms": "Sunray",
   "cocktail.685.description": "Cítrico, con presencia de bourbon y un amargor dulce suave con naranja fresca y vivaz.",
-  "cocktail.685.instructions": "1. Agita 20 ml de **bourbon**, 20 ml de **Grand Marnier**, 10 ml de **Lillet Blanc**, 10 ml de **vermú seco** y 22,5 ml de **zumo de naranja** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Exprime una piel de **naranja** sobre el cóctel y úsala como adorno."
+  "cocktail.685.instructions": "1. Agita 20 ml de **bourbon**, 20 ml de **Grand Marnier**, 10 ml de **Lillet Blanc**, 10 ml de **vermú seco** y 22,5 ml de **zumo de naranja** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Exprime una piel de **naranja** sobre el cóctel y úsala como adorno.",
+  "cocktail.686.name": "Marigny",
+  "cocktail.686.synonyms": "Marigny",
+  "cocktail.686.description": "Espirituoso, ácido, equilibrado y delicioso, con notas herbales, dos brandies y frescura cítrica.",
+  "cocktail.686.instructions": "1. Agita 22,5 ml de **coñac**, 22,5 ml de **calvados**, 15 ml de **chartreuse verde**, 22,5 ml de **zumo de limón**, 10 ml de **sirope simple rico** y 1 golpe de **amargos de Angostura** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Decora con una rodaja de **limón**.",
+  "cocktail.687.name": "Sidecar de Simón",
+  "cocktail.687.synonyms": "Simon's Sidecar",
+  "cocktail.687.description": "Una variación del Sidecar que se apoya en curaçao seco de naranja y pineau des charentes para un perfil sour en capas y muy equilibrado.",
+  "cocktail.687.instructions": "1. Agita 45 ml de **coñac**, 15 ml de **curaçao de naranja**, 15 ml de **pineau des charentes**, 15 ml de **zumo de limón**, 5 ml de **sirope simple rico** y 2 gotas de **solución salina (4:1)** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Exprime una piel de **naranja** sobre el cóctel y úsala como adorno.",
+  "cocktail.688.name": "Francés 125 (French '75' con coñac)",
+  "cocktail.688.synonyms": "French 125 (French '75' with cognac), French 125",
+  "cocktail.688.description": "Una versión con coñac del French 75: más corpulenta que la versión con ginebra, pero igual de viva, refrescante y fácil de beber.",
+  "cocktail.688.instructions": "1. Remueve 7,5 ml de **sirope simple rico** con 15 ml de **zumo de limón** en una coctelera.\n2. Añade 45 ml de **coñac** y agita con **hielo**.\n3. Cuela fino en una copa flauta fría.\n4. Completa con 75 ml de **champán** y remueve brevemente.\n5. Exprime una piel de **limón** sobre el cóctel y úsala como adorno.",
+  "cocktail.689.name": "Chauncey",
+  "cocktail.689.synonyms": "Chauncey",
+  "cocktail.689.description": "Un delicioso cóctel de estilo Manhattan con base dividida y partes iguales, ideal para beber tarde por la noche.",
+  "cocktail.689.instructions": "1. Remueve 22,5 ml de **old tom gin**, 22,5 ml de **rye whiskey**, 22,5 ml de **vermú rojo**, 22,5 ml de **coñac** y 1 golpe de **amargos de naranja** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Exprime una piel de **limón** sobre el cóctel y úsala como adorno."
 }
