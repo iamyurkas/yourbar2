@@ -3593,5 +3593,17 @@
   "cocktail.649.name": "Jaque mate checo",
   "cocktail.649.synonyms": "Czechmate",
   "cocktail.649.description": "Un sour highball refrescante de inspiración checa, donde **vodka**, **zumo de limón**, **Becherovka** y **sirope simple** denso se coronan con **cerveza pilsner**.",
-  "cocktail.649.instructions": "1. Añade 45 ml de **vodka**, 22.5 ml de **zumo de limón**, 15 ml de **Becherovka** y 10 ml de **sirope simple** denso en una coctelera.\n2. Llena la coctelera con **hielo** y agita hasta enfriar.\n3. Cuela en un vaso sling/highball con **hielo** fresco.\n4. Completa con 60 ml de **cerveza pilsner**.\n5. Decora con un gajo de **limón**."
+  "cocktail.649.instructions": "1. Añade 45 ml de **vodka**, 22.5 ml de **zumo de limón**, 15 ml de **Becherovka** y 10 ml de **sirope simple** denso en una coctelera.\n2. Llena la coctelera con **hielo** y agita hasta enfriar.\n3. Cuela en un vaso sling/highball con **hielo** fresco.\n4. Completa con 60 ml de **cerveza pilsner**.\n5. Decora con un gajo de **limón**.",
+  "cocktail.650.name": "Club Montana",
+  "cocktail.650.synonyms": "Montana Club",
+  "cocktail.650.description": "Un trago pre-Prohibición, intenso y directo, donde **coñac** y **vermut seco** se acentúan con **anisete**, amargos aromáticos y un toque de solución salina.",
+  "cocktail.650.instructions": "1. Añade 45 ml de **coñac**, 45 ml de **vermut seco**, 5 ml de **anisete**, 2 golpes de **amargos de Angostura** y 2 gotas de **solución salina (4:1)** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve suavemente unos 30 segundos hasta que esté bien frío.\n4. Cuela en una copa coupé previamente enfriada.\n5. Decora con **aceitunas** en brocheta.",
+  "cocktail.651.name": "Montana (Jacques Straub, 1913)",
+  "cocktail.651.synonyms": "Montana (Jacques Straub, 1913)",
+  "cocktail.651.description": "Una variación clásica cercana al Manhattan, en la que **coñac**, **vermut seco** y **oporto ruby** se unen con un toque sutil de **anisete** y amargos aromáticos.",
+  "cocktail.651.instructions": "1. Añade 45 ml de **coñac**, 22.5 ml de **vermut seco**, 7.5 ml de **oporto ruby**, 5 ml de **anisete** y 2 golpes de **amargos de Angostura** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve suavemente unos 30 segundos hasta que esté bien frío.\n4. Cuela en una copa coupé previamente enfriada.\n5. Exprime los aceites de una piel en espiral de **limón** sobre el cóctel y úsala como adorno.",
+  "cocktail.652.name": "Espuela de Naranja",
+  "cocktail.652.synonyms": "Orange Spur",
+  "cocktail.652.description": "Un aperitivo removido, amargo-dulce, en el que el **vodka** se redondea con **anisete** y **Aperol**, con el apoyo de amargos aromáticos.",
+  "cocktail.652.instructions": "1. Añade 60 ml de **vodka**, 15 ml de **anisete**, 15 ml de **Aperol** y 2 golpes de **amargos de Angostura** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve suavemente unos 30 segundos hasta que esté bien frío.\n4. Cuela fino en una copa coupé previamente enfriada.\n5. Decora con **anís estrellado** flotando en la superficie."
 }

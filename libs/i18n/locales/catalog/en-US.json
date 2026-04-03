@@ -3059,5 +3059,17 @@
   "cocktail.649.name": "Czechmate",
   "cocktail.649.synonyms": "",
   "cocktail.649.description": "A refreshing Czech-inspired sour highball where **vodka**, **lemon juice**, **Becherovka**, and rich **simple syrup** are topped with **pilsner lager**.",
-  "cocktail.649.instructions": "1. Add 45 ml of **vodka**, 22.5 ml of **lemon juice**, 15 ml of **Becherovka**, and 10 ml of rich **simple syrup** into a shaker.\n2. Fill the shaker with **ice** and shake until chilled.\n3. Strain into a sling/highball glass filled with fresh **ice**.\n4. Top with 60 ml of **pilsner lager**.\n5. Garnish with a **lemon** wedge."
+  "cocktail.649.instructions": "1. Add 45 ml of **vodka**, 22.5 ml of **lemon juice**, 15 ml of **Becherovka**, and 10 ml of rich **simple syrup** into a shaker.\n2. Fill the shaker with **ice** and shake until chilled.\n3. Strain into a sling/highball glass filled with fresh **ice**.\n4. Top with 60 ml of **pilsner lager**.\n5. Garnish with a **lemon** wedge.",
+  "cocktail.650.name": "Montana Club",
+  "cocktail.650.synonyms": "Montana Club",
+  "cocktail.650.description": "A spirit-forward pre-Prohibition sipper where **cognac** and **dry vermouth** are accented by **anisette**, aromatic bitters, and a touch of saline for extra definition.",
+  "cocktail.650.instructions": "1. Add 45 ml of **cognac**, 45 ml of **dry vermouth**, 5 ml of **anisette**, 2 dashes of **Angostura bitters**, and 2 drops of **saline solution (4:1)** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Garnish with skewered **olives**.",
+  "cocktail.651.name": "Montana (Jacques Straub, 1913)",
+  "cocktail.651.synonyms": "Montana (Jacques Straub, 1913)",
+  "cocktail.651.description": "A vintage Manhattan-adjacent variation where **cognac**, **dry vermouth**, and **ruby port** meet a subtle touch of **anisette** and aromatic bitters.",
+  "cocktail.651.instructions": "1. Add 45 ml of **cognac**, 22.5 ml of **dry vermouth**, 7.5 ml of **ruby port**, 5 ml of **anisette**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express the oils from a **lemon** twist over the drink and use as garnish.",
+  "cocktail.652.name": "Orange Spur",
+  "cocktail.652.synonyms": "Orange Spur",
+  "cocktail.652.description": "A bittersweet stirred aperitif where **vodka** is softened by **anisette** and **Aperol**, then lifted by aromatic bitters.",
+  "cocktail.652.instructions": "1. Add 60 ml of **vodka**, 15 ml of **anisette**, 15 ml of **Aperol**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with **anise** floated on the surface."
 }
