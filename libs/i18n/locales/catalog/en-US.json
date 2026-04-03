@@ -3087,5 +3087,21 @@
   "cocktail.656.name": "Fay Wray",
   "cocktail.656.synonyms": "Fay Wray",
   "cocktail.656.description": "A tropical shaken sour combining **aged rum**, **cognac**, **banana liqueur**, **lime juice**, and a touch of **rhum agricole**.",
-  "cocktail.656.instructions": "1. Add 22.5 ml of **aged rum**, 22.5 ml of **cognac**, 22.5 ml of **banana liqueur**, 22.5 ml of **lime juice**, 7.5 ml of **Rhum Martinique Agricole**, and 7.5 ml of **simple syrup** into a shaker, then squeeze in a wedge of **lime** and drop it in.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Strain into a rocks glass filled with crushed **ice** and garnish with a bouquet of **mint** and dried banana chips."
+  "cocktail.656.instructions": "1. Add 22.5 ml of **aged rum**, 22.5 ml of **cognac**, 22.5 ml of **banana liqueur**, 22.5 ml of **lime juice**, 7.5 ml of **Rhum Martinique Agricole**, and 7.5 ml of **simple syrup** into a shaker, then squeeze in a wedge of **lime** and drop it in.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Strain into a rocks glass filled with crushed **ice** and garnish with a bouquet of **mint** and dried banana chips.",
+  "cocktail.657.name": "Tequila Martini",
+  "cocktail.657.synonyms": "",
+  "cocktail.657.description": "A tequila-led Martini variation where **tequila blanco** and **bianco vermouth** are stirred with bitters for a crisp, aromatic, spirit-forward serve.",
+  "cocktail.657.instructions": "1. Add 60 ml of **tequila blanco**, 30 ml of **bianco vermouth**, and 4 drops of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express a **lime** twist over the cocktail and use it as garnish.",
+  "cocktail.658.name": "Old Gal",
+  "cocktail.658.synonyms": "",
+  "cocktail.658.description": "A White Negroni-adjacent stirred aperitif where spicy **rye whiskey**, bittersweet **Campari**, and **bianco vermouth** are rounded with a touch of saline.",
+  "cocktail.658.instructions": "1. Add 30 ml of **rye whiskey**, 30 ml of **Campari**, 30 ml of **bianco vermouth**, and 3 drops of **saline solution (4:1)** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over one large cube).\n5. Express an **orange** twist over the cocktail and use it as garnish.",
+  "cocktail.659.name": "Tuxedo No. 2 (Flora Bar's recipe)",
+  "cocktail.659.synonyms": "",
+  "cocktail.659.description": "A modern Tuxedo variation where **London dry gin** is softened by **bianco vermouth** and **Luxardo maraschino**, layered with **orange bitters** and an **absinthe** rinse.",
+  "cocktail.659.instructions": "1. Rinse a chilled coupe glass with 2.5 ml of **absinthe** and discard excess.\n2. Add 67.5 ml of **London dry gin**, 15 ml of **bianco vermouth**, 7.5 ml of **Luxardo maraschino**, and 4 dashes of **orange bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir until well chilled.\n5. Strain into the absinthe-rinsed glass.\n6. Express an **orange** twist over the cocktail and use it as garnish.\n7. Garnish with a skewered **maraschino cherry**.",
+  "cocktail.660.name": "Bamboo (Difford's Perfect Recipe)",
+  "cocktail.660.synonyms": "",
+  "cocktail.660.description": "A dry, aromatic aperitif where **fino sherry** leads, supported by a three-vermouth blend and a dash of **orange bitters** for layered herbal complexity.",
+  "cocktail.660.instructions": "1. Add 45 ml of **fino sherry**, 15 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 15 ml of **red vermouth**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish."
 }

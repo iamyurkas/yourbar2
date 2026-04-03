@@ -3621,5 +3621,21 @@
   "cocktail.656.name": "Fei Wray",
   "cocktail.656.synonyms": "Fay Wray, Fei Wray",
   "cocktail.656.description": "Un sour tropical agitado que combina **ron añejo**, **coñac**, **licor de banana**, **zumo de lima** y un toque de **rhum agricole**.",
-  "cocktail.656.instructions": "1. Añade 22.5 ml de **ron añejo**, 22.5 ml de **coñac**, 22.5 ml de **licor de banana**, 22.5 ml de **zumo de lima**, 7.5 ml de **Rhum Martinique Agricole** y 7.5 ml de **sirope simple** en una coctelera; luego exprime una cuña de **lima** y déjala dentro.\n2. Llena la coctelera con **hielo** y agita con energía durante unos 15 segundos hasta enfriar bien.\n3. Cuela en un vaso bajo con **hielo** picado y decora con un bouquet de **menta** y chips de banana deshidratada."
+  "cocktail.656.instructions": "1. Añade 22.5 ml de **ron añejo**, 22.5 ml de **coñac**, 22.5 ml de **licor de banana**, 22.5 ml de **zumo de lima**, 7.5 ml de **Rhum Martinique Agricole** y 7.5 ml de **sirope simple** en una coctelera; luego exprime una cuña de **lima** y déjala dentro.\n2. Llena la coctelera con **hielo** y agita con energía durante unos 15 segundos hasta enfriar bien.\n3. Cuela en un vaso bajo con **hielo** picado y decora con un bouquet de **menta** y chips de banana deshidratada.",
+  "cocktail.657.name": "Martini de Tequila",
+  "cocktail.657.synonyms": "Tequila Martini",
+  "cocktail.657.description": "Una variante de Martini centrada en el tequila, donde **tequila blanco** y **vermut bianco** se remueven con amargos para un trago nítido, aromático y muy espirituoso.",
+  "cocktail.657.instructions": "1. Añade 60 ml de **tequila blanco**, 30 ml de **vermut bianco** y 4 gotas de **amargos de naranja** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve hasta que esté bien frío.\n4. Cuela en una copa coupé previamente enfriada.\n5. Exprime un twist de **lima** sobre el cóctel y úsalo como adorno.",
+  "cocktail.658.name": "Vieja Dama",
+  "cocktail.658.synonyms": "Old Gal",
+  "cocktail.658.description": "Un aperitivo removido, cercano al White Negroni, donde **whiskey de centeno** especiado, **Campari** amargo-dulce y **vermut bianco** se redondean con un toque salino.",
+  "cocktail.658.instructions": "1. Añade 30 ml de **whiskey de centeno**, 30 ml de **Campari**, 30 ml de **vermut bianco** y 3 gotas de **solución salina (4:1)** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve hasta que esté bien frío.\n4. Cuela en un vaso bajo con **hielo** fresco (preferiblemente un cubo grande).\n5. Exprime un twist de **naranja** sobre el cóctel y úsalo como adorno.",
+  "cocktail.659.name": "Tuxedo n.º 2 (receta de Flora Bar)",
+  "cocktail.659.synonyms": "Tuxedo No. 2 (Flora Bar's recipe)",
+  "cocktail.659.description": "Una variante moderna del Tuxedo, donde **gin London dry** se suaviza con **vermut bianco** y **Luxardo maraschino**, con capas de **amargos de naranja** y enjuague de **absenta**.",
+  "cocktail.659.instructions": "1. Enjuaga una copa coupé previamente enfriada con 2.5 ml de **absenta** y descarta el exceso.\n2. Añade 67.5 ml de **gin London dry**, 15 ml de **vermut bianco**, 7.5 ml de **Luxardo maraschino** y 4 golpes de **amargos de naranja** en un vaso mezclador.\n3. Llena el vaso mezclador con **hielo**.\n4. Remueve hasta que esté bien frío.\n5. Cuela en la copa enjuagada con absenta.\n6. Exprime un twist de **naranja** sobre el cóctel y úsalo como adorno.\n7. Decora con una **cereza marrasquino** en brocheta.",
+  "cocktail.660.name": "Bambú (receta perfecta de Difford)",
+  "cocktail.660.synonyms": "Bamboo (Difford's Perfect Recipe)",
+  "cocktail.660.description": "Un aperitivo seco y aromático donde manda el **fino sherry**, respaldado por una mezcla de tres vermuts y un golpe de **amargos de naranja** para una complejidad herbal en capas.",
+  "cocktail.660.instructions": "1. Añade 45 ml de **fino sherry**, 15 ml de **vermut seco**, 15 ml de **vermut bianco**, 15 ml de **vermut rojo** y 1 golpe de **amargos de naranja** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve hasta que esté bien frío.\n4. Cuela fino en una copa coupé previamente enfriada.\n5. Exprime un twist de **naranja** sobre el cóctel y úsalo como adorno."
 }
