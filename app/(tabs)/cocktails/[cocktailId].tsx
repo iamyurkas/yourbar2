@@ -39,8 +39,8 @@ import { HeaderIconButton } from "@/components/HeaderIconButton";
 import { ListRow, PresenceCheck, Thumb } from "@/components/RowParts";
 import { TagPill } from "@/components/TagPill";
 import {
-  getCocktailMethods,
   getCocktailMethodById,
+  getCocktailMethods,
   METHOD_ICON_MAP,
   type CocktailMethodId,
 } from "@/constants/cocktail-methods";
@@ -2650,6 +2650,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 12,
     marginTop: 8,
+    marginHorizontal: -8,
   },
   similarCocktailDivider: {
     height: StyleSheet.hairlineWidth,
