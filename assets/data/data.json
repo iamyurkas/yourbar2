@@ -43681,6 +43681,288 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 661,
+      "name": "White Rob Roy",
+      "description": "A lighter Rob Roy variation where **Scotch whisky** and **bianco vermouth** are stirred with **Peychaud's bitters** for a crisp, aromatic serve.",
+      "instructions": "1. Add 50 ml of **Scotch whisky**, 30 ml of **bianco vermouth**, and 1 dash of **Peychaud's bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with a skewered **maraschino cherry**.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 311,
+          "name": "Scotch Whisky",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 276,
+          "name": "Peychaud's Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 4,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 236,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 662,
+      "name": "Obituario",
+      "description": "A tequila-led riff on the Obituary where **tequila blanco**, **mezcal**, and **bianco vermouth** are sharpened with **absinthe** and saline.",
+      "instructions": "1. Add 45 ml of **tequila blanco**, 15 ml of **mezcal**, 30 ml of **bianco vermouth**, 2.5 ml of **absinthe**, and 2 drops of **saline solution (4:1)** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled martini glass.\n5. Express a **lime** twist over the cocktail and discard.\n6. Garnish with a skewered **olive**.",
+      "glassId": "martini",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 334,
+          "name": "Tequila Blanco",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "2.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 368,
+          "name": "Saline solution (4:1)",
+          "amount": "2",
+          "unitId": 7
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 244,
+          "name": "Olive",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 663,
+      "name": "Tuxedo (Difford's recipe)",
+      "description": "A dry, spirit-forward Tuxedo variation combining **Old Tom gin**, two vermouths, **fino sherry**, and layered bitters with a touch of **absinthe**.",
+      "instructions": "1. Add 45 ml of **Old Tom gin**, 20 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 10 ml of **fino sherry**, 1.25 ml of **Luxardo maraschino**, 1 dash of **absinthe**, 1 dash of **Angostura bitters**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish.\n6. Garnish with a skewered **maraschino cherry**.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 243,
+          "name": "Old Tom Gin",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 157,
+          "name": "Fino Sherry",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "1.25",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 8,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 9,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 10,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 11,
+          "ingredientId": 236,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 664,
+      "name": "Crosstree",
+      "description": "A tropical sour where **overproof rum**, **bianco vermouth**, **pineapple juice**, and **lime juice** are brightened with vanilla and a dash of **absinthe**.",
+      "instructions": "1. Add 25 ml of **overproof rum**, 25 ml of **bianco vermouth**, 25 ml of **pineapple juice**, 25 ml of **lime juice**, 5 ml of **vanilla syrup**, and 1 dash of **absinthe** into a shaker.\n2. Fill the shaker with **ice** and shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.\n4. Garnish with a wedge of **pineapple**.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 256,
+          "name": "Overproof Rum",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "25",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 344,
+          "name": "Vanilla Syrup",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 2,
+          "name": "Absinthe",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 280,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [

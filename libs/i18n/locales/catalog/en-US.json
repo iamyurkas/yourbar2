@@ -3103,5 +3103,21 @@
   "cocktail.660.name": "Bamboo (Difford's Perfect Recipe)",
   "cocktail.660.synonyms": "",
   "cocktail.660.description": "A dry, aromatic aperitif where **fino sherry** leads, supported by a three-vermouth blend and a dash of **orange bitters** for layered herbal complexity.",
-  "cocktail.660.instructions": "1. Add 45 ml of **fino sherry**, 15 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 15 ml of **red vermouth**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish."
+  "cocktail.660.instructions": "1. Add 45 ml of **fino sherry**, 15 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 15 ml of **red vermouth**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish.",
+  "cocktail.661.name": "White Rob Roy",
+  "cocktail.661.synonyms": "",
+  "cocktail.661.description": "A lighter Rob Roy variation where **Scotch whisky** and **bianco vermouth** are stirred with **Peychaud's bitters** for a crisp, aromatic serve.",
+  "cocktail.661.instructions": "1. Add 50 ml of **Scotch whisky**, 30 ml of **bianco vermouth**, and 1 dash of **Peychaud's bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with a skewered **maraschino cherry**.",
+  "cocktail.662.name": "Obituario",
+  "cocktail.662.synonyms": "",
+  "cocktail.662.description": "A tequila-led riff on the Obituary where **tequila blanco**, **mezcal**, and **bianco vermouth** are sharpened with **absinthe** and saline.",
+  "cocktail.662.instructions": "1. Add 45 ml of **tequila blanco**, 15 ml of **mezcal**, 30 ml of **bianco vermouth**, 2.5 ml of **absinthe**, and 2 drops of **saline solution (4:1)** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled martini glass.\n5. Express a **lime** twist over the cocktail and discard.\n6. Garnish with a skewered **olive**.",
+  "cocktail.663.name": "Tuxedo (Difford's recipe)",
+  "cocktail.663.synonyms": "",
+  "cocktail.663.description": "A dry, spirit-forward Tuxedo variation combining **Old Tom gin**, two vermouths, **fino sherry**, and layered bitters with a touch of **absinthe**.",
+  "cocktail.663.instructions": "1. Add 45 ml of **Old Tom gin**, 20 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 10 ml of **fino sherry**, 1.25 ml of **Luxardo maraschino**, 1 dash of **absinthe**, 1 dash of **Angostura bitters**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish.\n6. Garnish with a skewered **maraschino cherry**.",
+  "cocktail.664.name": "Crosstree",
+  "cocktail.664.synonyms": "",
+  "cocktail.664.description": "A tropical sour where **overproof rum**, **bianco vermouth**, **pineapple juice**, and **lime juice** are brightened with vanilla and a dash of **absinthe**.",
+  "cocktail.664.instructions": "1. Add 25 ml of **overproof rum**, 25 ml of **bianco vermouth**, 25 ml of **pineapple juice**, 25 ml of **lime juice**, 5 ml of **vanilla syrup**, and 1 dash of **absinthe** into a shaker.\n2. Fill the shaker with **ice** and shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.\n4. Garnish with a wedge of **pineapple**."
 }
