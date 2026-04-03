@@ -44075,6 +44075,280 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 667,
+      "name": "Wibble",
+      "description": "A fruity, citrusy sour where **London dry gin**, **sloe gin**, and **pink grapefruit juice** are rounded by **crème de mûre** and rich syrup.",
+      "instructions": "1. Add 30 ml of **London dry gin**, 30 ml of **sloe gin**, 30 ml of **grapefruit juice**, 10 ml of **lemon juice**, 10 ml of **crème de mure**, and 5 ml of **rich simple syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 369,
+          "name": "London Dry Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 317,
+          "name": "Sloe Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 178,
+          "name": "Grapefruit Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 130,
+          "name": "Crème de Mure",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 668,
+      "name": "Dramble",
+      "description": "A Scotch whisky Bramble riff where **Scotch whisky**, **lemon juice**, and rich syrup are finished with a drizzle of **crème de mûre**.",
+      "instructions": "1. Add 60 ml of **Scotch whisky**, 30 ml of **lemon juice**, and 15 ml of **rich simple syrup** into a rocks glass filled with crushed **ice**.\n2. Stir to combine and chill.\n3. Drizzle 10 ml of **crème de mure** over the surface.\n4. Garnish with a **blackberry**.",
+      "glassId": "rocks_glass",
+      "methodIds": ["build", "stir"],
+      "defaultServings": 1,
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 2,
+          "ingredientId": 311,
+          "name": "Scotch Whisky",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 130,
+          "name": "Crème de Mure",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 53,
+          "name": "Blackberry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 669,
+      "name": "Especial Day",
+      "description": "A berry-forward shaken rum cocktail combining muddled **blackberries**, **white rum**, **red vermouth**, **crème de mûre**, and **pineapple juice** with **Peychaud's bitters**.",
+      "instructions": "1. Muddle 3 **blackberries** in a shaker.\n2. Add 60 ml of **white rum**, 15 ml of **red vermouth**, 22.5 ml of **crème de mure**, 15 ml of **pineapple juice**, and 3 dashes of **Peychaud's bitters**.\n3. Fill the shaker with **ice** and shake until well chilled.\n4. Fine strain into a chilled martini glass.\n5. Express a **lemon** twist over the cocktail and discard it.\n6. Garnish with skewered **blackberries**.",
+      "glassId": "martini",
+      "methodIds": ["muddle", "shake"],
+      "defaultServings": 1,
+      "tags": [1, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 53,
+          "name": "Blackberry",
+          "amount": "3",
+          "unitId": 1
+        },
+        {
+          "order": 2,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 130,
+          "name": "Crème de Mure",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 276,
+          "name": "Peychaud's Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        },
+        {
+          "order": 9,
+          "ingredientId": 53,
+          "name": "Blackberry",
+          "amount": "2",
+          "unitId": 1,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 670,
+      "name": "Allegheny",
+      "description": "A bourbon-based sour with two vermouths where **bourbon**, **dry vermouth**, **bianco vermouth**, and **crème de mûre** are brightened by **lemon juice** and bitters.",
+      "instructions": "1. Add 40 ml of **bourbon**, 20 ml of **dry vermouth**, 20 ml of **bianco vermouth**, 10 ml of **crème de mure**, 10 ml of **lemon juice**, and 1 dash of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 130,
+          "name": "Crème de Mure",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
