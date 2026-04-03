@@ -2648,8 +2648,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    gap: 12,
+    gap: 8,
     marginTop: 8,
+    marginHorizontal: -8,
   },
   similarCocktailDivider: {
     height: StyleSheet.hairlineWidth,
