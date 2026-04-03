@@ -3355,5 +3355,21 @@
   "cocktail.660.name": "Bambus (Diffords perfektes Rezept)",
   "cocktail.660.synonyms": "Bamboo (Difford's Perfect Recipe)",
   "cocktail.660.description": "Ein trockener, aromatischer Aperitif, bei dem **Fino Sherry** führt, gestützt von drei Wermutsorten und einem Dash **Orangenbitter** für vielschichtige Kräuterkomplexität.",
-  "cocktail.660.instructions": "1. Gib 45 ml **Fino Sherry**, 15 ml **trockenen Wermut**, 15 ml **Bianco Wermut**, 15 ml **roten Wermut** und 1 Dash **Orangenbitter** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden."
+  "cocktail.660.instructions": "1. Gib 45 ml **Fino Sherry**, 15 ml **trockenen Wermut**, 15 ml **Bianco Wermut**, 15 ml **roten Wermut** und 1 Dash **Orangenbitter** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.",
+  "cocktail.661.name": "Weißer Rob Roy",
+  "cocktail.661.synonyms": "White Rob Roy",
+  "cocktail.661.description": "Eine leichtere Rob-Roy-Variante, bei der **Scotch Whisky** und **Bianco Wermut** mit **Peychaud's Bitters** gerührt werden – klar und aromatisch.",
+  "cocktail.661.instructions": "1. Gib 50 ml **Scotch Whisky**, 30 ml **Bianco Wermut** und 1 Dash **Peychaud's Bitters** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Mit einer aufgespießten **Maraschino-Kirsche** garnieren.",
+  "cocktail.662.name": "Nachruf",
+  "cocktail.662.synonyms": "Obituario",
+  "cocktail.662.description": "Ein Tequila-angeführter Riff auf den Obituary, bei dem **Tequila Blanco**, **Mezcal** und **Bianco Wermut** mit **Absinth** und Salzlösung akzentuiert werden.",
+  "cocktail.662.instructions": "1. Gib 45 ml **Tequila Blanco**, 15 ml **Mezcal**, 30 ml **Bianco Wermut**, 2,5 ml **Absinth** und 2 Tropfen **Salzlösung (4:1)** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in ein gekühltes Martini-Glas abseihen.\n5. Eine **Limetten**zeste über dem Cocktail ausdrücken und verwerfen.\n6. Mit einer aufgespießten **Olive** garnieren.",
+  "cocktail.663.name": "Tuxedo (Diffords Rezept)",
+  "cocktail.663.synonyms": "Tuxedo (Difford's recipe)",
+  "cocktail.663.description": "Eine trockene, spirit-forward Tuxedo-Variante mit **Old Tom Gin**, zwei Wermutsorten, **Fino Sherry** und geschichteten Bitters mit einem Hauch **Absinth**.",
+  "cocktail.663.instructions": "1. Gib 45 ml **Old Tom Gin**, 20 ml **trockenen Wermut**, 15 ml **Bianco Wermut**, 10 ml **Fino Sherry**, 1,25 ml **Luxardo Maraschino**, 1 Dash **Absinth**, 1 Dash **Angostura Bitters** und 1 Dash **Orangenbitter** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.\n6. Mit einer aufgespießten **Maraschino-Kirsche** garnieren.",
+  "cocktail.664.name": "Kreuzbaum",
+  "cocktail.664.synonyms": "Crosstree",
+  "cocktail.664.description": "Ein tropischer Sour, bei dem **Overproof Rum**, **Bianco Wermut**, **Ananassaft** und **Limettensaft** mit Vanille und einem Dash **Absinth** aufgehellt werden.",
+  "cocktail.664.instructions": "1. Gib 25 ml **Overproof Rum**, 25 ml **Bianco Wermut**, 25 ml **Ananassaft**, 25 ml **Limettensaft**, 5 ml **Vanillesirup** und 1 Dash **Absinth** in einen Shaker.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen.\n4. Mit einem Stück **Ananas** garnieren."
 }
