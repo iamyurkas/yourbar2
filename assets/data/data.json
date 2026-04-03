@@ -44686,6 +44686,335 @@
       ]
     },
     {
+      "id": 676,
+      "name": "Triple Daiquiri",
+      "description": "A three-rum Daiquiri where **cachaça** adds grassy edges to a bright, spirit-led sour with **lime juice** and a touch of **sugar**.",
+      "instructions": "1. Shake all ingredients with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Garnish with a **lime** wedge.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [2],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 170,
+          "name": "Gold Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 7,
+          "name": "Aged Rum",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 72,
+          "name": "Cachaça",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 329,
+          "name": "Sugar",
+          "amount": "2",
+          "unitId": 2
+        },
+        {
+          "order": 6,
+          "ingredientId": 135,
+          "name": "Daiquiri Bitters",
+          "amount": "4",
+          "unitId": 7
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 677,
+      "name": "Edison's Medicine",
+      "description": "Herbal and zesty, with **cachaça**, **yellow Chartreuse**, **basil**, and **lime juice** rounded by **agave syrup**.",
+      "instructions": "1. Shake all ingredients with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Garnish with a **basil** leaf floated on the cocktail.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [2],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 39,
+          "name": "Basil",
+          "amount": "6",
+          "unitId": 10
+        },
+        {
+          "order": 2,
+          "ingredientId": 72,
+          "name": "Cachaça",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 361,
+          "name": "Yellow Chartreuse",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 6,
+          "name": "Agave Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 349,
+          "name": "Water",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 39,
+          "name": "Basil",
+          "amount": "1",
+          "unitId": 10,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 678,
+      "name": "Brazil 66",
+      "description": "An orange-leaning Caipirinha-style sour combining **cachaça**, **Cointreau**, fresh **orange juice**, and **lime juice**.",
+      "instructions": "1. Shake all ingredients with **ice**.\n2. Strain into an old-fashioned glass filled with fresh **ice**.\n3. Garnish with a **lime** wedge.",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [2],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 72,
+          "name": "Cachaça",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 113,
+          "name": "Cointreau",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 251,
+          "name": "Orange Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 679,
+      "name": "Esmeralda",
+      "description": "A punchy cachaça sour with **elderflower liqueur** and **lime juice**, sharpened by a smoky touch of peated **Scotch whisky**.",
+      "instructions": "1. Shake all ingredients with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Garnish with a **lime** wedge.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [2, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 72,
+          "name": "Cachaça",
+          "amount": "50",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 200,
+          "name": "Islay Scotch Whisky",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 365,
+          "name": "Elderflower Liquor",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 680,
+      "name": "Lavarello",
+      "description": "A bittersweet cachaça sipper riffing on Rabo-de-Galo, layering **aperitivo**, **Cynar**, and **chocolate bitters**.",
+      "instructions": "1. Stir all ingredients with **ice**.\n2. Strain into an old-fashioned glass filled with fresh **ice** (preferably over a large cube).\n3. Express an **orange** twist over the cocktail and use it as garnish.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 72,
+          "name": "Cachaça",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 23,
+          "name": "Aperol",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 134,
+          "name": "Cynar",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 93,
+          "name": "Chocolate Bitters",
+          "amount": "1",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 349,
+          "name": "Water",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
       "id": 681,
       "name": "Boston Sour",
       "description": "Bourbon whiskey soured with **lemon juice** and smoothed by **egg white**.",
