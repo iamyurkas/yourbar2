@@ -3100,8 +3100,8 @@
   "cocktail.598.synonyms": "Coffee Old Fashioned",
   "cocktail.598.description": "Ein reichhaltiger Kaffee-Cocktail mit **dunklem Rum**, **Kahlúa** und Maraschino-Likör.",
   "cocktail.598.instructions": "1. 60 ml **dunklen Rum**, 45 ml **Kaffeelikör**, 15 ml **Luxardo Maraschino**, 5 ml **Karamellsirup** und 2 Spritzer **Orangenbitter** in den Shaker geben.\n2. Einen Shaker mit **Eis** füllen.\n3. Etwa 15 Sekunden kräftig schütteln, bis alles gut gekühlt ist.\n4. In ein gekühltes Rocks-Glas über frisches **Eis** (vorzugsweise über einen großen Würfel) abseihen.\n5. Die Öle aus einer **Orangenschale** über dem Getränk ausdrücken und diese als Garnitur verwenden.",
-  "cocktail.599.name": "Yamabuki",
-  "cocktail.599.synonyms": "Yamabuki No Hana",
+  "cocktail.599.name": "Yamabuki-Blüte",
+  "cocktail.599.synonyms": "Yamabuki, Yamabuki No Hana",
   "cocktail.599.description": "Eine anspruchsvolle und harmonische Mischung, bei der die Tiefe von **japanischem Whisky** auf die Kräutersüße von **Bianco Wermut** und **Amaro Montenegro** trifft. Dieser Cocktail bietet eine perfekt strukturierte Balance aus Zitrushelligkeit und bittersüßer Komplexität.",
   "cocktail.599.instructions": "1. 45 ml **japanischen Whisky**, 22,5 ml **Bianco Wermut**, 15 ml **Amaro Montenegro** und einen Spritzer **Orangenbitter** in ein Rührglas geben.\n2. Ein Rührglas mit **Eis** füllen.\n3. Etwa 30 Sekunden lang sanft rühren, bis alles gut gekühlt ist.\n4. In ein gekühltes Nick & Nora-Glas abseihen.\n5. Die Öle aus einer **Zitronenschale** über dem Getränk ausdrücken und diese als Garnitur verwenden.",
   "cocktail.600.name": "Yellow Bird",
@@ -3371,5 +3371,13 @@
   "cocktail.664.name": "Kreuzbaum",
   "cocktail.664.synonyms": "Crosstree",
   "cocktail.664.description": "Ein tropischer Sour, bei dem **Overproof Rum**, **Bianco Wermut**, **Ananassaft** und **Limettensaft** mit Vanille und einem Dash **Absinth** aufgehellt werden.",
-  "cocktail.664.instructions": "1. Gib 25 ml **Overproof Rum**, 25 ml **Bianco Wermut**, 25 ml **Ananassaft**, 25 ml **Limettensaft**, 5 ml **Vanillesirup** und 1 Dash **Absinth** in einen Shaker.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen.\n4. Mit einem Stück **Ananas** garnieren."
+  "cocktail.664.instructions": "1. Gib 25 ml **Overproof Rum**, 25 ml **Bianco Wermut**, 25 ml **Ananassaft**, 25 ml **Limettensaft**, 5 ml **Vanillesirup** und 1 Dash **Absinth** in einen Shaker.\n2. Fülle den Shaker mit **Eis** und schüttle kräftig bis gut gekühlt.\n3. Fein in eine gekühlte Coupette abseihen.\n4. Mit einem Stück **Ananas** garnieren.",
+  "cocktail.665.name": "Mexikaner in Manhattan",
+  "cocktail.665.synonyms": "Mexican in Manhattan",
+  "cocktail.665.description": "Ein tequila-betonter Manhattan-Style-Sipper, bei dem **Tequila Añejo**, **Bianco Wermut** und ein Hauch **Luxardo Maraschino** mit aromatischen Bitters ausbalanciert werden.",
+  "cocktail.665.instructions": "1. Gib 60 ml **Tequila Añejo**, 30 ml **Bianco Wermut**, 2,5 ml **Luxardo Maraschino** und 3 Dashes **Angostura Bitters** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Mit einer aufgespießten **Maraschino-Kirsche** garnieren.",
+  "cocktail.666.name": "Gin-Blüten-Martini",
+  "cocktail.666.synonyms": "Gin Blossom Martini",
+  "cocktail.666.description": "Eine duftige, spirit-forward Martini-Variation, bei der **London Dry Gin**, **Bianco Wermut** und **Aprikosenbrand** durch **Orangenbitter** geschärft werden.",
+  "cocktail.666.instructions": "1. Gib 45 ml **London Dry Gin**, 45 ml **Bianco Wermut**, 22,5 ml **Aprikosenbrand** und 2 Dashes **Orangenbitter** in ein Rührglas.\n2. Fülle das Rührglas mit **Eis**.\n3. Rühre bis gut gekühlt.\n4. Fein in eine gekühlte Coupette abseihen.\n5. Eine **Zitronen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden."
 }
