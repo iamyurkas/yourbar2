@@ -3127,5 +3127,21 @@
   "cocktail.666.name": "Gin Blossom Martini",
   "cocktail.666.synonyms": "",
   "cocktail.666.description": "A fragrant, spirit-forward Martini variation where **London dry gin**, **bianco vermouth**, and **apricot brandy** are sharpened with **orange bitters**.",
-  "cocktail.666.instructions": "1. Add 45 ml of **London dry gin**, 45 ml of **bianco vermouth**, 22.5 ml of **apricot brandy**, and 2 dashes of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish."
+  "cocktail.666.instructions": "1. Add 45 ml of **London dry gin**, 45 ml of **bianco vermouth**, 22.5 ml of **apricot brandy**, and 2 dashes of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish.",
+  "cocktail.667.name": "Wibble",
+  "cocktail.667.synonyms": "",
+  "cocktail.667.description": "A fruity, citrusy sour where **London dry gin**, **sloe gin**, and **pink grapefruit juice** are rounded by **crème de mûre** and rich syrup.",
+  "cocktail.667.instructions": "1. Add 30 ml of **London dry gin**, 30 ml of **sloe gin**, 30 ml of **grapefruit juice**, 10 ml of **lemon juice**, 10 ml of **crème de mure**, and 5 ml of **rich simple syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish.",
+  "cocktail.668.name": "Dramble",
+  "cocktail.668.synonyms": "",
+  "cocktail.668.description": "A Scotch whisky Bramble riff where **Scotch whisky**, **lemon juice**, and rich syrup are finished with a drizzle of **crème de mûre**.",
+  "cocktail.668.instructions": "1. Add 60 ml of **Scotch whisky**, 30 ml of **lemon juice**, and 15 ml of **rich simple syrup** into a rocks glass filled with crushed **ice**.\n2. Stir to combine and chill.\n3. Drizzle 10 ml of **crème de mure** over the surface.\n4. Garnish with a **blackberry**.",
+  "cocktail.669.name": "Especial Day",
+  "cocktail.669.synonyms": "",
+  "cocktail.669.description": "A berry-forward shaken rum cocktail combining muddled **blackberries**, **white rum**, **red vermouth**, **crème de mûre**, and **pineapple juice** with **Peychaud's bitters**.",
+  "cocktail.669.instructions": "1. Muddle 3 **blackberries** in a shaker.\n2. Add 60 ml of **white rum**, 15 ml of **red vermouth**, 22.5 ml of **crème de mure**, 15 ml of **pineapple juice**, and 3 dashes of **Peychaud's bitters**.\n3. Fill the shaker with **ice** and shake until well chilled.\n4. Fine strain into a chilled martini glass.\n5. Express a **lemon** twist over the cocktail and discard it.\n6. Garnish with skewered **blackberries**.",
+  "cocktail.670.name": "Allegheny",
+  "cocktail.670.synonyms": "",
+  "cocktail.670.description": "A bourbon-based sour with two vermouths where **bourbon**, **dry vermouth**, **bianco vermouth**, and **crème de mûre** are brightened by **lemon juice** and bitters.",
+  "cocktail.670.instructions": "1. Add 40 ml of **bourbon**, 20 ml of **dry vermouth**, 20 ml of **bianco vermouth**, 10 ml of **crème de mure**, 10 ml of **lemon juice**, and 1 dash of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish."
 }
