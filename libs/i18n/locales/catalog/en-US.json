@@ -3183,5 +3183,21 @@
   "cocktail.680.name": "Haberdasher",
   "cocktail.680.synonyms": "",
   "cocktail.680.description": "A decadent after-dinner cocktail layering a stirred base of **bourbon**, dark **crème de cacao**, and **Fernet Branca** under a floated Chartreuse cream.",
-  "cocktail.680.instructions": "1. Add 45 ml of **bourbon**, 30 ml of **crème de cacao brown**, and 7.5 ml of **Fernet Branca** into a mixing glass with **ice** and stir until chilled.\n2. Strain into a chilled coupe glass.\n3. Add 15 ml of **green Chartreuse** and 30 ml of **heavy cream** into a shaker with **ice**.\n4. Shake, then strain back into the shaker.\n5. Dry shake (without ice) to emulsify.\n6. Carefully layer the Chartreuse cream over the surface of the cocktail.\n7. Dust with **cocoa powder** and float a **mint** leaf in the center."
+  "cocktail.680.instructions": "1. Add 45 ml of **bourbon**, 30 ml of **crème de cacao brown**, and 7.5 ml of **Fernet Branca** into a mixing glass with **ice** and stir until chilled.\n2. Strain into a chilled coupe glass.\n3. Add 15 ml of **green Chartreuse** and 30 ml of **heavy cream** into a shaker with **ice**.\n4. Shake, then strain back into the shaker.\n5. Dry shake (without ice) to emulsify.\n6. Carefully layer the Chartreuse cream over the surface of the cocktail.\n7. Dust with **cocoa powder** and float a **mint** leaf in the center.",
+  "cocktail.686.name": "Marigny",
+  "cocktail.686.synonyms": "",
+  "cocktail.686.description": "Spirit-forward, sour, balanced, and delicious with herbal notes, two brandies, and citrus freshness.",
+  "cocktail.686.instructions": "1. Shake 22.5 ml of **cognac**, 22.5 ml of **calvados**, 15 ml of **green Chartreuse**, 22.5 ml of **lemon juice**, 10 ml of **rich simple syrup**, and 1 dash of **Angostura bitters** with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Garnish with a **lemon** wheel.",
+  "cocktail.687.name": "Simon's Sidecar",
+  "cocktail.687.synonyms": "",
+  "cocktail.687.description": "A Sidecar variation that leans on dry orange curaçao and pineau des charentes for layered flavor and a finely balanced sour profile.",
+  "cocktail.687.instructions": "1. Shake 45 ml of **cognac**, 15 ml of **orange curaçao**, 15 ml of **pineau des charentes**, 15 ml of **lemon juice**, 5 ml of **rich simple syrup**, and 2 drops of **saline solution (4:1)** with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Express an **orange** twist over the cocktail and use as garnish.",
+  "cocktail.688.name": "French 125 (French '75' with cognac)",
+  "cocktail.688.synonyms": "French 125",
+  "cocktail.688.description": "A cognac-based French 75 variation: richer than the gin version, yet still lively, refreshing, and easy-drinking.",
+  "cocktail.688.instructions": "1. Stir 7.5 ml of **rich simple syrup** with 15 ml of **lemon juice** in a shaker.\n2. Add 45 ml of **cognac** and shake with **ice**.\n3. Fine strain into a chilled flute glass.\n4. Top with 75 ml of **champagne** and briefly stir.\n5. Express a **lemon** twist over the cocktail and use as garnish.",
+  "cocktail.689.name": "Chauncey",
+  "cocktail.689.synonyms": "",
+  "cocktail.689.description": "A delicious equal-parts split-base Manhattan-style cocktail suited to late-night sipping.",
+  "cocktail.689.instructions": "1. Stir 22.5 ml of **old tom gin**, 22.5 ml of **rye whiskey**, 22.5 ml of **red vermouth**, 22.5 ml of **cognac**, and 1 dash of **orange bitters** with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Express a **lemon** twist over the cocktail and use as garnish."
 }

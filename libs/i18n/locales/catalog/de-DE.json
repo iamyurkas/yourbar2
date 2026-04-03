@@ -3455,5 +3455,21 @@
   "cocktail.685.name": "Sonnenstrahl",
   "cocktail.685.synonyms": "Sunray",
   "cocktail.685.description": "Zitrisch, bourbonbetont und sanft bittersüß mit frischer, lebendiger Orange.",
-  "cocktail.685.instructions": "1. 20 ml **Bourbon**, 20 ml **Grand Marnier**, 10 ml **Lillet Blanc**, 10 ml **trockenen Wermut** und 22,5 ml **Orangensaft** mit **Eis** schütteln.\n2. Fein in eine gekühlte Coupette abseihen.\n3. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden."
+  "cocktail.685.instructions": "1. 20 ml **Bourbon**, 20 ml **Grand Marnier**, 10 ml **Lillet Blanc**, 10 ml **trockenen Wermut** und 22,5 ml **Orangensaft** mit **Eis** schütteln.\n2. Fein in eine gekühlte Coupette abseihen.\n3. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.",
+  "cocktail.686.name": "Marigny",
+  "cocktail.686.synonyms": "Marigny",
+  "cocktail.686.description": "Spirituosenbetont, sauer, ausgewogen und köstlich mit Kräuternoten, zwei Brandys und frischer Zitrusnote.",
+  "cocktail.686.instructions": "1. 22,5 ml **Cognac**, 22,5 ml **Calvados**, 15 ml **grünen Chartreuse**, 22,5 ml **Zitronensaft**, 10 ml **Rich Simple Syrup** und 1 Dash **Angostura Bitters** mit **Eis** schütteln.\n2. Fein in eine gekühlte Coupette abseihen.\n3. Mit einer **Zitronen**scheibe garnieren.",
+  "cocktail.687.name": "Simons Sidecar",
+  "cocktail.687.synonyms": "Simon's Sidecar",
+  "cocktail.687.description": "Eine Sidecar-Variation mit Fokus auf Dry Curaçao und Pineau des Charentes, die einen vielschichtigen und präzise ausbalancierten Sour ergibt.",
+  "cocktail.687.instructions": "1. 45 ml **Cognac**, 15 ml **Orange Curaçao**, 15 ml **Pineau des Charentes**, 15 ml **Zitronensaft**, 5 ml **Rich Simple Syrup** und 2 Tropfen **Salzlösung (4:1)** mit **Eis** schütteln.\n2. Fein in eine gekühlte Coupette abseihen.\n3. Eine **Orangen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.",
+  "cocktail.688.name": "Französische 125 (French '75' mit Cognac)",
+  "cocktail.688.synonyms": "French 125 (French '75' with cognac), French 125",
+  "cocktail.688.description": "Eine Cognac-basierte French-75-Variante: gehaltvoller als die Gin-Version, aber weiterhin belebend, erfrischend und sehr trinkbar.",
+  "cocktail.688.instructions": "1. 7,5 ml **Rich Simple Syrup** mit 15 ml **Zitronensaft** im Shaker verrühren.\n2. 45 ml **Cognac** zugeben und mit **Eis** schütteln.\n3. Fein in ein gekühltes Sektglas abseihen.\n4. Mit 75 ml **Champagner** auffüllen und kurz umrühren.\n5. Eine **Zitronen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden.",
+  "cocktail.689.name": "Chauncey",
+  "cocktail.689.synonyms": "Chauncey",
+  "cocktail.689.description": "Ein köstlicher Manhattan-ähnlicher Cocktail im Equal-Parts-Split-Base-Stil, ideal zum späten Sippen.",
+  "cocktail.689.instructions": "1. 22,5 ml **Old Tom Gin**, 22,5 ml **Rye Whiskey**, 22,5 ml **roten Wermut**, 22,5 ml **Cognac** und 1 Dash **Orangenbitter** mit **Eis** rühren.\n2. Fein in eine gekühlte Coupette abseihen.\n3. Eine **Zitronen**zeste über dem Cocktail ausdrücken und als Garnitur verwenden."
 }
