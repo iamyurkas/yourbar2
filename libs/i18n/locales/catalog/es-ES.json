@@ -3381,7 +3381,7 @@
   "cocktail.598.synonyms": "Writer's Coffee, Coffee Old Fashioned",
   "cocktail.598.description": "Un rico cóctel de café con **ron oscuro**, **Kahlúa** y licor de marrasquino.",
   "cocktail.598.instructions": "1. Añade 60 ml de **ron oscuro**, 45 ml de **licor de café**, 15 ml de **Luxardo marrasquino**, 5 ml de **jarabe de caramelo** y 2 gotas de **amargos de naranja** en una coctelera.\n2. Llena una coctelera con **hielo**.\n3. Agita enérgicamente durante unos 15 segundos hasta que esté bien frío.\n4. Cuela en un vaso rocks enfriado lleno de **hielo** fresco (preferiblemente sobre un cubo grande).\n5. Exprime los aceites de la piel de una **naranja** sobre la bebida y úsala como adorno.",
-  "cocktail.599.name": "Yamabuki",
+  "cocktail.599.name": "Flor de Yamabuki",
   "cocktail.599.synonyms": "Yamabuki, Yamabuki No Hana",
   "cocktail.599.description": "Una mezcla sofisticada y armoniosa donde la profundidad del **whisky japonés** se encuentra con la dulzura herbal del **vermut bianco** y el **Amaro Montenegro**. Este cóctel ofrece un equilibrio perfectamente estructurado de brillo cítrico y complejidad agridulce.",
   "cocktail.599.instructions": "1. Añade 45 ml de **whisky japonés**, 22,5 ml de **vermut bianco**, 15 ml de **Amaro Montenegro** y una gota de **amargos de naranja** en un vaso de mezclas.\n2. Llena un vaso de mezclas con **hielo**.\n3. Remueve suavemente durante unos 30 segundos hasta que esté bien frío.\n4. Cuela en una copa Nick & Nora enfriada.\n5. Exprime los aceites de la piel de un **limón** sobre la bebida y úsala como adorno.",
@@ -3653,5 +3653,13 @@
   "cocktail.664.name": "Cruce de Árboles",
   "cocktail.664.synonyms": "Crosstree",
   "cocktail.664.description": "Un sour tropical donde **ron overproof**, **vermut bianco**, **zumo de piña** y **zumo de lima** se realzan con vainilla y un golpe de **absenta**.",
-  "cocktail.664.instructions": "1. Añade 25 ml de **ron overproof**, 25 ml de **vermut bianco**, 25 ml de **zumo de piña**, 25 ml de **zumo de lima**, 5 ml de **sirope de vainilla** y 1 golpe de **absenta** en una coctelera.\n2. Llena la coctelera con **hielo** y agita con energía hasta enfriar bien.\n3. Cuela fino en una copa coupé previamente enfriada.\n4. Decora con una cuña de **piña**."
+  "cocktail.664.instructions": "1. Añade 25 ml de **ron overproof**, 25 ml de **vermut bianco**, 25 ml de **zumo de piña** y 25 ml de **zumo de lima**, 5 ml de **sirope de vainilla** y 1 golpe de **absenta** en una coctelera.\n2. Llena la coctelera con **hielo** y agita con energía hasta enfriar bien.\n3. Cuela fino en una copa coupé previamente enfriada.\n4. Decora con una cuña de **piña**.",
+  "cocktail.665.name": "Mexicano en Manhattan",
+  "cocktail.665.synonyms": "Mexican in Manhattan",
+  "cocktail.665.description": "Un trago estilo Manhattan con protagonismo de tequila, donde **tequila añejo**, **vermut bianco** y un toque de **Luxardo maraschino** se equilibran con amargos aromáticos.",
+  "cocktail.665.instructions": "1. Añade 60 ml de **tequila añejo**, 30 ml de **vermut bianco**, 2.5 ml de **Luxardo maraschino** y 3 golpes de **amargos Angostura** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve hasta que esté bien frío.\n4. Cuela fino en una copa coupé previamente enfriada.\n5. Decora con una **cereza marrasquino** en brocheta.",
+  "cocktail.666.name": "Martini Flor de Ginebra",
+  "cocktail.666.synonyms": "Gin Blossom Martini",
+  "cocktail.666.description": "Una variación de Martini fragante y espirituosa en la que **gin London dry**, **vermut bianco** y **brandy de albaricoque** se afinan con **amargos de naranja**.",
+  "cocktail.666.instructions": "1. Añade 45 ml de **gin London dry**, 45 ml de **vermut bianco**, 22.5 ml de **brandy de albaricoque** y 2 golpes de **amargos de naranja** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve hasta que esté bien frío.\n4. Cuela fino en una copa coupé previamente enfriada.\n5. Exprime un twist de **limón** sobre el cóctel y úsalo como adorno."
 }
