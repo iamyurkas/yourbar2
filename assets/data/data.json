@@ -46546,6 +46546,84 @@
         { "order": 4, "ingredientId": 320, "name": "Sparkling Wine", "amount": "20", "unitId": 11 },
         { "order": 5, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
       ]
+    },
+    {
+      "id": 709,
+      "name": "Velasco and Sand",
+      "synonyms": ["Authentic Blood & Sand", "Mezcal Blood & Sand"],
+      "description": "A smoky, zesty Blood & Sand riff where **mezcal** adds lift over **cherry liqueur**, **red vermouth**, and **orange juice**.",
+      "instructions": "1. Add 30 ml of **mezcal**, 22.5 ml of **cherry liqueur**, 22.5 ml of **red vermouth**, and 30 ml of **orange juice** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [2, 6],
+      "ingredients": [
+        { "order": 1, "ingredientId": 238, "name": "Mezcal", "amount": "30", "unitId": 11 },
+        { "order": 2, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "22.5", "unitId": 11 },
+        { "order": 3, "ingredientId": 294, "name": "Red Vermouth", "amount": "22.5", "unitId": 11 },
+        { "order": 4, "ingredientId": 251, "name": "Orange Juice", "amount": "30", "unitId": 11 },
+        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 6, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 26, "garnish": true }
+      ]
+    },
+    {
+      "id": 710,
+      "name": "Chorus Girl",
+      "description": "A decadent, spirit-forward aperitivo where **gin** meets **red vermouth**, **bianco vermouth**, cherry and floral accents with a hint of **chocolate bitters**.",
+      "instructions": "1. Add 60 ml of **gin**, 15 ml of **red vermouth**, 7.5 ml of **bianco vermouth**, 5 ml of **cherry liqueur**, 5 ml of **elderflower liquor**, and 4 dashes of **chocolate bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled nick and nora glass.\n5. Float an edible rose petal.",
+      "glassId": "nick_and_nora",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 5],
+      "ingredients": [
+        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "60", "unitId": 11 },
+        { "order": 2, "ingredientId": 294, "name": "Red Vermouth", "amount": "15", "unitId": 11 },
+        { "order": 3, "ingredientId": 46, "name": "Bianco Vermouth", "amount": "7.5", "unitId": 11 },
+        { "order": 4, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "5", "unitId": 11 },
+        { "order": 5, "ingredientId": 365, "name": "Elderflower Liquor", "amount": "5", "unitId": 11 },
+        { "order": 6, "ingredientId": 93, "name": "Chocolate Bitters", "amount": "4", "unitId": 6 },
+        { "order": 7, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true }
+      ]
+    },
+    {
+      "id": 711,
+      "name": "Fog Cutter (Bramble style)",
+      "description": "A short tropical sour where **white rum**, **cognac**, and **gin** are softened with citrus and a cherry drizzle over crushed ice.",
+      "instructions": "1. Add 30 ml of **white rum**, 15 ml of **cognac**, 15 ml of **gin**, 15 ml of **lime juice**, and 7.5 ml of **rich simple syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Strain into a rocks glass filled with crushed **ice**.\n5. Drizzle 7.5 ml of **cherry liqueur** over the cocktail.\n6. Garnish with an **orange** slice.",
+      "glassId": "rocks_glass",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [1, 6],
+      "ingredients": [
+        { "order": 1, "ingredientId": 357, "name": "White Rum", "amount": "30", "unitId": 11 },
+        { "order": 2, "ingredientId": 112, "name": "Cognac", "amount": "15", "unitId": 11 },
+        { "order": 3, "ingredientId": 161, "name": "Gin", "amount": "15", "unitId": 11 },
+        { "order": 4, "ingredientId": 228, "name": "Lime Juice", "amount": "15", "unitId": 11 },
+        { "order": 5, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "7.5", "unitId": 11 },
+        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 7, "ingredientId": 196, "name": "Ice", "amount": "120", "unitId": 8 },
+        { "order": 8, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "7.5", "unitId": 11 },
+        { "order": 9, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 19, "garnish": true }
+      ]
+    },
+    {
+      "id": 712,
+      "name": "Landing Gear",
+      "description": "A spirituous, richly fruity Burnt Fuselage riff where **cognac**, **Grand Marnier**, and cherry notes meet dry vermouth.",
+      "instructions": "1. Add 30 ml of **cognac**, 30 ml of **Grand Marnier**, 15 ml of **dry vermouth**, 15 ml of **cherry liqueur**, and 2.5 ml of **Luxardo Maraschino** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 5],
+      "ingredients": [
+        { "order": 1, "ingredientId": 112, "name": "Cognac", "amount": "30", "unitId": 11 },
+        { "order": 2, "ingredientId": 175, "name": "Grand Marnier", "amount": "30", "unitId": 11 },
+        { "order": 3, "ingredientId": 144, "name": "Dry Vermouth", "amount": "15", "unitId": 11 },
+        { "order": 4, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "15", "unitId": 11 },
+        { "order": 5, "ingredientId": 231, "name": "Luxardo Maraschino", "amount": "2.5", "unitId": 11 },
+        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 7, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+      ]
     }
   ],
   "ingredients": [
