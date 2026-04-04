@@ -46447,6 +46447,105 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 704,
+      "name": "Sabot",
+      "synonyms": ["Champagne White Lady"],
+      "description": "A White Lady lengthened with sparkling wine for extra lift, texture, and punch.",
+      "instructions": "1. Add 45 ml of **gin**, 22.5 ml of **triple sec**, 22.5 ml of **lemon juice**, 10 ml of **rich simple syrup**, and 15 ml of **egg white** into a shaker.\n2. Fill the shaker with **ice** and shake hard.\n3. Fine strain back into the shaker.\n4. Dry shake (without ice) to emulsify.\n5. Fine strain into a chilled coupe glass.\n6. Top with 22.5 ml of **sparkling wine**.\n7. Express a **lemon** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [3, 4],
+      "ingredients": [
+        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "45", "unitId": 11 },
+        { "order": 2, "ingredientId": 340, "name": "Triple Sec", "amount": "22.5", "unitId": 11 },
+        { "order": 3, "ingredientId": 221, "name": "Lemon Juice", "amount": "22.5", "unitId": 11 },
+        { "order": 4, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "10", "unitId": 11 },
+        { "order": 5, "ingredientId": 149, "name": "Egg White", "amount": "15", "unitId": 11 },
+        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 7, "ingredientId": 320, "name": "Sparkling Wine", "amount": "22.5", "unitId": 11 },
+        { "order": 8, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+      ]
+    },
+    {
+      "id": 705,
+      "name": "Carlton Banks",
+      "description": "A Champagne Cocktail-style serve where **cognac**, cherry liqueur, and bitters meet a chilled sparkling top.",
+      "instructions": "1. Add 30 ml of **cognac**, 30 ml of **cherry liqueur**, 2 dashes of **orange bitters**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Top with 45 ml of **sparkling wine**.\n6. Express an **orange** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 5],
+      "ingredients": [
+        { "order": 1, "ingredientId": 112, "name": "Cognac", "amount": "30", "unitId": 11 },
+        { "order": 2, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "30", "unitId": 11 },
+        { "order": 3, "ingredientId": 248, "name": "Orange Bitters", "amount": "2", "unitId": 6 },
+        { "order": 4, "ingredientId": 19, "name": "Angostura Bitters", "amount": "2", "unitId": 6 },
+        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 6, "ingredientId": 320, "name": "Sparkling Wine", "amount": "45", "unitId": 11 },
+        { "order": 7, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 26, "garnish": true }
+      ]
+    },
+    {
+      "id": 706,
+      "name": "Pisco Punch (Difford's recipe)",
+      "synonyms": ["Pisco Punch"],
+      "description": "A tangy, balanced pisco punch where pineapple and citrus round out grape-spirit depth.",
+      "instructions": "1. Add 60 ml of **pisco**, 22.5 ml of **pineapple juice**, 15 ml of **simple syrup**, 15 ml of **lemon juice**, 30 ml of **white wine**, and 3 **cloves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled highball glass over fresh **ice**.\n5. Garnish with a **pineapple** wedge.",
+      "glassId": "highball_glass",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [1, 6, 8],
+      "ingredients": [
+        { "order": 1, "ingredientId": 285, "name": "Pisco", "amount": "60", "unitId": 11 },
+        { "order": 2, "ingredientId": 281, "name": "Pineapple Juice", "amount": "22.5", "unitId": 11 },
+        { "order": 3, "ingredientId": 305, "name": "Simple Syrup", "amount": "15", "unitId": 11 },
+        { "order": 4, "ingredientId": 221, "name": "Lemon Juice", "amount": "15", "unitId": 11 },
+        { "order": 5, "ingredientId": 375, "name": "White Wine", "amount": "30", "unitId": 11 },
+        { "order": 6, "ingredientId": 99, "name": "Cloves", "amount": "3", "unitId": 1 },
+        { "order": 7, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 8, "ingredientId": 196, "name": "Ice", "amount": "120", "unitId": 8 },
+        { "order": 9, "ingredientId": 280, "name": "Pineapple", "amount": "1", "unitId": 27, "garnish": true }
+      ]
+    },
+    {
+      "id": 707,
+      "name": "Royal Mojito",
+      "synonyms": ["Champagne Mojito"],
+      "description": "A Mojito variation topped with sparkling wine instead of soda water for a drier, celebratory finish.",
+      "instructions": "1. Add 14 **mint** leaves, 60 ml of **gold rum**, 15 ml of **lime juice**, and 10 ml of **rich simple syrup** into a highball glass.\n2. Add crushed **ice** to fill about two-thirds of the glass.\n3. Churn gently with a bar spoon.\n4. Fill with more crushed **ice**.\n5. Top with 30 ml of **sparkling wine**.\n6. Garnish with a bouquet of **mint** sprigs.",
+      "glassId": "highball_glass",
+      "methodIds": ["build"],
+      "defaultServings": 1,
+      "tags": [1, 6, 8],
+      "ingredients": [
+        { "order": 1, "ingredientId": 241, "name": "Mint", "amount": "14", "unitId": 10 },
+        { "order": 2, "ingredientId": 170, "name": "Gold Rum", "amount": "60", "unitId": 11 },
+        { "order": 3, "ingredientId": 228, "name": "Lime Juice", "amount": "15", "unitId": 11 },
+        { "order": 4, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "10", "unitId": 11 },
+        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "140", "unitId": 8 },
+        { "order": 6, "ingredientId": 320, "name": "Sparkling Wine", "amount": "30", "unitId": 11 },
+        { "order": 7, "ingredientId": 241, "name": "Mint", "amount": "1", "unitId": 21, "garnish": true }
+      ]
+    },
+    {
+      "id": 708,
+      "name": "Millionaire's Martini",
+      "description": "A dangerous sparkling Martini riff built on equal parts **gin** and **dry vermouth** with a champagne lift.",
+      "instructions": "1. Add 40 ml of **gin** and 40 ml of **dry vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Top with 20 ml of **sparkling wine**.\n6. Express a **lemon** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 5],
+      "ingredients": [
+        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "40", "unitId": 11 },
+        { "order": 2, "ingredientId": 144, "name": "Dry Vermouth", "amount": "40", "unitId": 11 },
+        { "order": 3, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
+        { "order": 4, "ingredientId": 320, "name": "Sparkling Wine", "amount": "20", "unitId": 11 },
+        { "order": 5, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+      ]
     }
   ],
   "ingredients": [
