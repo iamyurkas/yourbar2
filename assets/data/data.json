@@ -18670,7 +18670,7 @@
     {
       "id": 285,
       "name": "Hanky Panky",
-      "synonyms": ["Gin, Red Vermouth and Fernet Branca Cocktail"],
+      "synonyms": ["Fernet Branca Manky Panky"],
       "description": "Classic **gin** and vermouth cocktail with a hint of fernet.",
       "instructions": "1. Add 45 ml of **gin**, 45 ml of **red vermouth**, and 7.5 ml of **Fernet Branca** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled coupe or martini glass.\n5. Express oils from an **orange** peel over the drink and use it as a garnish.",
       "photoUri": "assets/cocktails/285-hanky-panky.jpg",
@@ -43020,7 +43020,7 @@
     },
     {
       "id": 651,
-      "name": "Montana (Jacques Straub, 1913)",
+      "name": "Montana",
       "description": "A vintage Manhattan-adjacent variation where **cognac**, **dry vermouth**, and **ruby port** meet a subtle touch of **anisette** and aromatic bitters.",
       "instructions": "1. Add 45 ml of **cognac**, 22.5 ml of **dry vermouth**, 7.5 ml of **ruby port**, 5 ml of **anisette**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled.\n4. Strain into a chilled coupe glass.\n5. Express the oils from a **lemon** twist over the drink and use as garnish.",
       "glassId": "coupe",
@@ -43210,7 +43210,6 @@
     {
       "id": 654,
       "name": "Banana Boulevardier",
-      "synonyms": ["Banana Boulevardier"],
       "description": "A banana-kissed riff on the **Boulevardier**, balancing **bourbon**, **red vermouth**, **Campari**, and **banana liqueur**.",
       "instructions": "1. Add 30 ml of **bourbon**, 30 ml of **red vermouth**, 15 ml of **Campari**, and 15 ml of **banana liqueur** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled, then strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n4. Express oils from an **orange** twist over the drink, discard the twist, and garnish with a dried banana chip.",
       "glassId": "rocks_glass",
@@ -43275,6 +43274,7 @@
     {
       "id": 655,
       "name": "Bananarac",
+      "synonyms": ["Banana Sazerac"],
       "description": "A banana-accented, spirit-forward twist on a **Sazerac** with **rye whiskey**, **cognac**, a touch of **absinthe**, and aromatic bitters.",
       "instructions": "1. Rinse a chilled rocks glass with 2.5 ml of **absinthe**, discard excess, and set the glass aside.\n2. Add 30 ml of **rye whiskey**, 30 ml of **cognac**, 15 ml of **banana liqueur**, 2.5 ml of **simple syrup**, and 1 dash of **Angostura bitters** into a mixing glass with **ice**.\n3. Stir gently for about 30 seconds until well chilled, then strain into the absinthe-rinsed glass (no ice in glass).\n4. Express **lemon** and **lime** twists over the drink and discard both.",
       "glassId": "rocks_glass",
@@ -43353,6 +43353,7 @@
     {
       "id": 656,
       "name": "Fay Wray",
+      "synonyms": ["Banana Rum Sour"],
       "description": "A tropical shaken sour combining **aged rum**, **cognac**, **banana liqueur**, **lime juice**, and a touch of **rhum agricole**.",
       "instructions": "1. Add 22.5 ml of **aged rum**, 22.5 ml of **cognac**, 22.5 ml of **banana liqueur**, 22.5 ml of **lime juice**, 7.5 ml of **Rhum Martinique Agricole**, and 7.5 ml of **simple syrup** into a shaker, then squeeze in a wedge of **lime** and drop it in.\n2. Fill the shaker with **ice** and shake vigorously for about 15 seconds until well chilled.\n3. Strain into a rocks glass filled with crushed **ice** and garnish with a bouquet of **mint** and dried banana chips.",
       "glassId": "rocks_glass",
@@ -43550,7 +43551,7 @@
     },
     {
       "id": 659,
-      "name": "Tuxedo No. 2 (Flora Bar's recipe)",
+      "name": "Tuxedo #2",
       "description": "A modern Tuxedo variation where **London dry gin** is softened by **bianco vermouth** and **Luxardo maraschino**, layered with **orange bitters** and an **absinthe** rinse.",
       "instructions": "1. Rinse a chilled coupe glass with 2.5 ml of **absinthe** and discard excess.\n2. Add 67.5 ml of **London dry gin**, 15 ml of **bianco vermouth**, 7.5 ml of **Luxardo maraschino**, and 4 dashes of **orange bitters** into a mixing glass.\n3. Fill the mixing glass with **ice**.\n4. Stir until well chilled.\n5. Strain into the absinthe-rinsed glass.\n6. Express an **orange** twist over the cocktail and use it as garnish.\n7. Garnish with a skewered **maraschino cherry**.",
       "glassId": "coupe",
@@ -43621,7 +43622,7 @@
     },
     {
       "id": 660,
-      "name": "Bamboo (Difford's Perfect Recipe)",
+      "name": "Perfect Bamboo",
       "description": "A dry, aromatic aperitif where **fino sherry** leads, supported by a three-vermouth blend and a dash of **orange bitters** for layered herbal complexity.",
       "instructions": "1. Add 45 ml of **fino sherry**, 15 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 15 ml of **red vermouth**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish.",
       "glassId": "coupe",
@@ -43804,7 +43805,7 @@
     },
     {
       "id": 663,
-      "name": "Tuxedo (Difford's recipe)",
+      "name": "Tuxedo",
       "description": "A dry, spirit-forward Tuxedo variation combining **Old Tom gin**, two vermouths, **fino sherry**, and layered bitters with a touch of **absinthe**.",
       "instructions": "1. Add 45 ml of **Old Tom gin**, 20 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 10 ml of **fino sherry**, 1.25 ml of **Luxardo maraschino**, 1 dash of **absinthe**, 1 dash of **Angostura bitters**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish.\n6. Garnish with a skewered **maraschino cherry**.",
       "glassId": "coupe",
@@ -44079,6 +44080,7 @@
     {
       "id": 667,
       "name": "Wibble",
+      "synonyms": ["Grapefruit Bramble"],
       "description": "A fruity, citrusy sour where **London dry gin**, **sloe gin**, and **pink grapefruit juice** are rounded by **crème de mûre** and rich syrup.",
       "instructions": "1. Add 30 ml of **London dry gin**, 30 ml of **sloe gin**, 30 ml of **grapefruit juice**, 10 ml of **lemon juice**, 10 ml of **crème de mure**, and 5 ml of **rich simple syrup** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish.",
       "glassId": "coupe",
@@ -44149,6 +44151,7 @@
     {
       "id": 668,
       "name": "Dramble",
+      "synonyms": ["Scotch Bramble"],
       "description": "A Scotch whisky Bramble riff where **Scotch whisky**, **lemon juice**, and rich syrup are finished with a drizzle of **crème de mûre**.",
       "instructions": "1. Add 60 ml of **Scotch whisky**, 30 ml of **lemon juice**, and 15 ml of **rich simple syrup** into a rocks glass filled with crushed **ice**.\n2. Stir to combine and chill.\n3. Drizzle 10 ml of **crème de mure** over the surface.\n4. Garnish with a **blackberry**.",
       "glassId": "rocks_glass",
@@ -44205,6 +44208,7 @@
     {
       "id": 669,
       "name": "Especial Day",
+      "synonyms": ["Blackberry Bramble"],
       "description": "A berry-forward shaken rum cocktail combining muddled **blackberries**, **white rum**, **red vermouth**, **crème de mûre**, and **pineapple juice** with **Peychaud's bitters**.",
       "instructions": "1. Muddle 3 **blackberries** in a shaker.\n2. Add 60 ml of **white rum**, 15 ml of **red vermouth**, 22.5 ml of **crème de mure**, 15 ml of **pineapple juice**, and 3 dashes of **Peychaud's bitters**.\n3. Fill the shaker with **ice** and shake until well chilled.\n4. Fine strain into a chilled martini glass.\n5. Express a **lemon** twist over the cocktail and discard it.\n6. Garnish with skewered **blackberries**.",
       "glassId": "martini",
@@ -44283,6 +44287,7 @@
     {
       "id": 670,
       "name": "Allegheny",
+      "synonyms": ["Bourbon Bramble"],
       "description": "A bourbon-based sour with two vermouths where **bourbon**, **dry vermouth**, **bianco vermouth**, and **crème de mûre** are brightened by **lemon juice** and bitters.",
       "instructions": "1. Add 40 ml of **bourbon**, 20 ml of **dry vermouth**, 20 ml of **bianco vermouth**, 10 ml of **crème de mure**, 10 ml of **lemon juice**, and 1 dash of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** twist over the cocktail and use it as garnish.",
       "glassId": "coupe",
@@ -44353,6 +44358,7 @@
     {
       "id": 671,
       "name": "Sharman-Cox Daiquiri",
+      "synonyms": ["Blue Daiquiri"],
       "description": "A vivid blue modern Daiquiri riff where **white rum** meets **blue curaçao**, fresh **lime** and **lemon** juices, rich syrup, and a silky **egg white** foam.",
       "instructions": "1. Add 60 ml of **white rum**, 10 ml of **blue curaçao**, 7.5 ml of **lime juice**, 7.5 ml of **lemon juice**, 10 ml of **rich simple syrup**, and 15 ml of **egg white** into a shaker.\n2. Fill the shaker with **ice** and shake hard.\n3. Fine strain back into the shaker.\n4. Dry shake (without ice) until frothy.\n5. Fine strain into a chilled coupe glass.\n6. Express an **orange** twist over the drink and discard.\n7. Garnish with a wedge of **lime**.",
       "glassId": "coupe",
@@ -44500,7 +44506,7 @@
     },
     {
       "id": 673,
-      "name": "Heisenberg Cocktail",
+      "name": "Heisenberg",
       "description": "A bright blue agave sour combining **tequila añejo**, **mezcal**, **maraschino liqueur**, fresh **lime juice**, **lavender syrup**, **blue curaçao**, and simple syrup.",
       "instructions": "1. Add 40 ml of **tequila añejo**, 15 ml of **mezcal**, 10 ml of **Luxardo maraschino**, 20 ml of **lime juice**, 7.5 ml of **lavender syrup**, 7.5 ml of **blue curaçao**, and 5 ml of **rich simple syrup** into a shaker.\n2. Fill the shaker with **ice** and shake hard until well chilled.\n3. Fine strain into a chilled coupe glass.",
       "glassId": "coupe",
@@ -44758,6 +44764,7 @@
     {
       "id": 677,
       "name": "Edison's Medicine",
+      "synonyms": ["Basil Bramble"],
       "description": "Herbal and zesty, with **cachaça**, **yellow Chartreuse**, **basil**, and **lime juice** rounded by **agave syrup**.",
       "instructions": "1. Shake all ingredients with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Garnish with a **basil** leaf floated on the cocktail.",
       "glassId": "coupe",
@@ -44828,6 +44835,7 @@
     {
       "id": 678,
       "name": "Brazil 66",
+      "synonyms": ["Orange Caipirinha"],
       "description": "An orange-leaning Caipirinha-style sour combining **cachaça**, **Cointreau**, fresh **orange juice**, and **lime juice**.",
       "instructions": "1. Shake all ingredients with **ice**.\n2. Strain into an old-fashioned glass filled with fresh **ice**.\n3. Garnish with a **lime** wedge.",
       "glassId": "rocks_glass",
@@ -44954,6 +44962,7 @@
     {
       "id": 680,
       "name": "Lavarello",
+      "synonyms": ["Cachaça Negroni"],
       "description": "A bittersweet cachaça sipper riffing on Rabo-de-Galo, layering **aperitivo**, **Cynar**, and **chocolate bitters**.",
       "instructions": "1. Stir all ingredients with **ice**.\n2. Strain into an old-fashioned glass filled with fresh **ice** (preferably over a large cube).\n3. Express an **orange** twist over the cocktail and use it as garnish.",
       "glassId": "rocks_glass",
@@ -45143,6 +45152,7 @@
     {
       "id": 683,
       "name": "Enrico Pallazzo",
+      "synonyms": ["Sparkling Manhattan"],
       "description": "A bittersweet Manhattan-style lightly sparkling cocktail.",
       "instructions": "1. Stir 45 ml of **bourbon**, 30 ml of **red vermouth**, 22.5 ml of **Campari**, 7.5 ml of **Suze**, and 2 dashes of **grapefruit bitters** with **ice**.\n2. Strain into a carbonator and carbonate.\n3. Pour into a chilled coupe glass.\n4. Express a **grapefruit** zest twist over the cocktail and use as garnish.",
       "glassId": "coupe",
@@ -45206,6 +45216,7 @@
     {
       "id": 684,
       "name": "Hi Falutin",
+      "synonyms": ["Highfalutin, High Manhattan"],
       "description": "Forceful and Manhattan-like in style with sweet delicate influences from France and Sweden.",
       "instructions": "1. Stir 45 ml of **bourbon**, 30 ml of **Drambuie**, and 30 ml of **Dubonnet** with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Express a **lemon** zest twist over the cocktail and use as garnish.",
       "glassId": "coupe",
@@ -45457,8 +45468,7 @@
     },
     {
       "id": 688,
-      "name": "French 125 (French '75' with cognac)",
-      "synonyms": ["French 125"],
+      "name": "French 125",
       "description": "A cognac-based French 75 variation: richer than the gin version, yet still enlivening, refreshing, and quaffable.",
       "instructions": "1. Stir 7.5 ml of **rich simple syrup** with 15 ml of **lemon juice** in a shaker.\n2. Add 45 ml of **cognac** and shake with **ice**.\n3. Fine strain into a chilled flute glass.\n4. Top with 75 ml of **champagne** and briefly stir.\n5. Express a **lemon** zest twist over the cocktail and use as garnish.",
       "glassId": "flute_glass",
@@ -45853,6 +45863,7 @@
     {
       "id": 695,
       "name": "Enzoni",
+      "synonyms": ["Grapes Negroni"],
       "description": "A modern bittersweet sour where muddled **grapes** soften **Campari** and brighten **gin**.",
       "instructions": "1. Muddle 5 fresh **grapes** in the base of a shaker.\n2. Add 30 ml of **gin**, 30 ml of **Campari**, 20 ml of **lemon juice**, and 15 ml of **rich simple syrup**.\n3. Fill the shaker with **ice**.\n4. Shake until well chilled.\n5. Fine strain into a rocks glass filled with fresh **ice**.\n6. Garnish with an **orange** slice and/or a **grape**.",
       "glassId": "rocks_glass",
@@ -45924,6 +45935,7 @@
     {
       "id": 696,
       "name": "Sloegroni",
+      "synonyms": ["Sloe Negroni"],
       "description": "A softer, fruitier Negroni-style aperitivo where **sloe gin** brings berry depth.",
       "instructions": "1. Add 30 ml of **gin**, 20 ml of **Campari**, 20 ml of **sloe gin**, and 20 ml of **red vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Garnish with an **orange** slice.",
       "glassId": "rocks_glass",
@@ -45987,7 +45999,7 @@
     },
     {
       "id": 697,
-      "name": "Haiti Cocktail",
+      "name": "Haiti",
       "description": "A vintage aperitivo with layered bitterness from **Dubonnet**, vermouths, **Campari**, and a touch of **white rum**.",
       "instructions": "1. Add 20 ml of **Dubonnet**, 20 ml of **dry vermouth**, 10 ml of **red vermouth**, 5 ml of **Campari**, 5 ml of **white rum**, and 3 dashes of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled nick and nora glass.\n5. Express a **lemon** (or **orange**) twist over the cocktail and use as garnish.",
       "glassId": "nick_and_nora",
@@ -46276,6 +46288,7 @@
     {
       "id": 701,
       "name": "Manky Panky",
+      "synonyms": ["Shiraz Hanky Panky"],
       "description": "A wine-accented, bittersweet aperitivo style cocktail with **shiraz**, **Campari**, **fernet branca**, and **blood orange juice**.",
       "instructions": "1. Add 60 ml of **red wine**, 30 ml of **Campari**, 7.5 ml of **fernet branca**, and 30 ml of **orange juice** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with an **orange** slice.",
       "glassId": "coupe",
@@ -46459,14 +46472,64 @@
       "defaultServings": 1,
       "tags": [3, 4],
       "ingredients": [
-        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "45", "unitId": 11 },
-        { "order": 2, "ingredientId": 340, "name": "Triple Sec", "amount": "22.5", "unitId": 11 },
-        { "order": 3, "ingredientId": 221, "name": "Lemon Juice", "amount": "22.5", "unitId": 11 },
-        { "order": 4, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "10", "unitId": 11 },
-        { "order": 5, "ingredientId": 149, "name": "Egg White", "amount": "15", "unitId": 11 },
-        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 7, "ingredientId": 320, "name": "Sparkling Wine", "amount": "22.5", "unitId": 11 },
-        { "order": 8, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 340,
+          "name": "Triple Sec",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 149,
+          "name": "Egg White",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 320,
+          "name": "Sparkling Wine",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46479,19 +46542,62 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 112, "name": "Cognac", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "30", "unitId": 11 },
-        { "order": 3, "ingredientId": 248, "name": "Orange Bitters", "amount": "2", "unitId": 6 },
-        { "order": 4, "ingredientId": 19, "name": "Angostura Bitters", "amount": "2", "unitId": 6 },
-        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 6, "ingredientId": 320, "name": "Sparkling Wine", "amount": "45", "unitId": 11 },
-        { "order": 7, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 88,
+          "name": "Cherry Liqueur",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 4,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 320,
+          "name": "Sparkling Wine",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
       "id": 706,
-      "name": "Pisco Punch (Difford's recipe)",
-      "synonyms": ["Pisco Punch"],
+      "name": "Pisco Punch",
       "description": "A tangy, balanced pisco punch where pineapple and citrus round out grape-spirit depth.",
       "instructions": "1. Add 60 ml of **pisco**, 22.5 ml of **pineapple juice**, 15 ml of **simple syrup**, 15 ml of **lemon juice**, 30 ml of **white wine**, and 3 **cloves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled highball glass over fresh **ice**.\n5. Garnish with a **pineapple** wedge.",
       "glassId": "highball_glass",
@@ -46499,15 +46605,71 @@
       "defaultServings": 1,
       "tags": [1, 6, 8],
       "ingredients": [
-        { "order": 1, "ingredientId": 285, "name": "Pisco", "amount": "60", "unitId": 11 },
-        { "order": 2, "ingredientId": 281, "name": "Pineapple Juice", "amount": "22.5", "unitId": 11 },
-        { "order": 3, "ingredientId": 305, "name": "Simple Syrup", "amount": "15", "unitId": 11 },
-        { "order": 4, "ingredientId": 221, "name": "Lemon Juice", "amount": "15", "unitId": 11 },
-        { "order": 5, "ingredientId": 375, "name": "White Wine", "amount": "30", "unitId": 11 },
-        { "order": 6, "ingredientId": 99, "name": "Cloves", "amount": "3", "unitId": 1 },
-        { "order": 7, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 8, "ingredientId": 196, "name": "Ice", "amount": "120", "unitId": 8 },
-        { "order": 9, "ingredientId": 280, "name": "Pineapple", "amount": "1", "unitId": 27, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 285,
+          "name": "Pisco",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 281,
+          "name": "Pineapple Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 305,
+          "name": "Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 375,
+          "name": "White Wine",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 99,
+          "name": "Cloves",
+          "amount": "3",
+          "unitId": 1
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 9,
+          "ingredientId": 280,
+          "name": "Pineapple",
+          "amount": "1",
+          "unitId": 27,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46521,13 +46683,56 @@
       "defaultServings": 1,
       "tags": [1, 6, 8],
       "ingredients": [
-        { "order": 1, "ingredientId": 241, "name": "Mint", "amount": "14", "unitId": 10 },
-        { "order": 2, "ingredientId": 170, "name": "Gold Rum", "amount": "60", "unitId": 11 },
-        { "order": 3, "ingredientId": 228, "name": "Lime Juice", "amount": "15", "unitId": 11 },
-        { "order": 4, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "10", "unitId": 11 },
-        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "140", "unitId": 8 },
-        { "order": 6, "ingredientId": 320, "name": "Sparkling Wine", "amount": "30", "unitId": 11 },
-        { "order": 7, "ingredientId": 241, "name": "Mint", "amount": "1", "unitId": 21, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "14",
+          "unitId": 10
+        },
+        {
+          "order": 2,
+          "ingredientId": 170,
+          "name": "Gold Rum",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "140",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 320,
+          "name": "Sparkling Wine",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 241,
+          "name": "Mint",
+          "amount": "1",
+          "unitId": 21,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46540,11 +46745,43 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "40", "unitId": 11 },
-        { "order": 2, "ingredientId": 144, "name": "Dry Vermouth", "amount": "40", "unitId": 11 },
-        { "order": 3, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 4, "ingredientId": 320, "name": "Sparkling Wine", "amount": "20", "unitId": 11 },
-        { "order": 5, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 4,
+          "ingredientId": 320,
+          "name": "Sparkling Wine",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46558,12 +46795,50 @@
       "defaultServings": 1,
       "tags": [2, 6],
       "ingredients": [
-        { "order": 1, "ingredientId": 238, "name": "Mezcal", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "22.5", "unitId": 11 },
-        { "order": 3, "ingredientId": 294, "name": "Red Vermouth", "amount": "22.5", "unitId": 11 },
-        { "order": 4, "ingredientId": 251, "name": "Orange Juice", "amount": "30", "unitId": 11 },
-        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 6, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 88,
+          "name": "Cherry Liqueur",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 251,
+          "name": "Orange Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46576,13 +46851,56 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "60", "unitId": 11 },
-        { "order": 2, "ingredientId": 294, "name": "Red Vermouth", "amount": "15", "unitId": 11 },
-        { "order": 3, "ingredientId": 46, "name": "Bianco Vermouth", "amount": "7.5", "unitId": 11 },
-        { "order": 4, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "5", "unitId": 11 },
-        { "order": 5, "ingredientId": 365, "name": "Elderflower Liquor", "amount": "5", "unitId": 11 },
-        { "order": 6, "ingredientId": 93, "name": "Chocolate Bitters", "amount": "4", "unitId": 6 },
-        { "order": 7, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true }
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 46,
+          "name": "Bianco Vermouth",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 88,
+          "name": "Cherry Liqueur",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 365,
+          "name": "Elderflower Liquor",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 93,
+          "name": "Chocolate Bitters",
+          "amount": "4",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        }
       ]
     },
     {
@@ -46595,15 +46913,71 @@
       "defaultServings": 1,
       "tags": [1, 6],
       "ingredients": [
-        { "order": 1, "ingredientId": 357, "name": "White Rum", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 112, "name": "Cognac", "amount": "15", "unitId": 11 },
-        { "order": 3, "ingredientId": 161, "name": "Gin", "amount": "15", "unitId": 11 },
-        { "order": 4, "ingredientId": 228, "name": "Lime Juice", "amount": "15", "unitId": 11 },
-        { "order": 5, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "7.5", "unitId": 11 },
-        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 7, "ingredientId": 196, "name": "Ice", "amount": "120", "unitId": 8 },
-        { "order": 8, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "7.5", "unitId": 11 },
-        { "order": 9, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 19, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 8,
+          "ingredientId": 88,
+          "name": "Cherry Liqueur",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 9,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46616,13 +46990,57 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 112, "name": "Cognac", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 175, "name": "Grand Marnier", "amount": "30", "unitId": 11 },
-        { "order": 3, "ingredientId": 144, "name": "Dry Vermouth", "amount": "15", "unitId": 11 },
-        { "order": 4, "ingredientId": 88, "name": "Cherry Liqueur", "amount": "15", "unitId": 11 },
-        { "order": 5, "ingredientId": 231, "name": "Luxardo Maraschino", "amount": "2.5", "unitId": 11 },
-        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 7, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 175,
+          "name": "Grand Marnier",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 88,
+          "name": "Cherry Liqueur",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "2.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46635,17 +47053,85 @@
       "defaultServings": 1,
       "tags": [2, 6],
       "ingredients": [
-        { "order": 1, "ingredientId": 238, "name": "Mezcal", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 256, "name": "Overproof Rum", "amount": "15", "unitId": 11 },
-        { "order": 3, "ingredientId": 154, "name": "Falernum", "amount": "15", "unitId": 11 },
-        { "order": 4, "ingredientId": 231, "name": "Luxardo Maraschino", "amount": "5", "unitId": 11 },
-        { "order": 5, "ingredientId": 228, "name": "Lime Juice", "amount": "22.5", "unitId": 11 },
-        { "order": 6, "ingredientId": 298, "name": "Rich Simple Syrup", "amount": "10", "unitId": 11 },
-        { "order": 7, "ingredientId": 149, "name": "Egg White", "amount": "10", "unitId": 11 },
-        { "order": 8, "ingredientId": 248, "name": "Orange Bitters", "amount": "3", "unitId": 6 },
-        { "order": 9, "ingredientId": 368, "name": "Saline solution (4:1)", "amount": "2", "unitId": 13 },
-        { "order": 10, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 11, "ingredientId": 227, "name": "Lime", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 256,
+          "name": "Overproof Rum",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 154,
+          "name": "Falernum",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 7,
+          "ingredientId": 149,
+          "name": "Egg White",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 9,
+          "ingredientId": 368,
+          "name": "Saline solution (4:1)",
+          "amount": "2",
+          "unitId": 13
+        },
+        {
+          "order": 10,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 11,
+          "ingredientId": 227,
+          "name": "Lime",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46658,13 +47144,57 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 112, "name": "Cognac", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 305, "name": "Rye Whiskey", "amount": "30", "unitId": 11 },
-        { "order": 3, "ingredientId": 13, "name": "Amaro", "amount": "15", "unitId": 11 },
-        { "order": 4, "ingredientId": 154, "name": "Falernum", "amount": "10", "unitId": 11 },
-        { "order": 5, "ingredientId": 19, "name": "Angostura Bitters", "amount": "3", "unitId": 6 },
-        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 7, "ingredientId": 219, "name": "Lemon", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 112,
+          "name": "Cognac",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 305,
+          "name": "Rye Whiskey",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 13,
+          "name": "Amaro",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 154,
+          "name": "Falernum",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46677,13 +47207,57 @@
       "defaultServings": 1,
       "tags": [2, 6],
       "ingredients": [
-        { "order": 1, "ingredientId": 238, "name": "Mezcal", "amount": "60", "unitId": 11 },
-        { "order": 2, "ingredientId": 251, "name": "Orange Juice", "amount": "30", "unitId": 11 },
-        { "order": 3, "ingredientId": 98, "name": "Cinnamon Syrup", "amount": "7.5", "unitId": 11 },
-        { "order": 4, "ingredientId": 154, "name": "Falernum", "amount": "5", "unitId": 11 },
-        { "order": 5, "ingredientId": 228, "name": "Lime Juice", "amount": "5", "unitId": 11 },
-        { "order": 6, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 7, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 19, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 238,
+          "name": "Mezcal",
+          "amount": "60",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 251,
+          "name": "Orange Juice",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 98,
+          "name": "Cinnamon Syrup",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 154,
+          "name": "Falernum",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46697,12 +47271,50 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 161, "name": "Gin", "amount": "30", "unitId": 11 },
-        { "order": 2, "ingredientId": 134, "name": "Cynar", "amount": "30", "unitId": 11 },
-        { "order": 3, "ingredientId": 294, "name": "Red Vermouth", "amount": "30", "unitId": 11 },
-        { "order": 4, "ingredientId": 196, "name": "Ice", "amount": "120", "unitId": 8, "process": true },
-        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "120", "unitId": 8 },
-        { "order": 6, "ingredientId": 247, "name": "Orange", "amount": "1", "unitId": 26, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 134,
+          "name": "Cynar",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
       ]
     },
     {
@@ -46715,12 +47327,50 @@
       "defaultServings": 1,
       "tags": [3, 5],
       "ingredients": [
-        { "order": 1, "ingredientId": 65, "name": "Bourbon", "amount": "40", "unitId": 11 },
-        { "order": 2, "ingredientId": 294, "name": "Red Vermouth", "amount": "22.5", "unitId": 11 },
-        { "order": 3, "ingredientId": 231, "name": "Luxardo Maraschino", "amount": "7.5", "unitId": 11 },
-        { "order": 4, "ingredientId": 134, "name": "Cynar", "amount": "7.5", "unitId": 11 },
-        { "order": 5, "ingredientId": 196, "name": "Ice", "amount": "150", "unitId": 8, "process": true },
-        { "order": 6, "ingredientId": 236, "name": "Maraschino Cherry", "amount": "1", "unitId": 1, "garnish": true }
+        {
+          "order": 1,
+          "ingredientId": 65,
+          "name": "Bourbon",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "22.5",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 134,
+          "name": "Cynar",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 236,
+          "name": "Maraschino Cherry",
+          "amount": "1",
+          "unitId": 1,
+          "garnish": true
+        }
       ]
     }
   ],
