@@ -45793,6 +45793,343 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 694,
+      "name": "Pippin No. 2",
+      "description": "A bittersweet gin aperitivo where **Dubonnet**, **maraschino**, and **Campari** create layered richness.",
+      "instructions": "1. Add 45 ml of **gin**, 30 ml of **Dubonnet**, 7.5 ml of **Luxardo Maraschino**, and 7.5 ml of **Campari** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [1, 5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 145,
+          "name": "Dubonnet",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "7.5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 695,
+      "name": "Enzoni",
+      "description": "A modern bittersweet sour where muddled **grapes** soften **Campari** and brighten **gin**.",
+      "instructions": "1. Muddle 5 fresh **grapes** in the base of a shaker.\n2. Add 30 ml of **gin**, 30 ml of **Campari**, 20 ml of **lemon juice**, and 15 ml of **rich simple syrup**.\n3. Fill the shaker with **ice**.\n4. Shake until well chilled.\n5. Fine strain into a rocks glass filled with fresh **ice**.\n6. Garnish with an **orange** slice and/or a **grape**.",
+      "glassId": "rocks_glass",
+      "methodIds": ["muddle", "shake"],
+      "defaultServings": 1,
+      "tags": [1, 5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 180,
+          "name": "Grapes",
+          "amount": "5",
+          "unitId": 1
+        },
+        {
+          "order": 2,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 19,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 696,
+      "name": "Sloegroni",
+      "description": "A softer, fruitier Negroni-style aperitivo where **sloe gin** brings berry depth.",
+      "instructions": "1. Add 30 ml of **gin**, 20 ml of **Campari**, 20 ml of **sloe gin**, and 20 ml of **red vermouth** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Strain into a rocks glass filled with fresh **ice** (preferably over a large cube).\n5. Garnish with an **orange** slice.",
+      "glassId": "rocks_glass",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [1, 2],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 317,
+          "name": "Sloe Gin",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "120",
+          "unitId": 8,
+          "serving": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 697,
+      "name": "Haiti Cocktail",
+      "description": "A vintage aperitivo with layered bitterness from **Dubonnet**, vermouths, **Campari**, and a touch of **white rum**.",
+      "instructions": "1. Add 20 ml of **Dubonnet**, 20 ml of **dry vermouth**, 10 ml of **red vermouth**, 5 ml of **Campari**, 5 ml of **white rum**, and 3 dashes of **Angostura bitters** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled nick and nora glass.\n5. Express a **lemon** (or **orange**) twist over the cocktail and use as garnish.",
+      "glassId": "nick_and_nora",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [1, 2],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 145,
+          "name": "Dubonnet",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 144,
+          "name": "Dry Vermouth",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "3",
+          "unitId": 6
+        },
+        {
+          "order": 7,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 8,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true,
+          "substitutes": [
+            {
+              "ingredientId": 247,
+              "name": "Orange"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 698,
+      "name": "Curtain Call",
+      "description": "A sparkling modern sour where **white rum**, **basil**, and citrus meet bitter aperitivo and wine.",
+      "instructions": "1. Lightly muddle 1 **basil** leaf in the base of a shaker.\n2. Add 40 ml of **white rum**, 20 ml of **lemon juice**, 15 ml of **rich simple syrup**, and 10 ml of **Campari**.\n3. Fill the shaker with **ice**.\n4. Shake until well chilled.\n5. Fine strain into a chilled coupe glass.\n6. Top with 30 ml of **sparkling wine**.\n7. Garnish with skewered **olives**.",
+      "glassId": "coupe",
+      "methodIds": ["muddle", "shake", "build"],
+      "defaultServings": 1,
+      "tags": [3, 5],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 39,
+          "name": "Basil",
+          "amount": "1",
+          "unitId": 10
+        },
+        {
+          "order": 2,
+          "ingredientId": 357,
+          "name": "White Rum",
+          "amount": "40",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "20",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 74,
+          "name": "Campari",
+          "amount": "10",
+          "unitId": 11
+        },
+        {
+          "order": 6,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 7,
+          "ingredientId": 320,
+          "name": "Sparkling Wine",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 8,
+          "ingredientId": 245,
+          "name": "Olives",
+          "amount": "2",
+          "unitId": 23,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
