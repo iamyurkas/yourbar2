@@ -3753,5 +3753,21 @@
   "cocktail.689.name": "Chauncey",
   "cocktail.689.synonyms": "Chauncey",
   "cocktail.689.description": "Un delicioso cóctel de estilo Manhattan con base dividida y partes iguales, ideal para beber tarde por la noche.",
-  "cocktail.689.instructions": "1. Remueve 22,5 ml de **old tom gin**, 22,5 ml de **rye whiskey**, 22,5 ml de **vermú rojo**, 22,5 ml de **coñac** y 1 golpe de **amargos de naranja** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Exprime una piel de **limón** sobre el cóctel y úsala como adorno."
+  "cocktail.689.instructions": "1. Remueve 22,5 ml de **old tom gin**, 22,5 ml de **rye whiskey**, 22,5 ml de **vermú rojo**, 22,5 ml de **coñac** y 1 golpe de **amargos de naranja** con **hielo**.\n2. Cuela fino en una copa coupé fría.\n3. Exprime una piel de **limón** sobre el cóctel y úsala como adorno.",
+  "cocktail.690.name": "Cóctel Warday",
+  "cocktail.690.synonyms": "Warday's Cocktail",
+  "cocktail.690.description": "Un clásico de perfil alcohólico donde **calvados**, **ginebra** y **vermú rojo** se elevan con un toque de **chartreuse verde**.",
+  "cocktail.690.instructions": "1. Añade 30 ml de **calvados**, 30 ml de **ginebra**, 30 ml de **vermú rojo** y 5 ml de **chartreuse verde** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve suavemente hasta enfriar bien.\n4. Cuela fino en una copa coupé fría.\n5. Exprime una piel de **limón** (o **naranja**) sobre el cóctel y úsala como adorno.",
+  "cocktail.691.name": "Cóctel Flor de Manzano",
+  "cocktail.691.synonyms": "Apple Blossom Cocktail",
+  "cocktail.691.description": "Un clásico minimalista y removido que combina **calvados** aromático con **vermú rojo**, con opción de afinarlo con **amargos de naranja**.",
+  "cocktail.691.instructions": "1. Añade 45 ml de **calvados**, 45 ml de **vermú rojo** y 1 golpe de **amargos de naranja** (opcional) en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve suavemente hasta enfriar bien.\n4. Cuela fino en una copa coupé fría.\n5. Adorna con un gajo de **manzana** o una rodaja deshidratada de **manzana**.",
+  "cocktail.692.name": "Beso de Viuda",
+  "cocktail.692.synonyms": "Widow's Kiss",
+  "cocktail.692.description": "Un trago rico de la era pre-Prohibición donde el **calvados** se une a **Bénédictine**, **chartreuse amarillo** y amargos aromáticos.",
+  "cocktail.692.instructions": "1. Añade 45 ml de **calvados**, 15 ml de **Bénédictine D.O.M.**, 15 ml de **chartreuse amarillo** y 2 golpes de **amargos de Angostura** en un vaso mezclador.\n2. Llena el vaso mezclador con **hielo**.\n3. Remueve suavemente hasta enfriar bien.\n4. Cuela en una copa nick and nora fría.\n5. Adorna con 2 **cerezas marrasquino** ensartadas.",
+  "cocktail.693.name": "Luna de Miel",
+  "cocktail.693.synonyms": "Honeymoon, Farmer's Daughter",
+  "cocktail.693.description": "Un sour brillante y herbal que equilibra **calvados** y **Bénédictine** con **zumo de limón** fresco y un toque de **curaçao de naranja**.",
+  "cocktail.693.instructions": "1. Añade 30 ml de **calvados**, 30 ml de **Bénédictine D.O.M.**, 15 ml de **zumo de limón** y 5 ml de **curaçao de naranja** en una coctelera.\n2. Llena la coctelera con **hielo**.\n3. Agita hasta enfriar bien.\n4. Cuela fino en una copa coupé fría.\n5. Exprime una piel de **naranja** sobre el cóctel y úsala como adorno."
 }
