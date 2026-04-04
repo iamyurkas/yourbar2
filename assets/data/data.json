@@ -43805,72 +43805,44 @@
     },
     {
       "id": 663,
-      "name": "Tuxedo",
-      "description": "A dry, spirit-forward Tuxedo variation combining **Old Tom gin**, two vermouths, **fino sherry**, and layered bitters with a touch of **absinthe**.",
-      "instructions": "1. Add 45 ml of **Old Tom gin**, 20 ml of **dry vermouth**, 15 ml of **bianco vermouth**, 10 ml of **fino sherry**, 1.25 ml of **Luxardo maraschino**, 1 dash of **absinthe**, 1 dash of **Angostura bitters**, and 1 dash of **orange bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use it as garnish.\n6. Garnish with a skewered **maraschino cherry**.",
+      "name": "Dublin Minstrel",
+      "description": "A sharp, herbal whiskey sour where **Irish whiskey** meets **green Chartreuse**, **Luxardo maraschino**, and fresh lime.",
+      "instructions": "1. Add 30 ml of **Irish whiskey**, 20 ml of **green Chartreuse**, 20 ml of **Luxardo maraschino**, and 20 ml of **lime juice** into a shaker with **ice**.\n2. Shake until well chilled and fine strain into a chilled coupe glass.\n3. Express a **lime** zest twist over the cocktail and use as garnish.",
       "glassId": "coupe",
-      "methodIds": ["stir"],
+      "methodIds": ["shake"],
       "defaultServings": 1,
       "tags": [5],
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 243,
-          "name": "Old Tom Gin",
-          "amount": "45",
+          "ingredientId": 199,
+          "name": "Irish Whiskey",
+          "amount": "30",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 144,
-          "name": "Dry Vermouth",
+          "ingredientId": 182,
+          "name": "Green Chartreuse",
           "amount": "20",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 46,
-          "name": "Bianco Vermouth",
-          "amount": "15",
+          "ingredientId": 231,
+          "name": "Luxardo Maraschino",
+          "amount": "20",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 157,
-          "name": "Fino Sherry",
-          "amount": "10",
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "20",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 231,
-          "name": "Luxardo Maraschino",
-          "amount": "1.25",
-          "unitId": 11
-        },
-        {
-          "order": 6,
-          "ingredientId": 2,
-          "name": "Absinthe",
-          "amount": "1",
-          "unitId": 6
-        },
-        {
-          "order": 7,
-          "ingredientId": 19,
-          "name": "Angostura Bitters",
-          "amount": "1",
-          "unitId": 6
-        },
-        {
-          "order": 8,
-          "ingredientId": 248,
-          "name": "Orange Bitters",
-          "amount": "1",
-          "unitId": 6
-        },
-        {
-          "order": 9,
           "ingredientId": 196,
           "name": "Ice",
           "amount": "150",
@@ -43878,19 +43850,11 @@
           "process": true
         },
         {
-          "order": 10,
-          "ingredientId": 247,
-          "name": "Orange",
+          "order": 6,
+          "ingredientId": 227,
+          "name": "Lime",
           "amount": "1",
           "unitId": 26,
-          "garnish": true
-        },
-        {
-          "order": 11,
-          "ingredientId": 236,
-          "name": "Maraschino Cherry",
-          "amount": "1",
-          "unitId": 1,
           "garnish": true
         }
       ]
@@ -46597,58 +46561,51 @@
     },
     {
       "id": 706,
-      "name": "Pisco Punch",
-      "description": "A tangy, balanced pisco punch where pineapple and citrus round out grape-spirit depth.",
-      "instructions": "1. Add 60 ml of **pisco**, 22.5 ml of **pineapple juice**, 15 ml of **simple syrup**, 15 ml of **lemon juice**, 30 ml of **white wine**, and 3 **cloves** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled highball glass over fresh **ice**.\n5. Garnish with a **pineapple** wedge.",
-      "glassId": "highball_glass",
+      "name": "The Dante",
+      "description": "A citrusy, herbaceous tequila sour where **kummel** and **green Chartreuse** add caraway-rich complexity.",
+      "instructions": "1. Add 40 ml of **tequila blanco**, 10 ml of **green Chartreuse**, 10 ml of **kummel liqueur**, 10 ml of **rich simple syrup**, and 20 ml of **lime juice** into a shaker with **ice**.\n2. Shake until well chilled and fine strain into a chilled coupe glass.\n3. Garnish with a **basil** leaf floated on the cocktail.",
+      "glassId": "coupe",
       "methodIds": ["shake"],
       "defaultServings": 1,
       "tags": [1, 6, 8],
       "ingredients": [
         {
           "order": 1,
-          "ingredientId": 285,
-          "name": "Pisco",
-          "amount": "60",
+          "ingredientId": 334,
+          "name": "Tequila Blanco",
+          "amount": "40",
           "unitId": 11
         },
         {
           "order": 2,
-          "ingredientId": 281,
-          "name": "Pineapple Juice",
-          "amount": "22.5",
+          "ingredientId": 182,
+          "name": "Green Chartreuse",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 3,
-          "ingredientId": 305,
-          "name": "Simple Syrup",
-          "amount": "15",
+          "ingredientId": 214,
+          "name": "Kümmel liqueur",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 4,
-          "ingredientId": 221,
-          "name": "Lemon Juice",
-          "amount": "15",
+          "ingredientId": 298,
+          "name": "Rich Simple Syrup",
+          "amount": "10",
           "unitId": 11
         },
         {
           "order": 5,
-          "ingredientId": 375,
-          "name": "White Wine",
-          "amount": "30",
+          "ingredientId": 228,
+          "name": "Lime Juice",
+          "amount": "20",
           "unitId": 11
         },
         {
           "order": 6,
-          "ingredientId": 99,
-          "name": "Cloves",
-          "amount": "3",
-          "unitId": 1
-        },
-        {
-          "order": 7,
           "ingredientId": 196,
           "name": "Ice",
           "amount": "150",
@@ -46656,18 +46613,11 @@
           "process": true
         },
         {
-          "order": 8,
-          "ingredientId": 196,
-          "name": "Ice",
-          "amount": "120",
-          "unitId": 8
-        },
-        {
-          "order": 9,
-          "ingredientId": 280,
-          "name": "Pineapple",
+          "order": 7,
+          "ingredientId": 39,
+          "name": "Basil",
           "amount": "1",
-          "unitId": 27,
+          "unitId": 10,
           "garnish": true
         }
       ]
