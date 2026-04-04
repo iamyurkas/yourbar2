@@ -3199,5 +3199,21 @@
   "cocktail.689.name": "Chauncey",
   "cocktail.689.synonyms": "",
   "cocktail.689.description": "A delicious equal-parts split-base Manhattan-style cocktail suited to late-night sipping.",
-  "cocktail.689.instructions": "1. Stir 22.5 ml of **old tom gin**, 22.5 ml of **rye whiskey**, 22.5 ml of **red vermouth**, 22.5 ml of **cognac**, and 1 dash of **orange bitters** with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Express a **lemon** twist over the cocktail and use as garnish."
+  "cocktail.689.instructions": "1. Stir 22.5 ml of **old tom gin**, 22.5 ml of **rye whiskey**, 22.5 ml of **red vermouth**, 22.5 ml of **cognac**, and 1 dash of **orange bitters** with **ice**.\n2. Fine strain into a chilled coupe glass.\n3. Express a **lemon** twist over the cocktail and use as garnish.",
+  "cocktail.690.name": "Warday's Cocktail",
+  "cocktail.690.synonyms": "",
+  "cocktail.690.description": "A spirit-forward classic where **calvados**, **gin**, and **red vermouth** are lifted by a touch of **green Chartreuse**.",
+  "cocktail.690.instructions": "1. Add 30 ml of **calvados**, 30 ml of **gin**, 30 ml of **red vermouth**, and 5 ml of **green Chartreuse** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** (or **orange**) twist over the cocktail and use as garnish.",
+  "cocktail.691.name": "Apple Blossom Cocktail",
+  "cocktail.691.synonyms": "",
+  "cocktail.691.description": "A minimalist stirred classic pairing fragrant **calvados** with **red vermouth**, optionally sharpened by **orange bitters**.",
+  "cocktail.691.instructions": "1. Add 45 ml of **calvados**, 45 ml of **red vermouth**, and 1 dash of **orange bitters** (optional) into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with an **apple** wedge or a dehydrated **apple** slice.",
+  "cocktail.692.name": "Widow's Kiss",
+  "cocktail.692.synonyms": "",
+  "cocktail.692.description": "A rich pre-Prohibition sipper where **calvados** meets **Bénédictine**, **yellow Chartreuse**, and aromatic bitters.",
+  "cocktail.692.instructions": "1. Add 45 ml of **calvados**, 15 ml of **Bénédictine D.O.M.**, 15 ml of **yellow Chartreuse**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Strain into a chilled nick and nora glass.\n5. Garnish with 2 skewered **maraschino cherries**.",
+  "cocktail.693.name": "Honeymoon",
+  "cocktail.693.synonyms": "Farmer's Daughter",
+  "cocktail.693.description": "A bright, herbal sour balancing **calvados** and **Bénédictine** with fresh **lemon juice** and a touch of **orange curaçao**.",
+  "cocktail.693.instructions": "1. Add 30 ml of **calvados**, 30 ml of **Bénédictine D.O.M.**, 15 ml of **lemon juice**, and 5 ml of **orange curaçao** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use as garnish."
 }

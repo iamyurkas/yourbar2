@@ -45574,6 +45574,225 @@
           "garnish": true
         }
       ]
+    },
+    {
+      "id": 690,
+      "name": "Warday's Cocktail",
+      "description": "A spirit-forward classic where **calvados**, **gin**, and **red vermouth** are lifted by a touch of **green Chartreuse**.",
+      "instructions": "1. Add 30 ml of **calvados**, 30 ml of **gin**, 30 ml of **red vermouth**, and 5 ml of **green Chartreuse** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express a **lemon** (or **orange**) twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 73,
+          "name": "Calvados",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 161,
+          "name": "Gin",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 182,
+          "name": "Green Chartreuse",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 219,
+          "name": "Lemon",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 691,
+      "name": "Apple Blossom Cocktail",
+      "description": "A minimalist stirred classic pairing fragrant **calvados** with **red vermouth**, optionally sharpened by **orange bitters**.",
+      "instructions": "1. Add 45 ml of **calvados**, 45 ml of **red vermouth**, and 1 dash of **orange bitters** (optional) into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Garnish with an **apple** wedge or a dehydrated **apple** slice.",
+      "glassId": "coupe",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 73,
+          "name": "Calvados",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 294,
+          "name": "Red Vermouth",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 248,
+          "name": "Orange Bitters",
+          "amount": "1",
+          "unitId": 6,
+          "optional": true
+        },
+        {
+          "order": 4,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 5,
+          "ingredientId": 24,
+          "name": "Apple",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 692,
+      "name": "Widow's Kiss",
+      "description": "A rich pre-Prohibition sipper where **calvados** meets **Bénédictine**, **yellow Chartreuse**, and aromatic bitters.",
+      "instructions": "1. Add 45 ml of **calvados**, 15 ml of **Bénédictine D.O.M.**, 15 ml of **yellow Chartreuse**, and 2 dashes of **Angostura bitters** into a mixing glass.\n2. Fill the mixing glass with **ice**.\n3. Stir gently until well chilled.\n4. Strain into a chilled nick and nora glass.\n5. Garnish with 2 skewered **maraschino cherries**.",
+      "glassId": "nick_and_nora",
+      "methodIds": ["stir"],
+      "defaultServings": 1,
+      "tags": [3, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 73,
+          "name": "Calvados",
+          "amount": "45",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 43,
+          "name": "Benedictine",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 361,
+          "name": "Yellow Chartreuse",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 19,
+          "name": "Angostura Bitters",
+          "amount": "2",
+          "unitId": 6
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 236,
+          "name": "Maraschino Cherry",
+          "amount": "2",
+          "unitId": 23,
+          "garnish": true
+        }
+      ]
+    },
+    {
+      "id": 693,
+      "name": "Honeymoon",
+      "synonyms": ["Farmer's Daughter"],
+      "description": "A bright, herbal sour balancing **calvados** and **Bénédictine** with fresh **lemon juice** and a touch of **orange curaçao**.",
+      "instructions": "1. Add 30 ml of **calvados**, 30 ml of **Bénédictine D.O.M.**, 15 ml of **lemon juice**, and 5 ml of **orange curaçao** into a shaker.\n2. Fill the shaker with **ice**.\n3. Shake until well chilled.\n4. Fine strain into a chilled coupe glass.\n5. Express an **orange** twist over the cocktail and use as garnish.",
+      "glassId": "coupe",
+      "methodIds": ["shake"],
+      "defaultServings": 1,
+      "tags": [5, 6],
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 73,
+          "name": "Calvados",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 2,
+          "ingredientId": 43,
+          "name": "Benedictine",
+          "amount": "30",
+          "unitId": 11
+        },
+        {
+          "order": 3,
+          "ingredientId": 221,
+          "name": "Lemon Juice",
+          "amount": "15",
+          "unitId": 11
+        },
+        {
+          "order": 4,
+          "ingredientId": 249,
+          "name": "Orange Curaçao",
+          "amount": "5",
+          "unitId": 11
+        },
+        {
+          "order": 5,
+          "ingredientId": 196,
+          "name": "Ice",
+          "amount": "150",
+          "unitId": 8,
+          "process": true
+        },
+        {
+          "order": 6,
+          "ingredientId": 247,
+          "name": "Orange",
+          "amount": "1",
+          "unitId": 26,
+          "garnish": true
+        }
+      ]
     }
   ],
   "ingredients": [
