@@ -49990,21 +49990,24 @@
       "name": "London Dry Gin",
       "description": "Classic dry gin style with a crisp juniper-forward profile, bright citrus peel, and no added sweeteners after distillation.",
       "tags": [0],
-      "styleIngredientId": 161
+      "styleIngredientId": 161,
+      "photoUri": "assets/ingredients/369-london-dry-gin.jpg"
     },
     {
       "id": 370,
       "name": "Plymouth Gin",
       "description": "Protected gin style from Plymouth, England, softer and earthier than London Dry with balanced juniper and rooty botanicals.",
       "tags": [0],
-      "styleIngredientId": 161
+      "styleIngredientId": 161,
+      "photoUri": "assets/ingredients/370-plymouth-gin.jpg"
     },
     {
       "id": 371,
       "name": "Botanical Gin",
       "description": "Modern aromatic gin style emphasizing expressive botanicals such as floral, herbal, and citrus notes over strict juniper dominance.",
       "tags": [0],
-      "styleIngredientId": 161
+      "styleIngredientId": 161,
+      "photoUri": "assets/ingredients/371-botanical-gin.jpg"
     },
     {
       "id": 372,
