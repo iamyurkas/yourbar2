@@ -2361,6 +2361,11 @@ export default function CocktailDetailsScreen() {
                         <Text style={[styles.sectionTitle, { color: Colors.onSurface }]}>
                           {t("cocktailDetails.similarCocktailsTitle")}
                         </Text>
+                      </View>
+                      <View style={styles.similarControlsRow}>
+                        <Text style={[styles.similarFilterLabel, { color: Colors.onSurfaceVariant }]}>
+                          {t("common.filterBy")}
+                        </Text>
                         {shouldShowSimilarFilterButton ? (
                           <Pressable
                             onPress={handleSimilarFilterPress}
@@ -2375,11 +2380,51 @@ export default function CocktailDetailsScreen() {
                           >
                             <MaterialCommunityIcons
                               name="filter-variant"
-                              size={24}
+                              size={20}
                               color={isSimilarFilterActive ? Colors.tint : Colors.icon}
                             />
                           </Pressable>
                         ) : null}
+                        <View style={styles.similarViewModeToggle}>
+                          <Pressable
+                            onPress={() => setShowCardsInCollections(true)}
+                            accessibilityRole="button"
+                            accessibilityState={{ selected: showCardsInCollections }}
+                            accessibilityLabel={t("sideMenu.showCardsInCollections")}
+                            style={[
+                              styles.similarViewModeButton,
+                              {
+                                backgroundColor: showCardsInCollections ? Colors.tint : "transparent",
+                                borderColor: Colors.tint,
+                              },
+                            ]}
+                          >
+                            <MaterialCommunityIcons
+                              name="view-grid"
+                              size={16}
+                              color={showCardsInCollections ? Colors.background : Colors.tint}
+                            />
+                          </Pressable>
+                          <Pressable
+                            onPress={() => setShowCardsInCollections(false)}
+                            accessibilityRole="button"
+                            accessibilityState={{ selected: !showCardsInCollections }}
+                            accessibilityLabel={t("ingredientDetails.filterCocktails")}
+                            style={[
+                              styles.similarViewModeButton,
+                              {
+                                backgroundColor: !showCardsInCollections ? Colors.tint : "transparent",
+                                borderColor: Colors.tint,
+                              },
+                            ]}
+                          >
+                            <MaterialCommunityIcons
+                              name="view-list"
+                              size={16}
+                              color={!showCardsInCollections ? Colors.background : Colors.tint}
+                            />
+                          </Pressable>
+                        </View>
                       </View>
                       <View style={showCardsInCollections ? styles.similarCocktailsCards : styles.similarCocktailsList}>
                         {filteredSimilarCocktailEntries.map(
@@ -2625,10 +2670,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  similarControlsRow: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  similarFilterLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
   similarFilterButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  similarViewModeToggle: {
+    marginLeft: "auto",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  similarViewModeButton: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
   },
